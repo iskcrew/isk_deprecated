@@ -1,0 +1,34 @@
+<h1>Slide statistics for display: <%=@display.name%></h1>
+<p>This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).</p>
+
+<%unless @display.display_counts.empty?%>
+
+<table class="slide_stats">
+  <tr>
+    <th>Shown slides</th>
+  </tr>
+  <%@display.display_counts.order('updated_at desc').each do |dc|%>
+  <tr>
+    <td>
+    <%=preview_to_show_tag dc.slide%><br />
+    Shown total of <%=dc.count%> times. Last shown at <%=I18n.l(dc.updated_at, :format => :short)%>
+    </td>
+  </tr>
+  <%end%>
+  
+</table>
+
+<%else%>
+
+<div class='warning'>
+<p>No slides have been shown on this display!</p>
+</div>
+<%end%>
+
+
+<%content_for :navigation do %>
+  <%=link_to 'Details', :action => :show, :id => @display.id%>
+  <%if @display.can_edit? current_user%>
+	<%=link_to 'Edit', :action => :edit, :id => @display.id%>
+	<%end%>
+<%end%>

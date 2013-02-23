@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Isk</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%=render :partial => 'shared/display_warnings'%>
+    
+	<div class="topNavigation">&nbsp;
+	  <div class='tabs'>&nbsp;<%=navigation_links%></div>
+		<div class='logout'>
+		  I'm <b><%=current_user.username%></b>
+		  <%=link_to 'Logout', {:controller => :logins, :action => :destroy}, :method => :delete%>
+		</div>
+	</div>
+	<%=render :partial => "navigation" %>
+	<div class='flash'>
+	<p class="flash_notice"><%= flash[:notice] %></p>
+	<p class="flash_error"><%= flash[:error]%></p>
+  </div>
+
+<div class='content'>
+
+<%= yield %>
+</div>
+</body>
+</html>

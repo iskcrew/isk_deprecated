@@ -1,0 +1,7 @@
+<h1>Editing slide</h1>
+
+<%=form_for @slide, :as => :slide, :url => {:action => :update, :id => @slide.id} do |f|%>
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+	<%=f.submit "Update"%>
+<%end%>

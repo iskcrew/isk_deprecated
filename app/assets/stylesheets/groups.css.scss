@@ -1,0 +1,31 @@
+// Place all the styles related to the groups controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#slides img {
+	width: 160px;
+	height: 90px;
+}
+
+#slides li {
+	height: 92px;
+}
+
+#slides .slideimage {
+	float:left;
+}
+
+#slides .handle {
+	float: left;
+}
+
+#slides li.published:nth-child(odd) {
+	color:white;
+	background-color:#575;
+}
+
+
+#slides li.published:nth-child(even) {
+	color:white;
+	background-color:#7A7;
+}

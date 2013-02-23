@@ -1,0 +1,19 @@
+<h1>Listing all presentations</h1>
+<table class="presentationtable">
+	<tr>
+		<th>Name</th>
+		<th>Groups</th>
+		<th>Public slides</th>
+		<th>Total runtime</th>
+		<th>-</th>
+	</tr>
+	<%@presentations.each do |p|%>
+		<tr>
+			<td><%=link_to p.name, :action => :show, :id => p.id%></td>
+			<td><%=p.groups.count%></td>
+			<td><%=p.total_slides%></td>
+			<td><%=duration_to_text p.duration%></td>
+			<td><%=link_to 'Preview', :action => :preview, :id => p.id%></td>
+		</tr>
+	<%end%>
+</table>

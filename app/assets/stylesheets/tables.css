@@ -1,0 +1,31 @@
+table {
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse:collapse;
+}
+
+td, th {
+	border:1px solid #aaa;
+	padding:3px 7px 2px 7px;
+}
+
+td {
+	vertical-align: top;
+}
+
+th {
+	font-size:120%;
+	text-align:left;
+	padding-top:5px;
+	padding-bottom:4px;
+	background-color:#444;
+	color:#fff;
+}
+
+tr:nth-child(odd) td {
+	background-color:#353535;
+}
+
+
+tr td.error {
+	background-color: red;
+}

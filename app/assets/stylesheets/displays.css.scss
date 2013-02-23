@@ -1,0 +1,70 @@
+// Place all the styles related to the displays controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+#override_queues img {
+	width: 160px;
+	height: 90px;
+}
+
+#override_queues li {
+	height: 92px;
+}
+
+#override_queues .slideimage {
+	float:left;
+	display: inline;
+}
+
+#override_queues .handle {
+	float: left;
+	display: inline;
+}
+
+#override_queues li.published:nth-child(odd) {
+	color:#000;
+	background-color:#FFA0A0;
+}
+
+#override_queues form {
+	display: inline-block;
+}
+
+#override_queues .slidename {
+	overflow: hidden;
+	font-size: 80%;
+	display: inline-block;
+}
+
+#override_queues .actions {
+	float: right;
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px;
+}
+
+
+col.slide {
+	width: 400px;
+}
+
+div.slidename_400px {
+	width: 400px;
+	overflow: hidden;
+}
+
+table.override_queue {
+	div.slidebuttons {
+		display: none;
+	}
+	
+	div.hidden_slide {
+		background-color: #666;
+		
+		img {
+			opacity: 1;
+		}
+	}
+}

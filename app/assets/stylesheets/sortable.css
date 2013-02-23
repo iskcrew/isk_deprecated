@@ -1,0 +1,38 @@
+ul.sortable { 
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 80%;
+}
+
+ul.sortable .handle {
+	font-size: 1.5em;
+	cursor: move;
+	height: 100%;
+}
+
+.sortable span {
+	margin-left: 5px;
+}
+
+.sortable li {
+	margin: none;
+	padding: 5px 5px;
+	height: auto;
+	font-size: 1.4em;
+	border: 2px solid #aaa;
+}
+
+.sortable div {
+	display: inline-block;
+}
+
+
+.sortable .actions {
+	margin: 0;
+	float: right;
+}
+
+.sortable li:nth-child(even) {
+	background-color:#444;
+}

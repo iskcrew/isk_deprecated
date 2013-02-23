@@ -1,0 +1,43 @@
+<h1>Information for group: <%=@group.name%></h1>
+
+<%unless @group.presentations.empty?%>
+<p>This group is part of following presentations:</p>
+<ul>
+  <%@group.presentations.each do |p|%>
+  <li>
+    <%=link_to p.name, :controller => :presentations, :action => :show, :id => p.id%>
+  </li>
+  <%end%>
+</ul>
+<%end%>
+
+<%=authorized_users(@group)%>
+
+<h2>Slides in this master group</h2>
+
+<table class="compact_slidelist">
+  <tr>
+    <th>
+        Slides
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <%@group.slides.each do |s|%>
+        <%=render :partial => 'slides/compact_slideitem', :locals => {:s => s }%>
+      <%end%>
+    </td>
+  </tr>
+</table>
+
+
+<%if @group.can_edit? current_user%>
+  <%content_for :navigation do %>
+  <%=link_to 'Hide all slides', {:action => :hide_all, :id => @group.id}, :method => :post%>
+  <%=link_to 'Publish all slides', {:action => :publish_all, :id => @group.id}, :method => :post%>
+  
+    <%=link_to 'Edit', :action => :edit, :id => @group.id%>
+  	<%=link_to 'Add slides', :action => :add_slides, :id => @group.id%>
+  	<%=link_to 'Delete',{:action => :destroy, :id => @group.id}, :method => :delete, :confirm => "Are you sure?"%>
+  <%end%>
+<%end%>

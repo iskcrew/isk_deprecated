@@ -1,0 +1,7 @@
+<h1>Editing template</h1>
+
+<%=form_for @template, :url => {:action => :update} do |f|%>
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+	<%=f.submit "Update"%>
+<%end%>

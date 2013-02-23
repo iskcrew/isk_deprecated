@@ -1,0 +1,27 @@
+#!/usr/bin/env script/rails runner
+
+# Pullautetaan tiedostosta kelmuja kantaan määrissä....
+
+@offset = 50
+svg_template = ERB.new(File.read(Rails.root.join("data", "templates", "csv_import_template.svg.erb")),0, '>')
+
+
+File.open(Rails.root.join("slide_data.csv"), 'r').each_line do |row|
+  @header, @contents = row.split(';',2)
+  slide_svg = svg_template.result
+  Slide.transaction do
+    s = Slide.new
+    if @header && !@header.empty?
+      s.name = @header.strip
+    else
+      s.name = @contents.split(';')[0].split('§')[0].split[0..2].join(' ')
+    end
+    s.is_svg = true
+    s.master_group_id = MasterGroup::Ungrouped_id
+    s.save!
+    s.filename = "slide_" + s.id.to_s
+    File.open(s.svg_filename, 'w') {|f| f.write(slide_svg)}
+    s.generate_images
+    s.save!
+  end
+end

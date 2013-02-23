@@ -1,0 +1,49 @@
+<h1>Listing slides</h1>
+
+<div class='slidefilter'>
+  <%=filter_links @filter%>
+</div>
+
+<div class="slidelist">
+
+<%if @filter%>
+
+<div class='slidegroups'>
+  <table class="compact_slidelist">
+    <tr>
+      <th>
+        Slides I can <%=@filter == :edit ? 'edit' : 'hide'%>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <%@slides.each do |s|%>
+          <%=render :partial => 'compact_slideitem', :locals => {:s => s }%>
+        <%end%>
+      </td>
+    </tr>
+  </table>  
+</div>
+
+
+<%else%>
+<div class="grouplinks" id="scrollingDiv">
+  <p>Goto group:</p>
+  <ul>
+    <li>
+      <a href="#ungrouped" class="grouplink">Ungrouped</a>
+    </li>
+  <%@groups.each do |group|%>
+	  <%unless group.slides.count == 0%>
+	    <li>
+        <a href="#<%=group.name%>" class="grouplink"><%=group.name%></a>
+      </li>
+    <%end%>
+  <%end%>
+  </ul>
+</div>
+
+<%=render :partial => 'slidegroups'%>
+
+<%end%>
+</div>

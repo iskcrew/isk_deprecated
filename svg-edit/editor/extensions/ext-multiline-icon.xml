@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g id="text_align_right">
+    <svg width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <rect id="svg_2" height="3" width="20" y="3" x="1" stroke="#000000" fill="#3f3f3f"/>
+        <rect id="svg_3" height="3" width="11" y="9" x="10" stroke="#000000" fill="#3f3f3f"/>
+        <rect id="svg_4" height="3" width="5" y="15" x="16" stroke="#000000" fill="#3f3f3f"/>
+    </g>
+    </svg>
+ </g>
+
+ <g id="text_align_left">
+    <svg width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect id="svg_5" height="3" width="20" y="3" x="1" stroke="#000000" fill="#3f3f3f"/>
+      <rect id="svg_6" height="3" width="11" y="9" x="1" stroke="#000000" fill="#3f3f3f"/>
+      <rect id="svg_7" height="3" width="5" y="15" x="1" stroke="#000000" fill="#3f3f3f"/>
+    </g>
+    </svg>
+ </g>
+ <g id="text_align_center">
+    <svg width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect id="svg_8" height="3" width="20" y="3" x="1" stroke="#000000" fill="#3f3f3f"/>
+      <rect id="svg_9" height="3" width="11" y="9" x="6" stroke="#000000" fill="#3f3f3f"/>
+      <rect id="svg_10" height="3" width="5" y="15" x="9" stroke="#000000" fill="#3f3f3f"/>
+    </g>
+    </svg>
+ </g>
+</svg>

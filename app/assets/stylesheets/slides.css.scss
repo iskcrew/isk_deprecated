@@ -1,0 +1,235 @@
+// Place all the styles related to the slides controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+@font-face
+{
+font-family: 'Franklin Gothic Heavy';
+src: url('/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.ttf'),
+     url('/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.eot'); /* IE9 */
+}
+
+table.slidetable {
+	width: 80%;
+}
+
+
+table.slidetable col.name {
+	width: 20%;
+}
+
+
+table.slidetable col.group {
+	width: 20%;
+}
+
+table.slidetable col.preview {
+	width: 400px;
+}
+
+
+table.slidetable tr.hidden:nth-child(odd) td {
+	color:#ffffff;
+	background-color:#404040;
+}
+
+
+table.slidetable tr.hidden:nth-child(even) td {
+	color:#ffffff;
+	background-color:#303030;
+}
+
+table.slidetable tr.hidden td img {
+	opacity:0.7;
+}
+
+img.fullSlide {
+	border: 2px solid white;
+}
+
+.heading {
+	border: 2px solid white;
+	font-size: 160%;
+	color: #fff;
+	width: 80%;
+	position: relative;
+	background-color:#505050;
+}
+
+div.grouplinks {
+	float: right;
+	padding-right: 15px;
+	max-width: 150px;
+}
+
+div.slidelist {
+	min-width: 600px;
+}
+
+div.slidegroups {
+	margin-right: 170px;
+}
+
+
+
+table.compact_slidelist {
+	width: 100%;
+	min-width: 430px;
+}
+
+
+div.hidden_slide, div.public_slide {
+	float: left;
+	margin: 2px;
+	padding: 5px;
+	border: 2px solid #d0d0d0;	
+}
+
+div.hidden_slide {
+	background-color: #222;
+}
+
+div.public_slide {
+	background-color: #666;
+}
+
+div.hidden_slide img {
+	opacity: 0.6;
+}
+table.compact_slidelist form {
+	display: inline-block;	
+}
+
+table.compact_slidelist form div {
+	display: inline;
+	border: collapse;
+	padding: none;
+		
+}
+
+div.slidebuttons {
+	text-align: center;
+	min-height: 22px;
+	width: 400px;
+	
+	a.button {
+		font-size: 12px;
+	}
+	
+}
+
+div.slideheader {
+	width: 400px;
+	margin-bottom: 5px;
+	font-size: 1.5em;
+	
+	div.image {
+		background-color: #339;
+	}
+	
+	div.svg-edit {
+		background-color: #737;
+	}
+	
+	div.simple {
+		background-color: #393;
+	}
+	
+	div.inkscape {
+		background-color: #933;
+	}
+	
+	div.http {
+		background-color: #399;
+	}
+	
+	div.video {
+		background-color: #883;
+	}
+}
+
+
+div.slidename {
+	max-width: 320px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+
+div.slidetype {
+	float: right;
+	padding: 5px 5px;
+	font-size: 0.7em;
+	border-radius: 10px;
+	border: 1px solid white;
+	display: inline-block;
+}
+
+div.warning {
+	background-color: #770;
+	font-weight: bold;
+	padding: 0.1em 1em;
+	display: inline-block;
+}
+
+div.slidefilter {
+	display: inline-block;
+	margin: 20px 1.5em;
+	
+	a {
+		text-decoration: none;
+		display: inline-block;
+		border: 2px solid white;
+		border-right: none;
+		padding: 5px 10px;
+		float: left;
+	}
+	
+	a:first-child {
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+	
+	a:last-child {
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+		border-right: 2px solid white;
+		float: none;
+	}
+	
+	a.current {
+		background-color: #666;
+		font-weight: bold;
+	}
+}
+
+div.info_block {
+	margin-right: 10px;
+}
+
+div.slideinfo {
+	div.compact_slideitem {
+	}
+	
+	div.slide_metadata {
+		ul {
+			
+		}
+	}
+	
+	
+	div.authorized_users {
+	}
+}
+
+div.left_column {
+	float: left;
+	max-width: 420px;
+}
+
+div.right_column {
+	ul {
+		display: inline-block;
+	}
+}

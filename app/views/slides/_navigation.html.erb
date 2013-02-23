@@ -1,0 +1,13 @@
+<div class="navigation">&nbsp;
+	<%=link_to 'List', :controller => :slides, :action => :index%>
+	<%if current_user.has_role? ['slide-create', 'slide-admin']%>
+	  <%=link_to "New", :controller => :slides, :action => :new%>
+	<%end%>
+	<%=link_to 'Templates', :controller => :templates%>
+	<%if current_user.has_role? ['template-create', 'template-admin']%>
+	  <%=link_to "New template", :controller => :templates, :action => :new%>
+	<%end%>
+	<%=link_to 'Hidden', :controller => :slides, :action => :hidden%>
+	<%=link_to 'Thrashed', :controller => :slides, :action => :thrashed%>
+	<%= yield :navigation%>
+</div>

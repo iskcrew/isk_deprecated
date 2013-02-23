@@ -1,0 +1,33 @@
+<h1>Display management</h1>
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>IP-address</th>
+		<th>Presentation</th>
+		<th>Current group</th>
+		<th>Current slide</th>
+		<th>Monitored?</th>
+		<th>Last activity</th>
+		<th>Uptime</th>
+		<th>Actions</th>
+	</tr>
+	<%@displays.each do |d|%>
+		<tr>
+			<td><%=d.name%></td>
+			<td><%=d.ip%></td>
+			<td><%=d.presentation ? link_to(d.presentation.name, :controller => :presentations, :action => :show, :id => d.presentation.id) : 'Not defined'%></td>
+			<td><%=current_group_tag d%></td>
+			<td><%=current_slide_tag d%></td>
+			<td><%=d.monitor ? 'Yes' : 'No'%></td>
+			<td class="<%=d.late? ? 'error': 'ok' %>">
+			  <%=last_contact d%>
+			</td>
+			<td><%=d.uptime || 'DOWN'%></td>
+			<td>
+			  <%=link_to 'Details', :action => :show, :id => d.id%> <br />
+				<%=link_to 'Edit', :action => :edit, :id => d.id%>
+			</td>
+		</tr>
+	<%end%>
+</table>

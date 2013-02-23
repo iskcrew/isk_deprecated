@@ -1,0 +1,10 @@
+<h1>Editing simple slide</h1>
+<%=form_for @slide, :as => 'slide', :url => {:action => :update, :id => @slide.id} do |f|%>
+  
+  
+<%=render :partial => 'simple_edit'%>
+
+
+<%=f.submit "Update"%>
+
+<%end%>

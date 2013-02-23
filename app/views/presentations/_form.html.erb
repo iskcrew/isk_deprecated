@@ -1,0 +1,5 @@
+<%=fields_for @presentation do |f|%>
+	<p><b>Name:</b> <%=f.text_field :name%></p>
+	<p><b>Slide duration (seconds):</b> <%=f.text_field :delay%></p>
+	<p><b>Transition effect:</b> <%=f.select :effect_id, Effect.all.collect {|p| [ p.name, p.id ] }%></p>	
+<%end%>

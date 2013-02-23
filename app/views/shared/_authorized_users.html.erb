@@ -1,0 +1,26 @@
+<%if !obj.authorized_users.empty? or current_user.has_role?(obj.class::AdminRole)%>
+<div class='authorized_users info_block'>
+
+<h2>Authorized users</h2>
+<%unless obj.authorized_users.empty?%>
+  <p>Following users have edit priviledges:</p>
+    <ul class='userlist'>
+      <%obj.authorized_users.each do |u|%>
+      <li>
+        <%=u.username%>
+	      <%if current_user.has_role? obj.class::AdminRole%>
+	        <%=link_to 'X', {:action => :deny, :id => obj.id, :user_id => u.id}, :method => :post, :class => 'button'%>
+        <%end%>
+      </li>
+      <%end%>
+    </ul>
+<%end%>
+
+<%if current_user.has_role? obj.class::AdminRole%>
+  <%=form_for :grant, :url => {:action => :grant, :id => obj.id} do |f|%>
+  <p>Add user <%=f.select :user_id, options_for_select(User.all.collect {|u| [ u.username, u.id ] })%>
+    <%=f.submit 'Allow'%></p>
+  <%end%>
+<%end%>
+</div>
+<%end%>

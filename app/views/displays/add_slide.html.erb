@@ -1,0 +1,33 @@
+<h1>Adding to override queue for: <%=@display.name%></h1>
+
+<h2>Available slides</h2>
+
+<table class="compact_slidelist">
+  <tr>
+    <th>
+      Choose slide to add
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <%@slides.each do |s|%>
+        <div class="public_slide compact_slideitem">
+        <div class='slideheader'>
+          <div class="slidename"><%=link_to s.name, :action => :show, :id => s.id%></div>
+          <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
+        </div>
+
+        <%=preview_to_show_tag(s)%>
+        <div class='slidebuttons'>
+        <%=form_tag :controller => :displays, :action => :queue_slide, :id => @display.id do |f|%>
+          <%=hidden_field_tag :slide_id, s.id.to_s%>
+          <%=label_tag :duration, 'Duration (s):'%>
+          <%=text_field_tag :duration, '60', :class => 'duration_spinner', :size => 4%>
+          <%=submit_tag 'Add this slide'%>
+        <%end%>
+        </div>
+        </div>
+      <%end%>
+    </td>
+  </tr>
+</table>

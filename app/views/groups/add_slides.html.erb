@@ -1,0 +1,22 @@
+<h1>Adding slides to group: <%=@group.name%></h1>
+
+<h2>Available ungrouped slides</h2>
+<%=form_for :slides, :url => {:action => :adopt_slides, :id => @group.id} do |f|%>
+<%=f.submit "Add slides"%>
+<table class="slideselection">
+	<tr>
+		<th>Name</th>
+		<th>Preview</th>
+		<th>Add?</th>
+	</tr>
+	<% @slides.each do |s|%>
+		<%=f.fields_for "slide_" + s.id.to_s do |slide_form|%>
+		<tr>
+			<td><%=s.name%></td>
+			<td><%=preview_tag s%></td>
+			<td><%=slide_form.check_box :add%> <%=slide_form.hidden_field :id, :value=>s.id%></td>
+		</tr>
+		<%end%>
+	<% end%>
+				
+<%end%>

@@ -1,0 +1,20 @@
+<table class="compact_slidelist">
+  <tr>
+    <th>
+      <%unless group.id == MasterGroup::Ungrouped_id%>
+        <%=group_link_tag(group)%>
+        <%slides = group.slides.current%>
+      <%else%>
+        <a name="ungrouped">Ungrouped slides</a>
+        <%slides = Slide.current.ungrouped.order('id desc')%>
+      <%end%>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <%slides.each do |s|%>
+        <%=render :partial => 'compact_slideitem', :locals => {:s => s, :remote => true }%>
+      <%end%>
+    </td>
+  </tr>
+</table>

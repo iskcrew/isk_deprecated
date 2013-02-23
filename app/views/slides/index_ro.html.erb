@@ -1,0 +1,29 @@
+<h1>Listing all slides</h1>
+<div class="slidelist">
+
+<div class="grouplinks" id="scrollingDiv">
+  <p>Goto group:</p>
+  <ul>
+    <li>
+      <a href="#ungrouped">Ungrouped</a>
+    </li>
+  <%@groups.each do |group|%>
+	  <%unless group.slides.count == 0%>
+	    <li>
+        <a href="#<%=group.name%>"><%=group.name%></a>
+      </li>
+    <%end%>
+  <%end%>
+  </ul>
+</div>
+
+<div class="slidegroups">
+  <%=render :partial => 'compact_slidelist', :locals => {:group => @ungrouped, :ro => true}%>
+  <%@groups.each do |group|%>
+    <%unless group.slides.count == 0%>
+      <%=render :partial => 'compact_slidelist', :locals => {:group => group, :ro => true}%>
+    <%end%>
+  <%end%>
+</div>
+
+</div>

@@ -1,0 +1,39 @@
+<h1>Information for presentation: <%=@presentation.name%></h1>
+<p>This presentation has <b><%=@presentation.total_slides%></b> slides and has a run time of <b><%=duration_to_text @presentation.duration%></b>. Interval between slide changes is <b><%=@presentation.delay%></b> seconds. Last modified: <%=l @presentation.updated_at, :format => :short%></p>
+
+<%unless @presentation.displays.empty?%>
+<p>This presentation is being shown on following displays:</p>
+<ul>
+  <%@presentation.displays.each do |d|%>
+    <li><%=link_to d.name, :controller => :displays, :action => :show, :id => d.id%></li>
+  <%end%>
+</ul>
+<%end%>
+
+
+<%=authorized_users(@presentation)%>
+
+<%@presentation.groups.each do |group|%>
+<table class="compact_slidelist">
+  <tr>
+    <th>
+        <%=group_link_tag(group.master_group)%>
+        <%slides = group.slides.current.public%>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <%slides.each do |s|%>
+        <%=render :partial => 'slides/compact_slideitem', :locals => {:s => s }%>
+      <%end%>
+    </td>
+  </tr>
+</table>
+<%end%>
+
+<%content_for :navigation do%>
+	<%=link_to 'Preview', :action => :preview, :id => @presentation.id%>
+	<%if @presentation.can_edit? current_user%>
+	<%=link_to 'Edit', :action => :edit, :id => @presentation.id%>
+	<%end%>
+<%end%>

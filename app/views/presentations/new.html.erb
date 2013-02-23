@@ -1,0 +1,7 @@
+<h1>New presentation</h1>
+
+<%=form_for @presentation, :url => {:action => :create} do |f|%>
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+	<%=f.submit "Create"%>
+<%end%>

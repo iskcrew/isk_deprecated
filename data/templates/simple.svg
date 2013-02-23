@@ -1,0 +1,22 @@
+<svg xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' width='1280' height='720'>
+
+ <g>
+  <title>taustakuva</title>
+  <image xlink:href='backgrounds/empty.png' id='background_picture' width='1280' height='720' x='0' y='0'/>
+ </g>
+ <g>
+  <title>teksti</title>
+  <text font-family='Franklin Gothic Heavy' text-anchor='start' font-weight='normal' id='header' font-size='70' fill='#ffffff' stroke-width='2' stroke='#000000' x='30' y='100'>
+   <tspan xml:space='preserve' id='svg_17'>Slide header</tspan>
+  </text>
+  <text font-family='Franklin Gothic Heavy' text-anchor='start' font-weight='normal' id='slide_content' font-size='48' style='cursor: move;' fill='#ffffff' stroke='#000000' stroke-width='2' x='30' y='200'>
+   <tspan xml:space='preserve' id='svg_166'>slide contents</tspan>
+   <tspan dy='1em' xml:space='preserve' id='svg_167' x='30'>continues</tspan>
+   <tspan dy='1em' xml:space='preserve' id='svg_168' x='30'>couple lines</tspan>
+   <tspan dy='1em' xml:space='preserve' id='svg_169' x='30'>
+   </tspan>
+   <tspan dy='1em' xml:space='preserve' id='svg_170' x='30'>and another after empty line</tspan>
+  </text>
+ </g>
+ 
+<metadata id='metadata1'>178</metadata></svg>

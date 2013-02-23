@@ -1,0 +1,33 @@
+<h1>Preview for presentation: <%=@presentation.name%></h1>
+
+<table class="previewtable">
+  <colgroup>
+    <col class = 'preview-image' />
+    <col class = 'preview-data' />
+  </colgroup>
+	<tr>
+		<th>Preview</th>
+		<th>Data</th>
+	</tr>
+	<%@presentation.groups.each do |group|%>
+	<tr>
+		<td colspan="2" >Entering group <%=group.position%>: <%=group.name%></td>
+	</tr>
+	<%group.public_slides.each do |slide| %>
+	<tr>
+		<td><%=preview_tag slide%></td>
+		<td>
+			Name: <%=slide.name%> <br />
+			Position in group: <%=slide.position%>
+		</td>
+	</tr>
+	<%end%>
+	<%end%>
+</table>
+
+<%content_for :navigation do%>
+	<%=link_to 'Details', :action => :show, :id => @presentation.id%>
+	<%if @presentation.can_edit? current_user%>
+	  <%=link_to 'Edit', :action => :edit, :id => @presentation.id%>
+	<%end%>
+<%end%>

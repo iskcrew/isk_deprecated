@@ -1,0 +1,21 @@
+<% group.slides.each do |slide| %>
+<li id="slide_<%= slide.id %>" class="<%= slide.public ? 'published' : 'hidden'%>">
+	<span class="handle">⇕</span>
+	<div class="slideimage"><%=preview_tag slide%></div>
+	
+	<div class="slidename">
+		<%=link_to slide.name, :controller => :slides, :action => :show, :id => slide.id %>
+	</div>
+	<%if slide.can_edit? current_user%>
+	<div class="actions">
+		<%=button_to 'Ungroup', :controller => :slides, :action => :ungroup, :id => slide.id%>
+		<%if slide.public%>
+			<%=button_to 'Hide', :controller => :slides, :action => :hide, :id => slide.id%>
+		<%else%>
+			<%=button_to 'Publish', :controller => :slides, :action => :publish, :id => slide.id%>
+		<%end%>
+	</div>
+	<%end%>
+  
+</li>
+<%end%>

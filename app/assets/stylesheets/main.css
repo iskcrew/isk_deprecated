@@ -1,0 +1,65 @@
+body {
+	color:#ffffff;
+	background-color:#333;
+	font-size: 0.7em;
+	margin:0px;
+	min-width: 600px;
+}
+
+body,p,h1,h2,h3,h4,table,td,th,ul,ol,textarea,input {
+	font-family:verdana,helvetica,arial,sans-serif;
+}
+
+h1 {font-size:220%;margin-top:0px;font-weight:normal}
+h2 {font-size:200%;margin-top:10px;margin-bottom:10px;font-weight:normal}
+h3 {font-size:180%;font-weight:normal}
+h4 {font-size:150%;}
+h5 {font-size:120%;}
+h6 {font-size:110%;}
+
+h1,h2,h3,h4,h5,h6 {
+	background-color:transparent;
+	color:#ffffff;
+	margin-left: 5px;
+}
+
+table,th,td,input,textarea {
+	font-size:100%;
+}
+
+img {
+	border:0
+}
+
+img.preview {
+	height: 225px;
+	width: 400px;
+	border: 2px solid #d0d0d0;
+}
+
+p.flash_notice {
+	color: lightgreen;
+	font-size: 2em;
+}
+
+p.flash_error {
+	color: lightred;
+	font-size: 2em;
+}
+
+div.content {
+	padding: 0.5em 0.5em;
+}
+
+form.button_to {
+	display: inline-block;
+}
+
+a:link, a:visited {
+	color: inherit;
+}
+
+a:visited {
+	
+}
+

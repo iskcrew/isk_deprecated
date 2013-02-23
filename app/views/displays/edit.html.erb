@@ -1,0 +1,21 @@
+<h1>Editing display</h1>
+
+<%=form_for @display, :url => {:action => :update} do |f|%>
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+	<%=f.submit "Update metadata"%>
+<%end%>
+	
+	<h2>Override queue</h2>
+  <p>
+    <%=link_to 'Add slide to queue', :action => :add_slide, :id => @display.id%>
+  </p>
+  <ul id="override_queues" class="sortable" data-sortable='<%=url_for(:action => :sort_queue, :id => @display.id)%>'> 
+  	<%=render :partial => 'slide_items', :locals => {:override => @display.override_queues}%>
+  </ul>
+  
+  
+<%content_for :navigation do%>
+  <%=link_to 'Details', :action => :show, :id => @display.id%>
+  
+<%end%>

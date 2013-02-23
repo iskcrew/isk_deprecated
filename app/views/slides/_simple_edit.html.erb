@@ -1,0 +1,42 @@
+<%=fields_for :slide, @slide do |f|%>
+<div class='simple_editor_container'>
+<% slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)%>
+
+<div class='simple_editor_controls'>
+<h2>Slide metadata and settings</h2>
+
+
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+
+
+<h2>Slide contents</h2>
+<p>Use &lt;foo&gt; to highlight text in the slide.</p>
+<p>You need to have the following fonts installed for the editor to work correctly: <a href='/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.ttf'>Franklin Gothic Heavy Regular</a> and 
+<a href='/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Italic-webfont.ttf'>Franklin Gothic Heavy Italic</a> </p>
+<textarea id="head" name="head" rows="1" cols="31" wrap="off">
+<%=slidedata[:heading]%>
+</textarea>
+<br/>
+<textarea id="text" name="text" rows="6" cols="53">
+<%=slidedata[:text]%>
+</textarea>
+<input type='hidden' id="code" name="code"rows="19" cols="50">
+</input>
+<br />
+
+<%=simple_text_align_select(slidedata[:text_align])%>
+<%=simple_text_size_select(slidedata[:text_size])%>
+<%=simple_color_select(slidedata[:color])%>
+
+<%end%>
+</div>
+
+  <div class="simple_editor_preview">
+    <h3>Preview</h3>
+    <div id="wrapper">
+      <object id="svg" type="image/svg+xml" data="/simple.svg"></object>
+    </div>
+  </div>
+
+</div>

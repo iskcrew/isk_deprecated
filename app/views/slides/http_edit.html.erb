@@ -1,0 +1,16 @@
+<h1>Editing http slide</h1>
+
+<%=form_for @slide, :as => :slide, :url => {:action => :update, :id => @slide.id} do |f|%>
+	<%=f.error_messages%>
+	<%=render :partial => 'form'%>
+	
+	<%=label_tag :url, 'Url to fetch data from'%>
+	<%=text_field_tag :url, @slide.slidedata[:url]%>
+	
+	<%=label_tag :basic_user, 'Basic auth username'%>
+	<%=text_field_tag :basic_user, @slide.slidedata[:user]%>
+	
+	<%=label_tag :basic_password, 'Basic auth password (stored clear text)'%>
+	<%=text_field_tag :basic_password, @slide.slidedata[:password]%>
+	<%=f.submit "Update"%>
+<%end%>

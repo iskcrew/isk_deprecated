@@ -1,0 +1,16 @@
+	<% presentation.groups.each do |group| %>
+  <li id="group_<%= group.id %>">
+		<div class="handle">⇕</div>
+
+		<div class="groupname">
+			<%=link_to group.name, :controller => :groups, :action => :show, :id => group.master_group_id %> - 
+			Slides: <%=group.slides.public.count%>/<%=group.slides.count%> - Position: <%=group.position%>
+		</div>
+		
+		<div class="actions">
+			<%=button_to 'remove', :action => :remove_group, :id => group.id%>
+		</div>
+
+		
+	</li>
+<% end %>

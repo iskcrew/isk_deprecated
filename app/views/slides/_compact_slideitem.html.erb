@@ -1,0 +1,56 @@
+<%remote = true unless defined? remote%>
+<div class="<%=s.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=s.id.to_s%>">
+  <div class='slideheader'>
+    <div class="slidename"><%=link_to s.name, :controller => :slides, :action => :show, :id => s.id%></div>
+    <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
+  </div>
+  
+  <%unless defined?(to_full)%>
+    <%=preview_to_show_tag(s)%>
+  <%else%>
+    <%=preview_tag(s)%>
+  <%end%>
+
+  <div class="slidebuttons">
+
+  <%if s.can_edit? current_user %>
+  
+  <%=hide_button_or_status(s, remote)%>
+	
+	<%=toggle_link_to 'Clock', s.show_clock, {:controller => :slides, :action => :toggle_clock, :id => s.id}, :method => :post, :remote => true%>
+  
+  <%=link_to 'Edit', {:controller => :slides, :action => :edit, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
+
+	<%if s.is_a? InkscapeSlide%>
+		<%=link_to 'Download', {:controller => :slides, :action => :svg_data, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
+	<%end%>
+	
+	<%if s.is_a?(SvgSlide) && !s.is_a?(SimpleSlide)%>
+	  <%=link_to 'SVG-editor', {:controller => :slides, :action => :svg_edit, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
+	<%end%>
+
+	<%if s.grouped?%>
+		<%=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => s.id}, :method => :post, :class => 'button ungroup'%>
+	<%end%>
+
+  <%=link_to 'Clone', {:controller => :slides, :action => :clone, :id => s.id}, :method => :post, :title => 'Create clone of this slide', :class => 'button'%>
+	
+	<%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>s.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
+	
+	<% else %>
+	
+	<%=hide_button_or_status(s)%>
+	
+	<%=inactive_toggle 'Clock', s.show_clock%>
+	
+	<%if s.grouped?%>
+	  <a class="button inactive">Grouped</a>
+	<%else%>
+	  <a class="button inactive">Ungrouped</a>
+  <%end%>
+	
+	<% end %>
+	</div>
+	
+	
+</div>
