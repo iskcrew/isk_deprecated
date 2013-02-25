@@ -1,3 +1,4 @@
+<%unless group.slides.empty?%>
 <table class="compact_slidelist">
   <tr>
     <th>
@@ -12,9 +13,8 @@
   </tr>
   <tr>
     <td>
-      <%slides.each do |s|%>
-        <%=render :partial => 'compact_slideitem', :locals => {:s => s, :remote => true }%>
-      <%end%>
+      <%=render :partial => 'compact_slideitem', :collection => slides, :as => :s%>
     </td>
   </tr>
 </table>
+<%end%>

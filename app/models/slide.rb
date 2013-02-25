@@ -98,7 +98,7 @@ class Slide < ActiveRecord::Base
   
   
   def can_edit?(user)
-    self.authorized_users.include?(user) || user.has_role?(AdminRole)
+    user.has_role?(AdminRole) || self.authorized_users.include?(user)
   end
   
   def can_hide?(user)
