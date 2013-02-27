@@ -13,7 +13,7 @@
 
 <%=authorized_users(@group)%>
 
-<h2>Slides in this master group</h2>
+<h2>Slides in this group</h2>
 
 <table class="compact_slidelist">
   <tr>
@@ -23,10 +23,8 @@
   </tr>
   <tr>
     <td>
-      <%@group.slides.each do |s|%>
-        <%=render :partial => 'slides/compact_slideitem', :locals => {:s => s }%>
-      <%end%>
-    </td>
+        <%=render :partial => 'slides/compact_slideitem', :locals => {:slides => @group.slides }%>
+    <td>
   </tr>
 </table>
 
