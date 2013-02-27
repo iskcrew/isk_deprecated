@@ -13,7 +13,7 @@
   </tr>
   <tr>
     <td>
-      <%=render :partial => 'compact_slideitem', :collection => slides, :as => :s%>
+      <%=render :partial => 'compact_slideitem', :locals => {:slides => slides}%>
     </td>
   </tr>
 </table>

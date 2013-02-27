@@ -2,7 +2,7 @@
 <div class='slideinfo'>
 
 <div class='slide_metadata info_block left_column'>
-<%=render :partial => 'compact_slideitem', :locals => {:s => @slide, :to_full => true}%>
+<%=render :partial => 'compact_slideitem', :locals => {:slide => @slide, :to_full => true}%>
 
 <%=render :partial => 'slide_presentation_list', :locals => {:s => @slide}%>
   
