@@ -31,7 +31,7 @@
   <tr>
     <td>
       <%@display.override_queues.each do |oq|%>
-        <%=render :partial => 'slides/compact_slideitem', :locals => {:s =>  oq.slide}%>
+        <%=render :partial => 'slides/slide', :locals => {:slide =>  oq.slide}%>
       <%end%>
     </td>
   </tr>

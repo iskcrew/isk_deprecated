@@ -17,9 +17,7 @@
     </tr>
     <tr>
       <td>
-        <%@slides.each do |s|%>
-          <%=render :partial => 'compact_slideitem', :locals => {:s => s }%>
-        <%end%>
+          <%=render :partial => 'slide', :locals => {:slides => @slides }%>
       </td>
     </tr>
   </table>  
