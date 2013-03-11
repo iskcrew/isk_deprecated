@@ -17,9 +17,7 @@
     </tr>
     <tr>
       <td>
-        <%@slides.each do |s|%>
-          <%=render :partial => 'compact_slideitem', :locals => {:s => s }%>
-        <%end%>
+          <%=render :partial => 'slide', :locals => {:slides => @slides }%>
       </td>
     </tr>
   </table>  
@@ -30,10 +28,7 @@
 <div class="grouplinks" id="scrollingDiv">
   <p>Goto group:</p>
   <ul>
-    <li>
-      <a href="#ungrouped" class="grouplink">Ungrouped</a>
-    </li>
-  <%@groups.each do |group|%>
+   <%@groups.each do |group|%>
 	  <%unless group.slides.count == 0%>
 	    <li>
         <a href="#<%=group.name%>" class="grouplink"><%=group.name%></a>
@@ -43,7 +38,30 @@
   </ul>
 </div>
 
-<%=render :partial => 'slidegroups'%>
+<div class="slidegroups" id='slidegroups' data-refresh-url="<%=url_for :controller => :slides, :action => :index%>" >
+  <%@groups.each do |group|%>
+  <%unless group.slides.empty?%>
+  <table class="compact_slidelist">
+    <tr>
+      <th>
+        <%unless group.id == MasterGroup::Ungrouped_id%>
+          <%=group_link_tag(group)%>
+          <%slides = group.slides.current%>
+        <%else%>
+          <a name="ungrouped">Ungrouped slides</a>
+          <%slides = Slide.current.ungrouped.order('id desc')%>
+        <%end%>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <%=render :partial => 'slide', :locals => {:slides => slides}%>
+      </td>
+    </tr>
+  </table>
+  <%end%>
+  <%end%>
+</div>
 
 <%end%>
 </div>

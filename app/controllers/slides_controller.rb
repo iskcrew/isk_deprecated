@@ -16,8 +16,10 @@ class SlidesController < ApplicationController
       end
       @filter = :hide
     else
-      @ungrouped = MasterGroup.ungrouped
-      @groups = MasterGroup.defined_groups.order("LOWER(name), name").includes(:slides)
+      @groups = Array.new
+      @groups << MasterGroup.ungrouped
+      @groups << MasterGroup.defined_groups.order("LOWER(name), name").includes(:slides).all
+      @groups.flatten!
     end
     
     respond_to do |format|
