@@ -10,7 +10,9 @@
   <%=render :partial => 'shared/display_warnings'%>
     
 	<div class="topNavigation">&nbsp;
+	  <%cache('navigation tabs') do %>
 	  <div class='tabs'>&nbsp;<%=navigation_links%></div>
+	  <%end%>
 		<div class='logout'>
 		  I'm <b><%=current_user.username%></b>
 		  <%=link_to 'Logout', {:controller => :logins, :action => :destroy}, :method => :delete%>

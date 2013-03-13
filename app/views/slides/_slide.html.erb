@@ -14,8 +14,10 @@
   <%end%>
 
   <div class="slidebuttons">
-
+  
   <%if s.can_edit? current_user %>
+  
+  <% cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :edit) do%>
   
   <%=hide_button_or_status(s, remote)%>
 	
@@ -38,6 +40,9 @@
   <%=link_to 'Clone', {:controller => :slides, :action => :clone, :id => s.id}, :method => :post, :title => 'Create clone of this slide', :class => 'button'%>
 	
 	<%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>s.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
+	
+	
+	<% end %>
 	
 	<% else %>
 	
