@@ -3,6 +3,7 @@ class SlidesController < ApplicationController
   before_filter :require_admin, :only => [:deny, :grant, :to_inkscape]
   skip_before_filter :require_login, :only => [:svg_save, :preview, :full]
   
+  cache_sweeper :slide_sweeper
   
   def index
     if params[:filter] == 'edit'
