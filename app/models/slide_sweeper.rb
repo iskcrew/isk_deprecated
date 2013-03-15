@@ -18,8 +18,8 @@ class SlideSweeper < ActionController::Caching::Sweeper
     
     expire_fragment('group_links')
     
-    expire_fragment(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :edit)
-    expire_fragment(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :header)
+    expire_fragment(:controller => :slides, :action => :show, :id => slide.id, :action_suffix => :edit)
+    expire_fragment(:controller => :slides, :action => :show, :id => slide.id, :action_suffix => :header)
     
   end
 end

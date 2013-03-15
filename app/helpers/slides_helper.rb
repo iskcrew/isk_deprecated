@@ -29,15 +29,21 @@ module SlidesHelper
   end
   
   def hide_button_or_status(s, remote = false)
-    options = {:id => s.id, :controller => :slides}
-    options[:action]= (s.public ? :hide : :publish)
     if s.can_edit? current_user
-      return toggle_link_to "Public", s.public, options, :method => :post, :remote => true
+      return hide_button(s)
 	  elsif s.can_hide?(current_user) && s.public == true
-	    return toggle_link_to "Public", s.public, options, :method => :post, :remote => true, :confirm => 'Are you sure you want to hide this slide?'
+	    return hide_button(s, true)
     else
 	    return inactive_toggle('Public', s.public)
     end
+  end
+  
+  def hide_button(s, confirm = false)
+    options = {:id => s.id, :controller => :slides}
+    options[:action]= (s.public ? :hide : :publish)
+    html_options = {:method => :post, :remote => true}
+    html_options[:confirm] = "Are you sure you want to hide this slide?" if confirm
+    return toggle_link_to "Public", s.public, options, html_options 
   end
   
   def inactive_toggle(name, status)

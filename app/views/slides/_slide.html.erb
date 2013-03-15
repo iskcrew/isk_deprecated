@@ -1,4 +1,3 @@
-<%remote = true unless defined? remote%>
 <%(slides ||= [slide]).each do |s|%>
 
 <%cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :header) do %>
@@ -20,7 +19,7 @@
   
   <% cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :edit) do%>
   
-  <%=hide_button_or_status(s, remote)%>
+  <%=hide_button_or_status(s)%>
 	
 	<%=toggle_link_to 'Clock', s.show_clock, {:controller => :slides, :action => :toggle_clock, :id => s.id}, :method => :post, :remote => true%>
   
