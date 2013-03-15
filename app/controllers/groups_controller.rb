@@ -2,6 +2,9 @@ class GroupsController < ApplicationController
   before_filter :require_create, :only => [:new, :create]
   before_filter :require_admin, :only => [:publish_all, :hide_all]
   
+  cache_sweeper :group_sweeper
+  
+  
   def index
     @groups = MasterGroup.defined_groups.all
     @new_group = MasterGroup.new

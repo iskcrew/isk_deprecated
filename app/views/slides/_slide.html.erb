@@ -1,12 +1,13 @@
 <%remote = true unless defined? remote%>
 <%(slides ||= [slide]).each do |s|%>
 
+<%cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :header) do %>
 <div class="<%=s.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=s.id.to_s%>">
   <div class='slideheader'>
     <div class="slidename"><%=link_to s.name, :controller => :slides, :action => :show, :id => s.id%></div>
     <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
   </div>
-  
+<%end%>
   <%unless defined?(to_full)%>
     <%=preview_to_show_tag(s)%>
   <%else%>
