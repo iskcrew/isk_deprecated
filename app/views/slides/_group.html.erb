@@ -13,11 +13,6 @@
     </tr>
     <tr>
       <td>
-        <%if current_user.has_role?(Slide::AdminRole)%>
-          <%cache(:controller => :groups, :action => :show, :id => group.id) do%>
-            <%=render :partial => 'slide', :collection => slides%>
-          <%end%>
-        <%else%>
           <%slides.each do |slide|%>
             <%if slide.can_edit?(current_user)%>
               <%cache(:controller => :slides, :action => :show, :id => slide.id, :edit => true) do %>
@@ -34,7 +29,7 @@
             <%end%>
     
           <%end%>
-        <%end%>
+        
       </td>
     </tr>
   </table>
