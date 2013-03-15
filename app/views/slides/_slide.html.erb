@@ -1,12 +1,10 @@
 <%(slides ||= [slide]).each do |s|%>
 
-<%cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :header) do %>
 <div class="<%=s.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=s.id.to_s%>">
   <div class='slideheader'>
     <div class="slidename"><%=link_to s.name, :controller => :slides, :action => :show, :id => s.id%></div>
     <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
   </div>
-<%end%>
   <%unless defined?(to_full)%>
     <%=preview_to_show_tag(s)%>
   <%else%>
@@ -17,7 +15,6 @@
   
   <%if s.can_edit? current_user %>
   
-  <% cache(:controller => :slides, :action => :show, :id => s.id, :action_suffix => :edit) do%>
   
   <%=hide_button(s)%>
 	
@@ -42,7 +39,6 @@
 	<%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>s.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
 	
 	
-	<% end #kakku %>
 	
 	<% else %>
 	
