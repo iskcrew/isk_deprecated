@@ -1,5 +1,5 @@
 class GroupSweeper < ActionController::Caching::Sweeper
-  observe Group
+  observe MasterGroup
   
   def after_create(group)
     expire_cache_for(group)
@@ -16,5 +16,8 @@ class GroupSweeper < ActionController::Caching::Sweeper
   private
   def expire_cache_for(group)
     expire_fragment('group_links')
+    
+    
+    expire_fragment(:controller => :groups, :action => :show, :id => group.id)
   end
 end
