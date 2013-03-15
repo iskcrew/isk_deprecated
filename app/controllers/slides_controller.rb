@@ -378,19 +378,21 @@ class SlidesController < ApplicationController
   
   def preview
     @slide = Slide.find(params[:id])
-    
-    respond_to do |format|
-    format.html {
-      if @slide.ready
-        send_file(@slide.preview_filename, {:disposition => 'inline'})
-      else
-        send_file(Rails.root.join('public','no_image.jpg'), {:disposition => 'inline'})
+    if stale?(:last_modified => @slide.updated_at.utc, :etag => @slide)
+
+      respond_to do |format|
+        format.html {
+          if @slide.ready
+            send_file(@slide.preview_filename, {:disposition => 'inline'})
+          else
+            send_file(Rails.root.join('public','no_image.jpg'), {:disposition => 'inline'})
+          end
+        }
+        format.js {render :show}
       end
-      }
-      format.js {render :show}
     end
   end
-  
+
   def preview_ready
     slide = Slide.find(params[:id])
     
