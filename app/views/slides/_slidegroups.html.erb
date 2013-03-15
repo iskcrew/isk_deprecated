@@ -2,10 +2,11 @@
   <%if current_user.has_role?(Slide::AdminRole)%>
     <%@groups.each do |group|%>
       <%cache(:controller => :groups, :action => :show, :id => group.id) do%>
-        <%render :partial => 'group', :object => group%>
+        <%=render :partial => 'group', :object => group%>
       <%end%>
-    <%else%>
-      <%=render :partial => 'group', :collection => @groups%>
     <%end%>
+  <%else%>
+    <%=render :partial => 'group', :collection => @groups%>
+  <%end%>
   
 </div>
