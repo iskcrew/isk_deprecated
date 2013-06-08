@@ -135,10 +135,8 @@ class SlidesController < ApplicationController
     
     if @slide.type == SimpleSlide.sti_name
       redirect_to :action => :edit, :id => @slide.id
-    end
-    
-    unless @slide.is_a? SvgSlide
-      flash[:error] = "This slide isn't SVG-Editor slide, you cannot edit it online!"
+    else
+      flash[:error] = "This slide isn't a simple slide, you cannot edit it online!"
       redirect_to :action => :show, :id => @slide.id
     end
     
@@ -289,7 +287,7 @@ class SlidesController < ApplicationController
         when 'from_template'
           import_template = SlideTemplate.find(params[:use_template])
           FileUtils.copy(import_template.svg_filename, @slide.svg_filename)
-          @slide.type = SvgSlide.sti_name
+          @slide.type = InkscapeSlide.sti_name
           @slide.is_svg = true
           @slide.save!
           @slide = Slide.find(@slide.id) #muuten delayed job kusee
@@ -346,12 +344,8 @@ class SlidesController < ApplicationController
       
       @slide = Slide.find(@slide.id)
       
-      if @slide.type == SvgSlide.model_name
-        redirect_to :action => :svg_edit, :id => @slide.id
-      else
-        redirect_to :action => :show, :id => @slide.id
-      end 
-    
+      redirect_to :action => :show, :id => @slide.id
+      
     rescue Magick::ImageMagickError
       #image invalid
       File::delete(@slide.original_filename)

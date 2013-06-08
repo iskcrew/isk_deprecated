@@ -26,10 +26,6 @@
 		<%=link_to 'Download', {:controller => :slides, :action => :svg_data, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
 	<%end%>
 	
-	<%if s.is_a?(SvgSlide) && !s.is_a?(SimpleSlide)%>
-	  <%=link_to 'SVG-editor', {:controller => :slides, :action => :svg_edit, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
-	<%end%>
-
 	<%if s.grouped?%>
 		<%=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => s.id}, :method => :post, :class => 'button ungroup'%>
 	<%end%>
