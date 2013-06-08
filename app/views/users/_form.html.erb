@@ -1,7 +1,5 @@
-<%fields_for :edituser do |form| %>
-<%end%>
 
-<%fields_for 'password' do |form|%>
+<%=fields_for 'password' do |form|%>
 	<p>
 		<label>Password</label>
 		<%=form.password_field 'password'%>
