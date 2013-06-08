@@ -74,6 +74,17 @@ Isk::Application.routes.draw do
     end
   end
 
+  resources :users do
+    member do
+      get 'roles'
+      post 'grant'
+    end
+    
+    collection do
+      
+    end
+  end
+
   
   resources :slides do
     member do
