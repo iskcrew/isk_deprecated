@@ -1,0 +1,7 @@
+<h1>Edit user info</h1>
+<%=error_messages_for 'edituser'%>
+
+<%form_for :edituser, :url => {:action => :update, :id => @edituser.id} do |f| %>
+	<%=render :partial => "form"%>
+	<%=submit_tag 'Update'%>
+<%end%>

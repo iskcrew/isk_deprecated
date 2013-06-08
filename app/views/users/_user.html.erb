@@ -1,0 +1,7 @@
+<div class="userinfo">
+  <span><%=user.username%></span>
+	<span><%=user.roles_text%></span>
+	<span class="user_actions">
+	<%=link_to 'Assign roles', :action=>'roles', :id=>user%> | <%=link_to 'edit', :action=>'edit', :id=>user%> | <%=link_to 'show', :action=>'show', :id=>user%> | <%=link_to 'delete', :action => 'destroy', :id=>user%>
+	</span>
+</div>

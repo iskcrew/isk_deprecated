@@ -1,0 +1,31 @@
+<%fields_for :edituser do |form| %>
+	<p>
+		<label>Firstname</label>
+		<%=form.text_field 'firstname'%>
+	</p>
+
+	<p>
+		<label>lastname</label>
+		<%=form.text_field 'lastname'%>
+	</p>
+
+	<p>
+		<label>Company</label>
+		<%=form.select("company_id", Company.all.collect {|p| [ p.name, p.id ] } )%>
+
+	<p>
+		<label>Phone</label>
+		<%=form.text_field 'phone'%>
+	</p>
+	
+<%end%>
+<%fields_for 'password' do |form|%>
+	<p>
+		<label>Password</label>
+		<%=form.password_field 'password'%>
+	</p>
+	<p>
+		<label>Verify password</label>
+		<%=form.password_field 'verify'%>
+	</p>
+<%end%>
