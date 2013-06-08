@@ -1,6 +1,8 @@
 class TemplatesController < ApplicationController
   before_filter :require_template_admin, :except => [:index, :show]
   
+  #TODO: Tää pitäs muuttaa toimimaan uusien STI-kelmujen kanssa...
+  
   def index
     @templates = SlideTemplate.all
   end
