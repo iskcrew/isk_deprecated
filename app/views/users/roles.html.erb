@@ -1,6 +1,6 @@
-<h1>Assign roles to a user: <%=h @user.name%> (<%=h @user.username%>)</h1>
+<h1>Assign roles to a user: <%=@user.username%></h1>
 
-<%form_for :roles, :url => {:action => :grant, :id => @user} do |f| %>
+<%=form_for :roles, :url => {:action => :grant, :id => @user} do |f| %>
 	<table>
 		<tr>
 			<th>Roles</th>
@@ -8,7 +8,7 @@
 	<%@roles.each do |r| %>
 		<tr>
 			<td>
-			<%=f.check_box(r.role, ( @user.has_role?(r.role) ? {:checked => true} : {:checked => false}))%> <%=r.role%>
+			<%=f.check_box(r.id, ( @user.has_role?(r.role) ? {:checked => true} : {:checked => false}))%> <%=r.role%>
 			</td>
 		</tr>
 	<%end%>

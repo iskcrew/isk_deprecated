@@ -8,28 +8,28 @@ class UsersController < ApplicationController
   
   def roles
     @user = User.find(params[:id])
-    @roles = Role.find(:all)
+    @roles = Role.all
   end
   
   #Grant roles to a user
   def grant
     user=User.find(params[:id])
-    params[:roles].each_pair do |request_role, value|
-      if value.to_i == 1
-        unless user.has_role?(request_role.to_s)
-          r = Role.find(:first, :conditions=>{:role => request_role.to_s})
+    params[:roles].each_pair do |role_id, checked|
+      r = Role.find(role_id)
+      if checked.to_i == 1
+        unless user.roles.include?(r)
           user.roles << r
         end
+      
       else
-        if user.has_role?(request_role.to_s)
-          remove = user.roles.find(:first, :conditions=>{:role => request_role.to_s})
-          user.roles.delete(remove)
+        if user.roles.include?(r)
+          user.roles.delete(r)
         end
       end
     end
     user.save!
     flash[:notice] = "User roles changed"
-    redirect_to :action=>'list'
+    redirect_to :action=>'index'
     
   end
   
