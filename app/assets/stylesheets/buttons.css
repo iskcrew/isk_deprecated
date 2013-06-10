@@ -110,6 +110,11 @@ a.inactive:hover {
 	cursor: default;
 }
 
+
+a.delete {
+	background-color:#fe1a00;
+}
+
 .led:after {
     content: "";
     display: inline-block;

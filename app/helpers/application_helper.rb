@@ -2,11 +2,18 @@ module ApplicationHelper
   
   def navigation_links
     controllers = ['Slides', 'Groups', 'Presentations', 'Displays']
+    admin_controllers = ['Users']
     ret = String.new
     html_options = Hash.new
     controllers.each do |c|
       html_options = controller.class.name.include?(c) ? {:class => 'current'} : {}
       ret << link_to(c, {:controller => c.downcase}, html_options)
+    end
+    if current_user.admin?
+      admin_controllers.each do |c|
+        html_options = controller.class.name.include?(c) ? {:class => 'current'} : {}
+        ret << link_to(c, {:controller => c.downcase}, html_options)
+      end
     end
     return ret.html_safe 
   end

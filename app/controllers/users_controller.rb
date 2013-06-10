@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 
   def roles
     @user = User.find(params[:id])
-    @roles = Role.all
+    @roles = Role.order('role').all
   end
 
   #Grant roles to a user

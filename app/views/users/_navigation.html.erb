@@ -1,9 +1,4 @@
-<%if session[:user]%>
-	<%if User.find(session[:user]).has_role?("admin")%>
-		<div class="navigation">
-			<%=link_to "List users", :action => 'list'%> |
-			<%=link_to "Create user", :action => 'new'%>
-	   	<%=(' | '+ @navigation) unless @navigation == nil%>
-		</div>
-		<%end%>
-<%end%>
+<div class="navigation">&nbsp;
+	<%=link_to 'List', :controller => :users, :action => :index%>
+	<%=link_to "New", :controller => :slides, :action => :new%>
+</div>
