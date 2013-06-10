@@ -2,6 +2,6 @@
 <%=error_messages_for 'edituser'%>
 
 <%form_for :edituser, :url => {:action => :update, :id => @edituser.id} do |f| %>
-	<%=render :partial => "form"%>
+	<%=render :partial => "password_form"%>
 	<%=submit_tag 'Update'%>
 <%end%>

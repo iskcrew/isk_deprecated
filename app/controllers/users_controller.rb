@@ -71,18 +71,17 @@ class UsersController < ApplicationController
   end
 
   def update
-    @edituser=User.find(params[:id])
-    @edituser.attributes=params[:user]
+    @user=User.find(params[:id])
     unless params[:password][:password].empty? then
       if params[:password][:password] == params[:password][:verify] then
-        @edituser.password=params[:password][:password]
+        @user.password=params[:password][:password]
       else
-        @edituser.errors.add('', "Passwords don't match")
+        @user.errors.add('', "Passwords don't match")
         render :action => 'edit'
         return
       end
     end
-    if @edituser.save
+    if @user.save
       flash[:notice]="User updated"
       redirect_to :action => 'list'
     else
