@@ -43,7 +43,7 @@ class SvgSlide < Slide
     svg = REXML::Document.new(File.read(self.svg_filename))
     
 
-    return nil unless svg.root.elements.to_a('//image').count = 1 #jos on muuta kuin taustakuva niin SEIS
+    return nil unless svg.root.elements.to_a('//image').count == 1 #jos on muuta kuin taustakuva niin SEIS
 
     text_nodes = svg.root.elements.to_a('//text')
     
