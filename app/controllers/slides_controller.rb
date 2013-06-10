@@ -168,6 +168,15 @@ class SlidesController < ApplicationController
     redirect_to :action => :show, :id => ink.id
   end
   
+  def to_simple
+    slide = SvgSlide.find(params[:id])
+    simple = InkscapeSlide.copy! slide
+    
+    flash[:notice] = "Slide was converted simple slide"
+    redirect_to :action => :edit, :id => slide.id
+  end
+  
+  
   def thrashed
     @slides = Slide.thrashed.order("name ASC")
   end

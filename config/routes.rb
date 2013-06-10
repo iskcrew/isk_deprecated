@@ -104,6 +104,7 @@ Isk::Application.routes.draw do
       post 'deny'
       post 'grant'
       post 'to_inkscape'
+      post 'to_simple'
       post 'add_to_group'
       post 'add_to_override'
       post 'clone'

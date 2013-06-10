@@ -37,6 +37,40 @@ class SvgSlide < Slide
     is.delay.generate_images
   end
 
+  def to_simple_slide!
+    return nil unless self.is_svg?
+
+    svg = REXML::Document.new(File.read(self.svg_filename))
+    
+
+    return nil unless svg.root.elements.to_a('//image').count = 1 #jos on muuta kuin taustakuva niin SEIS
+
+    text_nodes = svg.root.elements.to_a('//text')
+    
+    return nil unless text_nodes.count > 0 #Pitää olla tekstiä
+    
+    header = text_nodes[0].elements.collect('//tspan'){|e| e.texts.join(" ")}.join(" ").strip
+      
+    text_nodes.delete_at(0)
+      
+    text = String.new
+    text_nodes.each do |n|
+      text << n.elements.collect('//tspan'){|e| e.texts.join(" ")}.join(" ").strip << " "
+    end
+    text.strip!
+    
+    
+    
+    self.type = SimpleSlide.model_name
+    self.ready = false
+    self.save!
+    
+    s = Slide.find(self.id) #muutettiin STI-tyyppiä
+    
+    s.slidedata({:heading => header, :text => text})
+    
+  end
+
 
   def sanitize!
     svg = REXML::Document.new(File.read(self.svg_filename))

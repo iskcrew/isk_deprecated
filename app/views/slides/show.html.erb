@@ -53,6 +53,7 @@
 	  <%=link_to 'Edit', {:action => :edit, :id => @slide.id}, :confirm => (@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
 	  <%if @slide.is_a?(SvgSlide)%>
 	    <%=link_to('Convert to inkscape', {:action => :to_inkscape, :id => @slide.id}, :method => :post) if current_user.has_role?('slide-admin')%>
+	    <%=link_to('Convert to simple', {:action => :to_simple, :id => @slide.id}, :method => :post) if current_user.has_role?('slide-admin')%>
 	  <%end%>
 	  <%=link_to( 'Download', {:action => :svg_data, :id => @slide.id}, :confirm => (@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)) if @slide.is_a?(InkscapeSlide)%>
   <%end%>
