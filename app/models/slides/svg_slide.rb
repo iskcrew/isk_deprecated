@@ -69,6 +69,9 @@ class SvgSlide < Slide
     
     s.slidedata({:heading => header, :text => text})
     
+    
+    
+    return true
   end
 
 

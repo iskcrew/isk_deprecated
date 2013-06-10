@@ -16,9 +16,9 @@ class SimpleSlide < SvgSlide
       
       FileUtils.copy(s.svg_filename, simple.svg_filename)
       
-      simple.to_simple_slide!
+      raise Execption unless simple.to_simple_slide!
       
-      simple = InkscapeSlide.find(simple.id)
+      simple = SimpleSlide.find(simple.id)
       
       s = Slide.find(orig_id)
       s.replacement_id = simple.id

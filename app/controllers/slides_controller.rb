@@ -170,10 +170,10 @@ class SlidesController < ApplicationController
   
   def to_simple
     slide = SvgSlide.find(params[:id])
-    simple = InkscapeSlide.copy! slide
+    simple = SimpleSlide.copy! slide
     
     flash[:notice] = "Slide was converted simple slide"
-    redirect_to :action => :edit, :id => slide.id
+    redirect_to :action => :edit, :id => simple.id
   end
   
   
