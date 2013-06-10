@@ -9,7 +9,7 @@
       <li>
         <%=u.username%>
 	      <%if current_user.has_role? obj.class::AdminRole%>
-	        <%=link_to 'X', {:action => :deny, :id => obj.id, :user_id => u.id}, :method => :post, :class => 'button'%>
+	        <%=link_to 'X', {:action => :deny, :id => obj.id, :user_id => u.id}, :method => :post, :class => 'button delete'%>
         <%end%>
       </li>
       <%end%>
