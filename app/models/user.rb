@@ -9,12 +9,12 @@ class User < ActiveRecord::Base
   validates_length_of :username, :in=>1..50
   validates_uniqueness_of :username
   
-  has_and_belongs_to_many :roles
+  has_and_belongs_to_many :roles, :order => "role"
   
-  has_and_belongs_to_many :slides
-  has_and_belongs_to_many :master_groups
-  has_and_belongs_to_many :presentations
-  has_and_belongs_to_many :displays
+  has_and_belongs_to_many :slides, :order => "name"
+  has_and_belongs_to_many :master_groups, :order => "name"
+  has_and_belongs_to_many :presentations, :order => "name"
+  has_and_belongs_to_many :displays, :order => "name"
   
   attr_protected :password
   attr_protected :salt
