@@ -12,6 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui.min
+//= require jquery.ui.all
 //= require jquery.timer
 //= require_tree .

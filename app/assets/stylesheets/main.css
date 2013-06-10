@@ -38,12 +38,12 @@ img.preview {
 }
 
 p.flash_notice {
-	color: lightgreen;
+	color: green;
 	font-size: 2em;
 }
 
 p.flash_error {
-	color: lightred;
+	color: red;
 	font-size: 2em;
 }
 
