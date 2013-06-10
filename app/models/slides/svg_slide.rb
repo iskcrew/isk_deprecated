@@ -49,13 +49,13 @@ class SvgSlide < Slide
     
     return nil unless text_nodes.count > 0 #Pitää olla tekstiä
     
-    header = text_nodes[0].elements.collect('//tspan'){|e| e.texts.join(" ")}.join(" ").strip
+    header = text_nodes[0].elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip
       
     text_nodes.delete_at(0)
       
     text = String.new
     text_nodes.each do |n|
-      text << n.elements.collect('//tspan'){|e| e.texts.join(" ")}.join(" ").strip << " "
+      text << n.elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip << " "
     end
     text.strip!
     
