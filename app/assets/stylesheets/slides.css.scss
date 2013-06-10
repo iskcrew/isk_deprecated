@@ -6,9 +6,18 @@
 @font-face
 {
 font-family: 'Franklin Gothic Heavy';
-src: url('/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.ttf'),
-     url('/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.eot'); /* IE9 */
+src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
+     url('/fonts/Franklin_Gothic_Heavy-Regular.eot'); /* IE9 */
 }
+
+@font-face
+{
+font-family: 'Franklin Gothic Heavy';
+src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
+     url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
+font-style: italic;
+}
+
 
 table.slidetable {
 	width: 80%;
