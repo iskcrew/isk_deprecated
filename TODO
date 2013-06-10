@@ -4,6 +4,12 @@
 - näytin loggaamaan vielä enemmän: kaikki näytetyt kalvot omalle tietokantarivilleen
 - näytin loggaamaan kaikki hellot
 
+- Inkscape forkki:
+http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
+ tuolta relatiiviset sidotuksi inkscapen työhakemistoon
+ iski työkalupalkkiin?
+
+
 -PROD ENV, slidelistan generointi vie liian pitkään
 
 
