@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
     # no further implementation necessary
   end
 
+  class ConvertError < StandardError
+    # no further implementation necessary
+  end
+
+
   rescue_from ActionController::RedirectBackError, :with => :return_to_root
   rescue_from ApplicationController::PermissionDenied do |e| 
     http_status_code(:forbidden, e) 

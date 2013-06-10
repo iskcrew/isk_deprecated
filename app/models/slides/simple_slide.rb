@@ -16,7 +16,7 @@ class SimpleSlide < SvgSlide
       
       FileUtils.copy(s.svg_filename, simple.svg_filename)
       
-      raise Execption unless simple.to_simple_slide!
+      raise ConvertError unless simple.to_simple_slide!
       
       simple = SimpleSlide.find(simple.id)
       

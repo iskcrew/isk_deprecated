@@ -170,10 +170,20 @@ class SlidesController < ApplicationController
   
   def to_simple
     slide = SvgSlide.find(params[:id])
-    simple = SimpleSlide.copy! slide
+    begin
+      simple = SimpleSlide.copy! slide
+      flash[:notice] = "Slide was converted simple slide"
+      redirect_to :action => :edit, :id => simple.id
+      
+    rescue ConvertError
+      flash[:error] = "Conversion error, maybe slide has images?"
+      redirect_to :action => :show, :id => slide.id
+  
+    end
     
-    flash[:notice] = "Slide was converted simple slide"
-    redirect_to :action => :edit, :id => simple.id
+    
+   
+    
   end
   
   
