@@ -67,7 +67,7 @@ class SvgSlide < Slide
     
     s = Slide.find(self.id) #muutettiin STI-tyyppiä
     
-    s.slidedata({:heading => header, :text => text})
+    s.slidedata = {:heading => header, :text => text}
     
     
     
