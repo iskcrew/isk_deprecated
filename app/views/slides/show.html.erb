@@ -10,6 +10,13 @@
 </div>
 
 <div class='slide_metadata info_block right_column'>
+
+  <%unless @slide.description.empty?%>
+    <h2>Slide description</h2>
+    <%=simple_format @slide.description%>
+  <%end%>
+
+
 <h2>Slide metadata</h2>
 
   <%if @slide.public%>
@@ -31,6 +38,7 @@
 		  <p>This slide has been deleted. <%=button_to 'Undelete', :action => :undelete, :id => @slide.id, :class => 'button' if current_user.has_role?(Slide::AdminRole)%></p>
 	  </div>
   <%end%>
+  
   
   <ul>
     <li>Slide class: <%=slide_class @slide%></li>

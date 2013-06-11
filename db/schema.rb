@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130219080829) do
+ActiveRecord::Schema.define(:version => 20130611162524) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(:version => 20130219080829) do
     t.boolean  "public",                         :default => false
     t.boolean  "show_clock",                     :default => true
     t.string   "type"
+    t.text     "description",                    :default => ""
   end
 
   add_index "slides", ["id", "public"], :name => "index_slides_on_id_and_public"

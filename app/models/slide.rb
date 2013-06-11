@@ -14,7 +14,7 @@ class Slide < ActiveRecord::Base
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
   
   
-  attr_accessible :name, :show_clock
+  attr_accessible :name, :show_clock, :description
   
   scope :public, where(:public => true)
   scope :hidden, where(:public => false)

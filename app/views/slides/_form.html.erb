@@ -1,5 +1,7 @@
 <%=fields_for :slide, @slide do |f|%>
 	<p><b>Name:</b><%=f.text_field :name%> <b>Show clock:</b><%=f.check_box :show_clock%></p>
+	<h3>Slide description</h2>
+	<%=f.text_area :description%>
 	<%if @slide.new_record?%>
 	<p><b>Group:</b><%=f.select :master_group_id, MasterGroup.all.collect {|p| [ p.name, p.id ] }%></p>
 	<%end%>
