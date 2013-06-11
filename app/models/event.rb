@@ -5,12 +5,14 @@ class Event < ActiveRecord::Base
   
   has_many :master_groups
   
+  #TODO: tietokannan päähän triggeri joka varmistaa että ainankin yksi tapahtuma on aktiivinen?
   def self.current
     self.where(:current => true).first!
   end
   
   private
   
+  #Varmistetaan että vain yhdella tapahtumalla on current -bitti päällä
   def set_current_event
     if self.current
       Event.update_all :current => false
