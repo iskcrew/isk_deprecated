@@ -9,7 +9,8 @@ class MasterGroup < ActiveRecord::Base
   has_many :groups
   
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
-  
+ 
+  belongs_to :event
   
   scope :orphan, joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.id IS NULL and master_groups.id <> ?', MasterGroup::Ungrouped_id)
 
