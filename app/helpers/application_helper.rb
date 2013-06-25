@@ -30,7 +30,7 @@ module ApplicationHelper
   
   def preview_tag(slide)
     if slide.ready
-      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id), {:class => 'preview'}), {:controller => :slides, :action => :full, :id => slide.id}, :title => 'Click to show full sized slide.'
+      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'preview'}), {:controller => :slides, :action => :full, :id => slide.id}, :title => 'Click to show full sized slide.'
     else
       html="<img class='preview' title='Slide preview not yet ready. Click to show full sized slide picture.' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
       return link_to html.html_safe, :controller => :slides, :action => :full, :id => slide.id

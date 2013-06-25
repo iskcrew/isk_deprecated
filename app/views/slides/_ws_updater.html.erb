@@ -6,4 +6,12 @@ slidelist.bind('updated_slide', function(data) {$.ajax({
 	url: "<%=url_for :controller => :slides%>/" + data,
 	dataType: 'script'
 });})
+
+slidelist.bind('updated_slideimage', function(data) {$.ajax({
+	type: "GET",
+	url: "<%=url_for :controller => :slides%>/" + data,
+	dataType: 'script'
+});})
+
+
 </script>

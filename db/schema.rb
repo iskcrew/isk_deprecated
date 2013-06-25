@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130611174246) do
+ActiveRecord::Schema.define(:version => 20130625191951) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -176,20 +176,21 @@ ActiveRecord::Schema.define(:version => 20130611174246) do
   add_index "slide_templates", ["name"], :name => "index_templates_on_name", :unique => true
 
   create_table "slides", :force => true do |t|
-    t.string   "name",            :limit => 100
-    t.string   "filename",        :limit => 50
+    t.string   "name",              :limit => 100
+    t.string   "filename",          :limit => 50
     t.integer  "replacement_id"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
-    t.boolean  "ready",                          :default => false
-    t.integer  "master_group_id",                :default => 1
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+    t.boolean  "ready",                            :default => false
+    t.integer  "master_group_id",                  :default => 1
     t.integer  "position"
-    t.boolean  "deleted",                        :default => false
-    t.boolean  "is_svg",                         :default => false
-    t.boolean  "public",                         :default => false
-    t.boolean  "show_clock",                     :default => true
+    t.boolean  "deleted",                          :default => false
+    t.boolean  "is_svg",                           :default => false
+    t.boolean  "public",                           :default => false
+    t.boolean  "show_clock",                       :default => true
     t.string   "type"
-    t.text     "description",                    :default => ""
+    t.text     "description",                      :default => ""
+    t.datetime "images_updated_at"
   end
 
   add_index "slides", ["id", "public"], :name => "index_slides_on_id_and_public"

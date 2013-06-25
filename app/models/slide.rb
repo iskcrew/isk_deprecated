@@ -86,6 +86,7 @@ class Slide < ActiveRecord::Base
     hash[:created_at] = self.created_at.to_i
     hash[:updated_at] = self.updated_at.to_i
     hash[:duration] = duration
+    hash[:images_updated_at] = self.images_updated_at
     hash[:effect] = 0
     hash[:show_clock] = self.show_clock
     hash[:type] = self.is_a?(VideoSlide) ? 'video' : 'image'
@@ -182,6 +183,7 @@ class Slide < ActiveRecord::Base
       picture.write(self.preview_filename)
     
       self.ready = true
+      self.images_updated_at = Time.now
       self.save!
       
       WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
