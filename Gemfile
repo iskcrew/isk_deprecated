@@ -19,6 +19,8 @@ gem 'dynamic_form'
 gem 'time_diff', '~> 0.2.2'
 gem 'jquery-ui-rails'
 
+gem 'websocket-rails'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

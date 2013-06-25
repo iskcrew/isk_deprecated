@@ -15,3 +15,5 @@
 //= require jquery.ui.all
 //= require jquery.timer
 //= require_tree .
+//= require websocket_rails/main
+
