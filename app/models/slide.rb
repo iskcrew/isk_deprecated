@@ -183,6 +183,8 @@ class Slide < ActiveRecord::Base
     
       self.ready = true
       self.save!
+      
+      WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
     end
   end
   
