@@ -5,12 +5,6 @@
 
 <h1>Display information for: <%=@display.name%> (<%=@display.ip%>)</h1>
 
-<script>
-  dispatcer = new WebSocketRails('localhost:3000/websockets');
-  message = {'display_id': '<%=@display.id%>'};
-  dispatcher.trigger('current_slide', message);
-</script
-
 <%if @display.presentation%>
   <p><b>Presentation:</b> <%=link_to @display.presentation.name, :controller => :presentations, :action => :show, :id => @display.presentation.id%></p>
 <%else%>
