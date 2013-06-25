@@ -1,5 +1,5 @@
 <script>
-var dispatcher = new WebSocketRails('<%=root_url.to_s.split("//")[1]%>websocket');
+var dispatcher = new WebSocketRails('<%=home_domain%>/websocket');
 slidelist = dispatcher.subscribe('slidelist');
 slidelist.bind('updated_slide', function(data) {$.ajax({
 	type: "GET",
