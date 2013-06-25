@@ -169,9 +169,6 @@ class Slide < ActiveRecord::Base
       picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
       picture.write(self.preview_filename)
       
-      self.ready = true
-      self.save!
-      self.touch
     else  
       picture = Magick::ImageList.new(self.original_filename)
       picture = picture[0]
@@ -182,12 +179,15 @@ class Slide < ActiveRecord::Base
       picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
       picture.write(self.preview_filename)
     
-      self.ready = true
-      self.images_updated_at = Time.now
-      self.save!
       
-      WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
+      
     end
+
+    self.ready = true
+    self.images_updated_at = Time.now
+    self.save!
+    
+    WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
   end
   
   
