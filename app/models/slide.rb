@@ -183,6 +183,7 @@ class Slide < ActiveRecord::Base
       picture.write(self.preview_filename)
     
       self.ready = true
+      self.images_updated_at = Time.now
       self.save!
       
       WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)

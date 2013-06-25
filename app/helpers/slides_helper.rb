@@ -2,7 +2,7 @@ module SlidesHelper
   
   def preview_to_show_tag(slide)
     if slide.ready
-      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id), {:class => 'preview'}), {:controller => :slides, :action => :show, :id => slide.id}, :title => 'Click to show slide details.'
+      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'preview'}), {:controller => :slides, :action => :show, :id => slide.id}, :title => 'Click to show slide details.'
     else
       html="<img class='preview' title='Preview not yet available. Click to show slide details.' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
       return link_to html.html_safe, :controller => :slides, :action => :show, :id => slide.id
