@@ -74,8 +74,8 @@ class Slide < ActiveRecord::Base
     Display.joins(:override_queues => :slide).where(:slides => {:id => self.id}).uniq
   end
   
-  
-  def to_hash(duration)
+  #TODO durationille jotain
+  def to_hash(duration = 20)
     hash = Hash.new
     hash[:id] = self.id
     hash[:name] = self.name
