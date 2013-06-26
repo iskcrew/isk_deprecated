@@ -1,10 +1,13 @@
 <script>
 var dispatcher = new WebSocketRails('<%=home_domain%>/websocket');
-var replace_slideitem = function(data) {$.ajax({
-	type: "GET",
-	url: "<%=url_for :controller => :slides%>/" + data.id,
-	dataType: 'script'
-});};
+function replace_slideitem(slide) {
+  console.log("jeee!" + slide);
+  $.ajax({
+	  type: "GET",
+	  url: "<%=url_for :controller => :slides%>/" + slide.id,
+	  dataType: 'script'
+});
+};
 
 slidelist = dispatcher.subscribe('slide');
 slidelist.bind('update', replace_slideitem);
