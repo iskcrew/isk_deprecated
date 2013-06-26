@@ -5,7 +5,7 @@ class Slide < ActiveRecord::Base
     s.filename = "slide_" + s.id.to_s
     s.save!
   end
-  
+    
   belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
   belongs_to :master_group, :touch => true
   
@@ -187,7 +187,8 @@ class Slide < ActiveRecord::Base
     self.images_updated_at = Time.now
     self.save!
     
-    WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
+    updated_image_notifications
+    
   end
   
   
@@ -280,6 +281,11 @@ class Slide < ActiveRecord::Base
 
   
   private
+  
+  def updated_image_notifications
+    WebsocketRails[:slide].trigger(:updated_image, self.to_json)
+  end  
+  
   
   def ensure_master_group_exists
     errors.add(:master_group_id, "^Group is invalid") if self.master_group.nil?
