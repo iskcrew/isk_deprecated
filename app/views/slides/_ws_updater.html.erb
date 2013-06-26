@@ -2,7 +2,7 @@
 var dispatcher = new WebSocketRails('<%=home_domain%>/websocket');
 var replace_slideitem = function(data) {$.ajax({
 	type: "GET",
-	url: "<%=url_for :controller => :slides%>/" + data,
+	url: "<%=url_for :controller => :slides%>/" + data.id,
 	dataType: 'script'
 });};
 
