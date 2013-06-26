@@ -13,13 +13,7 @@ class Presentation < ActiveRecord::Base
   attr_accessible :name, :effect_id, :delay
   
   
-  AdminRole = 'presentation-admin'
-  CreateRole = 'presentation-create'
-  
-  def can_edit?(user)
-    self.authorized_users.include?(user) || user.has_role?('presentation-admin')
-  end
-  
+  include ModelAuthorization
   
   def total_slides
     self.groups.joins(:master_group => :slides).where(:slides => {:public => true, :deleted => false, :replacement_id => nil}).count

@@ -82,7 +82,7 @@ class PresentationsController < ApplicationController
   def create
     @presentation = Presentation.new(params[:presentation])
     if @presentation.save
-      @presentation.authorized_users << current_user unless current_user.has_role?(Presentation::AdminRole)
+      @presentation.authorized_users << current_user unless Presentation.admin?(current_user)
       flash[:notice] = 'Presentation was successfully created.'
       redirect_to :action => :show, :id => @presentation.id
     else
@@ -127,11 +127,11 @@ class PresentationsController < ApplicationController
   private
   
   def require_admin
-    raise ApplicationController::PermissionDenied unless require_role 'presentation-admin'
+    raise ApplicationController::PermissionDenied unless Presentation.admin? current_user
   end
   
   def require_create
-    raise ApplicationController::PermissionDenied unless require_role ['presentation-create', 'presentation-admin']
+    raise ApplicationController::PermissionDenied unless Presentation.can_create? current_user
   end
     
 end
