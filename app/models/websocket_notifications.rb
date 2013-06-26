@@ -1,35 +1,39 @@
 class WebsocketNotifications < ActiveRecord::Observer
   #TODO näyttimelle kunnolla observointia...
-  observe :slide, :simple_slide, :svg_slide, :inkscape_slide, :http_slide, :video_slide, :master_group, :group, :presentation, :display
+  observe :slide, :master_group, :group, :presentation, :display
 
-  def after_create(model)
-    channel = model.base_class.name.downcase
+
+  def after_create(obj)
     event = :create
-    data = model.to_json
+    data = {:id => obj.id}
     
-    WebsocketRails[channel].trigger(event, data)
+    trigger obj, event, data
   end
   
-  def after_updata(model)
-    channel = model.base_class.name.downcase
+  def after_update(obj)
     event = :update
-    data = model.to_json
+    data = {:id => obj.id}
     
-    WebsocketRails[channel].trigger(event, data)
-    
+    trigger obj, event, data
   end
   
-  def after_destroy(model)
-    channel = model.base_class.name.downcase
+  def after_destroy(obj)
     event = :destroy
-    data = model.id
+    data = {:id => obj.id}
     
-    WebsocketRails[channel].trigger(event, data)
-    
+    trigger obj, event, data
   end
 
 
   private
+
+  def trigger(obj, event, data)
+    WebsocketRails[get_channel(obj)].trigger(event, data)
+  end
+
+  def get_channel(obj)
+    return obj.class.base_class.name.downcase
+  end
 
   def asd
     case 
