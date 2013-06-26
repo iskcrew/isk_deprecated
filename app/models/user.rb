@@ -2,10 +2,7 @@ class User < ActiveRecord::Base
   require 'digest/sha1'
   
   AdminUsers = ['admin']
-  
-  AdminRole = 'user-admin'
-  CreateRole = 'user-create'
-  
+    
   validates_length_of :username, :in=>1..50
   validates_uniqueness_of :username
   
@@ -19,6 +16,8 @@ class User < ActiveRecord::Base
   attr_protected :password
   attr_protected :salt
   attr_protected :username
+
+  include ModelAuthorization
 
   def admin?
     User::AdminUsers.include?(self.username)

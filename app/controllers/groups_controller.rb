@@ -100,7 +100,7 @@ class GroupsController < ApplicationController
     new_group.event_id = 2 #PURKKAA
     if new_group.save
       flash[:notice] = "Group created."
-      new_group.authorized_users << current_user unless current_user.has_role?(MasterGroup::AdminRole)
+      new_group.authorized_users << current_user unless MasterGroup.admin? current_user
     else
       flash[:error] = "Error saving group"
     end
@@ -126,11 +126,11 @@ class GroupsController < ApplicationController
   private
   
   def require_create
-    raise ApplicationController::PermissionDenied unless require_role('group-admin') || require_role('group-create')
+    raise ApplicationController::PermissionDenied unless MasterGroup.can_create?(current_user)
   end
     
   def require_admin
-    raise ApplicationController::PermissionDenied unless require_role 'group-admin'
+    raise ApplicationController::PermissionDenied unless MasterGroup.admin?(current_user)
   end
   
 end

@@ -32,22 +32,16 @@ class Slide < ActiveRecord::Base
   FullHeight = 720
   PreviewWidth = 400
   PreviewHeight = 225
-  
+
   TypeString = 'image'
-  AdminRole = 'slide-admin'
-  CreateRole = 'slide-create'
+
+
+  include ModelAuthorization
   
   FilePath = Rails.root.join('data','slides')
   
   @_svg_data = nil
   
-  def self.can_edit(user)
-    if user.has_role?(AdminRole)
-      return self
-    else
-      self.joins(:authorized_users).where('users.id = ?', user.id)
-    end
-  end
   
   def clone!
     new_slide = self.dup
@@ -96,16 +90,7 @@ class Slide < ActiveRecord::Base
   def type_str
     self.class::TypeString
   end
-  
-  
-  def can_edit?(user)
-    user.has_role?(AdminRole) || self.authorized_users.include?(user)
-  end
-  
-  def can_hide?(user)
-    user.has_role?('slide-hide') || can_edit?(user)
-  end
-    
+      
   def grouped?
     self[:master_group_id] != MasterGroup::Ungrouped_id
   end

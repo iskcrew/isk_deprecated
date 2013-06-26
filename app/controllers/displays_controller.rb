@@ -192,15 +192,15 @@ class DisplaysController < ApplicationController
   private
   
   def require_admin
-    raise ApplicationController::PermissionDenied unless require_role 'display-admin'
+    raise ApplicationController::PermissionDenied unless Display.admin? current_user
   end
   
   def require_create
-    raise ApplicationController::PermissionDenied unless require_role ['display-admin', 'display-create']
+    raise ApplicationController::PermissionDenied unless Display.can_create? current_user
   end
   
   def require_override(d)
-    raise ApplicationController::PermissionDenied unless d.can_override?(current_user)
+    raise ApplicationController::PermissionDenied unless d.can_override? current_user
   end
  
 

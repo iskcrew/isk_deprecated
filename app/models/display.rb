@@ -20,34 +20,9 @@ class Display < ActiveRecord::Base
   
   
   Timeout = 5 #minutes
-  AdminRole = 'display-admin'
-  CreateRole = 'display-create'
-  OverrideRole = 'display-override'
+
+  include ModelAuthorization
   
-  
-  def can_edit?(user)
-    self.authorized_users.include?(user) || user.has_role?(AdminRole)
-  end
-  
-  def can_override?(user)
-    self.authorized_users.include?(user) || user.has_role?([AdminRole, OverrideRole])
-  end
-  
-  def self.can_edit(user)
-    if user.has_role?(AdminRole)
-      return self.order(:id)
-    else
-      return self.joins(:authorized_users).where('users.id = ?', user.id)
-    end
-  end
-  
-  def self.can_override(user)
-    if user.has_role?([OverrideRole, AdminRole])
-      return self.order(:id)
-    else
-      return self.joins(:authorized_users).where(:users => {:id => user.id})
-    end
-  end
   
   def self.late
     Display.where('monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)

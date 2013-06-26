@@ -62,6 +62,8 @@ module Isk
     # Ladataan alihakemistot malleista
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '{**}')]
     
+    # Moduulit
+    config.autoload_paths += Dir[Rails.root.join('app', 'mixins', '{**}')]
     
   end
 end

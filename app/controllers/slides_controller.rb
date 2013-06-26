@@ -203,7 +203,7 @@ class SlidesController < ApplicationController
   def new
     @slide = Slide.new
     
-    unless current_user.has_role? 'slide-admin'
+    unless Slide.admin? current_user
       #sallitaan vain yksinkertaisten ryhmättömien kelmujen luonti
       render :new_simple
       return
@@ -276,7 +276,7 @@ class SlidesController < ApplicationController
           return
         end
 
-        if require_role 'slide-admin'
+        if Slide.admin? current_user
           @slide.master_group = MasterGroup.find(params[:slide][:master_group_id])
         else
           @slide.master_group_id = MasterGroup::Ungrouped_id
@@ -499,13 +499,13 @@ class SlidesController < ApplicationController
   end
   
   def require_create
-    unless require_role('slide-create') || require_role('slide-admin')
+    unless Slide.can_create? current_user
       raise ApplicationController::PermissionDenied
     end
   end
   
   def require_admin
-    unless current_user.has_role?('slide-admin')
+    unless Slide.admin? current_user
       raise ApplicationController::PermissionDenied
     end
   end
