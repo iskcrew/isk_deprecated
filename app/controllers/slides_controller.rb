@@ -34,8 +34,6 @@ class SlidesController < ApplicationController
     user = User.find(params[:user_id])
     slide.authorized_users.delete(user)
 
-    slide_update_notifications(slide)
-    
     redirect_to :back
   end
   
@@ -43,9 +41,6 @@ class SlidesController < ApplicationController
     slide = Slide.find(params[:id])
     user = User.find(params[:grant][:user_id])
     slide.authorized_users << user
-
-    slide_update_notifications(slide)
-
 
     redirect_to :back    
   end
@@ -61,8 +56,6 @@ class SlidesController < ApplicationController
     
     flash[:notice] = "Added slide " << slide.name << " to group " << group.name
 
-    group_update_notifications(slide)
-    
     redirect_to :back
   end
   
@@ -81,8 +74,6 @@ class SlidesController < ApplicationController
     end
     flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
 
-    slide_update_notifications(slide)
-    
     redirect_to :back
   end
 
@@ -92,8 +83,6 @@ class SlidesController < ApplicationController
     
     @slide.show_clock = @slide.show_clock ? false : true
     @slide.save!
-    
-    slide_update_notifications(@slide)
     
     respond_to do |format|
       format.js {render :show}
@@ -118,9 +107,6 @@ class SlidesController < ApplicationController
     
     @slide.save!
 
-    slide_update_notifications(@slide)
-
-
     respond_to do |format|
         format.html {redirect_to :back}
         format.js {render :show}
@@ -133,9 +119,6 @@ class SlidesController < ApplicationController
     
     @slide.public = true
     @slide.save!
-    
-    slide_update_notifications(@slide)
-    
     
     respond_to do |format|
       format.html {redirect_to :back}
@@ -172,9 +155,6 @@ class SlidesController < ApplicationController
 
     @slide.delay.generate_images
 
-    slide_update_notifications(@slide)
-    
-    
     render :nothing => true
   end
 
@@ -184,10 +164,6 @@ class SlidesController < ApplicationController
     
     flash[:notice] = "Slide was converted to inkscape slide"
     
-    slide_replace_notifications(slide)
-    new_slide_notifications(ink)
-    
-    
     redirect_to :action => :show, :id => ink.id
   end
   
@@ -196,10 +172,6 @@ class SlidesController < ApplicationController
     begin
       simple = SimpleSlide.copy! slide
       flash[:notice] = "Slide was converted simple slide"
-      
-      slide_replace_notifications(slide)
-      new_slide_notifications(simple)
-      
       
       redirect_to :action => :edit, :id => simple.id
       
@@ -247,9 +219,6 @@ class SlidesController < ApplicationController
       @slide.destroy
       @slide.save!
       
-      deleted_slide_notifications(@slide)
-      
-      
     end
     redirect_to :action => :show, :id => @slide.id
   end
@@ -263,8 +232,6 @@ class SlidesController < ApplicationController
       @slide.undelete
       @slide.save!
     end
-    
-    new_slide_notifications(@slide)
     
     redirect_to :action => :show, :id => @slide.id
   end
@@ -284,7 +251,6 @@ class SlidesController < ApplicationController
       @slide.replacement = replacement
       @slide.save!
     end
-    replaced_slide_notifications(@slide)
     redirect_to :action => :show, :id => @slide.id
   end
   
@@ -294,7 +260,6 @@ class SlidesController < ApplicationController
     slide.delay.generate_images unless slide.ready
     flash[:notice] = "Slide cloned."
     
-    new_slide_notifications(slide)
     redirect_to :action => :show, :id => slide.id
   end
   
@@ -399,8 +364,6 @@ class SlidesController < ApplicationController
       
       @slide = Slide.find(@slide.id)
       
-      
-      new_slide_notifications(@slide)
       redirect_to :action => :show, :id => @slide.id
       
     rescue Magick::ImageMagickError
@@ -419,8 +382,6 @@ class SlidesController < ApplicationController
       slide.master_group_id = 1
       slide.save!
     end
-
-    group_update_notifications(slide)
 
     respond_to do |format|
       format.html {redirect_to :back}
@@ -520,7 +481,6 @@ class SlidesController < ApplicationController
       end
       
       flash[:notice] = 'Slide was successfully updated.'
-      slide_update_notifications(@slide)
       
       redirect_to :action => 'show', :id => @slide.id and return
     else
@@ -530,27 +490,7 @@ class SlidesController < ApplicationController
   end
   
   private
-  
-  def slide_update_notifications(s)
-    WebsocketRails[:slidelist].trigger(:updated_slide, s.id)
-  end
-  
-  def group_update_notifications(s)
-    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
-  end
-  
-  def new_slide_notifications(s)
-    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
-  end
-  
-  def deleted_slide_notifications(s)
-    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
-  end
-  
-  def slide_replace_notifications(s)
-    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
-  end
-  
+    
   def require_slide_edit(s)
     #Varmistetaan oikeudet
     unless s.can_edit? current_user

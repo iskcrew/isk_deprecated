@@ -6,6 +6,9 @@ class Slide < ActiveRecord::Base
     s.save!
   end
   
+  after_create :create_notifications
+  after_update :update_notifications
+  
   belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
   belongs_to :master_group, :touch => true
   
@@ -187,7 +190,8 @@ class Slide < ActiveRecord::Base
     self.images_updated_at = Time.now
     self.save!
     
-    WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
+    updated_image_notifications
+    
   end
   
   
@@ -280,6 +284,32 @@ class Slide < ActiveRecord::Base
 
   
   private
+  
+  def update_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slide, self.id)
+  end
+  
+  def updated_image_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slideimage, self.id)
+  end
+  
+  def group_update_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
+  end
+  
+  def create_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
+  end
+  
+  def destroy_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
+  end
+  
+  def replace_notifications
+    WebsocketRails[:slidelist].trigger(:updated_slidelist, nil)
+  end
+  
+  
   
   def ensure_master_group_exists
     errors.add(:master_group_id, "^Group is invalid") if self.master_group.nil?
