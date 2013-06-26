@@ -1,7 +1,5 @@
 <div class="navigation">&nbsp;
 	<%=link_to 'List', :action => :index%>
-	<%if current_user.has_role? 'template-admin'%>
-	<%=link_to "New", :action => :new%>
-	<%end%>
+	<%=link_to "New", :action => :new if Presentation.can_create?(current_user)%>
 	<%=yield :navigation%>
 </div>

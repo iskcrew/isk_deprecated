@@ -35,7 +35,7 @@
 	  </div>
   <%elsif @slide.deleted%>
 	  <div class="warning">
-		  <p>This slide has been deleted. <%=button_to 'Undelete', :action => :undelete, :id => @slide.id, :class => 'button' if current_user.has_role?(Slide::AdminRole)%></p>
+		  <p>This slide has been deleted. <%=button_to 'Undelete', :action => :undelete, :id => @slide.id, :class => 'button' if Slide.admin?(current_user)%></p>
 	  </div>
   <%end%>
   
@@ -60,10 +60,10 @@
   <%content_for :navigation do %>
 	  <%=link_to 'Edit', {:action => :edit, :id => @slide.id}, :confirm => (@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
 	  <%if @slide.is_a?(SvgSlide)%>
-	    <%=link_to('Convert to inkscape', {:action => :to_inkscape, :id => @slide.id}, :method => :post) if current_user.has_role?('slide-admin')%>
+	    <%=link_to('Convert to inkscape', {:action => :to_inkscape, :id => @slide.id}, :method => :post) if Slide.admin?(current_user)%>
 	  <%end%>
 	  
-	  <%=link_to('Convert to simple', {:action => :to_simple, :id => @slide.id}, :method => :post, :alt => 'Clones slide and converts it to a simple editor slide. Does not work if slide contains non-text elements.') if current_user.has_role?('slide-admin') && @slide.type == SvgSlide.sti_name%>
+	  <%=link_to('Convert to simple', {:action => :to_simple, :id => @slide.id}, :method => :post, :alt => 'Clones slide and converts it to a simple editor slide. Does not work if slide contains non-text elements.') if Slide.admin?(current_user) && @slide.type == SvgSlide.sti_name%>
 	  
 	  <%=link_to( 'Download', {:action => :svg_data, :id => @slide.id}, :confirm => (@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)) if @slide.is_a?(InkscapeSlide)%>
   <%end%>

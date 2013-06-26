@@ -1,5 +1,5 @@
 <div class="slidegroups" id='slidegroups' data-refresh-url="<%=url_for :controller => :slides, :action => :index%>" >
-  <%if current_user.has_role?(Slide::AdminRole)%>
+  <%if Slide.admin? current_user%>
     <%@groups.each do |group|%>
       <%cache(:controller => :groups, :action => :show, :id => group.id) do%>
         <%=render :partial => 'group', :object => group%>
