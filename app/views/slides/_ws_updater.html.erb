@@ -1,7 +1,6 @@
 <script>
 var dispatcher = new WebSocketRails('<%=home_domain%>/websocket');
 function replace_slideitem(slide) {
-  console.log("jeee!" + slide);
   $.ajax({
 	  type: "GET",
 	  url: "<%=url_for :controller => :slides%>/" + slide.id,
