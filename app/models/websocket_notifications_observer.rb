@@ -1,6 +1,6 @@
 class WebsocketNotificationsObserver < ActiveRecord::Observer
   #TODO näyttimelle kunnolla observointia...
-  observe :slide, :master_group, :group, :presentation, :display
+  observe :slide, :simple_slide, :svg_slide, :inkscape_slide, :http_slide, :master_group, :group, :presentation, :display
 
   def after_create(model)
     channel = model.base_class.name.downcase
