@@ -1,4 +1,4 @@
-class WebsocketNotificationsObserver < ActiveRecord::Observer
+class WebsocketNotifications < ActiveRecord::Observer
   #TODO näyttimelle kunnolla observointia...
   observe :slide, :simple_slide, :svg_slide, :inkscape_slide, :http_slide, :video_slide, :master_group, :group, :presentation, :display
 
