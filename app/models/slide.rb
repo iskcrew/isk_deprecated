@@ -42,7 +42,12 @@ class Slide < ActiveRecord::Base
   
   @_svg_data = nil
   
+  #Log that the slide has been shown on display_id just now.
+  def shown(display_id)
+    self.display_counts.create(:display_id => display_id)
+  end
   
+  #Create new ungrouped hidden clone of the slide
   def clone!
     new_slide = self.dup
     new_slide.public = false
@@ -87,6 +92,7 @@ class Slide < ActiveRecord::Base
     return hash
   end
   
+  #Tätä käytetään html:ssa luomaan ikonit eri slidetyypeille
   def type_str
     self.class::TypeString
   end
@@ -103,7 +109,7 @@ class Slide < ActiveRecord::Base
     self.is_svg
   end
   
-  
+  #Luetaan svg-data ja pistetään se muistiin kakkuun siltä varalta että tarvitaan uusiksi
   def svg_data
     return @_svg_data if @_svg_data
     
@@ -112,14 +118,18 @@ class Slide < ActiveRecord::Base
     return @_svg_data
   end
   
+  #Kirjoitetaan uusi svg-data tiedostoon ja merkitään kelmun kuva epäkelvoksi
   def svg_data=(svg)
     File.open(self.svg_filename,  'w') do |f|
       f.write svg
     end
+    @_svg_data = svg
     self.ready = false
     self.save!
   end
   
+  
+  #TODO: muuta tää korvausjuttu replace! -kutsuksi ja pistä noi replaement-accessorit privaateiksi!
   
   #Korvataan slide kaikista paikoista uudella
   def replacement=(replacement)
@@ -144,17 +154,21 @@ class Slide < ActiveRecord::Base
     end
   end
   
+  
+  #Paistetaan kelmusta kuvat ja pingataan websockettia niistä.
   def generate_images
     if self.is_svg?
       #Generoidaan svg:stä png:t rsvg:llä
       if system rsvg_command(:full)
       end
       
+      #Previkan tekeminen rsvg:llä tuppaa kusemaan, fontit ei skaalaudu oikein
       picture = Magick::ImageList.new(self.full_filename)
       picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
       picture.write(self.preview_filename)
       
-    else  
+    else
+      #Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
       picture = Magick::ImageList.new(self.original_filename)
       picture = picture[0]
         
@@ -204,6 +218,8 @@ class Slide < ActiveRecord::Base
     self.save!
   end
   
+  
+  #TODO: parempi lista-gemi käyttöön ja tää purkka pois
   def master_group_id=(mg_id)
     self.transaction do
       if self[master_group_id] != mg_id
@@ -221,7 +237,8 @@ class Slide < ActiveRecord::Base
 
 
   
-
+  #Konvertoidaan svg-kalvo (svg-editin tuottamassa muodossa) muotoon jota inkscape tykkää syödä
+  #Ilman näitä muutoksia mm. rivitys kusee inkscapessa.
   def svg_edit_to_inscape!
     
     return unless self.is_svg?
