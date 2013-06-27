@@ -3,7 +3,7 @@ WebsocketRails.setup do |config|
   # Uncomment to override the default log level. The log level can be
   # any of the standard Logger log levels. By default it will mirror the
   # current Rails environment log level.
-  # config.log_level = :debug
+  config.log_level = :debug
 
   # Uncomment to change the default log file path.
   # config.log_path = "#{Rails.root}/log/websocket_rails.log"
@@ -20,7 +20,7 @@ WebsocketRails.setup do |config|
   # Change to true to enable channel synchronization between
   # multiple server instances.
   # * Requires Redis.
-  config.synchronize = false
+  config.synchronize = true
 
   # Uncomment and edit to point to a different redis instance.
   # Will not be used unless standalone or synchronization mode
