@@ -33,18 +33,8 @@ class DisplaysController < ApplicationController
   #Näytin kertoo mitä kalvoa näytetään
   def current_slide
     d = Display.find(params[:id])
-    if params[:group].to_i != -1
-      d.current_group = MasterGroup.find(params[:group])
-    else
-      d.current_group_id = -1
-    end
-    s = Slide.find(params[:slide])
-    d.current_slide = s
-    d.last_contact_at = Time.now
     
-    dc = DisplayCount.where(:slide_id => s.id, :display_id => d.id).first_or_initialize
-    dc.count += 1
-    dc.save!
+    d.current_slide(params[:group], params[:slide])
     
     d.save!
     render :nothing => true
@@ -52,13 +42,11 @@ class DisplaysController < ApplicationController
   
   #Näytin kertoo kun ohisyötön kalvo on näytetty
   def slide_shown
-    d = Display.find(params[:id])
-    d.current_group_id = -1
-    oq = d.override_queues.find(params[:override])
-    d.current_slide = oq.slide
-    d.last_contact_at = Time.now
-    oq.destroy
-    d.save!
+    Display.transaction do
+      d = Display.find(params[:id])
+      d.override_shown(params[:override])
+      d.save!
+    end
     render :nothing => true
   end
   

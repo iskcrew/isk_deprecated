@@ -54,9 +54,23 @@ WebsocketRails::EventMap.describe do
 
 
   namespace :iskdpy do
-    subscribe :current_slide, to: IskdpyController, with_method: :current_slide
-    subscribe :current_presentation, to: IskdpyController, with_method: :current_presentation
-    subscribe :data, to: IskdpyController, with_method: :display
+    #Näytin kertoo mitä kelmua näytetään parhaillaan.
+    #data = {display_id, group_id, slide_id}
+    #palauttaa: display_<id> kanavalle viestin "current_slide" data={sliden serialisaatio}
+    subscribe :current_slide,         to: IskdpyController, with_method: :current_slide
+    
+    #Näytin kertoo kun override on näytetty.
+    #data = {display_id, slide_id}
+    #palauttaa: display_<id> kanavalle viestin "override_shown" data={display_id, override_id}
+    subscribe :override_shown,        to: IskdpyController, with_method: :override_shown
+    
+    #Pyydetään näyttimen tiedot serialisoituna
+    #data = {display_id}
+    #palauttaa: display_<id> kanavalle viestin "data" data={näyttimen serialisaatio}
+    subscribe :display_data,          to: IskdpyController, with_method: :display_data
+    
+    subscribe :current_presentation,  to: IskdpyController, with_method: :current_presentation
+    
   end
 
 
