@@ -23,6 +23,31 @@ class Display < ActiveRecord::Base
 
   include ModelAuthorization
   
+  def websocket_channel
+    return "display_" + self.id.to_s
+  end
+  
+  def override_shown(override)
+    self.current_group_id = -1
+    oq = self.override_queues.find(override)
+    d.current_slide = oq.slide
+    d.last_contact_at = Time.now
+    oq.destroy
+  end
+  
+  def current_slide(group_id, slide_id)
+    if group_id != -1
+      d.current_group = MasterGroup.find(group_id)
+    else
+      d.current_group_id = -1
+    end
+    s = Slide.find(slide_id)
+    d.current_slide = s
+    d.last_contact_at = Time.now
+    s.shown_on(d.id)
+    
+  end
+
   
   def self.late
     Display.where('monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)
