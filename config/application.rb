@@ -65,5 +65,7 @@ module Isk
     # Moduulit
     config.autoload_paths += Dir[Rails.root.join('app', 'mixins', '{**}')]
     
+    
+    require 'websocket_pong_updates_displays'
   end
 end
