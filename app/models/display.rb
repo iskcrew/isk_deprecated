@@ -46,16 +46,16 @@ class Display < ActiveRecord::Base
     oq.destroy
   end
   
-  def current_slide(group_id, slide_id)
+  def set_current_slide(group_id, slide_id)
     if group_id != -1
-      d.current_group = self.groups.find(group_id)
+      self.current_group = self.presentation.groups.find(group_id)
     else
-      d.current_group_id = -1
+      self.current_group_id = -1
     end
     s = Slide.find(slide_id)
-    d.current_slide = s
-    d.last_contact_at = Time.now
-    s.shown_on(d.id)
+    self.current_slide = s
+    self.last_contact_at = Time.now
+    s.shown_on(self.id)
     
   end
 

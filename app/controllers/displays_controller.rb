@@ -29,7 +29,7 @@ class DisplaysController < ApplicationController
   def current_slide
     d = Display.find(params[:id])
     
-    d.current_slide(params[:group], params[:slide])
+    d.set_current_slide params[:group], params[:slide]
     
     d.save!
     render :nothing => true

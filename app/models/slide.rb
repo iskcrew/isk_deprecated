@@ -43,7 +43,7 @@ class Slide < ActiveRecord::Base
   @_svg_data = nil
   
   #Log that the slide has been shown on display_id just now.
-  def shown(display_id)
+  def shown_on(display_id)
     self.display_counts.create(:display_id => display_id)
   end
   
