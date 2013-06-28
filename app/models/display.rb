@@ -10,7 +10,7 @@ class Display < ActiveRecord::Base
   end
   
   belongs_to :presentation
-  belongs_to :current_group, :class_name => "MasterGroup"
+  belongs_to :current_group, :class_name => "Group"
   belongs_to :current_slide, :class_name => "Slide"
   has_many :override_queues, :order => :position
   
