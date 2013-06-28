@@ -27,6 +27,17 @@ class Display < ActiveRecord::Base
     return "display_" + self.id.to_s
   end
   
+  
+  def self.hello(display_name, display_ip, connection_id = nil)
+    display = Display.where(:name => display_name).first_or_initialize
+    display.ip = ip
+    display.websocket_connection_id = connection_id 
+    display.last_contact_at = Time.now
+    display.last_hello = Time.now
+    display.save!
+    return display
+  end
+  
   def override_shown(override)
     self.current_group_id = -1
     oq = self.override_queues.find(override)
@@ -37,7 +48,7 @@ class Display < ActiveRecord::Base
   
   def current_slide(group_id, slide_id)
     if group_id != -1
-      d.current_group = MasterGroup.find(group_id)
+      d.current_group = self.groups.find(group_id)
     else
       d.current_group_id = -1
     end
