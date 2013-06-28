@@ -16,7 +16,7 @@ class IskdpyController < WebsocketRails::BaseController
   def current_slide
       Display.transaction do
         d = Display.find(message[:display_id])
-        d.current_slide(message[:group_id], message[:slide_id])
+        d.set_current_slide = message[:group_id], message[:slide_id]
         d.save!
       end
       data(d.current_slide.to_hast(d.presentation.duration))
