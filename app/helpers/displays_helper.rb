@@ -4,7 +4,7 @@ module DisplaysHelper
     if d.current_group_id == -1
       return link_to 'Override', {:action => :show, :id => d.id}, :class => 'override'
     elsif d.current_group
-      return link_to d.current_group.name, :controller => :groups, :action => :show, :id => d.current_group.id
+      return link_to d.current_group.name, :controller => :groups, :action => :show, :id => d.current_group.master_group.id
     else
       return 'UNKNOWN'
     end

@@ -48,7 +48,7 @@ class Display < ActiveRecord::Base
   
   def current_slide(group_id, slide_id)
     if group_id != -1
-      d.current_group = MasterGroup.find(group_id)
+      d.current_group = self.groups.find(group_id)
     else
       d.current_group_id = -1
     end
