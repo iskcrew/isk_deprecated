@@ -1,5 +1,17 @@
 class IskdpyController < WebsocketRails::BaseController
   
+  #näytin esittäytyy ja alustaa itsensä
+  def hello
+    if connection.request.headers['HTTP_X_FORWARDED_FOR']
+      display.ip = connection.request.headers['HTTP_X_FORWARDED_FOR']
+    else
+      display.ip = connection.request.ip
+    end
+    d = Display.hello(message[:display_name], ip, connection.id)
+    trigger_success d.to_hash
+  end
+  
+  
   #Näytin kertoo mitä kelmua se näyttää
   def current_slide
       Display.transaction do
@@ -7,8 +19,9 @@ class IskdpyController < WebsocketRails::BaseController
         d.current_slide(message[:group_id], message[:slide_id])
         d.save!
       end
-      
-      WebsocketRails[d.websocket_channel].trigger(:current_slide, d.current_slide.to_hast(d.presentation.duration))
+      data(d.current_slide.to_hast(d.presentation.duration))
+      WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
+      trigger_success data
   end
   
   #Näytin kertoo esittäneensä ohisyötön
@@ -19,18 +32,21 @@ class IskdpyController < WebsocketRails::BaseController
         d.save!
       end
       
-      WebsocketRails[d.websocket_channel].trigger(:override_shown, {:display_id => d.id, :override_id => message[:override_id]})
+      WebsocketRails[d.websocket_channel].trigger(:override_shown, data)
+      trigger_success data
   end
   
   
   def presentation
     d = Display.find(message)
-    send_message :current_presentatin, d.presentation.to_hash
+    trigger_success d.presentation.to_hash
   end
   
   #Lähetetään näyttimen serialisaatio pyydettäessä.
   def display_data
     d = Display.find(message)
-    WebsocketRails[d.websocket_channel].trigger(:data, d.to_hash)
+    data = d.to_hash
+    WebsocketRails[d.websocket_channel].trigger(:data, data)
+    trigger_success data
   end
 end

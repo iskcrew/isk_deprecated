@@ -16,18 +16,13 @@ class DisplaysController < ApplicationController
   
   #Näytin esittäytyy uniikilla nimellään
   def hello
-    @display = Display.where(:name => params[:name]).first_or_initialize
     if request.headers['HTTP_X_FORWARDED_FOR']
-      @display.ip = request.headers['HTTP_X_FORWARDED_FOR']
+      display_ip = request.headers['HTTP_X_FORWARDED_FOR']
     else
-      @display.ip = request.ip
+      display_ip = request.ip
     end
-    @display.last_contact_at = Time.now
-    @display.last_hello = Time.now
-    @display.save!
-    @display.reload
-
-    render :text => @display.id
+    d = Display.hello(params[:name], ip)
+    render :text => d.id
   end
   
   #Näytin kertoo mitä kalvoa näytetään

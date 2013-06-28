@@ -54,6 +54,11 @@ WebsocketRails::EventMap.describe do
 
 
   namespace :iskdpy do
+    #Näytin esittäytyy ja saa alkutietonsa
+    #data = {:display_name}
+    #palauttaa success, data = {näyttimen serialisaatio}
+    subscribe :hello,         to: IskdpyController, with_method: :hello
+    
     #Näytin kertoo mitä kelmua näytetään parhaillaan.
     #data = {display_id, group_id, slide_id}
     #palauttaa: display_<id> kanavalle viestin "current_slide" data={sliden serialisaatio}
