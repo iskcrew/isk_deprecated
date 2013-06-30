@@ -34,7 +34,7 @@ class Display < ActiveRecord::Base
   
   def self.hello(display_name, display_ip, connection_id = nil)
     display = Display.where(:name => display_name).first_or_initialize
-    display.ip = display_id
+    display.ip = display_ip
     display.websocket_connection_id = connection_id 
     display.last_contact_at = Time.now
     display.last_hello = Time.now
