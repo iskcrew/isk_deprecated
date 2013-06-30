@@ -7,6 +7,7 @@ class WebsocketNotifications < ActiveRecord::Observer
     event = :create
     data = {:id => obj.id}
     
+    display_datas(obj)
     trigger obj, event, data
   end
   
@@ -14,6 +15,7 @@ class WebsocketNotifications < ActiveRecord::Observer
     event = :update
     data = {:id => obj.id}
     
+    display_datas(obj)
     trigger obj, event, data
   end
   
@@ -21,6 +23,7 @@ class WebsocketNotifications < ActiveRecord::Observer
     event = :destroy
     data = {:id => obj.id}
     
+    display_datas(obj)
     trigger obj, event, data
   end
 
@@ -35,15 +38,11 @@ class WebsocketNotifications < ActiveRecord::Observer
     return obj.class.base_class.name.downcase
   end
 
-  def asd
-    case 
-    when model.is_a?(Slide)
-    when model.is_a?(MasterGroup)
-    when model.is_a?(Group)
-    when model.is_a?(Presentation)
-    when model.is_a?(Display)
+  def display_datas(obj)
+    obj.displays.each do |d|
+      data = d.to_hash
+      WebsocketRails[d.websocket_channel].trigger(:data, data)
     end
   end
-
 
 end
