@@ -3,9 +3,9 @@ class IskdpyController < WebsocketRails::BaseController
   #näytin esittäytyy ja alustaa itsensä
   def hello
     if connection.request.headers['HTTP_X_FORWARDED_FOR']
-      display.ip = connection.request.headers['HTTP_X_FORWARDED_FOR']
+      ip = connection.request.headers['HTTP_X_FORWARDED_FOR']
     else
-      display.ip = connection.request.ip
+      ip = connection.request.ip
     end
     d = Display.hello(message[:display_name], ip, connection.id)
     trigger_success d.to_hash
