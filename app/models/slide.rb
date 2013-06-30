@@ -40,7 +40,7 @@ class Slide < ActiveRecord::Base
   
   FilePath = Rails.root.join('data','slides')
   
-  @_svg_data = nil
+  @_svg_data = nil  
   
   #Log that the slide has been shown on display_id just now.
   def shown_on(display_id)
@@ -67,6 +67,10 @@ class Slide < ActiveRecord::Base
   
   def presentations
     Presentation.includes(:displays).joins(:groups => {:master_group => :slides}).where(:slides => {:id => self.id}).uniq
+  end
+  
+  def displays
+    Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
   end
   
   def override

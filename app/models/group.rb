@@ -24,6 +24,11 @@ class Group < ActiveRecord::Base
     self.master_group.slides
   end
   
+  def displays
+    Display.joins(:presentation => :groups).where(:groups => {:id => self.id}).uniq
+  end
+  
+  
   def public_slides
     self.master_group.slides.where(:public => true)
   end

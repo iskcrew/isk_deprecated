@@ -19,6 +19,7 @@ class MasterGroup < ActiveRecord::Base
   scope :ungrouped, find(MasterGroup::Ungrouped_id)
   
   
+  
  
   def self.ungrouped
     self.find(Ungrouped_id)
@@ -27,6 +28,10 @@ class MasterGroup < ActiveRecord::Base
   
   def presentations
     Presentation.joins(:groups => :master_group).where('master_groups.id = ?', self.id).uniq.all
+  end
+  
+  def displays
+    Display.joins(:presentation => {:groups => :master_group}).where(:master_groups => {:id => self.id}).uniq
   end
   
   def hide_slides

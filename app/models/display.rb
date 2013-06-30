@@ -27,6 +27,10 @@ class Display < ActiveRecord::Base
     return "display_" + self.id.to_s
   end
   
+  def displays
+    return [self]
+  end
+  
   
   def self.hello(display_name, display_ip, connection_id = nil)
     display = Display.where(:name => display_name).first_or_initialize
