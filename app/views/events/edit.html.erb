@@ -1,0 +1,7 @@
+<h1>Edit event info</h1>
+<%=error_messages_for :event%>
+
+<%=form_for :event, :url => {:action => :update, :id => @event.id}, :method => :put do |f| %>
+	<%=render :partial => 'form'%>
+	<%=f.submit 'Update'%>
+<%end%>

@@ -1,0 +1,4 @@
+<%=fields_for :event do |f|%>
+	<p><b>Name:</b><%=f.text_field :name%></p>
+	<p><b>Make this current event?</b><%=f.check_box :current%>
+<%end%>

@@ -19,7 +19,7 @@ class SlidesController < ApplicationController
     else
       @groups = Array.new
       @groups << MasterGroup.ungrouped
-      @groups << MasterGroup.defined_groups.order("LOWER(name), name").includes(:slides).all
+      @groups << MasterGroup.current.defined_groups.order("LOWER(name), name").includes(:slides).all
       @groups.flatten!
     end
     
@@ -49,7 +49,7 @@ class SlidesController < ApplicationController
     slide = Slide.current.ungrouped.find(params[:id])
     require_edit(slide)
     
-    group = MasterGroup.defined_groups.find(params[:add_to_group][:group_id])
+    group = MasterGroup.current.defined_groups.find(params[:add_to_group][:group_id])
     require_edit(group)
     
     group.slides << slide
