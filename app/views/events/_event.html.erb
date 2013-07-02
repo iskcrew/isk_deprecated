@@ -1,0 +1,7 @@
+<tr>
+  <td><%=event.name%></td>
+	<td><%=event.current ? 'Current' : ''%></td>
+	<td>
+	<%=link_to 'edit', :action=>'edit', :id=>event%> | <%=link_to 'show', :action=>'show', :id=>event%> | <%=link_to 'X', {:action => 'destroy', :id=>event}, :class => "button delete"%>
+	</td>
+</tr>

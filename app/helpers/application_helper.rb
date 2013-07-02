@@ -2,7 +2,7 @@ module ApplicationHelper
   
   def navigation_links
     controllers = ['Slides', 'Groups', 'Presentations', 'Displays']
-    admin_controllers = ['Users']
+    admin_controllers = ['Users', 'Events']
     ret = String.new
     html_options = Hash.new
     controllers.each do |c|

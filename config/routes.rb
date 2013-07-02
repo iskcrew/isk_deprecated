@@ -116,6 +116,15 @@ Isk::Application.routes.draw do
     end
   end
   
+  resources :events do
+    member do
+    end
+    
+    collection do
+      
+    end
+  end
+  
   resources :groups do
     member do
       post 'sort', :as => 'sort'

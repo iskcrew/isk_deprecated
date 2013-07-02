@@ -11,6 +11,10 @@
 </ul>
 <%end%>
 
+<%if @group.event%>
+  <p>This group belongs to event: <%=@group.event.name%>
+<%end%>
+
 <%=authorized_users(@group)%>
 
 <h2>Slides in this group</h2>

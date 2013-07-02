@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :current
   
   before_save :set_current_event
   

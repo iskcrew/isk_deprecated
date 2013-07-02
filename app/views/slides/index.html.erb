@@ -1,7 +1,7 @@
 <%=render :partial => 'ws_updater'%>
 
 <h1>Listing slides</h1>
-
+<p>Current event: <%=Event.current.name%></p>
 <div class='slidefilter'>
   <%=filter_links @filter%>
 </div>

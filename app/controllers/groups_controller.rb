@@ -97,7 +97,7 @@ class GroupsController < ApplicationController
   
   def create
     new_group = MasterGroup.new(params[:master_group])
-    new_group.event_id = 2 #PURKKAA
+    new_group.event = Event.current
     if new_group.save
       flash[:notice] = "Group created."
       new_group.authorized_users << current_user unless MasterGroup.admin? current_user
