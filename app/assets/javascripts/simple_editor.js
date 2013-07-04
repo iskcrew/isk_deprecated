@@ -1,6 +1,7 @@
 var SVG;
 var SVG_HEAD;
 var SVG_TEXT;
+var SVG_BGR;
 var INPUT_TEXT;
 var INPUT_TEXT_SIZE;
 var INPUT_TEXT_ALIGN;
@@ -13,26 +14,30 @@ var TEMPLATE_WIDTH;
 
 var svgNS = "http://www.w3.org/2000/svg";
 var xmlNS = "http://www.w3.org/XML/1998/namespace";
+var xlinkNS = "http://www.w3.org/1999/xlink";
 
 function prepare(){
   INPUT_TEXT_ALIGN=document.getElementById("text_align");
+  INPUT_TEXT_SIZE=document.getElementById("text_size");
+  INPUT_COLOR=document.getElementById("color");
+  INPUT_TEXT=document.getElementById("text");
+  INPUT_HEAD=document.getElementById("head");
+  CODE=document.getElementById("code");
+
+  if (! (INPUT_TEXT_ALIGN && INPUT_TEXT_SIZE && INPUT_COLOR && INPUT_TEXT && INPUT_HEAD && CODE)) return false;
+  
   INPUT_TEXT_ALIGN.addEventListener('change', update, false);
 
-  INPUT_TEXT_SIZE=document.getElementById("text_size");
   INPUT_TEXT_SIZE.addEventListener('change', update, false);
 
-  INPUT_COLOR=document.getElementById("color");
   INPUT_COLOR.addEventListener('change', update, false);
 
-  INPUT_TEXT=document.getElementById("text");
   INPUT_TEXT.addEventListener('input', update, false);
   INPUT_TEXT.wrap='off';
 
-  INPUT_HEAD=document.getElementById("head");
   INPUT_HEAD.addEventListener('input', update, false);
   INPUT_HEAD.wrap='off';
 
-  CODE=document.getElementById("code");
 
   SERIALIZE = new XMLSerializer();
 
@@ -42,9 +47,13 @@ function prepare(){
 
   SVG_TEXT=SVG.getElementById('slide_content');
   SVG_HEAD=SVG.getElementById('header');
+  SVG_BGR=SVG.getElementById('background_picture');
+
+  SVG_BGR.setAttributeNS(xlinkNS, 'xlink:href', '/' + SVG_BGR.getAttributeNS(xlinkNS, 'href'))
 
   TEMPLATE_TEXT_X=parseInt(SVG_TEXT.getAttributeNS(null, 'x'));
   TEMPLATE_WIDTH=parseInt(SVG.getElementsByTagName('svg')[0].getAttributeNS(null, 'width'));
+  return true;
 }
 
 function clear_element(element) {
@@ -128,8 +137,8 @@ function update(){
 }
 
 function onload() {
-  prepare();
-  update();
+  if (prepare())
+    update();
 };
 
 window.addEventListener ?  window.addEventListener("load",onload,false) : 
