@@ -181,7 +181,8 @@ ActiveRecord::Schema.define(:version => 20130704172916) do
   create_table "schedules", :force => true do |t|
     t.integer  "event_id"
     t.string   "name"
-    t.integer  "master_group_id"
+    t.integer  "schedule_group_id"
+    t.integer  "up_next_group_id"
     t.boolean  "up_next",                :default => true
     t.integer  "max_slides",             :default => -1
     t.integer  "min_events_on_next_day", :default => 3
