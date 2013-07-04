@@ -61,16 +61,13 @@ class SlidesController < ApplicationController
   
   def add_to_override
     slide = Slide.current.find(params[:id])
-    require_edit(slide)
     
     display = Display.find(params[:add_to_override][:display_id])
-    require_edit(display)
+    
+    raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
     Display.transaction do
-      oq = display.override_queues.new
-      oq.duration = params[:add_to_override][:duration].to_i
-      oq.slide = slide
-      oq.save!
+      display.add_to_override(slide, params[:add_to_override][:duration].to_i)
     end
     flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
 

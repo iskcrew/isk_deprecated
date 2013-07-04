@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130628121429) do
+ActiveRecord::Schema.define(:version => 20130704172916) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -166,6 +166,29 @@ ActiveRecord::Schema.define(:version => 20130628121429) do
 
   add_index "roles_users", ["role_id"], :name => "index_roles_users_on_role_id"
   add_index "roles_users", ["user_id"], :name => "index_roles_users_on_user_id"
+
+  create_table "schedule_events", :force => true do |t|
+    t.integer  "schedule_id"
+    t.datetime "at"
+    t.string   "name"
+    t.string   "description"
+    t.string   "location"
+    t.boolean  "major",       :default => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  create_table "schedules", :force => true do |t|
+    t.integer  "event_id"
+    t.string   "name"
+    t.integer  "schedule_group_id"
+    t.integer  "up_next_group_id"
+    t.boolean  "up_next",                :default => true
+    t.integer  "max_slides",             :default => -1
+    t.integer  "min_events_on_next_day", :default => 3
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
 
   create_table "slide_templates", :force => true do |t|
     t.string   "name",        :limit => 100

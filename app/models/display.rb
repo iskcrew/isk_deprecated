@@ -31,6 +31,12 @@ class Display < ActiveRecord::Base
     return [self]
   end
   
+  def add_to_override(slide, duration)
+    oq = self.override_queues.new
+    oq.duration = duration
+    oq.slide = slide
+    oq.save!
+  end
   
   def self.hello(display_name, display_ip, connection_id = nil)
     display = Display.where(:name => display_name).first_or_initialize

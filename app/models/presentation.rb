@@ -19,6 +19,10 @@ class Presentation < ActiveRecord::Base
     self.groups.joins(:master_group => :slides).where(:slides => {:public => true, :deleted => false, :replacement_id => nil}).count
   end
   
+  def slides
+    Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}).order('groups.position, slides.position')
+  end
+  
   def to_hash
     hash = Hash.new
     hash[:name] = self.name

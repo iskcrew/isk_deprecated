@@ -34,6 +34,23 @@ class PresentationsController < ApplicationController
     
   end
   
+  def add_to_override
+    presentation = Presentation.find(params[:id])
+    display = Display.find(params[:override][:display_id])
+    duration = params[:override][:duration].to_i
+    
+    if display.can_override?(current_user)
+      presentation.slides.each do |s|
+        display.add_to_override(s, duration)
+      end
+      flash[:notice] = "Added presentation " + presentation.name + " to override on display " + display.name
+    else
+      flash[:error] = "You can't add slides to the override queue on display " + display.name
+    end
+    redirect_to :action => :show, :id => presentation.id
+    
+  end
+  
   def add_group
     Presentation.transaction do
       @presentation = Presentation.find(params[:id])

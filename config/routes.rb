@@ -134,6 +134,7 @@ Isk::Application.routes.draw do
       post 'publish_all'
       post 'grant'
       post 'deny'
+      post 'add_to_override'
     end
   end
   
@@ -145,6 +146,7 @@ Isk::Application.routes.draw do
       get 'preview'
       post 'grant'
       post 'deny'
+      post 'add_to_override'
     end
     
     collection do
