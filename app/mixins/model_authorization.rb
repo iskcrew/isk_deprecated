@@ -52,7 +52,7 @@ module  ModelAuthorization
   end
     
   def can_override?(user)
-    user.has_role?([self.class.auth_roles[:admin], @base.auth_roles[:override]]) || self.authorized_users.include?(user)
+    user.has_role?([self.class.auth_roles[:admin], self.class.auth_roles[:override]]) || self.authorized_users.include?(user)
   end
     
   def admin?(user)
