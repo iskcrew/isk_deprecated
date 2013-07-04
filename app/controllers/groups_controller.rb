@@ -32,18 +32,21 @@ class GroupsController < ApplicationController
     
   end
   
+  #Set all slides in the groups to public
   def publish_all
     @group = MasterGroup.find(params[:id])
     @group.publish_slides
     redirect_to :action => :show, :id => @group.id
   end
   
+  #Hide all slides in the group
   def hide_all
     @group = MasterGroup.find(params[:id])
     @group.hide_slides
     redirect_to :action => :show, :id => @group.id
   end
   
+  #Change the order of slides in the group, used with jquerry sortable widget.
   def sort
     MasterGroup.transaction do
       group = MasterGroup.find(params[:id])
@@ -63,6 +66,7 @@ class GroupsController < ApplicationController
     end
   end
 
+  #Delete a group, all contained slides will become ungrouped
   def destroy
     @group = MasterGroup.find(params[:id])
     require_edit @group
@@ -71,6 +75,7 @@ class GroupsController < ApplicationController
     redirect_to :back
   end
   
+  #Add multiple slides to group, render the selection form for all ungrouped slides
   def add_slides
     @group = MasterGroup.find(params[:id])
     require_edit @group
@@ -78,6 +83,7 @@ class GroupsController < ApplicationController
     @slides = Slide.current.ungrouped
   end
   
+  #Add multiple slides to group
   def adopt_slides
     @group = MasterGroup.find(params[:id])
     require_edit @group
@@ -122,6 +128,23 @@ class GroupsController < ApplicationController
     redirect_to :back    
   end
   
+  #Add all slides on this group to override on a display
+  def add_to_override
+    group = MasterGroup.find(params[:id])
+    display = Display.find(params[:override][:display_id])
+    duration = params[:override][:duration].to_i
+    
+    if display.can_override?(current_user)
+      group.slides.each do |s|
+        display.add_to_override(s, duration)
+      end
+      flash[:notice] = "Added group " + group.name + " to override on display " + display.name
+    else
+      flash[:error] = "You can't add slides to the override queue on display " + display.name
+    end
+    redirect_to :action => :show, :id => group.id
+    
+  end
   
   private
   
