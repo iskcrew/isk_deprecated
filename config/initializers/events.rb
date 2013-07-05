@@ -65,7 +65,7 @@ WebsocketRails::EventMap.describe do
     subscribe :current_slide,         to: IskdpyController, with_method: :current_slide
     
     #Näytin kertoo kun override on näytetty.
-    #data = {display_id, slide_id}
+    #data = {display_id, override_queue_id}
     #palauttaa: display_<id> kanavalle viestin "override_shown" data={display_id, override_id}
     subscribe :override_shown,        to: IskdpyController, with_method: :override_shown
     
