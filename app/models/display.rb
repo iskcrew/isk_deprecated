@@ -48,9 +48,9 @@ class Display < ActiveRecord::Base
     return display
   end
   
-  def override_shown(override)
+  def override_shown(override_id)
     self.current_group_id = -1
-    oq = self.override_queues.find(override)
+    oq = self.override_queues.find(override_id)
     self.current_slide = oq.slide
     self.last_contact_at = Time.now
     oq.destroy
