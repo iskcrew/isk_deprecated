@@ -1,0 +1,29 @@
+<div id="<%=group.id%>" class="groupitem">
+  <div class="groupheader">
+    <div class="groupname"><%=link_to group.name + " " + group.slides.public.count.to_s + "/" + group.slides.count.to_s + " slides, used in " + group.presentations.count.to_s + " presentations" , :controller => :groups, :action => :show, :id => group.id%></div>
+  
+    <div class="groupbuttons">
+      <%=link_to 'Details', {:controller => :groups, :aciton => :show, :id => group.id}, :class => 'button'%>
+      <%=link_to 'Add slides', {:controller => :groups, :action => :add_slides, :id => group.id}, :class => 'button', :title => "Add ungrouped slides to this group."%>
+      <%=link_to 'Edit', {:controller => :groups, :action => :edit, :id => group.id}, :class => 'button', :title => 'Edit slide order and group metadata.'%>
+      <%=link_to 'Delete', {:controller => :grous, :action => :destroy, :id => group.id}, :method => :delete, :confirm => "Are you sure you want to delete this group? All slides in this group will become ungrouped.", :class => "button delete"%>
+    </div>
+  
+  
+  </div>
+  
+  
+  
+  <div class="slides_in_group">
+    <%if group.slides.empty?%>
+      <div class="no_slides">
+      This group doesn't contain any slides.
+      </div>
+    <%else%>
+      <%group.slides.each do |s|%>
+        <%=preview_to_show_tag(s)%>
+      <%end%>
+    <%end%>
+  </div>
+
+</div>
