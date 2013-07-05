@@ -6,36 +6,7 @@
 <%end%>
 
 <h2>Current defined master groups</h2>
-<div>
-	<table class="grouptable">
-		<tr>
-			<th>Name</th>
-			<th>Slides <br /> public/all</th>
-			<th>Presentations<br /> using this group</th>
-			<th>Actions</th>
-		</tr>
-		<% @groups.each do |g| %>
-		<tr>
-			<td><%=g.name%></td>
-			<td><%=g.slides.public.count%>/<%=g.slides.count%></td>
-			<td>
-			  <%if g.presentations.empty?%>
-			    <b>NONE</b>
-			  <%else%>
-			    <%g.presentations.each do |p|%>
-			      <%=p.name%> <br />
-			    <%end%>
-			  <%end%>
-			    </td>
-			<td>
-				<%=link_to 'Details', :action => :show, :id => g.id%> <br />
-				<%if g.can_edit? current_user%>
-				<%=link_to 'Add slides', :action => :add_slides, :id => g.id%> <br />
-				<%=link_to 'Edit', :action => :edit, :id => g.id%> <br /	>
-				<%=link_to 'Delete', {:action=>:destroy, :id=>g.id}, :confirm=>"Are you sure?", :method=>:delete %>
-				<%end%>
-			</td>
-		</tr>
-		<%end%>
-	</table>
+
+<div class="grouplist">
+  <%=render :partial => 'group', :collection => @groups%> 
 </div>
