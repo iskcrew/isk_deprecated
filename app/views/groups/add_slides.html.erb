@@ -13,7 +13,7 @@
 		<%=f.fields_for "slide_" + s.id.to_s do |slide_form|%>
 		<tr>
 			<td><%=s.name%></td>
-			<td><%=preview_tag s%></td>
+			<td><%=slide_preview_to_full_tag s%></td>
 			<td><%=slide_form.check_box :add%> <%=slide_form.hidden_field :id, :value=>s.id%></td>
 		</tr>
 		<%end%>

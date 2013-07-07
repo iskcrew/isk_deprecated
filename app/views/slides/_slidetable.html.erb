@@ -28,7 +28,7 @@
 				<% end%>
 				Pictures generated: <%=s.ready ? 'Yes' : 'No'%><br />
 			</td>
-			<td><%=preview_tag s%></td>
+			<td><%=slide_preview_image_tag s%></td>
 			<td>
 				<%=link_to 'Details', :action => :show, :id => s.id%> <br />
 				<%if s.is_svg?%>

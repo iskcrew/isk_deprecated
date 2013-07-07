@@ -1,14 +1,51 @@
 module SlidesHelper
   
-  def preview_to_show_tag(slide)
+  def slide_preview_image_tag(slide)
     if slide.ready
-      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden')}), {:controller => :slides, :action => :show, :id => slide.id}, :title => 'Click to show slide details.'
+      html_options = {
+        :class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden')
+      }
+      url = url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i)
+      return image_tag url, html_options
     else
-      html="<img class='preview' title='Preview not yet available. Click to show slide details.' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
-      return link_to html.html_safe, :controller => :slides, :action => :show, :id => slide.id
-    end 
+      html="<img class='preview' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
+      return html.html_safe
+    end
   end
   
+  def slide_full_image_tag(slide)
+    image_tag url_for(:controller => :slides, :action => :full, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'fullSlide'}
+  end
+  
+  
+  def slide_preview_to_show_tag(slide)
+    html_options = {
+      :title => 'Click to show slide details',
+      :class => 'slide-preview-to-show'
+    }
+    url_options = {
+      :controller => :slides,
+      :action => :show,
+      :id => slide.id
+    }
+    return link_to slide_preview_image_tag(slide), url_options, html_options
+  end
+  
+  
+  def slide_preview_to_full_tag(slide)
+    html_options = {
+      :title => 'Click to show full size slide image',
+      :class => 'slide-preview-to-full'
+    }
+    url_options = {
+      :controller => :slides,
+      :action => :full,
+      :id => slide.id
+    }
+    
+    return link_to slide_preview_image_tag(slide), url_options, html_options
+  end
+    
   def group_link_tag(g)
     html = 'Group:' 
     html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, :name => g.name)

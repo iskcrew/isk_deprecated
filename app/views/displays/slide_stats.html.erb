@@ -10,7 +10,7 @@
   <%@display.display_counts.order('updated_at desc').each do |dc|%>
   <tr>
     <td>
-    <%=preview_to_show_tag dc.slide%><br />
+    <%=slide_preview_to_show_tag dc.slide%><br />
     Shown total of <%=dc.count%> times. Last shown at <%=I18n.l(dc.updated_at, :format => :short)%>
     </td>
   </tr>

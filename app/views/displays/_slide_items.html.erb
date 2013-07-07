@@ -1,7 +1,7 @@
 <% override.each do |oq| %>
 <li id="override_queue_<%= oq.id %>" >
 	<div class="handle">⇕</div>
-	<div class="slideimage"><%=preview_tag oq.slide%></div>
+	<div class="slideimage"><%=slide_preview_to_show_tag oq.slide%></div>
 	
 	<div class="slidename">
 	  <%=link_to oq.slide.name, :controller => :slides, :action => :show, :id => oq.slide.id %> <br />

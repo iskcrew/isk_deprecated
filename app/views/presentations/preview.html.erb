@@ -15,7 +15,7 @@
 	</tr>
 	<%group.public_slides.each do |slide| %>
 	<tr>
-		<td><%=preview_tag slide%></td>
+		<td><%=slide_preview_to_show_tag slide%></td>
 		<td>
 			Name: <%=slide.name%> <br />
 			Position in group: <%=slide.position%>
