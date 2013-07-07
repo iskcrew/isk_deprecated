@@ -1,7 +1,0 @@
-<div class="navigation">&nbsp;
-	<%=link_to 'List', :action => :index%>
-	<%if current_user.has_role? 'image-admin'%>
-	<%=link_to "New", :action => :new%>
-	<%end%>
-	<%=yield :navigation%>
-</div>

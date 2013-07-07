@@ -152,18 +152,7 @@ Isk::Application.routes.draw do
     collection do
     end
   end
-  
-  resources :images do
-    member do
-      get 'preview'
-      get 'full'
-    end
     
-    collection do
-      get 'imagelib'
-    end
-  end  
-  
   resources :displays do
     member do
       get 'presentation'
