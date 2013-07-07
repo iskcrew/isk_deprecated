@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704172916) do
+ActiveRecord::Schema.define(:version => 20130707201507) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -189,15 +189,6 @@ ActiveRecord::Schema.define(:version => 20130704172916) do
     t.datetime "created_at",                               :null => false
     t.datetime "updated_at",                               :null => false
   end
-
-  create_table "slide_templates", :force => true do |t|
-    t.string   "name",        :limit => 100
-    t.string   "description", :limit => 500
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-  end
-
-  add_index "slide_templates", ["name"], :name => "index_templates_on_name", :unique => true
 
   create_table "slides", :force => true do |t|
     t.string   "name",              :limit => 100
