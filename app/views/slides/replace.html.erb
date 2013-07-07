@@ -12,7 +12,7 @@
 	<% @slides.each do |s|%>
 		<tr>
 			<td><%=s.name%></td>
-			<td><%=preview_tag s%></td>
+			<td><%=slide_preview_to_show_tag s%></td>
 			<td><%=f.radio_button :replacement_id, s.id%> </td>
 		</tr>
 	<% end%>

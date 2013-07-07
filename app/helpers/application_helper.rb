@@ -27,19 +27,7 @@ module ApplicationHelper
   def authorized_users(obj)
     render :partial => 'shared/authorized_users', :locals => {:obj => obj}
   end
-  
-  def preview_tag(slide)
-    if slide.ready
-      link_to image_tag(url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'preview'}), {:controller => :slides, :action => :full, :id => slide.id}, :title => 'Click to show full sized slide.'
-    else
-      html="<img class='preview' title='Slide preview not yet ready. Click to show full sized slide picture.' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
-      return link_to html.html_safe, :controller => :slides, :action => :full, :id => slide.id
-    end
-  end
-  
-  def full_size_tag(id)
-    image_tag url_for(:controller => :slides, :action => :full, :id => id), {:class => 'fullSlide'}
-  end
+    
   
   def late_display_warning(d)
     link_text = (d.name || String.new) << " (" << d.ip << ") is more than " << Display::Timeout.to_s << " minutes late!"

@@ -17,7 +17,7 @@
           <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
         </div>
 
-        <%=preview_to_show_tag(s)%>
+        <%=slide_preview_to_show_tag(s)%>
         <div class='slidebuttons'>
         <%=form_tag :controller => :displays, :action => :queue_slide, :id => @display.id do |f|%>
           <%=hidden_field_tag :slide_id, s.id.to_s%>

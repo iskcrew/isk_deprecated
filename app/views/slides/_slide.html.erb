@@ -6,9 +6,9 @@
     <div class='slidetype <%=s.type_str%>'><%=s.type_str%></div>
   </div>
   <%unless defined?(to_full)%>
-    <%=preview_to_show_tag(s)%>
+    <%=slide_preview_to_show_tag(s)%>
   <%else%>
-    <%=preview_tag(s)%>
+    <%=slide_preview_to_full_tag(s)%>
   <%end%>
 
   <div class="slidebuttons">
