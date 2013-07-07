@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130707201507) do
+ActiveRecord::Schema.define(:version => 20130707201829) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -95,15 +95,6 @@ ActiveRecord::Schema.define(:version => 20130707201507) do
   add_index "groups", ["master_group_id"], :name => "index_groups_on_master_group_id"
   add_index "groups", ["presentation_id", "position"], :name => "index_groups_on_presentation_id_and_position"
   add_index "groups", ["presentation_id"], :name => "index_groups_on_presentation_id"
-
-  create_table "images", :force => true do |t|
-    t.string   "name",       :limit => 100
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.string   "filename",   :limit => 50
-  end
-
-  add_index "images", ["name"], :name => "index_images_on_name", :unique => true
 
   create_table "master_groups", :force => true do |t|
     t.string   "name",       :limit => 100
