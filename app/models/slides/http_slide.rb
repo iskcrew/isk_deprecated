@@ -2,11 +2,17 @@ class HttpSlide < Slide
   
   require 'net/http'
   require 'net/https'
+
   
   TypeString = 'http'
   
   DefaultSlidedata = {:url => 'http://', :user => nil, :password => nil}
-  @slidedata = nil
+  include HasSlidedata
+  
+  after_create do |s|
+    s.send(:write_slidedata)
+    s.delay.fetch!
+  end
 
   attr_accessible :name, :description, :show_clock, :slidedata
   
@@ -21,55 +27,10 @@ class HttpSlide < Slide
     self.is_svg = false
     self.ready = false
   end
-  
-  def data_filename
-    FilePath.join(self.filename + '_data')
-  end
-  
-  
-  def slidedata
-    return @_slidedata unless @_slidedata.nil?
-    if File.exists? self.data_filename.to_s
-      return @slidedata = YAML.load(File.read(self.data_filename))
-    else
-      return HttpSlide::DefaultSlidedata
-    end
-  end
-  
+    
   def needs_fetch?
     return @_needs_fetch ||=false
-  end
-  
-  
-  def slidedata=(d)
-    #Varmisetetaan että kaikki hashin avaimet ovat symboleja
-    d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
-
-
-    # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
-    d = self.slidedata.merge(d)
-
-    #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
-    d.keep_if do |k, v|
-      HttpSlide::DefaultSlidedata.keys.include? k
-    end
-  
-  
-    #Varmistetaan että url on ok (heittää URI::InvalidURIError jos ei ole ok)
-    URI::parse d[:url].strip
-    
-    if d[:url] != self.slidedata[:url]
-      @_needs_fetch = true
-      self.ready = false
-    end
-    
-    @_slidedata=d
-    
-    File.open(self.data_filename,  'w') do |f|
-      f.write d.to_yaml
-    end    
-  end
-  
+  end  
   
   def fetch!
     return false if self.slidedata.nil?
