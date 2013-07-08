@@ -5,8 +5,8 @@ class SvgSlide < Slide
   @_svg_data = nil
 #TODO: svg-datan käsittely tänne kontrollerista
   
-  def initialize
-    super
+  def initialize(data)
+    super(data)
     self.is_svg = true
   end
     

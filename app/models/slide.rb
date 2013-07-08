@@ -2,9 +2,15 @@ class Slide < ActiveRecord::Base
   require 'rexml/document'
   
   after_create do |s|
-    s.filename = "slide_" + s.id.to_s
-    s.save!
+    s.update_column :filename, "slide_" + s.id.to_s
+    
+    if @_svg_data
+      s.send(:write_svg_data)
+    end
+    
   end
+  
+  
     
   belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
   belongs_to :master_group, :touch => true
@@ -115,7 +121,7 @@ class Slide < ActiveRecord::Base
   
   #Luetaan svg-data ja pistetään se muistiin kakkuun siltä varalta että tarvitaan uusiksi
   def svg_data
-    return @_svg_data if @_svg_data
+    return @_svg_data if (@_svg_data or self.new_record?)
     
     @_svg_data = File.read(self.svg_filename)
     
@@ -131,10 +137,10 @@ class Slide < ActiveRecord::Base
   #paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
   def svg_data=(svg)
     if self.svg_data != svg
-      File.open(self.svg_filename,  'w') do |f|
-        f.write svg
-      end
+      
       @_svg_data = svg
+      write_svg_data
+    
       self.ready = false
       @_needs_images = true
     end
@@ -286,15 +292,23 @@ class Slide < ActiveRecord::Base
 
     svg_data.gsub!('FranklinGothicHeavy', 'Franklin Gothic Heavy')
 
-    File.open(self.svg_filename, 'w') do |f|
-      f.write svg_data
-    end
+    @_svg_data = svg_data
 
+    write_svg_data
+    
   end
 
 
   
   private
+  
+  def write_svg_data
+    unless self.new_record?
+      File.open(self.svg_filename, 'w') do |f|
+        f.write @_svg_data
+      end
+    end
+  end
   
   def updated_image_notifications
     WebsocketRails[:slide].trigger(:updated_image, self.to_json)
@@ -307,18 +321,14 @@ class Slide < ActiveRecord::Base
   
   
   def rsvg_command(type)
-    command = 'cd ' << FilePath.to_s << ' && rsvg'
+    command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
     
-    if type == :preview
+    if type == :full
       command << ' -w ' << Slide::PreviewWidth.to_s
       command << ' -h ' << Slide::PreviewHeight.to_s
+      command << ' -f png'
+      command << ' -o ' << self.full_filename.to_s
       command << ' ' << self.svg_filename.to_s
-      command << ' ' << self.preview_filename.to_s
-    else
-      command << ' -w ' << Slide::FullWidth.to_s
-      command << ' -h ' << Slide::FullHeight.to_s
-      command << ' ' << self.svg_filename.to_s
-      command << ' ' << self.full_filename.to_s
     end
     
     return command

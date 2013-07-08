@@ -1,12 +1,14 @@
+<% slidedata = (@slide.is_a?(HttpSlide) ? @slide.slidedata : HttpSlide::DefaultSlidedata)%>
+
 <p>
 <%=label_tag 'slide[slidedata][url]', 'Url to fetch data from'%>
-<%=text_field_tag 'slide[slidedata][url]', @slide.slidedata[:url]%>
+<%=text_field_tag 'slide[slidedata][url]', slidedata[:url]%>
 </p>
 <p>
 <%=label_tag 'slide[slidedata][user]', 'Basic auth username'%>
-<%=text_field_tag 'slide[slidedata][user]', @slide.slidedata[:user]%>
+<%=text_field_tag 'slide[slidedata][user]', slidedata[:user]%>
 </p>
 <p>
 <%=label_tag 'slide[slidedata][password]', 'Basic auth password (stored clear text)'%>
-<%=text_field_tag 'slide[slidedata][password]', @slide.slidedata[:password]%>
+<%=text_field_tag 'slide[slidedata][password]', slidedata[:password]%>
 </p>

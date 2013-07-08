@@ -6,6 +6,11 @@ class SimpleSlide < SvgSlide
 
   DefaultSlidedata = {:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left'}
 
+  after_create do |s|
+    s.send(:write_slidedata)
+  end
+
+
   attr_accessible :name, :description, :show_clock, :slidedata, :svg_data
 
   def self.copy!(s)
@@ -46,11 +51,11 @@ class SimpleSlide < SvgSlide
   end
   
   def slidedata
-    return @slidedata unless @slidedata.nil?
-    if File.exists? self.data_filename.to_s
-      return @slidedata = YAML.load(File.read(self.data_filename))
+    return @_slidedata unless @_slidedata.nil?
+    if !self.new_record? && File.exists?(self.data_filename.to_s)
+      return @_slidedata = YAML.load(File.read(self.data_filename))
     else
-      return @slidedata = SimpleSlide::DefaultSlidedata
+      return @_slidedata = SimpleSlide::DefaultSlidedata
     end
   end
   
@@ -67,11 +72,20 @@ class SimpleSlide < SvgSlide
       SimpleSlide::DefaultSlidedata.keys.include? k
     end
   
-    @slidedata=d
+    @_slidedata=d
     
-    File.open(self.data_filename,  'w') do |f|
-      f.write d.to_yaml
-    end    
+        
   end
+  
+  private
+  
+  def write_slidedata
+    unless self.new_record?
+      File.open(self.data_filename,  'w') do |f|
+        f.write @_slidedata.to_yaml
+      end
+    end
+  end
+    
   
 end

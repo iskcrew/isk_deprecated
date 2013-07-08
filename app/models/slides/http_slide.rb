@@ -16,8 +16,8 @@ class HttpSlide < Slide
     return new_slide
   end
 
-  def initialize
-    super
+  def initialize(data)
+    super(data)
     self.is_svg = false
     self.ready = false
   end

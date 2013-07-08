@@ -265,93 +265,32 @@ class SlidesController < ApplicationController
     begin
       #transaktiona jotta kantaan ei mene mitään jos tiedostosta ei saada kuvaa ulos
       Slide.transaction do
-        @slide = Slide.new
-        @slide.name = params[:slide][:name]
-
-        unless @slide.save
-          render :action => :new
-          return
-        end
-
-        if Slide.admin? current_user
-          @slide.master_group = MasterGroup.find(params[:slide][:master_group_id])
-        else
-          @slide.master_group_id = MasterGroup::Ungrouped_id
-          params[:create_type] = 'simple'
+        
+        unless params[:create_type] == 'simple' || Slide.admin?(current_user)
+          raise ApplicationController::PermissionDenied
         end
         
+        #Luodaan oikeanlainen slide
+        case params[:create_type]
+        when 'simple'
+          @slide = SimpleSlide.new(params[:slide])
+        when 'http_slide'
+          @slide = HttpSlide.new(params[:slide])
+        when 'empty_file'
+          @slide = InkscapeSlide.new(params[:slide])
+        else
+          @slide = Slide.new(params[:slide])
+        end
+        
+        unless @slide.save
+          render :action => :new and return
+        end
         
         case params[:create_type]
-        when 'upload_file'
-          slide_picture_io = params[:slide][:upload]
-
-          File.open(@slide.original_filename.to_s, 'w') do |file|
-            file.write(slide_picture_io.read)
-          end
-
-          #test that the image is valid for rmagick
-          Magick::ImageList.new(@slide.original_filename.to_s)
-      
-          @slide.delay.generate_images
-      
         when 'empty_file'
           FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
-          @slide.is_svg = true
-          @slide.type = InkscapeSlide.sti_name
-          @slide.save!
-          @slide = Slide.find(@slide.id) #muuten delayed job kusee
-          @slide.delay.generate_images
-        when 'from_template'
-          import_template = SlideTemplate.find(params[:use_template])
-          FileUtils.copy(import_template.svg_filename, @slide.svg_filename)
-          @slide.type = InkscapeSlide.sti_name
-          @slide.is_svg = true
-          @slide.save!
-          @slide = Slide.find(@slide.id) #muuten delayed job kusee
-          @slide.delay.generate_images
-        when 'simple'
-          FileUtils.copy(SlideTemplate::SimpleSVG, @slide.svg_filename)
-          @slide.type = SimpleSlide.sti_name
-          @slide.is_svg = true
-          @slide.save!
-
-
-          @slide = Slide.find(@slide.id) #muuten loput kusee koska operoidaan väärällä luokalla
-          
-          
-          slidedata = {:heading => params[:head], :text => params[:text], 
-            :text_size => params[:text_size], :color => params[:color], 
-            :text_align => params[:text_align]}
-        
-          @slide.slidedata = slidedata
-          
-          @slide.svg_data = params[:code] if params[:code]
-          
-          @slide.delay.generate_images
-        when 'http_slide'
-          @slide.type = HttpSlide.sti_name
-          @slide.save!
-          @slide = Slide.find(@slide.id) #jotta kelmu olisi oikeaa aliluokkaa
-          
-          begin
-            URI::parse params[:url]
-          rescue URI::InvalidURIError
-            flash[:error] = "Error parsing the slide http url!"
-            render :http_edit and return
-          end
-
-          slidedata = {:url => params[:url], :user => params[:basic_username], :password => params[:basic_password]}
-
-          @slide.slidedata = slidedata
-          @slide.ready = false
-          @slide.save!
-          @slide.delay.fetch!
-          
-        else
-          raise ArgumentError 'Invalid slide type requested'
-
         end
-        
+                
         unless @slide.can_edit? current_user
           @slide.authorized_users << current_user
         end
@@ -359,7 +298,11 @@ class SlidesController < ApplicationController
         
       end #transaktio
       
-      @slide = Slide.find(@slide.id)
+      if @slide.is_a? HttpSlide
+        @slide.delay.fetch!
+      else
+        @slide.delay.generate_images
+      end
       
       redirect_to :action => :show, :id => @slide.id
       
