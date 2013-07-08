@@ -136,6 +136,8 @@ class Slide < ActiveRecord::Base
   #Ei tehdä mitään jos uusi svg on sama kuin vanha, tällä säästetään vähän kuvien
   #paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
   def svg_data=(svg)
+    #Simple-editin taustat on sidottu webbiserverin roottiin
+    svg.gsub!('href="/backgrounds', 'href="backgrounds')
     if self.svg_data != svg
       
       @_svg_data = svg
@@ -324,8 +326,9 @@ class Slide < ActiveRecord::Base
     command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
     
     if type == :full
-      command << ' -w ' << Slide::PreviewWidth.to_s
-      command << ' -h ' << Slide::PreviewHeight.to_s
+      command << ' -w ' << Slide::FullWidth.to_s
+      command << ' -h ' << Slide::FullHeight.to_s
+      command << ' --base-uri ' << Slide::FilePath.to_s << '/'
       command << ' -f png'
       command << ' -o ' << self.full_filename.to_s
       command << ' ' << self.svg_filename.to_s
