@@ -10,7 +10,6 @@ class SimpleSlide < SvgSlide
 
   after_create do |s|
     s.send(:write_slidedata)
-    s.delay.generate_images
   end
 
 
