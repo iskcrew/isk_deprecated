@@ -10,7 +10,7 @@ presentation_with_slides:
     delay: 20
     effect_id: 1
 
-presentation_with_overrides:
+with_empty_group:
     id: 3
     name: I have overrides!
     delay: 30

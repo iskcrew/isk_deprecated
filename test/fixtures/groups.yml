@@ -25,5 +25,5 @@ group_4:
 group_5:
     id: 5
     position: 1
-    master_group_id: 2
+    master_group_id: 3
     presentation_id: 3
