@@ -324,8 +324,9 @@ class Slide < ActiveRecord::Base
     command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
     
     if type == :full
-      command << ' -w ' << Slide::PreviewWidth.to_s
-      command << ' -h ' << Slide::PreviewHeight.to_s
+      command << ' -w ' << Slide::FullWidth.to_s
+      command << ' -h ' << Slide::FullHeight.to_s
+      command << ' --base-uri ' << Slide::FilePath.to_s << '/'
       command << ' -f png'
       command << ' -o ' << self.full_filename.to_s
       command << ' ' << self.svg_filename.to_s
