@@ -1,15 +1,16 @@
 module  HasSlidedata
+
   def data_filename
-    FilePath.join(self.filename + '_data')
+    self.class.base_class::FilePath.join(self.filename + '_data')
   end
   
   
   def slidedata
-    return @_slidedata unless @_slidedata.nil?
-    if File.exists? self.data_filename.to_s
+    return @_slidedata if @_slidedata
+    if !self.new_record? && File.exists?(self.data_filename.to_s)
       return @_slidedata = YAML.load(File.read(self.data_filename))
     else
-      return self.class::DefaultSlidedata
+      return @_slidedata = self.class::DefaultSlidedata
     end
   end
   
