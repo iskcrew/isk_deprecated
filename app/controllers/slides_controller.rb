@@ -444,41 +444,40 @@ class SlidesController < ApplicationController
   end
   
   def update
-    @slide =Slide.find(params[:id])
-    
-    require_slide_edit(@slide)
-    
-    if @slide.update_attributes(params[:slide])      
-      case @slide.type
-      when SimpleSlide.sti_name
-        @slide.save!
-        @slide.delay.generate_images
-    
-      when HttpSlide.sti_name
-        begin
-          URI::parse params[:url]
-        rescue URI::InvalidURIError
-          flash[:error] = "Error parsing the slide http url!"
-          render :http_edit and return
-        end
-        
-        slidedata = {:url => params[:url], :user => params[:basic_user], :password => params[:basic_password]}
-        
-        @slide.slidedata = slidedata
-        @slide.ready = false
-        @slide.save!
-        @slide.delay.fetch!
-      end
-      
-      flash[:notice] = 'Slide was successfully updated.'
-      
-      redirect_to :action => 'show', :id => @slide.id and return
-    else
-      flash[:error] = "Error updating slide"
-      render :action => 'edit'
-    end
-  end
+    Slide.transaction do
+
+      @slide =Slide.find(params[:id], :lock => true)
+      require_slide_edit(@slide)
   
+      if @slide.update_attributes(params[:slide])
+        
+
+        #Paistetaan uusi kuva simpleslidelle
+        @slide.delay.generate_images if @slide.needs_images?
+        
+        #Haetaan uusi kuva http-slidelle jos on tarvis
+        @slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
+
+
+        respond_to do |format|
+          format.html {
+            flash[:notice] = 'Slide was successfully updated.'
+            redirect_to :action => 'show', :id => @slide.id and return
+          }
+          format.js {render :show}
+        end
+      else
+        flash[:error] = "Error updating slide"
+        render :action => 'edit' and return
+      end
+    end
+    
+    rescue URI::InvalidURIError
+      flash[:error] = "Error parsing the slide http url!"
+      render :http_edit and return
+  end
+
+
   private
     
   def require_slide_edit(s)

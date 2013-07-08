@@ -55,10 +55,6 @@ class SimpleSlide < SvgSlide
   end
   
   def slidedata=(d)
-    Rails.logger.debug "Got new slidedata: " + d.inspect
-    #Make sure new data has all the keys before saving.
-
-
     #Varmisetetaan että kaikki hashin avaimet ovat symboleja
     d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
 
@@ -66,18 +62,16 @@ class SimpleSlide < SvgSlide
     # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
     d = self.slidedata.merge(d)
 
-
+    #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
       SimpleSlide::DefaultSlidedata.keys.include? k
     end
-
   
     @slidedata=d
     
     File.open(self.data_filename,  'w') do |f|
       f.write d.to_yaml
-    end
-    
+    end    
   end
   
 end

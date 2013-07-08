@@ -122,14 +122,22 @@ class Slide < ActiveRecord::Base
     return @_svg_data
   end
   
+  def needs_images?
+    return @_needs_images ||= false
+  end
+  
   #Kirjoitetaan uusi svg-data tiedostoon ja merkitään kelmun kuva epäkelvoksi
+  #Ei tehdä mitään jos uusi svg on sama kuin vanha, tällä säästetään vähän kuvien
+  #paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
   def svg_data=(svg)
-    File.open(self.svg_filename,  'w') do |f|
-      f.write svg
+    if self.svg_data != svg
+      File.open(self.svg_filename,  'w') do |f|
+        f.write svg
+      end
+      @_svg_data = svg
+      self.ready = false
+      @_needs_images = true
     end
-    @_svg_data = svg
-    self.ready = false
-    self.save!
   end
   
   

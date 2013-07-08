@@ -48,18 +48,8 @@
       	<%=f.error_messages%>
       	<%=render :partial => 'form'%>
         <%=hidden_field_tag :create_type, 'http_slide'%>
-        <p>
-  		        <%=label_tag :url, 'Url:'%>
-  		        <%=text_field_tag :url, 'http://'%>
-  		  </p>
-  		  <p>
-  		        <%=label_tag :basic_username, 'Basic auth username:'%>
-  		        <%=text_field_tag :basic_username%>
-  		  </p>
-  		  <p>
-  		        <%=label_tag :basic_password, 'Basic auth password (clear):'%>
-  		        <%=text_field_tag :basic_password%>
-  		  </p>
+        <%=render :partial => 'http_slide_form'%>
+
   	    <%=f.submit "Create"%>
   <%end%>
     </div>
