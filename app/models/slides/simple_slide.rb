@@ -6,6 +6,8 @@ class SimpleSlide < SvgSlide
 
   DefaultSlidedata = {:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left'}
 
+  attr_accessible :name, :description, :show_clock, :slidedata, :svg_data
+
   def self.copy!(s)
     Slide.transaction do 
       orig_id = s.id
@@ -53,11 +55,17 @@ class SimpleSlide < SvgSlide
   end
   
   def slidedata=(d)
-    
+    Rails.logger.debug "Got new slidedata: " + d.inspect
     #Make sure new data has all the keys before saving.
-    self.slidedata.each_key do |k|
-      d[k] ||= self.slidedata[k]
-    end
+
+
+    #Varmisetetaan että kaikki hashin avaimet ovat symboleja
+    d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
+
+
+    # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
+    d = self.slidedata.merge(d)
+
 
     d.keep_if do |k, v|
       SimpleSlide::DefaultSlidedata.keys.include? k

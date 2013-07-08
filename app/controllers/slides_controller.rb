@@ -451,16 +451,9 @@ class SlidesController < ApplicationController
     if @slide.update_attributes(params[:slide])      
       case @slide.type
       when SimpleSlide.sti_name
-        slidedata = {:heading => params[:head], :text => params[:text], 
-          :text_size => params[:text_size], :color => params[:color], 
-          :text_align => params[:text_align]}
-        @slide.slidedata = slidedata
-        
-        @slide.svg_data = params[:code]
-        
         @slide.save!
         @slide.delay.generate_images
-        
+    
       when HttpSlide.sti_name
         begin
           URI::parse params[:url]
