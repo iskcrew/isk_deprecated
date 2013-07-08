@@ -1,11 +1,68 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+slide_1:
+    id: 1
+    position: 1
+    name: Only one in this group
+    description: Fooo
+    filename: slide_1
+    ready: true
+    public: true
+    show_clock: true
+    is_svg: true
+    deleted: false
+    master_group_id: 1
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+<%2.upto(11) do |i|%>
+
+slide_<%=i%>:
+    id: <%=i%>
+    position: <%=i - 1 %>
+    name: Slide id <%=i%>
+    description: bar
+    filename: slide_<%=i%>
+    ready: true
+    public: true
+    show_clock: true
+    is_svg: true
+    deleted: false
+    master_group_id: 2
+
+<% end %>
+
+not_ready:
+    id: 12
+    position: 1
+    name: Not ready
+    description: I am not ready yet!
+    filename: slide_12
+    ready: false
+    public: true
+    show_clock: true
+    is_svg: true
+    deleted: false
+    master_group_id: 4
+    
+no_clock:
+    id: 13
+    position: 2
+    name: No clock
+    description: No clock shown
+    filename: slide_13
+    ready: true
+    public: true
+    show_clock: false
+    is_svg: true
+    deleted: false
+    master_group_id: 4
+
+hidden:
+    id: 14
+    position: 3
+    name: hidden slide
+    description: I am invisible!
+    filename: slide_14
+    ready: true
+    public: false
+    show_clock: true
+    is_svg: true
+    deleted: false
+    master_group_id: 4

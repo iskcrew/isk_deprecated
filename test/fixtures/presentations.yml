@@ -1,11 +1,17 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+empty_presentation:
+    id: 1
+    name: Empty
+    delay: 20
+    effect_id: 1
+    
+presentation_with_slides:
+    id: 2
+    name: I have slides!
+    delay: 20
+    effect_id: 1
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+presentation_with_overrides:
+    id: 3
+    name: I have overrides!
+    delay: 30
+    effect_id: 1
