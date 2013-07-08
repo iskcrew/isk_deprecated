@@ -136,6 +136,8 @@ class Slide < ActiveRecord::Base
   #Ei tehdä mitään jos uusi svg on sama kuin vanha, tällä säästetään vähän kuvien
   #paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
   def svg_data=(svg)
+    #Simple-editin taustat on sidottu webbiserverin roottiin
+    svg.gsub!('href="/backgrounds', 'href="backgrounds')
     if self.svg_data != svg
       
       @_svg_data = svg
