@@ -8,7 +8,7 @@ class HttpSlide < Slide
   DefaultSlidedata = {:url => 'http://', :user => nil, :password => nil}
   @slidedata = nil
 
-
+  attr_accessible :name, :description, :show_clock, :slidedata
   
   def clone!
     new_slide = super
@@ -16,8 +16,8 @@ class HttpSlide < Slide
     return new_slide
   end
 
-  def initialize
-    super
+  def initialize(data)
+    super(data)
     self.is_svg = false
     self.ready = false
   end
@@ -28,7 +28,7 @@ class HttpSlide < Slide
   
   
   def slidedata
-    return @slidedata unless @slidedata.nil?
+    return @_slidedata unless @_slidedata.nil?
     if File.exists? self.data_filename.to_s
       return @slidedata = YAML.load(File.read(self.data_filename))
     else
@@ -36,24 +36,38 @@ class HttpSlide < Slide
     end
   end
   
+  def needs_fetch?
+    return @_needs_fetch ||=false
+  end
+  
   
   def slidedata=(d)
-    #Make sure new data has all the keys before saving.
-    self.slidedata.each_key do |k|
-      d[k] ||= self.slidedata[k]
-    end
-    
+    #Varmisetetaan että kaikki hashin avaimet ovat symboleja
+    d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
+
+
+    # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
+    d = self.slidedata.merge(d)
+
+    #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
       HttpSlide::DefaultSlidedata.keys.include? k
     end
+  
+  
+    #Varmistetaan että url on ok (heittää URI::InvalidURIError jos ei ole ok)
+    URI::parse d[:url].strip
     
-    @slidedata=d
+    if d[:url] != self.slidedata[:url]
+      @_needs_fetch = true
+      self.ready = false
+    end
     
+    @_slidedata=d
     
     File.open(self.data_filename,  'w') do |f|
       f.write d.to_yaml
-    end
-    
+    end    
   end
   
   

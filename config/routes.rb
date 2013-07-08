@@ -63,17 +63,6 @@ Isk::Application.routes.draw do
   end
   
 
-  scope "/slides" do
-    resources :templates do
-      member do
-        get 'svg_edit'
-        get 'svg_data'
-        post 'svg_data' => :svg_save, :as => 'svg_save'
-      end
-      
-    end
-  end
-
   resources :users do
     member do
       get 'roles'
@@ -152,18 +141,7 @@ Isk::Application.routes.draw do
     collection do
     end
   end
-  
-  resources :images do
-    member do
-      get 'preview'
-      get 'full'
-    end
     
-    collection do
-      get 'imagelib'
-    end
-  end  
-  
   resources :displays do
     member do
       get 'presentation'

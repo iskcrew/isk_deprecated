@@ -1,7 +1,0 @@
-<h1>Editing image</h1>
-
-<%=form_for @image, :url => {:action => :update} do |f|%>
-	<%=f.error_messages%>
-	<%=render :partial => 'form'%>
-	<%=f.submit "Update"%>
-<%end%>

@@ -6,6 +6,13 @@ class SimpleSlide < SvgSlide
 
   DefaultSlidedata = {:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left'}
 
+  after_create do |s|
+    s.send(:write_slidedata)
+  end
+
+
+  attr_accessible :name, :description, :show_clock, :slidedata, :svg_data
+
   def self.copy!(s)
     Slide.transaction do 
       orig_id = s.id
@@ -44,32 +51,41 @@ class SimpleSlide < SvgSlide
   end
   
   def slidedata
-    return @slidedata unless @slidedata.nil?
-    if File.exists? self.data_filename.to_s
-      return @slidedata = YAML.load(File.read(self.data_filename))
+    return @_slidedata unless @_slidedata.nil?
+    if !self.new_record? && File.exists?(self.data_filename.to_s)
+      return @_slidedata = YAML.load(File.read(self.data_filename))
     else
-      return @slidedata = SimpleSlide::DefaultSlidedata
+      return @_slidedata = SimpleSlide::DefaultSlidedata
     end
   end
   
   def slidedata=(d)
-    
-    #Make sure new data has all the keys before saving.
-    self.slidedata.each_key do |k|
-      d[k] ||= self.slidedata[k]
-    end
+    #Varmisetetaan että kaikki hashin avaimet ovat symboleja
+    d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
 
+
+    # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
+    d = self.slidedata.merge(d)
+
+    #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
       SimpleSlide::DefaultSlidedata.keys.include? k
     end
-
   
-    @slidedata=d
+    @_slidedata=d
     
-    File.open(self.data_filename,  'w') do |f|
-      f.write d.to_yaml
-    end
-    
+        
   end
+  
+  private
+  
+  def write_slidedata
+    unless self.new_record?
+      File.open(self.data_filename,  'w') do |f|
+        f.write @_slidedata.to_yaml
+      end
+    end
+  end
+    
   
 end
