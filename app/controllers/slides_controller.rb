@@ -74,19 +74,6 @@ class SlidesController < ApplicationController
     redirect_to :back
   end
 
-  def toggle_clock
-    @slide = Slide.find(params[:id])
-    require_slide_edit(@slide)
-    
-    @slide.show_clock = @slide.show_clock ? false : true
-    @slide.save!
-    
-    respond_to do |format|
-      format.js {render :show}
-      format.html {redirect_to :back}
-    end
-  end
-
   def hidden
     @slides = Slide.current.hidden.all
   end
@@ -110,19 +97,6 @@ class SlidesController < ApplicationController
     end
   end
     
-  def publish
-    @slide = Slide.find(params[:id])
-    require_slide_edit @slide
-    
-    @slide.public = true
-    @slide.save!
-    
-    respond_to do |format|
-      format.html {redirect_to :back}
-      format.js {render :show}
-    end
-  end
-
   def svg_edit
     @slide = Slide.find(params[:id])
     

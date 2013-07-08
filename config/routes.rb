@@ -88,8 +88,6 @@ Isk::Application.routes.draw do
       post 'ungroup'
       post 'undelete'
       post 'hide'
-      post 'publish'
-      post 'toggle_clock'
       post 'deny'
       post 'grant'
       post 'to_inkscape'
