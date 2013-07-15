@@ -17,7 +17,7 @@ class IskdpyController < WebsocketRails::BaseController
       d = Display.find(message[:display_id])
       d.set_current_slide(message[:group_id], message[:slide_id])
       d.save!
-      data = d.current_slide.to_hash(d.presentation.delay)
+      data = {:display_id => message[:display_id], :group_id => message[:group_id], :slide_id => message[:slide_id]}
       WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
       trigger_success data
   end
@@ -29,7 +29,7 @@ class IskdpyController < WebsocketRails::BaseController
         d.override_shown(message[:override_queue_id])
         d.save!
       end
-      
+      data = {:display_id => message[:display_id], :override_queue_id => message[:override_queue_id]}
       WebsocketRails[d.websocket_channel].trigger(:override_shown, data)
       trigger_success data
   end
