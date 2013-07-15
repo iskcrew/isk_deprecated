@@ -14,12 +14,10 @@ class IskdpyController < WebsocketRails::BaseController
   
   #Näytin kertoo mitä kelmua se näyttää
   def current_slide
-      Display.transaction do
-        d = Display.find(message[:display_id])
-        d.set_current_slide(message[:group_id], message[:slide_id])
-        d.save!
-      end
-      data(d.current_slide.to_hast(d.presentation.duration))
+      d = Display.find(message[:display_id])
+      d.set_current_slide(message[:group_id], message[:slide_id])
+      d.save!
+      data = d.current_slide.to_hash(d.presentation.delay)
       WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
       trigger_success data
   end
