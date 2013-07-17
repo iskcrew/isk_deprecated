@@ -30,7 +30,7 @@ class IskdpyController < WebsocketRails::BaseController
     d = Display.find(message[:display_id])
     
     data = message
-    WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
+    WebsocketRails[d.websocket_channel].trigger(:goto_slide, data)
     trigger_success data
   end
   
