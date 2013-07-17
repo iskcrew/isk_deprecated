@@ -60,9 +60,16 @@ WebsocketRails::EventMap.describe do
     subscribe :hello,         to: IskdpyController, with_method: :hello
     
     #Näytin kertoo mitä kelmua näytetään parhaillaan.
-    #data = {display_id, group_id, slide_id}
-    #palauttaa: display_<id> kanavalle viestin "current_slide" data={sliden serialisaatio}
+    #data = {display_id, group_id, slide_id} 
+    # TAI
+    # data = {display_id, override_queue_id}
+    #palauttaa: display_<id> kanavalle viestin "current_slide" data={group_id, slide_id}
     subscribe :current_slide,         to: IskdpyController, with_method: :current_slide
+    
+    #Käli ja näytin viestivät keskenään kalvojen vaihdosta
+    #data = {display_id, mitätahansamuuta}
+    #palauttaa: display_<id> kanavalle goto_slide eventin jonka data on sama kuin sisääntullut
+    subscribe :goto_slide,            to: IskdpyController, with_method: :goto_slide
     
     #Näytin kertoo kun override on näytetty.
     #data = {display_id, override_queue_id}

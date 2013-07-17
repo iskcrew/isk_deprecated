@@ -1,11 +1,20 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+#Has all roles
+admin:
+    id: 1
+    username: admin
+    salt: 12345678
+    password: <%= Digest::SHA1.hexdigest('test1' << "12345678") %>
+     
+no_roles: 
+    id: 2
+    username: no_roles
+    salt: 12345678
+    password: <%= Digest::SHA1.hexdigest('test2' << "12345678") %>
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+#Has create roles, slide-hide and display-override roles
+limited:
+    id: 3
+    username: limited
+    salt: 12345678
+    password: <%= Digest::SHA1.hexdigest('test3' << "12345678") %>
+    

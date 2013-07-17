@@ -15,11 +15,23 @@ class IskdpyController < WebsocketRails::BaseController
   #Näytin kertoo mitä kelmua se näyttää
   def current_slide
       d = Display.find(message[:display_id])
-      d.set_current_slide(message[:group_id], message[:slide_id])
+      if message[:override_queue_id]
+        d.override_shown(message[:override_queue_id])
+      else
+        d.set_current_slide(message[:group_id], message[:slide_id])
+      end
       d.save!
-      data = {:display_id => message[:display_id], :group_id => message[:group_id], :slide_id => message[:slide_id]}
+      data = {:display_id => message[:display_id], :group_id => d.current_group_id, :slide_id => d.current_slide_id}
       WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
       trigger_success data
+  end
+  
+  def goto_slide
+    d = Display.find(message[:display_id])
+    
+    data = message
+    WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
+    trigger_success data
   end
   
   #Näytin kertoo esittäneensä ohisyötön

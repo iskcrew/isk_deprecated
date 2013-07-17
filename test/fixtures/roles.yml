@@ -1,11 +1,49 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+slide_admin:
+    id: 1
+    role: slide-admin
+    description: Full slide control
+    
+slide_hide:
+    id: 2
+    role: slide-hide
+    description: Can hide all slides
+    
+slide_create:
+    id: 3
+    role: slide-create
+    description: Can create new slides
+    
+mastergroup_admin:
+    id: 4
+    role: mastergroup-admin
+    description: Full group control
+    
+mastergroup_create:
+    id: 5
+    role: mastergroup-create
+    description: Can create new groups
+    
+presentation_admin:
+    id: 6
+    role: presentation-admin
+    description: Full presentation control
+    
+presentation_create:
+    id: 7
+    role: presentation-create
+    description: Can create new presentations
+    
+display_admin:
+    id: 8
+    role: display-admin
+    description: Full display control
+    
+display_create:
+    id: 9
+    role: display-create
+    description: Can create new displays
+    
+display_override:
+    id: 10
+    role: display-override
+    description: Can add override slides to all displays

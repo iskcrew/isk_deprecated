@@ -18,6 +18,17 @@ module ApplicationHelper
     return ret.html_safe 
   end
   
+  def inactive_toggle(name, status)
+    if status
+      html="<a class='button inactive led green'>"
+    else
+      html="<a class='button inactive led off'>"
+    end
+    html << name << '</a>'
+    return html.html_safe
+  end
+  
+  
   def toggle_link_to(name, selected,options = {}, html_options = {})
     html_options[:class] = (selected ? 'button led green' : 'button led off')
     html_options[:title] = (selected ? 'Toggle this off' : 'Toggle this on')

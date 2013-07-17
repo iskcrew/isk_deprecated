@@ -1,11 +1,19 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+one_slide:
+    id: 1
+    name: One slide here
+    event_id: 2
+    
+ten_slides:
+    id: 2
+    name: Ten slides here
+    event_id: 2
+    
+inactive_event:
+    id: 3
+    name: Not in the current event
+    event_id: 1
+    
+no_slides:
+    id: 4
+    name: No slides in this one
+    event_id: 2

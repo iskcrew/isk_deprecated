@@ -67,32 +67,18 @@ module SlidesHelper
   
   def hide_button_or_status(s, remote = false)
     if s.can_edit? current_user
-      return hide_button(s)
+      return slide_toggle_button('Public', s, :public)
 	  elsif s.can_hide?(current_user) && s.public == true
-	    return hide_button(s, true)
+	    return toggle_link_to 'Public', s.public, {:controller => :slides, :action => :hide, :id => s.id}, :method => :post, :remote => true, :confirm => "Are you sure you want to hide this slide? You cannot publish it later!"
     else
 	    return inactive_toggle('Public', s.public)
     end
   end
   
-  def hide_button(s, confirm = false)
-    options = {:id => s.id, :controller => :slides}
-    options[:action]= (s.public ? :hide : :publish)
-    html_options = {:method => :post, :remote => true}
-    html_options[:confirm] = "Are you sure you want to hide this slide?" if confirm
-    return toggle_link_to "Public", s.public, options, html_options 
+  def slide_toggle_button(name, slide, attrib)
+    toggle_link_to name, slide.send(attrib), {:controller => :slides, :action => :update, :id => slide.id, :slide => {attrib => !slide.send(attrib)}}, :method => :put, :remote => true
   end
-  
-  def inactive_toggle(name, status)
-    if status
-      html="<a class='button inactive led green'>"
-    else
-      html="<a class='button inactive led off'>"
-    end
-    html << name << '</a>'
-    return html.html_safe
-  end
-  
+      
   def slide_class(s)
     return 'Inkscape slide' if s.is_a? InkscapeSlide
     return 'Online simple editor slide' if s.is_a? SimpleSlide

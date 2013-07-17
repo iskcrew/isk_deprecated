@@ -15,10 +15,9 @@
   
   <%if s.can_edit? current_user %>
   
+  <%=slide_toggle_button 'Public', s, :public%>
   
-  <%=hide_button(s)%>
-	
-	<%=toggle_link_to 'Clock', s.show_clock, {:controller => :slides, :action => :toggle_clock, :id => s.id}, :method => :post, :remote => true%>
+	<%=slide_toggle_button 'Clock', s, :show_clock%>
   
   <%=link_to 'Edit', {:controller => :slides, :action => :edit, :id => s.id}, :class => 'button', :confirm => (s.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
 
