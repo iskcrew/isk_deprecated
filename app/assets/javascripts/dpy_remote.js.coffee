@@ -33,7 +33,7 @@ $ ->
 			g.append $('<h1/>').text group.name
 			g.append slide group, s for s in group?.slides
 		
-		elems=$('<div><h1>Display_'+display.id+' Presentation: '+display.presentation.name+'</h1></div>')
+		elems=$('<div><h1>Display: '+display.name+' Presentation: '+display.presentation.name+'</h1></div>')
 		elems.append group g for g in display?.presentation?.groups
 
 		id=root.find('.active')?.id
