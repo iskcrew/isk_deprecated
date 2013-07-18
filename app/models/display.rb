@@ -91,6 +91,7 @@ class Display < ActiveRecord::Base
   def to_hash
     h = Hash.new
     h[:metadata_updated_at] = self.metadata_updated_at.to_i
+    h[:name] = self.name
     h[:last_contact_at] = self.last_contact_at.to_i
     h[:updated_at] = self.updated_at.to_i
     h[:created_at] = self.created_at.to_i
