@@ -1,10 +1,10 @@
 $ -> 
 	preview=$('#display_preview')
-	root=$('#display_control')
+	root=$('#display_control').first()
 	if not root then return
 
 	display_id=root.attr('data-id')
-
+	if not display_id then return
 
 
 	handle_display = (display) ->
