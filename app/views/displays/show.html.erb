@@ -44,5 +44,8 @@
   <%if @display.can_edit? current_user%>
 	<%=link_to 'Edit', :action => :edit, :id => @display.id%>
 	<%end%>
+	
+	<%=link_to 'Remote control', :action => :dpy_control, :id => @display.id%>
+	
 	<%=link_to 'Slide stats', :action => :slide_stats, :id => @display.id%>
 <%end%>

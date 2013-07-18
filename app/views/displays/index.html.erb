@@ -27,6 +27,7 @@
 			<td>
 			  <%=link_to 'Details', :action => :show, :id => d.id%> <br />
 				<%=link_to 'Edit', :action => :edit, :id => d.id%>
+				<%=link_to 'Remote control', :action => :dpy_control, :id => d.id%>
 			</td>
 		</tr>
 	<%end%>
