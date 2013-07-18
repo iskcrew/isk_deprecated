@@ -153,7 +153,8 @@ Isk::Application.routes.draw do
       post 'remove_override'
       put 'update_override'
       post 'grant'
-      post 'deny'      
+      post 'deny'
+      get 'dpy_control'      
     end
     
     collection do
