@@ -24,9 +24,6 @@ var refreshTimer = $.timer(function() {
 	if ($('[data-refresh-url]').length == 0) refreshTimer.stop();
 }, 300000, true);
 
-
-
-
 $().ready(function() {
 	var $scrollingDiv = $("#scrollingDiv");
 
@@ -35,6 +32,21 @@ $().ready(function() {
 		.stop()
 		.animate({"marginTop": Math.max(($(window).scrollTop()) - 130, 0)+ "px"}, 200 );			
 	});
+	
+	
+	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
+	function replace_slideitem(slide) {
+	  	console.log('fooo! ' + window.location.protocol + "/slides/" + slide.id);
+		$.ajax({
+		  type: "GET",
+		  url: window.location.origin + "/slides/" + slide.id,
+		  dataType: 'script'
+	});
+	};
+
+	slidelist = dispatcher.subscribe('slide');
+	slidelist.bind('update', replace_slideitem);
+	
 });
 	
 function scrollToAnchor(aid){
@@ -61,3 +73,4 @@ jQuery(function($) {
 	$(document).tooltip({show: {duration: 1000, easing: 'easeInExpo'}});
 	$( "#tabs" ).tabs();
 });
+
