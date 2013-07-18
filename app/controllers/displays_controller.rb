@@ -97,6 +97,11 @@ class DisplaysController < ApplicationController
       render :action => 'edit'
     end
   end  
+
+  #Remote control for iskdpy via javascript and websockets
+  def dpy_control
+    @display = Display.find(params[:id])
+  end
     
   def presentation
     @display = Display.find(params[:id])
