@@ -60,7 +60,7 @@ $ ->
 
 	dispatcher=null
 	connect = ->
-		dispatcher = new WebSocketRails 'isk0.asm.fi/websocket'
+		dispatcher = new WebSocketRails(window.location.host  + '/websocket')
 		dispatcher.on_open = ->
 			dispatcher.trigger 'iskdpy.display_data', display_id
 				, success = (d) -> handle_display d
