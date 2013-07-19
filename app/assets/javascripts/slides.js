@@ -12,14 +12,9 @@ var refreshTimer = $.timer(function() {
 }, 300000, true);
 
 $().ready(function() {
-	var $scrollingDiv = $("#scrollingDiv");
-
-	$(window).scroll(function(){			
-		$scrollingDiv
-		.stop()
-		.animate({"marginTop": Math.max(($(window).scrollTop()) - 130, 0)+ "px"}, 200 );			
-	});
 	
+	$('#scrollingDiv').waypoint('sticky');
+
 	
 	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 

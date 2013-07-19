@@ -6,6 +6,8 @@ $ ->
 	display_id=root.attr('data-id')
 	if not display_id then return
 
+	$('.display_preview').waypoint('sticky');
+
 
 	handle_display = (display) ->
 		console.log "received display"
@@ -46,7 +48,17 @@ $ ->
 		root.find('.active').removeClass 'active'
 		active = root.find('#img'+gs_id)
 		active.addClass 'active'
-		preview.html active.clone()
+		
+		img=$('<img/>')
+		img.attr { 
+			id: "img"+gs_id,
+			src: "/slides/#{slide?.id}/preview?t=#{slide?.images_updated_at}"
+			}
+		
+		preview.html img
+		
+		
+		
 	
 	send_goto_slide = (event) ->
 		d=$(event.target).data()

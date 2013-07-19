@@ -71,9 +71,20 @@ table.override_queue {
 
 div.display_preview {
 	display: block;
+	height: 230px;
+	width: 410px;
+	background: red;
 	float: right;
+	
 }
 
+div.display_preview.stuck {
+	position:fixed;
+	top:0;
+	right: 5px;
+	box-shadow:0 2px 4px rgba(0, 0, 0, .3);
+	float: right;
+}
 
 div.display_control {
 	div.slide {

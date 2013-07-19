@@ -72,6 +72,16 @@ div.grouplinks {
 	max-width: 150px;
 }
 
+div.grouplinks.stuck {
+	position:fixed;
+	top:0;
+	right: 5px;
+	box-shadow:0 2px 4px rgba(0, 0, 0, .3);
+	float: right;
+}
+
+
+
 div.slidelist {
 	min-width: 600px;
 }

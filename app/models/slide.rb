@@ -186,16 +186,6 @@ class Slide < ActiveRecord::Base
       if system rsvg_command(:full)
       end
       
-      #Previkan tekeminen rsvg:llä tuppaa kusemaan, fontit ei skaalaudu oikein
-      picture = Magick::ImageList.new(self.full_filename)
-      picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
-      picture.write(self.preview_filename)
-      
-      #Previkan tekeminen rsvg:llä tuppaa kusemaan, fontit ei skaalaudu oikein
-      picture = Magick::ImageList.new(self.full_filename)
-      picture.resize_to_fit!(Slide::ThumbWidth, Slide::ThumbHeight)
-      picture.write(self.thumb_filename)
-      
       
     else
       #Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
@@ -204,13 +194,17 @@ class Slide < ActiveRecord::Base
         
       picture.resize!(Slide::FullWidth, Slide::FullHeight)
       picture.write(self.full_filename)
-    
-      picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
-      picture.write(self.preview_filename)
-    
       
       
     end
+    
+    #Paistetaan ImageMagickillä previkat
+    picture = Magick::ImageList.new(self.full_filename)
+    preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
+    preview_picture.write(self.preview_filename)
+    
+    thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
+    thumb_picture.write(self.thumb_filename)
 
     self.ready = true
     self.images_updated_at = Time.now
