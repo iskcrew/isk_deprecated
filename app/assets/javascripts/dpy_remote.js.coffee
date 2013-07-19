@@ -6,8 +6,6 @@ $ ->
 	display_id=root.attr('data-id')
 	if not display_id then return
 
-	$('.display_preview').waypoint('sticky');
-
 	$('.display_preview').waypoint('sticky', {
 	  wrapper: '<div class="display_preview_wrapper" />',
 	  stuckClass: 'stuck'
