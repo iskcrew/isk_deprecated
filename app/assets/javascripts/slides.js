@@ -15,6 +15,10 @@ $().ready(function() {
 	
 	$('#scrollingDiv').waypoint('sticky');
 
+	$('#scrollingDiv').waypoint('sticky', {
+	  wrapper: '<div class="scrollingDiv-wrapper" />',
+	  stuckClass: 'stuck'
+	});
 	
 	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 
