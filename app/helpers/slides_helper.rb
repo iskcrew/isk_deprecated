@@ -81,7 +81,7 @@ module SlidesHelper
     
   def group_link_tag(g)
     html = 'Group:' 
-    html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, :name => g.name)
+    html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, {:name => 'group_' + g.id.to_s} )
     html << " Slides:" << g.slides.public.count.to_s << '/' << g.slides.count.to_s
     return html.html_safe
   end

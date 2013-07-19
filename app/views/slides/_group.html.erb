@@ -6,7 +6,7 @@
           <%=group_link_tag(group)%>
           <%slides = group.slides.current%>
         <%else%>
-          <a name="ungrouped">Ungrouped slides</a>
+          <a name="group_<%=group.id%>">Ungrouped slides</a>
           <%slides = Slide.current.ungrouped.order('id desc')%>
         <%end%>
       </th>

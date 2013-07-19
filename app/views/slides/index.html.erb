@@ -33,7 +33,7 @@
    <%@groups.each do |group|%>
 	  <%unless group.slides.count == 0%>
 	    <li>
-        <a href="#<%=group.name%>" class="grouplink"><%=group.name%></a>
+        <a href="#group_<%=group.id%>" class="grouplink"><%=group.name%></a>
       </li>
     <%end%>
   <%end%>
