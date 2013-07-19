@@ -194,8 +194,6 @@ class Slide < ActiveRecord::Base
         
       picture.resize!(Slide::FullWidth, Slide::FullHeight)
       picture.write(self.full_filename)
-      
-      
     end
     
     #Paistetaan ImageMagickillä previkat
