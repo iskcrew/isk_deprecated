@@ -69,12 +69,15 @@ table.override_queue {
 	}
 }
 
+div.display_preview_wrapper {
+	float: right;
+}
+
 div.display_preview {
 	display: block;
 	height: 230px;
 	width: 410px;
 	background: red;
-	float: right;
 	
 }
 

@@ -66,18 +66,21 @@ img.fullSlide {
 	background-color:#505050;
 }
 
-div.grouplinks {
+div.scrollingDiv-wrapper {
 	float: right;
+	max-width: 150px;
+}
+
+div.grouplinks {
 	padding-right: 15px;
 	max-width: 150px;
+	display: block;
 }
 
 div.grouplinks.stuck {
 	position:fixed;
 	top:0;
-	right: 5px;
-	box-shadow:0 2px 4px rgba(0, 0, 0, .3);
-	float: right;
+	right: 6px;
 }
 
 
@@ -87,7 +90,7 @@ div.slidelist {
 }
 
 div.slidegroups {
-	margin-right: 180px;
+	margin-right: 175px;
 }
 
 

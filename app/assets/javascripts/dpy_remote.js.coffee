@@ -8,6 +8,11 @@ $ ->
 
 	$('.display_preview').waypoint('sticky');
 
+	$('.display_preview').waypoint('sticky', {
+	  wrapper: '<div class="display_preview_wrapper" />',
+	  stuckClass: 'stuck'
+	});
+
 
 	handle_display = (display) ->
 		console.log "received display"
