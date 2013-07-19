@@ -13,8 +13,6 @@ var refreshTimer = $.timer(function() {
 
 $().ready(function() {
 	
-	$('#scrollingDiv').waypoint('sticky');
-
 	$('#scrollingDiv').waypoint('sticky', {
 	  wrapper: '<div class="scrollingDiv-wrapper" />',
 	  stuckClass: 'stuck'
