@@ -95,6 +95,7 @@ Isk::Application.routes.draw do
       post 'add_to_group'
       post 'add_to_override'
       post 'clone'
+      get 'thumb'
     end
     
     collection do

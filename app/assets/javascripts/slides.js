@@ -1,16 +1,3 @@
-//Korvataan puuttuvat previkat oikeilla kunhan ne valmistuvat
-var previewTimer = $.timer(function() {
-	$('[data-preview-url]').each(function(index, element) {
-		$.ajax({
-			type: "GET",
-			url: $(this).attr('data-preview-url'),
-			dataType: 'script'
-		});
-	});
-	if ($('[data-preview-url]').length == 0) previewTimer.stop();
-}, 2000, true);
-
-
 // Päivitetään kelmulistaa automaattisesti 60s välein
 var refreshTimer = $.timer(function() {
 	$('[data-refresh-url]').each(function(index, element) {
@@ -35,17 +22,38 @@ $().ready(function() {
 	
 	
 	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
+
 	function replace_slideitem(slide) {
 	  	console.log('fooo! ' + window.location.protocol + "/slides/" + slide.id);
 		$.ajax({
 		  type: "GET",
 		  url: window.location.origin + "/slides/" + slide.id,
 		  dataType: 'script'
-	});
+		});
+	};
+
+	function replace_slide_image(slide) {
+		console.log('Updating slide images for slide id: ' + slide.id);
+	  	$('img#slide_full_' + slide.id).each(function(index, element) {
+			console.log(' >Found full size images..');
+			$(element).attr("src", window.location.origin + '/slides/' + slide.id + '/full?t=' + slide.images_updated_at);
+		});
+		
+		$('img#slide_preview_' + slide.id).each(function(index, element) {
+			console.log(' >Found preview images..');
+			$(element).attr("src", window.location.origin + '/slides/' + slide.id + '/preview?t=' + slide.images_updated_at);
+		});
+		
+		$('img#slide_thumb_' + slide.id).each(function(index, element) {
+			console.log(' >Found thumbnails..');
+			$(element).attr("src", window.location.origin + '/slides/' + slide.id + '/thumb?t=' + slide.images_updated_at);
+		});
 	};
 
 	slidelist = dispatcher.subscribe('slide');
 	slidelist.bind('update', replace_slideitem);
+	console.log('asdasdasd!!!');
+	slidelist.bind('updated_image', replace_slide_image);
 	
 });
 	
