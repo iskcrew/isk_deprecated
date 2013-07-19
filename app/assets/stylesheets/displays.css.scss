@@ -68,3 +68,44 @@ table.override_queue {
 		}
 	}
 }
+
+div.display_preview {
+	display: block;
+	float: right;
+}
+
+
+div.display_control {
+	div.slide {
+		display: inline-block;
+		margin: 5px;
+		background: #BBB;
+		
+		img {
+			width: 128px;
+			height: 72px;
+			padding: 5px;
+		}
+	}
+	
+	div.group {
+		display: block;
+		padding: 5px;
+		margin: 5px;
+		background: #999;
+		
+		h1 {
+			font-size: 14pt;
+		}
+		
+		h2.slideheader {
+			font-size: 8pt;
+			max-width: 130px;
+			overflow: hidden;
+		}
+	}
+	
+	.active {
+		background: #F00;
+	}
+}
