@@ -36,8 +36,12 @@ class Slide < ActiveRecord::Base
   
   FullWidth = 1280
   FullHeight = 720
+  
   PreviewWidth = 400
   PreviewHeight = 225
+  
+  ThumbWidth = 128
+  ThumbHeight = 72
 
   TypeString = 'image'
 
@@ -187,6 +191,12 @@ class Slide < ActiveRecord::Base
       picture.resize_to_fit!(Slide::PreviewWidth, Slide::PreviewHeight)
       picture.write(self.preview_filename)
       
+      #Previkan tekeminen rsvg:llä tuppaa kusemaan, fontit ei skaalaudu oikein
+      picture = Magick::ImageList.new(self.full_filename)
+      picture.resize_to_fit!(Slide::ThumbWidth, Slide::ThumbHeight)
+      picture.write(self.thumb_filename)
+      
+      
     else
       #Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
       picture = Magick::ImageList.new(self.original_filename)
@@ -214,6 +224,11 @@ class Slide < ActiveRecord::Base
   def svg_filename
     FilePath.join(self.filename + '.svg')
   end
+
+  def thumb_filename
+    FilePath.join(self.filename + '_thumb.png')
+  end
+
   
   def preview_filename
     FilePath.join(self.filename + '_preview.png')
@@ -313,7 +328,7 @@ class Slide < ActiveRecord::Base
   end
   
   def updated_image_notifications
-    WebsocketRails[:slide].trigger(:updated_image, self.to_json)
+    WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
   end  
   
   

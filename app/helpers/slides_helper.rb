@@ -3,7 +3,8 @@ module SlidesHelper
   def slide_preview_image_tag(slide)
     if slide.ready
       html_options = {
-        :class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden')
+        :class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden'),
+        :id => 'slide_preview_' + slide.id.to_s
       }
       url = url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i)
       return image_tag url, html_options
@@ -12,9 +13,25 @@ module SlidesHelper
       return html.html_safe
     end
   end
+
+  def slide_thumb_image_tag(slide)
+    if slide.ready
+      html_options = {
+        :class => 'thumb ' + (slide.public ? 'slide-public' : 'slide-hidden'),
+        :id => 'slide_thumb_' + slide.id.to_s
+      }
+      url = url_for(:controller => :slides, :action => :thumb, :id => slide.id, :t => slide.images_updated_at.to_i)
+      return image_tag url, html_options
+    else
+      html="<img class='preview' data-preview-url='" << url_for(:controller => :slides, :action => :thumb, :id => slide.id)  << "' src='/wait.gif' />"
+      return html.html_safe
+    end
+  end
+
+
   
   def slide_full_image_tag(slide)
-    image_tag url_for(:controller => :slides, :action => :full, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'fullSlide'}
+    image_tag url_for(:controller => :slides, :action => :full, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'fullSlide', :id => 'slide_full_' + slide.id.to_s}
   end
   
   
@@ -30,6 +47,20 @@ module SlidesHelper
     }
     return link_to slide_preview_image_tag(slide), url_options, html_options
   end
+
+  def slide_thumb_to_show_tag(slide)
+    html_options = {
+      :title => 'Click to show slide details',
+      :class => 'slide-preview-to-show'
+    }
+    url_options = {
+      :controller => :slides,
+      :action => :show,
+      :id => slide.id
+    }
+    return link_to slide_thumb_image_tag(slide), url_options, html_options
+  end
+
   
   
   def slide_preview_to_full_tag(slide)
