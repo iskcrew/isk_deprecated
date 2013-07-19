@@ -1,17 +1,19 @@
 module SlidesHelper
   
   def slide_preview_image_tag(slide)
+    html_options = {
+      :class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden'),
+      :id => 'slide_preview_' + slide.id.to_s
+    }
+    
     if slide.ready
-      html_options = {
-        :class => 'preview ' + (slide.public ? 'slide-public' : 'slide-hidden'),
-        :id => 'slide_preview_' + slide.id.to_s
-      }
       url = url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i)
-      return image_tag url, html_options
     else
-      html="<img class='preview' data-preview-url='" << url_for(:controller => :slides, :action => :preview, :id => slide.id)  << "' src='/wait.gif' />"
-      return html.html_safe
+      url = '/wait.gif'
     end
+    
+    return image_tag url, html_options
+    
   end
 
   def slide_thumb_image_tag(slide)
