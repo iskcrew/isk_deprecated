@@ -24,7 +24,11 @@ $().ready(function() {
 	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 
 	function replace_slideitem(slide) {
-	  	console.log('fooo! ' + window.location.protocol + "/slides/" + slide.id);
+	  	console.log('Updating slide data: ' + window.location.protocol + "/slides/" + slide.id);
+		
+		//Tarkistetaan että onko kelmua hötömölössä ennen kuin haetaan ajaxia
+		if ($('#slide_' + slide.id).length == 0) return
+		
 		$.ajax({
 		  type: "GET",
 		  url: window.location.origin + "/slides/" + slide.id,
@@ -52,7 +56,6 @@ $().ready(function() {
 
 	slidelist = dispatcher.subscribe('slide');
 	slidelist.bind('update', replace_slideitem);
-	console.log('asdasdasd!!!');
 	slidelist.bind('updated_image', replace_slide_image);
 	
 });
