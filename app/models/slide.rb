@@ -200,6 +200,8 @@ class Slide < ActiveRecord::Base
     
     #Paistetaan ImageMagickillä previkat
     picture = Magick::ImageList.new(self.full_filename)
+    picture = picture[0]
+    
     preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
     preview_picture.write(self.preview_filename)
     
