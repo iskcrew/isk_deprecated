@@ -18,7 +18,7 @@ $ ->
 			img=$('<img/>')
 			img.attr { 
 				id: "img"+gs_id,
-				src: "/slides/#{slide?.id}/preview?t=#{slide?.images_updated_at}"
+				src: "/slides/#{slide?.id}/thumb?t=#{slide?.images_updated_at}"
 				}
 			delete group.slides
 			img.data 'group', group
