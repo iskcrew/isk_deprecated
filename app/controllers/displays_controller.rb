@@ -55,6 +55,7 @@ class DisplaysController < ApplicationController
 	      @display.save!
         render(:json =>JSON.pretty_generate(@display.to_hash))
       }
+      format.js
     end
   end
   

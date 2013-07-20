@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(:version => 20130720141146) do
     t.boolean  "public",                           :default => false
     t.boolean  "show_clock",                       :default => true
     t.string   "type"
-    t.text     "description",                      :default => ""
+    t.text     "description"
     t.datetime "images_updated_at"
   end
 
