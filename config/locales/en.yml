@@ -5,4 +5,14 @@ en:
     time:
         formats:
             short: "%H:%M:%S %d.%m.%y"
-            iso: "%Y-%m-%dT%H:%M:%S"
+            iso: "%Y-%m-%dT%H:%M:%S"			
+    activerecord:
+        attributes:
+            presentation:
+                delay: "Slide duration (seconds)"
+                effect_id: "Slide transition effect"
+            slide:
+                show_clock: "Show overlay clock with this slide"
+                public: "Public slide (hidden slides won't be shown')"
+                name: 'Slide name'
+                description: 'Slide description'

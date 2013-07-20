@@ -1,19 +1,17 @@
 <%=fields_for :slide, @slide do |f|%>
+
+
+<%=f.error_messages%>
+<%=f.submit%>
+
 <div class='simple_editor_container'>
 <% slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)%>
 
 <div class='simple_editor_controls'>
-<h2>Slide metadata and settings</h2>
-
-
-	<%=f.error_messages%>
-	<%=render :partial => 'form'%>
-
-
 <h2>Slide contents</h2>
 <p>Use &lt;foo&gt; to highlight text in the slide.</p>
-<p>You need to have the following fonts installed for the editor to work correctly: <a href='/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Regular-webfont.ttf'>Franklin Gothic Heavy Regular</a> and 
-<a href='/svg-edit/fonts/FranklinGothicHeavy/FranklinGothicHeavy-Italic-webfont.ttf'>Franklin Gothic Heavy Italic</a> </p>
+<p>You need to have the following fonts installed for the editor to work correctly: <a href='/fonts/Franklin_Gothic_Heavy-Regular.ttf'>Franklin Gothic Heavy Regular</a> and 
+<a href='/fonts/Franklin_Gothic_Heavy-Italic.ttf'>Franklin Gothic Heavy Italic</a> </p>
 <textarea id="head" name="slide[slidedata][heading]" rows="1" cols="31" wrap="off">
 <%=slidedata[:heading]%>
 </textarea>
@@ -29,7 +27,14 @@
 <%=simple_text_size_select(slidedata[:text_size])%>
 <%=simple_color_select(slidedata[:color])%>
 
+<h2>Slide metadata and settings</h2>
+	<%=render :partial => 'form'%>
+    
+<p><%=f.submit%></p>
+
 <%end%>
+
+
 </div>
 
   <div class="simple_editor_preview">
