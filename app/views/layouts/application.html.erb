@@ -18,8 +18,8 @@
 	</div>
 	<%=render :partial => "navigation" %>
 	<div class='flash'>
-	<p class="flash_notice"><%= flash[:notice] %></p>
-	<p class="flash_error"><%= flash[:error]%></p>
+	<div class="error"><%= flash[:error]%></div>
+	<div class="notice"><%= flash[:notice] %></div>
   </div>
 
 <div class='content'>

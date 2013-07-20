@@ -1,6 +1,6 @@
 class WebsocketNotifications < ActiveRecord::Observer
   #TODO näyttimelle kunnolla observointia...
-  observe :slide, :master_group, :group, :presentation, :display
+  observe :slide, :master_group, :group, :presentation, :display, :override_queue
 
 
   def after_create(obj)

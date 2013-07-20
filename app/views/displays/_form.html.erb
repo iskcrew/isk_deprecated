@@ -1,5 +1,6 @@
 <%=fields_for @display do |f|%>
 	<p><b>Name:</b><%=f.text_field :name%></p>
-	<p><b>Monitor this display?</b><%=f.check_box :monitor%>
+	<p><b>Monitor this display?</b><%=f.check_box :monitor%></p>
+	<p><b>Manual control only?</b><%=f.check_box :manual%></p>
 	<p><b>Presentation:</b><%=f.collection_select(:presentation_id, Presentation.all, :id, :name, {:include_blank => true})%>
 <%end%>

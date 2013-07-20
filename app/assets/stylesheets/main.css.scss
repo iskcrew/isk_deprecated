@@ -37,16 +37,20 @@ img.preview {
 	border: 2px solid #d0d0d0;
 }
 
-p.flash_notice {
-	color: green;
-	font-size: 2em;
-}
+div.flash {
+	display: block;
+	font-size: 1.5em;
+	
+	div.notice {
+		padding-left: 10px;
+		background: green;
+	}
 
-p.flash_error {
-	color: red;
-	font-size: 2em;
+	div.error {
+		padding-left: 10px;
+		background: red;
+	}
 }
-
 div.content {
 	padding: 0.5em 0.5em;
 }

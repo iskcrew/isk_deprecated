@@ -23,6 +23,8 @@ class Display < ActiveRecord::Base
 
   include ModelAuthorization
   
+  attr_accessible :name, :presentation_id, :monitor, :manual
+  
   def websocket_channel
     return "display_" + self.id.to_s
   end
@@ -95,6 +97,9 @@ class Display < ActiveRecord::Base
     h[:name] = self.name
     h[:last_contact_at] = self.last_contact_at.to_i
     h[:updated_at] = self.updated_at.to_i
+    h[:manual] = self.manual
+    h[:current_slide_id] = self.current_slide_id
+    h[:current_group_id] = self.current_group_id
     h[:created_at] = self.created_at.to_i
     h[:presentation] = self.presentation ? self.presentation.to_hash : Hash.new
     q = Array.new

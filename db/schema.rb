@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130707201829) do
+ActiveRecord::Schema.define(:version => 20130720141146) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(:version => 20130707201829) do
     t.string   "name",                    :limit => 50
     t.string   "ip",                      :limit => 12
     t.integer  "presentation_id"
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.boolean  "monitor",                               :default => true
     t.integer  "current_group_id"
     t.integer  "current_slide_id"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20130707201829) do
     t.datetime "metadata_updated_at"
     t.datetime "last_hello"
     t.integer  "websocket_connection_id"
+    t.boolean  "manual",                                :default => false
   end
 
   add_index "displays", ["last_contact_at"], :name => "index_displays_on_last_contact_at"
