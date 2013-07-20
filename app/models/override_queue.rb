@@ -10,4 +10,10 @@ class OverrideQueue < ActiveRecord::Base
     
     return h
   end
+  
+  #Used by the websocket notification observer to avoid special cases
+  def displays
+    return [self.display]
+  end
+  
 end
