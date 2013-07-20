@@ -10,9 +10,26 @@ module DisplaysHelper
     end
   end
   
+  def display_ping(d)
+    if d.late?
+      html_class = 'late'
+    else
+      html_class = 'on_time'
+    end
+    
+    ping_seconds = (Time.now - d.last_contact_at).to_i
+    
+    if ping_seconds > 60
+      ping_seconds = ">60"
+    end
+    
+    return content_tag(:span, 'Ping: ' + ping_seconds.to_s + " s.", :class => html_class)
+    
+  end
+  
   def current_slide_tag(d)
     if d.current_slide
-      return link_to d.current_slide.name, :controller => :slides, :action => :show, :id => d.current_slide.id
+      return slide_preview_to_show_tag d.current_slide
     else
       return 'UNKNOWN'
     end

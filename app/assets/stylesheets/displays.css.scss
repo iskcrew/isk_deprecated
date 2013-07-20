@@ -89,6 +89,49 @@ div.display_preview.stuck {
 	float: right;
 }
 
+div.display_info {
+    border: 2px solid red;
+    margin: 5px;
+    float: left;
+    border: 2px solid #d0d0d0;
+    border-radius: 10px;
+    
+    div.display_header {
+        padding: 5px;
+        max-width: 380;
+        overflow: hidden;
+        font-size: 1.5em;
+    }
+    
+    div.display_current_slide {
+        
+    }
+    
+    div.display_metadata {
+        ul {
+            list-style-type: none;
+            margin: 5px;
+            padding: 5px;
+        }
+        
+        .late {
+            font-weight: bold;
+        }
+        
+        .on_time {
+            
+        }
+    }
+    
+    div.display_actions {
+        margin: 5px;
+    }
+}
+
+div.display_info.late {
+    background: #A55;
+}
+
 div.display_control {
 	div.slide {
 		display: inline-block;
