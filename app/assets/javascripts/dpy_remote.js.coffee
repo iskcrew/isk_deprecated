@@ -59,24 +59,31 @@ $ ->
 		preview.html img
 		
 	send_previous_slide = (event) ->
-		console.log 'Sending iskdpy.goto_slide slide=previous'	
 		event.preventDefault()
-		d=$(event.target).data()
+		d=$('#previous').data()
 		data = {
 			slide: 'previous',
 			display_id: d.id
 			}
 		dispatcher.trigger 'iskdpy.goto_slide', data
+		console.log 'Sending iskdpy.goto_slide slide=previous, display_id=' + data.display_id
         
 	send_next_slide = (event) ->
-		console.log "Sending iskdpy.goto_slide slide=next"
 		event.preventDefault()
-		d=$(event.target).data()
+		d=$('#next').data()
 		data = {
 			slide: 'next',
 			display_id: d.id
 			}
+		console.log 'Sending iskdpy.goto_slide slide=next, display_id=' + data.display_id
 		dispatcher.trigger 'iskdpy.goto_slide', data
+	
+	handle_keydown = (event) ->
+		console.log "Got keydown: " + event.which
+		if (event.which == 37) then	send_previous_slide event
+		
+		if (event.which == 39) then	send_next_slide event
+		
 	
 	send_goto_slide = (event) ->
 		d=$(event.target).data()
@@ -107,5 +114,5 @@ $ ->
 	connect()
 	$('#previous').bind 'click', send_previous_slide
 	$('#next').bind 'click', send_next_slide
-	
+	$(window).bind 'keydown', handle_keydown
 
