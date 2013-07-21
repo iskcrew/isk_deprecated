@@ -93,10 +93,16 @@ class DisplaysController < ApplicationController
 
     if @display.update_attributes(params[:display])
       flash[:notice] = 'Display was successfully updated.'
-      redirect_to :back
     else
-      render :action => 'edit'
+      flash[:error] = "Error updating display."
+      render :action => 'edit' and return
     end
+    
+    respond_to do |format|
+      format.html
+      format.js {render :show}
+    end
+    
   end  
 
   #Remote control for iskdpy via javascript and websockets

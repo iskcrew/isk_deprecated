@@ -75,10 +75,20 @@ div.display_preview_wrapper {
 
 div.display_preview {
 	display: block;
-	height: 230px;
-	width: 410px;
 	background: red;
-	
+	float: right;
+    
+    div.display_info {
+        float: none;
+    }
+    
+    div.control_buttons {
+        border: 2px solid #d0d0d0;
+        border-radius: 10px;
+        display: block;
+        margin: 5px;
+        padding: 5px;
+    }
 }
 
 div.display_preview.stuck {
@@ -86,7 +96,6 @@ div.display_preview.stuck {
 	top:0;
 	right: 5px;
 	box-shadow:0 2px 4px rgba(0, 0, 0, .3);
-	float: right;
 }
 
 div.display_info {
@@ -133,6 +142,8 @@ div.display_info.late {
 }
 
 div.display_control {
+    margin-right: 410px;
+    
 	div.slide {
 		display: inline-block;
 		margin: 5px;

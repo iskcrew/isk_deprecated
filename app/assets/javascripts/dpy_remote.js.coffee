@@ -11,7 +11,6 @@ $ ->
 	  stuckClass: 'stuck'
 	});
 
-
 	handle_display = (display) ->
 		console.log "received display"
 		slide = (group, slide) ->
@@ -57,11 +56,27 @@ $ ->
 			id: "img"+gs_id,
 			src: "/slides/#{d?.slide_id}/preview"
 			}
-		
 		preview.html img
 		
-		
-		
+	send_previous_slide = (event) ->
+		console.log 'Sending iskdpy.goto_slide slide=previous'	
+		event.preventDefault()
+		d=$(event.target).data()
+		data = {
+			slide: 'previous',
+			display_id: d.id
+			}
+		dispatcher.trigger 'iskdpy.goto_slide', data
+        
+	send_next_slide = (event) ->
+		console.log "Sending iskdpy.goto_slide slide=next"
+		event.preventDefault()
+		d=$(event.target).data()
+		data = {
+			slide: 'next',
+			display_id: d.id
+			}
+		dispatcher.trigger 'iskdpy.goto_slide', data
 	
 	send_goto_slide = (event) ->
 		d=$(event.target).data()
@@ -90,4 +105,7 @@ $ ->
 			if confirm("Connection lost. Reconnect?")
 			then connect()
 	connect()
+	$('#previous').bind 'click', send_previous_slide
+	$('#next').bind 'click', send_next_slide
+	
 

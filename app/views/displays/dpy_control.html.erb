@@ -1,8 +1,15 @@
 <h1>iskdpy remote control interface</h1>
 <p>Click on a slide image to make the display jump to that slide.</p>
 
-
-<div class="display_preview" id="display_preview"></div>
+<div class="display_preview">
+    <%=render @display%>
+    
+    <div class='control_buttons'>
+        <a class="button previous"     id="previous" data-id="<%=@display.id%>" href="#top">Prev</a>
+        <a class="button next" id="next"     data-id="<%=@display.id%>" href="#top">Next</a>
+    </div>
+    
+</div>
 
 <div class="display_control" id="display_control" data-id="<%=@display.id%>"></div>
 
