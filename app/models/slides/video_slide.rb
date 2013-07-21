@@ -4,7 +4,7 @@ class VideoSlide < Slide
 
   FilePath = Rails.root.join('data','video')
 
-  VideoThumbnail = Rails.root.join('public','no_video.png')
+  VideoThumbnail = Rails.root.join('data','video','no_video.png')
 
   def initialize
     super
@@ -13,6 +13,10 @@ class VideoSlide < Slide
   end
 
   def preview_filename
+    return VideoThumbnail
+  end
+
+  def thumb_filename
     return VideoThumbnail
   end
   
