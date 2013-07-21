@@ -1,0 +1,18 @@
+<%
+#Luodaan vasemmalla leijuva lista kaikista ryhmistä joista voi scrollata ikkunan ryhmän kohdalle
+%>
+
+<%cache('group_links') do%>
+<div class="grouplinks" id="scrollingDiv">
+  <p>Goto group:</p>
+  <ul>
+   <%@groups.each do |group|%>
+	  <%unless group.slides.count == 0%>
+	    <li>
+        <a href="#group_<%=group.id%>" class="grouplink"><%=group.name%></a>
+      </li>
+    <%end%>
+  <%end%>
+  </ul>
+</div>
+<%end%>
