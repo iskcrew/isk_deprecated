@@ -10,10 +10,10 @@
             <li>Presentation: <%=display.presentation ? link_to(display.presentation.name, :controller => :presentations, :action => :show, :id => display.presentation.id) : 'Not defined'%></li>
             <li>Uptime: <%=display.uptime%></li>
             <li><%=display_ping display%></li>
-            <li>Manual mode: <%=display.manual ? 'Yes' : 'No'%></li>
         </ul>
     </div>
     <div class="display_actions">
+        <%=toggle_link_to 'Manual control', @display.manual, {:controller => :displays, :action => :update, :id => @display.id, :display => {:manual => !@display.manual}}, {:method => :put, :remote => true}%>
 	    <%=link_to 'Details', {:controller => :displays, :action => :show, :id => display.id}, :class => 'button'%>
 	    <%=link_to 'Edit', {:controller => :displays, :action => :edit, :id => display.id}, :class => 'button'%>
 		<%=link_to 'Remote control', {:controller => :displays, :action => :dpy_control, :id => display.id}, :class => :button%>
