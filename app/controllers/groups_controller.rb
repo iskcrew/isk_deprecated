@@ -6,7 +6,7 @@ class GroupsController < ApplicationController
   
   
   def index
-    @groups = MasterGroup.defined_groups.all
+    @groups = MasterGroup.current.defined_groups.all
     @new_group = MasterGroup.new
   end
   
