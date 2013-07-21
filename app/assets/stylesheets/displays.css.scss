@@ -177,3 +177,22 @@ div.display_control {
 		background: #F00;
 	}
 }
+
+div.display_properties {
+    display: block;
+    overflow: auto;
+    
+    margin: 5px;
+    div.extra_information {
+        float: left;
+        margin-left: 5px;
+    }
+    
+    div.display_info {
+        
+    }
+}
+
+div.override_queue {
+    overflow: auto;
+}

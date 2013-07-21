@@ -5,40 +5,34 @@
 
 <h1>Display information for: <%=@display.name%> (<%=@display.ip%>)</h1>
 
-<%if @display.presentation%>
-  <p><b>Presentation:</b> <%=link_to @display.presentation.name, :controller => :presentations, :action => :show, :id => @display.presentation.id%></p>
-<%else%>
-  <p><b>This display doesn't have a presentation asigned to it!</b></p>
+<div class="display_properties">
+	
+	<%=render @display%>
+
+	<div class="extra_information">
+		<h2>Extra information</h2>
+		<ul>
+			<li>IP: <%=@display.ip%></li>
+			<li>Last contact at: <%=l @display.last_contact_at, :format => :short%></li>
+			<li>Metadata updated at: <%=l @display.metadata_updated_at, :format => :short%></li>
+			<li>Updated at: <%=l @display.updated_at, :format => :short%></li>
+			<li>Created at: <%=l @display.created_at, :format => :short%></li>
+		</ul>
+		<%=authorized_users(@display)%>
+	</div>
+</div>
+
+<%if !@display.override_queues.empty?%>
+	<div class="override_queue">
+
+		<h2>Slides in override queue</h2>
+	 	
+			<%@display.override_queues.each do |oq|%>
+        		<%=render :partial => 'slides/slide', :locals => {:slide =>  oq.slide}%>
+      		<%end%>
+	</div>
+	
 <%end%>
-
-<p><b>Monitor this display</b> (shows error notification on top if display hasn't been active for <%=Display::Timeout.to_s%> minutes): <%=@display.monitor ? 'Yes' : 'No' %></p>
-
-
-<%=authorized_users(@display)%>
-
-<%if @display.can_override?(current_user) or !@display.override_queues.empty?%>
-<h2>Override queue</h2>
-<p>
-  <%=link_to 'Add slide to queue', :action => :add_slide, :id => @display.id if @display.can_override?(current_user)%>
-</p>
-
-<table class="compact_slidelist override_queue">
-  <tr>
-    <th>
-      Queued slides
-    </th>
-  </tr>
-  <tr>
-    <td>
-      <%@display.override_queues.each do |oq|%>
-        <%=render :partial => 'slides/slide', :locals => {:slide =>  oq.slide}%>
-      <%end%>
-    </td>
-  </tr>
-</table>
-<%end%>
-
-
 
 <%content_for :navigation do %>
   <%if @display.can_edit? current_user%>
