@@ -10,6 +10,7 @@
             <li>Presentation: <%=display.presentation ? link_to(display.presentation.name, :controller => :presentations, :action => :show, :id => display.presentation.id) : 'Not defined'%></li>
             <li>Uptime: <%=display.uptime%></li>
             <li><%=display_ping display%></li>
+            <li>Monitored: <%=display.monitor ? 'Yes' : 'No'%>
         </ul>
     </div>
     <div class="display_actions">
