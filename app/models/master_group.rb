@@ -15,18 +15,19 @@ class MasterGroup < ActiveRecord::Base
   scope :orphan, joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.id IS NULL and master_groups.id <> ?', MasterGroup::Ungrouped_id)
 
 #TODO: eventtikäsittely
-  scope :defined_groups, where('id != ?', MasterGroup::Ungrouped_id).order('name')
-  scope :ungrouped, find(MasterGroup::Ungrouped_id)
+  scope :defined_groups, where(:internal => false).order('name')
   
   
-  
- 
   def self.ungrouped
-    self.find(Ungrouped_id)
+    Event.current.ungrouped
+  end
+  
+  def self.thrashed
+    Event.current.thrashed
   end
   
   def self.current
-    self.where(:event_id => Event.current.id)
+    self.where(:event_id => Event.current.id).where(:internal => false)
   end
   
   def presentations

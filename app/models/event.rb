@@ -5,6 +5,26 @@ class Event < ActiveRecord::Base
   
   has_many :master_groups
   
+  
+  belongs_to :thrashed, :class_name => 'MasterGroup', :foreign_key => 'thrashed_id'
+  belongs_to :ungrouped, :class_name => 'MasterGroup', :foreign_key => 'ungrouped_id'
+  
+  after_create do |e|
+    e.ungrouped = MasterGroup.where(:name => ('Ungrouped slides for ' + e.name)).first_or_create
+    e.ungrouped.internal = true
+    e.ungrouped.save!
+    
+    e.thrashed = MasterGroup.where(:name => ('Thrashed slides for ' + e.name)).first_or_create
+    e.thrashed.internal = true
+    e.thrashed.save!
+    
+    e.master_groups << e.ungrouped
+    e.master_groups << e.thrashed
+    
+    e.save!
+  end
+  
+  
   #TODO: tietokannan päähän triggeri joka varmistaa että ainankin yksi tapahtuma on aktiivinen?
   def self.current
     self.where(:current => true).first!

@@ -18,7 +18,7 @@ class SlidesController < ApplicationController
       @filter = :hide
     else
       @groups = Array.new
-      @groups << MasterGroup.ungrouped
+      @groups << Event.current.ungrouped
       @groups << MasterGroup.current.defined_groups.order("LOWER(name), name").includes(:slides).all
       @groups.flatten!
     end
@@ -293,7 +293,7 @@ class SlidesController < ApplicationController
     Slide.transaction do
       slide = Slide.find(params[:id])
       require_edit(slide)
-      slide.master_group_id = 1
+      slide.master_group_id = Event.current.ungrouped.id
       slide.save!
     end
 

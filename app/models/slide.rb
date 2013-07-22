@@ -25,8 +25,6 @@ class Slide < ActiveRecord::Base
   scope :public, where(:public => true)
   scope :hidden, where(:public => false)
   scope :current, where(:deleted => false).where(:replacement_id => nil)
-  scope :grouped, where('master_group_id != ?', MasterGroup::Ungrouped_id)
-  scope :ungrouped, where(:master_group_id => MasterGroup::Ungrouped_id)
   scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
   
   acts_as_list :scope => :master_group
@@ -51,6 +49,14 @@ class Slide < ActiveRecord::Base
   FilePath = Rails.root.join('data','slides')
   
   @_svg_data = nil  
+  
+  def grouped
+    self.where('master_group_id != ?', Event.current.ungrouped.id)
+  end
+  
+  def ungrouped
+    self.where(:master_group_id => Event.current.ungrouped.id)
+  end
   
   #Log that the slide has been shown on display_id just now.
   def shown_on(display_id)
@@ -112,7 +118,7 @@ class Slide < ActiveRecord::Base
   end
       
   def grouped?
-    self[:master_group_id] != MasterGroup::Ungrouped_id
+    self[:master_group_id] != Event.current.ungrouped.id
   end
   
   def replaced?
@@ -170,7 +176,7 @@ class Slide < ActiveRecord::Base
      self[:replacement_id] = rep_id
      position = self.position
      rep.master_group_id = self.master_group_id
-     self.master_group_id = MasterGroup::Ungrouped_id
+     self.master_group_id = Event.current.ungrouped.id
      self[:deleted] = true
      rep.insert_at(position)
      self.save!
@@ -238,7 +244,7 @@ class Slide < ActiveRecord::Base
   
   def destroy
     self.deleted = true
-    self.master_group_id = MasterGroup::Ungrouped_id
+    self.master_group_id = Event.current.thrashed.id
     self.save!
   end
   

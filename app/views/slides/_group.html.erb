@@ -2,12 +2,12 @@
   <table class="compact_slidelist">
     <tr>
       <th>
-        <%unless group.id == MasterGroup::Ungrouped_id%>
+        <%unless group.id == Event.current.ungrouped.id%>
           <%=group_link_tag(group)%>
           <%slides = group.slides.current%>
         <%else%>
           <a name="group_<%=group.id%>">Ungrouped slides</a>
-          <%slides = Slide.current.ungrouped.order('id desc')%>
+          <%slides = group.slides.order('id desc')%>
         <%end%>
       </th>
     </tr>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130720141146) do
+ActiveRecord::Schema.define(:version => 20130722201246) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -77,10 +77,12 @@ ActiveRecord::Schema.define(:version => 20130720141146) do
   end
 
   create_table "events", :force => true do |t|
-    t.string   "name",                          :null => false
-    t.boolean  "current",    :default => false, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.string   "name",                            :null => false
+    t.boolean  "current",      :default => false, :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "ungrouped_id"
+    t.integer  "thrashed_id"
   end
 
   add_index "events", ["current"], :name => "index_events_on_current"
@@ -99,9 +101,10 @@ ActiveRecord::Schema.define(:version => 20130720141146) do
 
   create_table "master_groups", :force => true do |t|
     t.string   "name",       :limit => 100
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
     t.integer  "event_id"
+    t.boolean  "internal",                  :default => false
   end
 
   add_index "master_groups", ["event_id"], :name => "index_master_groups_on_event_id"
