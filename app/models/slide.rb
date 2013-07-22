@@ -14,11 +14,10 @@ class Slide < ActiveRecord::Base
     
   belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
   belongs_to :master_group, :touch => true
-  
   has_many :display_counts
-  
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
-  
+
+  validates :name, :presence => true, :length => { :maximum => 100 }
   
   attr_accessible :name, :show_clock, :description, :public
   
@@ -31,7 +30,6 @@ class Slide < ActiveRecord::Base
   
   Host = 'http://isk:Kissa@isk0.asm.fi'
   
-  
   FullWidth = 1280
   FullHeight = 720
   
@@ -43,10 +41,11 @@ class Slide < ActiveRecord::Base
 
   TypeString = 'image'
 
+  FilePath = Rails.root.join('data','slides')
+
 
   include ModelAuthorization
   
-  FilePath = Rails.root.join('data','slides')
   
   @_svg_data = nil  
   

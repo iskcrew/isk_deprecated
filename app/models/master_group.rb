@@ -5,18 +5,20 @@ class MasterGroup < ActiveRecord::Base
 
   has_many :slides, :order => 'position ASC', :after_add => :add_slide, :before_remove => :remove_slide
   has_many :groups
-  
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
- 
   belongs_to :event
+
+  validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 100 }
+  validates :internal, :inclusion => { :in => [true, false] }
 
   include ModelAuthorization
   
   scope :orphan, joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.id IS NULL and master_groups.id <> ?', MasterGroup::Ungrouped_id)
-
-#TODO: eventtikäsittely
   scope :defined_groups, where(:internal => false).order('name')
   
+  before_create do |g|
+    g.event = Event.current unless g.event
+  end
   
   def self.ungrouped
     Event.current.ungrouped

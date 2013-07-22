@@ -9,6 +9,9 @@ class Event < ActiveRecord::Base
   belongs_to :thrashed, :class_name => 'MasterGroup', :foreign_key => 'thrashed_id'
   belongs_to :ungrouped, :class_name => 'MasterGroup', :foreign_key => 'ungrouped_id'
   
+  validates :name, :uniqueness => true, :presence => true
+  validates :current, :inclusion => { :in => [true, false] }  
+  
   after_create do |e|
     e.ungrouped = MasterGroup.where(:name => ('Ungrouped slides for ' + e.name)).first_or_create
     e.ungrouped.internal = true

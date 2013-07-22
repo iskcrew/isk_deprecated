@@ -5,9 +5,10 @@ class Presentation < ActiveRecord::Base
   has_many :displays
   
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
-    
+  #TODO: sido eventtiin  
   
   validate :ensure_effect_exists
+  validates :name, :presence => true, :length => { :maximum => 100 }
 
   
   attr_accessible :name, :effect_id, :delay
