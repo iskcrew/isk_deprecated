@@ -8,7 +8,7 @@ class MasterGroup < ActiveRecord::Base
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
   belongs_to :event
 
-  validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 100 }
+  validates :name, :presence => true, :length => { :maximum => 100 }
   validates :internal, :inclusion => { :in => [true, false] }
 
   include ModelAuthorization

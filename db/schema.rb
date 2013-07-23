@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722201246) do
+ActiveRecord::Schema.define(:version => 20130723101444) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -108,7 +108,6 @@ ActiveRecord::Schema.define(:version => 20130722201246) do
   end
 
   add_index "master_groups", ["event_id"], :name => "index_master_groups_on_event_id"
-  add_index "master_groups", ["name"], :name => "index_master_groups_on_name", :unique => true
 
   create_table "master_groups_users", :id => false, :force => true do |t|
     t.integer "master_group_id"
