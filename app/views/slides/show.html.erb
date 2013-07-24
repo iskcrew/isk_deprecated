@@ -1,8 +1,8 @@
-asd<h1>Information for slide: <%=@slide.name%></h1>
+<h1>Information for slide: <%=@slide.name%></h1>
 
 <div class='slideinfo'>
 	<div class='slide_metadata info_block left_column'>
-		<%=render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}%>
+		<%=render @slide%>
 		<%=render :partial => 'slide_presentation_list', :locals => {:s => @slide}%>
 		<%=render :partial => 'slide_overrides', :locals => {:s => @slide}%>
 	</div>

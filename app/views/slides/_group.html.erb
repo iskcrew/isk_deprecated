@@ -16,15 +16,15 @@
 				<%slides.each do |slide|%>
 					<%if slide.can_edit?(current_user)%>
 						<%cache(:controller => :slides, :action => :show, :id => slide.id, :edit => true) do %>
-							<%=render :partial => 'slides/slide', :locals => {:slide => slide}%>
+							<%=render slide%>
 						<%end #cache%>
 					<%elsif slide.can_hide?(current_user)%>
 						<%cache(:controller => :slides, :action => :show, :id => slide.id, :hide => true) do %>
-							<%=render :partial => 'slides/slide', :locals => {:slide => slide}%>
+							<%=render slide%>
 						<%end #cache%>
 					<%else #user can't do anything to slide'%>
 						<%cache(:controller => :slides, :action => :show, :id => slide.id) do %>
-							<%=render :partial => 'slides/slide', :locals => {:slide => slide}%>
+							<%=render slide%>
 						<%end #cache%>
 					<%end #slide.can_edit?...%>
 				<%end%>
