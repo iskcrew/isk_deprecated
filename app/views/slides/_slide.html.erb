@@ -1,42 +1,49 @@
 <%(slides ||= [slide]).each do |slide|%>
-    <div class="<%=slide.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=slide.id.to_s%>">
-        <div class='slideheader'>
-            <div class="slidename"><%=link_to slide.name, :controller => :slides, :action => :show, :id => slide.id%></div>
-            <div class='slidetype <%=slide.type_str%>'><%=slide.type_str%></div>
-        </div>
-        <%unless defined?(to_full)%>
-            <%=slide_preview_to_show_tag(slide)%>
-        <%else%>
-            <%=slide_preview_to_full_tag(slide)%>
-        <%end%>
-        
-        <div class="slidebuttons">
-            <%if slide.can_edit? current_user %>
-                <%=slide_toggle_button 'Public', slide, :public%>
-                <%=slide_toggle_button 'Clock', slide, :show_clock%>
-                <%=link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, :class => 'button', :confirm => (slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
-                
-                <%if slide.is_a? InkscapeSlide%>
-		            <%=link_to 'Download', {:controller => :slides, :action => :svg_data, :id => slide.id}, :class => 'button', :confirm => (slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
-                <%end%>
+	<div class="<%=slide.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=slide.id.to_s%>">
+		<div class='slideheader'>
+			<div class="slidename"><%=link_to slide.name, :controller => :slides, :action => :show, :id => slide.id%></div>
+			<div class='slidetype <%=slide.type_str%>'><%=slide.type_str%></div>
+		</div>
+		<%unless defined?(to_full)%>
+			<%=slide_preview_to_show_tag(slide)%>
+		<%else%>
+			<%=slide_preview_to_full_tag(slide)%>
+		<%end%>
+		
+		<div class="slidebuttons">
+			<%if slide.deleted?%>
+			<p>
+				This slide has been deleted.
+				<%if slide.can_edit? current_user%>
+					<%=link_to 'Undelete', {:controller => :slides, :action => :undelete, :id => slide.id}, :method => :post, :class => 'button'%>
+				<%end%>
+			
+			<%elsif slide.can_edit? current_user %>
+				<%=slide_toggle_button 'Public', slide, :public%>
+				<%=slide_toggle_button 'Clock', slide, :show_clock%>
+				<%=link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, :class => 'button', :confirm => (slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
+				
+				<%if slide.is_a? InkscapeSlide%>
+					<%=link_to 'Download', {:controller => :slides, :action => :svg_data, :id => slide.id}, :class => 'button', :confirm => (slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)%>
+				<%end%>
 	
-                <%if slide.grouped?%>
-		            <%=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => slide.id}, :method => :post, :class => 'button ungroup'%>
-                <%end%>
-                
-                <%=link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id}, :method => :post, :title => 'Create clone of this slide', :class => 'button'%>
-                <%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
-            
-            <%else # Can't edit slide'%>
-                <%=hide_button_or_status(s)%>
-                <%=inactive_toggle 'Clock', slide.show_clock%>
-                
-                <%if slide.grouped?%>
-                    <a class="button inactive">Grouped</a>
-                <%else%>
-                    <a class="button inactive">Ungrouped</a>
-                <%end%>
-            <%end # slide.can_edit?%>
-        </div>
+				<%if slide.grouped?%>
+					<%=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => slide.id}, :method => :post, :class => 'button ungroup'%>
+				<%end%>
+				
+				<%=link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id}, :method => :post, :title => 'Create clone of this slide', :class => 'button'%>
+				<%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
+			
+			<%else # Can't edit slide'%>
+				<%=hide_button_or_status(s)%>
+				<%=inactive_toggle 'Clock', slide.show_clock%>
+				
+				<%if slide.grouped?%>
+					<a class="button inactive">Grouped</a>
+				<%else%>
+					<a class="button inactive">Ungrouped</a>
+				<%end%>
+			<%end # slide.can_edit?%>
+		</div>
 	</div>
 <%end%>
