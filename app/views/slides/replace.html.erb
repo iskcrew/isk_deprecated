@@ -1,20 +1,23 @@
 <h1>Replace slide: <%=@slide.name%></h1>
 
+<p>This slide will be marked as deleted and the new slide will take it's exact place.</p>
+
 <h2>Available ungrouped slides</h2>
 <%=form_for :slide, :url => {:action => :replace_slide, :id => @slide.id} do |f|%>
-<%=f.submit "Replace slide"%>
-<table class="slideselection">
-	<tr>
-		<th>Name</th>
-		<th>Preview</th>
-		<th>Replace with?</th>
-	</tr>
-	<% @slides.each do |s|%>
+	<%=f.submit "Replace slide"%>
+
+	<table class="slideselection">
 		<tr>
-			<td><%=s.name%></td>
-			<td><%=slide_preview_to_show_tag s%></td>
-			<td><%=f.radio_button :replacement_id, s.id%> </td>
+			<th>Name</th>
+			<th>Preview</th>
+			<th>Replace with?</th>
 		</tr>
-	<% end%>
-				
-<%end%>
+		
+		<% @slides.each do |s|%>
+			<tr>
+				<td><%=s.name%></td>
+				<td><%=slide_preview_to_show_tag s%></td>
+				<td><%=f.radio_button :replacement_id, s.id%> </td>
+			</tr>
+		<% end # slides.each%>
+<%end #form_for (replace)%>

@@ -18,8 +18,7 @@
 		<%= form_for :add_to_group, :url => {:action => :add_to_group, :id => s.id} do |f|%>
 	  		<p>
 				Add this slide to group:
-				<%=f.select :group_id, options_for_select(MasterGroup.can_edit(current_user).all.collect 
-					{|g| [ g.name, g.id ] })%>
+				<%=f.select :group_id, options_for_select(MasterGroup.can_edit(current_user).all.collect {|g| [ g.name, g.id ] })%>
 				
 				<%=f.submit 'Add'%>
 			</p>
