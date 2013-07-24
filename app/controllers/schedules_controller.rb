@@ -12,7 +12,13 @@ class SchedulesController < ApplicationController
   end
   
   def create
-    
+    @schedule = Schedule.new(params[:schedule])
+    if @schedule.save
+      flash[:notice] = "Schedule created"
+    else
+      flash[:error] = "Error creating schedule"
+      render :edit and return
+    end
   end
   
   def edit
