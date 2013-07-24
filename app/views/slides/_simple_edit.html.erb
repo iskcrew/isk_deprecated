@@ -3,51 +3,51 @@
 		<% slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)%>
 
 		<%=f.error_messages%>
-	
+
 		<%=f.submit%>
-	
+
 		<div class='simple_editor_controls'>
 			<h2>Slide contents</h2>
-			
+
 			<p>Use &lt;foo&gt; to highlight text in the slide.</p>
-			<p>You need to have the following fonts installed for the editor to work correctly: 
+			<p>You need to have the following fonts installed for the editor to work correctly:
 				<a href='/fonts/Franklin_Gothic_Heavy-Regular.ttf'>Franklin Gothic Heavy Regular</a> and
 				<a href='/fonts/Franklin_Gothic_Heavy-Italic.ttf'>Franklin Gothic Heavy Italic</a>
 			</p>
-			
-			<textarea id="head" name="slide[slidedata][heading]" rows="1" cols="31" wrap="off">
-				<%=slidedata[:heading]%>
-			</textarea>
-			
-			<br/>
-			
-			<textarea id="text" name="slide[slidedata][text]" rows="6" cols="53">
-				<%=slidedata[:text]%>
-			</textarea>
-			
-			<input type='hidden' id="code" name="slide[svg_data]"rows="19" cols="50" />
 
-			<br />
+
+			<%=fields_for :slidedata do |f|%>
+				<%=f.text_area :heading, {:id => "head", :rows => 1, :cols => 31, :wrap => "off", :value => slidedata[:heading]}%>
+				<br/>
+				<%=f.text_area :text, {:id => "text", :rows => 6, :cols => 53, :value => slidedata[:text]}%>
+
+				<%=simple_text_align_select(f, slidedata[:text_align])%>
+				<%=simple_text_size_select(f, slidedata[:text_size])%>
+				<%=simple_color_select(f, slidedata[:color])%>
+				
+				
+			<%end%>
 			
-			<%=simple_text_align_select(slidedata[:text_align])%>
-			<%=simple_text_size_select(slidedata[:text_size])%>
-			<%=simple_color_select(slidedata[:color])%>
+			<%=f.hidden_field :svg_data, {:id => "code"}%>
+			
+			<br />
+
 
 			<h2>Slide metadata and settings</h2>
-	
+
 			<%=render :partial => 'form'%>
-			
+
 			<p>
 				<%=f.submit%>
 			</p>
 		</div>
 	<%end #fields for%>
-	
+
 	<div class="simple_editor_preview">
 		<h3>Preview</h3>
-		
+
 		<div id="wrapper">
-			<object id="svg" type="image/svg+xml" data="/simple.svg" />
+			<object id="svg" type="image/svg+xml" data="/simple.svg"></object>
 		</div>
 	</div>
 </div>

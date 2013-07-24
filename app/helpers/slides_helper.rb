@@ -86,16 +86,16 @@ module SlidesHelper
     return html.html_safe
   end
   
-  def simple_color_select(color)
-    select_options_tag 'slide[slidedata][color]', simple_colors, :value=>color,:id=>'color', :title => 'Select the highlight color.'
+  def simple_color_select(f, color)
+    f.select :color, options_for_select(simple_colors, color)
   end
   
-  def simple_text_size_select(size)
-    select_options_tag 'slide[slidedata][text_size]', simple_text_sizes, :value=>size, :id=>'text_size', :title => 'Select the font size for slide contents.'
+  def simple_text_size_select(f, size)
+    f.select :text_size, options_for_select(simple_text_sizes, size)
   end
   
-  def simple_text_align_select(align)
-    select_options_tag 'slide[slidedata][text_align]', simple_aligns, :value => align, :id => 'text_align', :title => 'Select the text alignment for slide contents.'
+  def simple_text_align_select(f, align)
+    f.select :text_align, options_for_select(simple_aligns, align)
   end
   
   def hide_button_or_status(s, remote = false)
