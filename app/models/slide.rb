@@ -47,6 +47,15 @@ class Slide < ActiveRecord::Base
   include ModelAuthorization
   
   
+  def self.inherited(child)
+    child.instance_eval do
+      def model_name
+        self.base_class.model_name
+      end
+    end
+    super
+  end
+  
   @_svg_data = nil  
   
   def grouped
