@@ -53,6 +53,12 @@ class Slide < ActiveRecord::Base
         self.base_class.model_name
       end
     end
+    
+    child.class_eval do
+      def to_partial_path
+        'slides/slide'
+      end 
+    end
     super
   end
   
