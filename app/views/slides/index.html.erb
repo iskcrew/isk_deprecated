@@ -1,34 +1,26 @@
 <h1>Listing slides</h1>
 <p>Current event: <%=Event.current.name%></p>
+
 <div class='slidefilter'>
-  <%=filter_links @filter%>
+	<%=filter_links @filter%>
 </div>
 
 <div class="slidelist">
-
-<%if @filter%>
-
-<div class='slidegroups'>
-  <table class="compact_slidelist">
-    <tr>
-      <th>
-        Slides I can <%=@filter == :edit ? 'edit' : 'hide'%>
-      </th>
-    </tr>
-    <tr>
-      <td>
-          <%=render :partial => 'slide', :locals => {:slides => @slides }%>
-      </td>
-    </tr>
-  </table>  
-</div>
-
-
-<%else%>
-
-<%=render :partial => 'shared/group_links'%>
-
-<%=render :partial => 'slidegroups'%>
-
-<%end%>
+	<%if @filter%>
+		<div class='slidegroups'>
+			<table class="compact_slidelist">
+				<tr>
+					<th>Slides I can <%=@filter == :edit ? 'edit' : 'hide'%></th>
+				</tr>
+				<tr>
+					<td>
+						<%=render :partial => 'slide', :locals => {:slides => @slides }%>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<%else #if filter%>
+		<%=render :partial => 'shared/group_links'%>
+		<%=render :partial => 'slidegroups'%>
+	<%end%>
 </div>
