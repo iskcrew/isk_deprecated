@@ -79,12 +79,10 @@ Isk::Application.routes.draw do
     member do
       get 'preview'
       get 'full'
-      get 'replace'
       get 'svg_edit'
       get 'svg_data'
       get 'preview_ready'
       post "svg_data" => :svg_save, :as => 'svg_save'
-      post 'replace_slide'
       post 'ungroup'
       post 'undelete'
       post 'hide'

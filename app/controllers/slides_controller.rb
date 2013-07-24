@@ -206,25 +206,7 @@ class SlidesController < ApplicationController
     
     redirect_to :action => :show, :id => @slide.id
   end
-  
-  def replace
-    @slide = Slide.find(params[:id])
-    @slides = Slide.current.ungrouped
-  end
-  
-  def replace_slide
-    @slide = Slide.find(params[:id])
     
-    require_slide_edit(@slide)
-    
-    replacement = Slide.current.ungrouped.find(params[:slide][:replacement_id])
-    Slide.transaction do
-      @slide.replacement = replacement
-      @slide.save!
-    end
-    redirect_to :action => :show, :id => @slide.id
-  end
-  
   def clone
     old_slide = Slide.find(params[:id])
     slide = old_slide.clone!
