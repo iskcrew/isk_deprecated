@@ -122,13 +122,11 @@ module SlidesHelper
     return 'Unknown'
   end
   
-  def filter_links(filter)
+  def slide_filter_links(filter)
     html = String.new
     html << link_to('All slides', {:action => :index}, :class => (filter ? nil : 'current'))
-    html << link_to('Slides I can edit', {:action => :index, :filter => 'edit'}, :class => (filter == :edit ? 'current' : nil))
-    if current_user.has_role?('slide-hide')
-      html << link_to('Slides I can hide', {:action => :index, :filter => 'hide'}, :class => (filter == :hide ? 'current' : nil))
-    end
+    html << link_to('Thrashed', {:action => :index, :filter => 'thrashed'}, :class => (filter == :thrashed ? 'current' : nil))
+
     return html.html_safe
   end
   

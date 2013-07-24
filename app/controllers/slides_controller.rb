@@ -6,16 +6,9 @@ class SlidesController < ApplicationController
   cache_sweeper :slide_sweeper
   
   def index
-    if params[:filter] == 'edit'
-      @slides = Slide.can_edit(current_user).all
-      @filter = :edit
-    elsif params[:filter] == 'hide'
-      if current_user.has_role?('slide-hide')
-        @slides = Slide.current.public
-      else
-        @slides = Slide.can_edit(current_user).all
-      end
-      @filter = :hide
+    if params[:filter] == "thrashed"
+      @groups = [Event.current.thrashed]
+      @filter = :thrashed
     else
       @groups = Array.new
       @groups << Event.current.ungrouped
