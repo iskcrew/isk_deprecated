@@ -24,7 +24,7 @@ function prepare(){
   INPUT_HEAD=document.getElementById("head");
   CODE=document.getElementById("code");
 
-  //if (! (INPUT_TEXT_ALIGN && INPUT_TEXT_SIZE && INPUT_COLOR && INPUT_TEXT && INPUT_HEAD && CODE)) return false;
+  if (! (INPUT_TEXT_ALIGN && INPUT_TEXT_SIZE && INPUT_COLOR && INPUT_TEXT && INPUT_HEAD && CODE)) return false;
   
   INPUT_TEXT_ALIGN.addEventListener('change', update, false);
 
