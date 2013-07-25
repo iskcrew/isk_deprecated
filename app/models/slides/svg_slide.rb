@@ -10,6 +10,7 @@ class SvgSlide < Slide
     self.is_svg = true
   end
     
+  #TODO: tee tästä ennemminkin kopiointifunkkari suoraan inkscapeslideen...
   def to_inkscape_slide!
     return nil unless self.is_svg?
     

@@ -331,7 +331,7 @@ class Slide < ActiveRecord::Base
 
 
   
-  private
+  protected
   
   def write_svg_data
     unless self.new_record?
@@ -364,43 +364,6 @@ class Slide < ActiveRecord::Base
     end
     
     return command
-  end
+  end  
   
-  def metadata_contents(svg)
-    svg.elements.delete_all('//metadata')
-    metadata = svg.root.add_element('metadata')
-    metadata.attributes['id'] = 'metadata1'
-    meta = String.new
-    
-    meta << self.id.to_s
-    meta << '!'
-    meta << Host
-    
-    metadata.text = meta
-    
-    return svg
-  end
-  
-  def inkscape_modifications(svg)
-    svg.root.add_namespace('sodipodi', "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd")
-    svg.root.add_namespace('inkscape', "http://www.inkscape.org/namespaces/inkscape")
-    
-    #TODO named-view?
-    inkscape_settings = REXML::Document.new(File.read(InkscapeSlide::InkscapeFragment))
-    
-    svg.root.delete_element('//sodipodi:namedview')
-    svg.root[0,0] = inkscape_settings.root.elements['sodipodi:namedview']
-    
-    svg.root.elements.each('//text') do |e|
-      e.delete_attribute 'xml:space'
-      e.attributes['sodipodi:linespacing'] = '125%'
-      e.elements.each('tspan') do |ts|
-        ts.attributes['sodipodi:role'] = 'line'
-      end
-    end
-    
-    return svg
-  end
-  
-    
 end
