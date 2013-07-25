@@ -76,9 +76,7 @@
 		text-anchor='start'
 		x='30'
 		y='100'><tspan
-				sodipodi:role='line'
-				xml:space='preserve'
-				x='30'><tspan><%=@header%></tspan>
+				sodipodi:role='line'><tspan><%=@header%></tspan>
 			</tspan>
 		</text>
 		<% index = 0 %>
@@ -96,8 +94,7 @@
 			text-anchor='start'
 			x='<%=options[:subheader_x]%>'
 			y='<%=options[:content_start_y] + (index * options[:item_spacing])%>'><tspan 
-				sodipodi:role='line'
-				xml:space='preserve'><tspan><%=i[:subheader]%></tspan>
+				sodipodi:role='line'><tspan><%=i[:subheader]%></tspan>
 			</tspan>
 		</text>
 		<%else%>
@@ -113,12 +110,10 @@
 			text-anchor='start'
 			x='<%=options[:time_x]%>'
 			y='<%=options[:content_start_y] + (index * options[:item_spacing])%>'><tspan 
-				sodipodi:role='line'
-				xml:space='preserve'><tspan><%=i[:time]%></tspan>
+				sodipodi:role='line'><tspan><%=i[:time]%></tspan>
 			</tspan>
 		</text>
 	   <flowRoot 
-			xml:space="preserve"
 			id="event_name<%=index%>"
 			style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;font-family:Franklin Gothic Heavy;-inkscape-font-specification:Franklin Gothic Heavy"
 			text-anchor='start'><flowRegion
