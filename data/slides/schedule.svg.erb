@@ -6,7 +6,7 @@
 	xmlns:xlink='http://www.w3.org/1999/xlink'
 	xmlns='http://www.w3.org/2000/svg'>
 
-<%pos = {dayheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 190, item_spacing: 60 }%>	
+<%options = {subheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 190, item_spacing: 60 }%>	
 
 	<sodipodi:namedview
 		bordercolor='#e32966'
@@ -83,7 +83,7 @@
 		</text>
 		<% index = 0 %>
 		<% @items.each do |i|%>
-			<%if i[:dayheader]%>
+			<%if i[:subheader]%>
 		<text
 			fill='#ffffff'
 			font-family='Franklin Gothic Heavy'
@@ -94,10 +94,10 @@
 			stroke='#FF0000'
 			stroke-width='2'
 			text-anchor='start'
-			x='<%=pos[:dayheader_x]%>'
-			y='<%=pos[:content_start_y] + (index * pos[:item_spacing])%>'><tspan 
+			x='<%=options[:subheader_x]%>'
+			y='<%=options[:content_start_y] + (index * options[:item_spacing])%>'><tspan 
 				sodipodi:role='line'
-				xml:space='preserve'><tspan><%=i[:dayheader]%></tspan>
+				xml:space='preserve'><tspan><%=i[:subheader]%></tspan>
 			</tspan>
 		</text>
 		<%else%>
@@ -111,8 +111,8 @@
 			stroke='#000000'
 			stroke-width='2'
 			text-anchor='start'
-			x='<%=pos[:time_x]%>'
-			y='<%=pos[:content_start_y] + (index * pos[:item_spacing])%>'><tspan 
+			x='<%=options[:time_x]%>'
+			y='<%=options[:content_start_y] + (index * options[:item_spacing])%>'><tspan 
 				sodipodi:role='line'
 				xml:space='preserve'><tspan><%=i[:time]%></tspan>
 			</tspan>
@@ -126,8 +126,8 @@
 					id="rect<%=index%>"
 					width="800"
 					height="65"
-					x="<%=pos[:item_name_x]%>"
-					y="<%=pos[:content_start_y] + (index * pos[:item_spacing]) - 56%>"
+					x="<%=options[:item_name_x]%>"
+					y="<%=options[:content_start_y] + (index * options[:item_spacing]) - 56%>"
 					text-anchor="start"/></flowRegion><flowPara
 				id="flowPara<%=index%>"
 				style="stroke:#000000;stroke-width:2;fill:#ffffff"><%=i[:name]%></flowPara>
