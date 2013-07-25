@@ -6,7 +6,7 @@
 	xmlns:xlink='http://www.w3.org/1999/xlink'
 	xmlns='http://www.w3.org/2000/svg'>
 
-<%options = {subheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 190, item_spacing: 60 }%>	
+<%options = {subheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 160, item_spacing: 60 }%>	
 
 	<sodipodi:namedview
 		bordercolor='#e32966'
@@ -83,13 +83,13 @@
 		<% @items.each do |i|%>
 			<%if i[:subheader]%>
 		<text
-			fill='#ffffff'
+			fill='#ffd700'
 			font-family='Franklin Gothic Heavy'
 			font-size='56'
 			font-weight='normal'
 			id='date_header<%=index%>'
 			sodipodi:linespacing='125%'
-			stroke='#FF0000'
+			stroke='#000000'
 			stroke-width='2'
 			text-anchor='start'
 			x='<%=options[:subheader_x]%>'
