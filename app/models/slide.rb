@@ -26,7 +26,7 @@ class Slide < ActiveRecord::Base
   scope :current, where(:deleted => false).where(:replacement_id => nil)
   scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
   
-  acts_as_list :scope => :master_group
+  sortable :scope => :master_group_id
   
   Host = 'http://isk:Kissa@isk0.asm.fi'
   
@@ -267,24 +267,6 @@ class Slide < ActiveRecord::Base
     self.save!
   end
   
-  
-  #TODO: parempi lista-gemi käyttöön ja tää purkka pois
-  def master_group_id=(mg_id)
-    self.transaction do
-      if self[master_group_id] != mg_id
-        remove_from_list if in_list?
-        super(mg_id)
-        assume_bottom_position unless new_record?
-        self.save!
-      end
-    end
-  end
-  
-  def master_group=(new_group)
-    self.master_group_id = new_group.id
-  end
-
-
   
   #Konvertoidaan svg-kalvo (svg-editin tuottamassa muodossa) muotoon jota inkscape tykkää syödä
   #Ilman näitä muutoksia mm. rivitys kusee inkscapessa.
