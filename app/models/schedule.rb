@@ -25,8 +25,29 @@ class Schedule < ActiveRecord::Base
 	def generate_slides
 		slide_template = ERB.new(File.read(TemplateFile))
 		
-		return paginate_events
 		
+		slides = paginate_events
+		total_slides = slides.size
+		current_slide = 1
+		slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
+		
+		slides.each do |s|
+			if total_slides == 1
+				@header = self.name
+			else
+				@header = self.name + ' ' + current_slide.to_s + '/' + total_slides.to_s
+			end
+			slide = ScheduleSlide.new
+			slide.name = @header
+			slide.description = slide_description
+			self.slidegroup.slides << slide
+			@items = s
+			slide.save!
+			slide.svg_data = slide_template.result(binding)
+			slide.delay.generate_images
+			
+			current_slide += 1
+		end
 	end
 	
 	private
@@ -49,7 +70,7 @@ class Schedule < ActiveRecord::Base
 				unless (e.at.to_date === last_date)
 					slide_items << {:subheader => (e.at.strftime('%A %d.%m.'))}
 				end
-				slide_items << {:name => e.name, :at => e.at.strftime("%H:%M")}
+				slide_items << {:name => e.name, :time => e.at.strftime("%H:%M")}
 				last_date = e.at.to_date
 			end
 		end

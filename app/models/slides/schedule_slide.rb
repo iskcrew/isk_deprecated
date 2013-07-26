@@ -2,12 +2,9 @@ class ScheduleSlide < Slide
   #Automatically generated schedule slide
   TypeString = 'schedule'
   
-
-  def initialize
-    super
-    self.is_svg = true
-    self.ready = false
-  end
-  
-  
+	before_create do |slide|
+		slide.is_svg = true
+		return true
+	end
+	  
 end
