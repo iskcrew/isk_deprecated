@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723102519) do
+ActiveRecord::Schema.define(:version => 20130726085040) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20130723102519) do
   create_table "schedules", :force => true do |t|
     t.integer  "event_id"
     t.string   "name"
-    t.integer  "schedule_group_id"
+    t.integer  "slidegroup_id"
     t.integer  "up_next_group_id"
     t.boolean  "up_next",                :default => true
     t.integer  "max_slides",             :default => -1

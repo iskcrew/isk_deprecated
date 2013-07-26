@@ -1,0 +1,5 @@
+<%=fields_for event_form do |f| %>
+	<%=f.label :name%>: <%=f.text_field :name%>
+	<%=f.label :at%>: <%=f.datetime_select :at%>
+	<%=f.label :major%>: <%=f.check_box :major%>
+<%end%>

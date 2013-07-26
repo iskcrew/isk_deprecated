@@ -1,1 +1,22 @@
 <h1>Schedule information for <%=@schedule.name%></h1>
+
+<div class="schedule_info">
+	<h2>Settings</h2>
+	<ul>
+		<li>Name: <%=@schedule.name%></li>
+		<li>Maximum number of slides created: <%=@schedule.max_slides == -1 ? 'Unlimited' : @schedule.max_slides%></li>
+		<li>Group for generated slides: <%=link_to @schedule.slidegroup.name, group_path(@schedule.slidegroup)%></li>
+		<li>Group to store up next slides: <%=link_to @schedule.up_next_group.name, group_path(@schedule.up_next_group)%></li>
+	</ul>
+	
+	<%unless @schedule.schedule_events.empty?%>
+		<h2>Scheduled events</h2>
+		
+		<ul class="schedule_events">
+			<%@schedule.schedule_events.each do |event|%>
+				<%=render :partial => 'schedule_event', :object => event%>
+			<%end%>
+		</ul>
+	<%end%>
+	
+</div>

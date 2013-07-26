@@ -1,0 +1,6 @@
+<%=fields_for @schedule do |f|%>
+	<p><%=f.label :name%>: <%=f.text_field :name%></p>
+	<p><%=f.label :max_slides%>: <%=f.text_field :max_slides, :size => 3%></p>
+	<p><%=f.label :min_events_on_next_day%>: <%=f.text_field :min_events_on_next_day, :size => 3%></p>
+	<p><%=f.label :up_next%>: <%=f.check_box :up_next%></p>
+<%end%>

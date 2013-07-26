@@ -1,1 +1,23 @@
 <h1>Editing schedule: <%=@schedule.name%></h1>
+
+<%=form_for @schedule do |f|%>
+
+	<h2>Metadata and settings</h2>
+	<%=render :partial => 'form'%>
+	<%=f.submit%>
+<%end%>
+
+<%=form_for @schedule do |f|%>
+	<h2>Scheduled events</h2>
+	<%=f.fields_for :schedule_events do |f|%>
+		<%=f.label :name%>: <%=f.text_field :name%>
+		<%=f.label :at%>: <%=f.datetime_select :at%>
+		<%=f.label :major%>: <%=f.check_box :major%>
+	<%end%>
+	<%=f.submit 'Update events' unless @schedule.schedule_events.empty?%>
+<%end%>
+
+<%=form_for @new_event, :url => {:action => :add_event, :id => @schedule.id} do |f|%>
+	<%=render :partial => 'event_form', :object => @new_event%>
+	<%=f.submit 'Add event'%>
+<%end%>
