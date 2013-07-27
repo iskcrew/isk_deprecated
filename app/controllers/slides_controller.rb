@@ -12,7 +12,7 @@ class SlidesController < ApplicationController
     else
       @groups = Array.new
       @groups << Event.current.ungrouped
-      @groups << MasterGroup.current.defined_groups.order("LOWER(name), name").includes(:slides).all
+      @groups << MasterGroup.current.order("LOWER(name), name").includes(:slides).all
       @groups.flatten!
     end
     
