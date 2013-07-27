@@ -10,7 +10,7 @@ class Schedule < ActiveRecord::Base
   
 	TemplateFile = Rails.root.join('data', 'slides', 'schedule.svg.erb')
 	EventsPerSlide = 9
-	TimeTolerance = 15.years
+	TimeTolerance = 15.minutes
 	
 	after_create do |schedule|
 		slidegroup = MasterGroup.create(:name => ("Slides for schedule: " + schedule.name), :event_id => Event.current.id)
@@ -31,6 +31,8 @@ class Schedule < ActiveRecord::Base
 		current_slide = 1
 		slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
 		
+		self.slidegroup.slides.destroy_all
+		
 		slides.each do |s|
 			if total_slides == 1
 				@header = self.name
@@ -48,9 +50,46 @@ class Schedule < ActiveRecord::Base
 			
 			current_slide += 1
 		end
+		
+		if self.up_next and self.schedule_events.present?
+			generate_up_next_slide
+		end
+		
+		return true
 	end
 	
 	private
+	
+	
+	def generate_up_next_slide
+		slide_template = ERB.new(File.read(TemplateFile))
+		up_next_items = Array.new
+		slide_description = "Next " + EventsPerSlide.to_s + " events on schedule " + self.name
+		slide_name = "Up next on schedule: " + self.name
+		
+		self.schedule_events.where('at > ?', (Time.now - TimeTolerance)).limit(9).each do |event|
+			up_next_items << {:name => event.name, :time => event.at.strftime('%H:%M')}
+		end
+		
+		self.up_next_group.slides.destroy_all
+		
+		if up_next_items.size > 0
+			
+		
+			up_next_slide = ScheduleSlide.new
+			up_next_slide.name = slide_name
+			up_next_slide.description = slide_description
+			self.up_next_group.slides << up_next_slide
+			up_next_slide.save!
+			@header = "Next up: " + self.name
+			@items = up_next_items
+			up_next_slide.svg_data = slide_template.result(binding)
+			up_next_slide.save!
+			up_next_slide.delay.generate_images
+		end
+		
+		return true
+	end
 	
 	
 	#Create an array containing items for each slide suitable for the template
