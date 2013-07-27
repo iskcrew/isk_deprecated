@@ -1,0 +1,6 @@
+$('#edit_schedule_<%=@schedule.id.to_s%>').html('<%=j render :partial => 'form' %>');
+$('div.flash').noty({
+	text: 'Added new event to schedule',
+	type: 'Information',
+	timeout: 5000
+})

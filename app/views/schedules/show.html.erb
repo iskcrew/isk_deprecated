@@ -12,11 +12,20 @@
 	<%unless @schedule.schedule_events.empty?%>
 		<h2>Scheduled events</h2>
 		
-		<ul class="schedule_events">
+		<table class="schedule_events">
+			<tr>
+				<th>Time</th>
+				<th>Name</th>
+				<th>Major</th>
+			</tr>
 			<%@schedule.schedule_events.each do |event|%>
 				<%=render :partial => 'schedule_event', :object => event%>
 			<%end%>
-		</ul>
+		</table>
 	<%end%>
 	
 </div>
+
+<%=content_for :navigation do%>
+	<%=link_to 'Edit', :controller => :schedules, :action => :edit, :id => @schedule.id%>
+<%end%>

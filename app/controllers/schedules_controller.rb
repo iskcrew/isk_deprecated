@@ -49,7 +49,14 @@ class SchedulesController < ApplicationController
 			@schedule = Schedule.find(params[:id])
 			event = @schedule.schedule_events.new 
 			event.update_attributes(params[:schedule_event])
-			redirect_to :action => :show, :id => @schedule.id
+			
+			respond_to do |format|
+				format.html {
+					redirect_to :action => :show, :id => @schedule.id
+				}
+				
+				format.js
+			end
 		end
 	end
 	
