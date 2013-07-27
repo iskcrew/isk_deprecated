@@ -8,13 +8,15 @@
 			selector: 'ul#noty_top_layout_container',
 			style: function() {
 				$(this).css({
-					float: 'right',
-					right: '5%',
-					width: '50%',
+					top: 0,
+					left: '5%',
+					position: 'fixed',
+					width: '90%',
 					height: 'auto',
 					margin: 0,
 					padding: 0,
-					listStyleType: 'none'
+					listStyleType: 'none',
+					zIndex: 9999999
 				});
 			}
 		},
