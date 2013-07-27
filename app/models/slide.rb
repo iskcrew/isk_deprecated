@@ -147,7 +147,8 @@ class Slide < ActiveRecord::Base
   def svg_data
     return @_svg_data if (@_svg_data or self.new_record?)
     
-    @_svg_data = File.read(self.svg_filename)
+		
+    @_svg_data = File.read(self.svg_filename) if File.exists?(self.svg_filename)
     
     return @_svg_data
   end
