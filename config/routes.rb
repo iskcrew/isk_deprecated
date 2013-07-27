@@ -142,6 +142,7 @@ Isk::Application.routes.draw do
   resources :schedules do
     member do
       post :add_event
+			post :destroy_event
     end
     
     collection do

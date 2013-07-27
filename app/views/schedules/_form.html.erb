@@ -13,6 +13,7 @@
 				<th>Time</th>
 				<th>Name</th>
 				<th>Major</th>
+				<th />
 			</tr>
 		<%=f.fields_for :schedule_events do |f|%>
 			<tr>
@@ -24,6 +25,9 @@
 				</td>
 				<td>
 					<%=f.check_box :major%>
+				</td>
+				<td>
+					<%=link_to 'X', {controller: :schedules, action: :destroy_event, id: f.object.id}, method: :post, class: 'button delete', :remote => true%>
 				</td>
 			</tr>
 		<%end%>

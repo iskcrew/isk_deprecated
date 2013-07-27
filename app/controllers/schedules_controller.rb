@@ -55,8 +55,31 @@ class SchedulesController < ApplicationController
 					redirect_to :action => :show, :id => @schedule.id
 				}
 				
-				format.js
+				format.js {
+					@message = 'Event added'
+					render :update_form
+				}
 			end
+		end
+	end
+	
+	def destroy_event
+		Schedule.transaction do
+			event = ScheduleEvent.find(params[:id])
+			@schedule = event.schedule
+			event.destroy
+			
+			respond_to do |format|
+				format.html {
+					redirect_to :action => :show, :id => @schedule.id
+				}
+				
+				format.js {
+					@message = "Event deleted"
+					render :update_form
+				}
+			end
+			
 		end
 	end
 	
