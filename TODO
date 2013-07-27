@@ -1,3 +1,8 @@
+- admincontroller
+	- clear cache action: cache_store.clear
+	- regenerate all slides
+	
+
 - Conffien hallinta
 - Palkintojenjakogeneraattori
 - inkscape -> simple conversio
@@ -9,21 +14,12 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
  tuolta relatiiviset sidotuksi inkscapen työhakemistoon
  iski työkalupalkkiin?
 
-
--PROD ENV, slidelistan generointi vie liian pitkään
-
-
 -Käyttäjähallinta
   -Viewit kuntoon:
-    -templaattejen listin linkit
     -displays
     -presentations
     -groups
-    -käyttäjien lisäys/poisto/roolien poisto
   
--Models
-  -slide_template.rb / slide.rb yhteiseksi noi kuvajutut, slide_template perimään slide!!!
-
 
 - slidejen pohjakuvan valinta kälistä
 
@@ -39,98 +35,17 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 
 -Uusi json-formaatti
 
--ohisyötön kakutusongelma
 
 -Tally??
 
 - SQL lukitus?
-
-- image/slide/template perimään yhteiset toiminnallisuudet
 
 - svg-pohjakirjasto
 	- Previkkakuvat
 
 - Välkkybitti slideihin valittavaksi
 
-- Slideryhmiin "special" -bitti? ungroupped ja paniikkislidet jne?
-
-- kuvakirjasto
-	- Kategoriat?
-	- Kirjaston napin siirtäminen svg-editissä?
-
-- Kälin siivousta ja miettimistä
-
-- Assettejen compile?
-- Production env?
-
-- Deny/grant moduuliksi
- - flashiin viestiä...
-
 - näyttimien rekisteröinti ja hallinta
 	- Näyttimien luominen
 
-- acts_as_list -> https://github.com/shuber/sortable
-
-14:28:26 >>@deram<< Depili: kaikkialle missä on slidejä listassa, olisi hyvä olla samat muokkaustoiminnot valittavissa
-14:30:39 >>@deram<< Depili: käytännössä siis jos saman näköiseen listaukseen pääsee montaa kautta, olisi hyvä että niistä kaikista olisi samat toiminnot 
-                    käytettävissä
-
-14:30:46 < Cornix> mulla meni ainaki sekasi tosi helposti ne pari erilaista listausta, mitä se ISK anto, ku ei ollu oikein kunnon käsitystä, mitä eri jonoja ja 
-                   listoja siellä on vaihtoehtoina
-
-14:31:21 <@deram> ja groupeille voisi olla joku informatiivisempi esitystapa esityksen listassa
-
-14:31:33 < Depili> deram: nyt kalvoja lähinnä esitetään kahdella eri listalla: table jossa on reilusti tietoa ja sitten <ul> jolla voi säätää järjestystä
-14:31:50 <@deram> aa.. joo..
-
-14:31:51 < Depili> deram: mitä niistä ryhmistä kaipaisit vielä siihen?
-14:32:20 <@deram> lähinnä että ne ryhmän slidet olisi pieninä flotaavina kuvina sen ryhmän nimen alla
-14:32:21 < Depili> toi jquery-sortable juttu toimii vain <li> elementeillä että se rajoittaa touhua jonkin verran
-
-14:32:46 <@deram> li:n sisään voi tehdä yksirivisen taulukon tai toisen li:n jolla sopiva css
-
-
-14:40:07 >>@deram<< Depili: tohon saatetaan jossain vaiheessa tarvita vielä joku abstraktio näytinryhmälle...
-
-14:41:29 < Depili> deram: yks mitä tässä oon kanssa miettinyt niin ajattelin lisätä mahdollisuuden laittaa slidekohtaisen näyttö-ajan, jos sitä ei aseteta niin 
-                   mennään presiksen ajan mukaan mutta jos on asetettu niin se ajaa presis-asetuksen yli
-
-
-14:46:18 < Cornix> öh, jokin hassu js vissii rullaa slides-listauksessa Operan aina takas ihan ylös :D
-14:47:02 < Depili> johtuu varmaan tosta animoidusta divistä jossa on linkit eri ryhmien kohdille
-14:48:31 < Cornix> aa, ei muuten ollu selainikkuna tarpeeks levee
-14:48:43 < Cornix> ni se ei sopinu tohon tablen vierelle, vaan meni aina sen yläpuolelle
-14:49:23 < Depili> aa, eli ei se sinällään skrollannut sua takas alkuun vaan se taulukko liikkui ton navigaatiokäkättimen mukana ;)
-14:49:48 < Cornix> noh, tosta varmaan pääsis jollai sopivalla min-widthillä johonki kohtaa
-14:50:04 < Cornix> ni tulis vaakaskrolli sen sijaan, että antais pienentää liian pieneks
-
-
-15:10:57 <@deram> sit ois ehkä pakkosoittoon kiva saada asetettua ryhmä joka ei ole missään presentaatiossa
-15:11:18 <@deram> "compo will begin in ###mins"
-
-15:16:06 < Cornix> seminaareille vois tehtailla samasta csv-datasta kuin elaineenkin sellaset kelmut, että "tämä-ja-tämä-seminaari alkaa kohta", jo valmiiks, ni 
-                   ei tarttis käsin kirjotella :p
-15:16:27 < Depili> joo, tota kelmujen automaattista generointia pitää miettiä
-
-
-15:22:59 < Depili> jos sais barrolta sen kunnon aikataulun (työkalu oli kai puoliksi pms:ssä valmiina sen aikataulun hallintaan mutta jäi käyttämättä) niin sitten vois olla sellainen sivu josta vois valita aikataulun mukaan -+30min sisään alkavat tapahtumat esim ja vois sanoa että tää on nyt 15min myöhässä
-
-
-
-15:25:19 <@deram> ainiin.. tuli mieleen että kalvoissa pitäisi olla joku kommenttikenttä, johon voi sitten kirjoittaa vaikka "Secun määräyksestä näytettävä 
-                                     kunnes erikseen ilmoitettu"
-15:26:20 <@deram> tuo vain pitää keksiä mihin kohtaan se pitäsi mitäkin käliä näyttää
-15:26:43 <@deram> ainakaan unpublishia tai deleteä ei saisi päästä painamaan näkemättä tota
-
-
-18:18:54 >>@deram<< Depili: ainakin ton Groups valikon details on täysin väärä nimi sille uudelleenjärjestämiselle ja slidejen lisäämiselle.. sen pitäs olla 
-                                       edit nimeltään, ja sisältää se nimen muuttaminenkin
-
-18:21:16 <@deram> samoin presentaation details on lähempänä edittiä kuin se oikea edit
-18:21:44 <@deram> ehkä tonne sit tarttis oikean details napin, jossa on puhtaasti readonly jutut
-18:23:00 < Depili> joops, pitää tehdä tolleen
-18:23:24 < Depili> ja se käyttäjäkohtainen redirecti sitten että mennäänkö kumpaan näkymään
-
-
 - Kalvojen näyttömäärien valvonta
-- Näytinten uptime
