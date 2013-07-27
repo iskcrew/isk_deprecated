@@ -17,3 +17,16 @@ en:
                 public: "Public slide (hidden slides won't be shown')"
                 name: 'Slide name'
                 description: 'Slide description'
+            schedule:
+                schedule_group_id: "Group for generated slides"
+                up_next: 'Generate a slide showing just few upcoming events'
+                max_slides: 'Maximum number of schedule slides generated (-1 for unlimited)'
+                min_events_on_next_day: "Move events to next slide if there are less than this many events incoming to a slide"
+            schedule_event:
+                at: "Event start"
+                name: "Event name"
+                description: "Short description of this event"
+                location: "Event location"
+                major: "Major event"
+                cancelled: "Event cancelled"
+                rescheduled: "Event resheduled"

@@ -14,25 +14,21 @@ class Slide < ActiveRecord::Base
     
   belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
   belongs_to :master_group, :touch => true
-  
   has_many :display_counts
-  
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
-  
+
+  validates :name, :presence => true, :length => { :maximum => 100 }
   
   attr_accessible :name, :show_clock, :description, :public
   
   scope :public, where(:public => true)
   scope :hidden, where(:public => false)
   scope :current, where(:deleted => false).where(:replacement_id => nil)
-  scope :grouped, where('master_group_id != ?', MasterGroup::Ungrouped_id)
-  scope :ungrouped, where(:master_group_id => MasterGroup::Ungrouped_id)
   scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
   
-  acts_as_list :scope => :master_group
+  sortable :scope => :master_group_id
   
   Host = 'http://isk:Kissa@isk0.asm.fi'
-  
   
   FullWidth = 1280
   FullHeight = 720
@@ -45,12 +41,36 @@ class Slide < ActiveRecord::Base
 
   TypeString = 'image'
 
+  FilePath = Rails.root.join('data','slides')
+
 
   include ModelAuthorization
   
-  FilePath = Rails.root.join('data','slides')
+  
+  def self.inherited(child)
+    child.instance_eval do
+      def model_name
+        self.base_class.model_name
+      end
+    end
+    
+    child.class_eval do
+      def to_partial_path
+        'slides/slide'
+      end 
+    end
+    super
+  end
   
   @_svg_data = nil  
+  
+  def grouped
+    self.where('master_group_id != ?', Event.current.ungrouped.id)
+  end
+  
+  def ungrouped
+    self.where(:master_group_id => Event.current.ungrouped.id)
+  end
   
   #Log that the slide has been shown on display_id just now.
   def shown_on(display_id)
@@ -112,7 +132,7 @@ class Slide < ActiveRecord::Base
   end
       
   def grouped?
-    self[:master_group_id] != MasterGroup::Ungrouped_id
+    self[:master_group_id] != Event.current.ungrouped.id
   end
   
   def replaced?
@@ -170,7 +190,7 @@ class Slide < ActiveRecord::Base
      self[:replacement_id] = rep_id
      position = self.position
      rep.master_group_id = self.master_group_id
-     self.master_group_id = MasterGroup::Ungrouped_id
+     self.master_group_id = Event.current.ungrouped.id
      self[:deleted] = true
      rep.insert_at(position)
      self.save!
@@ -238,7 +258,7 @@ class Slide < ActiveRecord::Base
   
   def destroy
     self.deleted = true
-    self.master_group_id = MasterGroup::Ungrouped_id
+    self.master_group_id = Event.current.thrashed.id
     self.save!
   end
   
@@ -247,24 +267,6 @@ class Slide < ActiveRecord::Base
     self.save!
   end
   
-  
-  #TODO: parempi lista-gemi käyttöön ja tää purkka pois
-  def master_group_id=(mg_id)
-    self.transaction do
-      if self[master_group_id] != mg_id
-        remove_from_list if in_list?
-        super(mg_id)
-        assume_bottom_position unless new_record?
-        self.save!
-      end
-    end
-  end
-  
-  def master_group=(new_group)
-    self.master_group_id = new_group.id
-  end
-
-
   
   #Konvertoidaan svg-kalvo (svg-editin tuottamassa muodossa) muotoon jota inkscape tykkää syödä
   #Ilman näitä muutoksia mm. rivitys kusee inkscapessa.
@@ -311,7 +313,7 @@ class Slide < ActiveRecord::Base
 
 
   
-  private
+  protected
   
   def write_svg_data
     unless self.new_record?
@@ -344,43 +346,6 @@ class Slide < ActiveRecord::Base
     end
     
     return command
-  end
+  end  
   
-  def metadata_contents(svg)
-    svg.elements.delete_all('//metadata')
-    metadata = svg.root.add_element('metadata')
-    metadata.attributes['id'] = 'metadata1'
-    meta = String.new
-    
-    meta << self.id.to_s
-    meta << '!'
-    meta << Host
-    
-    metadata.text = meta
-    
-    return svg
-  end
-  
-  def inkscape_modifications(svg)
-    svg.root.add_namespace('sodipodi', "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd")
-    svg.root.add_namespace('inkscape', "http://www.inkscape.org/namespaces/inkscape")
-    
-    #TODO named-view?
-    inkscape_settings = REXML::Document.new(File.read(InkscapeSlide::InkscapeFragment))
-    
-    svg.root.delete_element('//sodipodi:namedview')
-    svg.root[0,0] = inkscape_settings.root.elements['sodipodi:namedview']
-    
-    svg.root.elements.each('//text') do |e|
-      e.delete_attribute 'xml:space'
-      e.attributes['sodipodi:linespacing'] = '125%'
-      e.elements.each('tspan') do |ts|
-        ts.attributes['sodipodi:role'] = 'line'
-      end
-    end
-    
-    return svg
-  end
-  
-    
 end

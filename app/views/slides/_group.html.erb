@@ -1,36 +1,34 @@
 <%unless group.slides.empty?%>
-  <table class="compact_slidelist">
-    <tr>
-      <th>
-        <%unless group.id == MasterGroup::Ungrouped_id%>
-          <%=group_link_tag(group)%>
-          <%slides = group.slides.current%>
-        <%else%>
-          <a name="group_<%=group.id%>">Ungrouped slides</a>
-          <%slides = Slide.current.ungrouped.order('id desc')%>
-        <%end%>
-      </th>
-    </tr>
-    <tr>
-      <td>
-          <%slides.each do |slide|%>
-            <%if slide.can_edit?(current_user)%>
-              <%cache(:controller => :slides, :action => :show, :id => slide.id, :edit => true) do %>
-                <%=render :partial => 'slide', :locals => {:slide => slide}%>
-              <%end%>
-            <%elsif slide.can_hide?(current_user)%>
-              <%cache(:controller => :slides, :action => :show, :id => slide.id, :hide => true) do %>
-                <%=render :partial => 'slide', :locals => {:slide => slide}%>
-              <%end%>
-            <%else%>
-              <%cache(:controller => :slides, :action => :show, :id => slide.id) do %>
-                <%=render :partial => 'slide', :locals => {:slide => slide}%>
-              <%end%>
-            <%end%>
-    
-          <%end%>
-        
-      </td>
-    </tr>
-  </table>
-<%end%>
+	<table class="compact_slidelist">
+		<tr>
+			<th>
+				<%unless group.id == Event.current.ungrouped.id%>
+					<%=group_link_tag(group)%>
+					<%slides = group.slides%>
+				<%else #group is current events ungrouped slide group%>
+					<a name="group_<%=group.id%>">Ungrouped slides</a>
+					<%slides = group.slides.order('id desc')%>
+				<%end%>
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<%slides.each do |slide|%>
+					<%if slide.can_edit?(current_user)%>
+						<%cache(:controller => :slides, :action => :show, :id => slide.id, :edit => true) do %>
+							<%=render slide%>
+						<%end #cache%>
+					<%elsif slide.can_hide?(current_user)%>
+						<%cache(:controller => :slides, :action => :show, :id => slide.id, :hide => true) do %>
+							<%=render slide%>
+						<%end #cache%>
+					<%else #user can't do anything to slide'%>
+						<%cache(:controller => :slides, :action => :show, :id => slide.id) do %>
+							<%=render slide%>
+						<%end #cache%>
+					<%end #slide.can_edit?...%>
+				<%end%>
+			</td>
+		</tr>
+	</table>
+<%end #unless group.slides.empty?%>

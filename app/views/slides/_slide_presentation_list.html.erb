@@ -1,24 +1,26 @@
 <div class='slide_presentation_list info_block'>
-
-<h3>Presentations</h3>
-<%unless s.presentations.empty?%>
-<p>This slide belongs to following presentations:
-  <ul>
-    <%s.presentations.each do |p|%>
-  <li><%=link_to p.name, :controller => :presentations, :action => :show, :id => p.id%>
-  <%unless p.displays.empty?%>
-    <ul>
-      <li>Associated displays:
-        <%p.displays.each do |d|%>
-          <li><%=link_to d.name, :controller => :displays, :action => :show, :id => d.id%></li>
-        <%end%>
-    </ul>
-  <%end%>
-  </li>
-  <%end%>
-</ul>
-</p>
-<%else%>
-<p>This slide doesn't belong to any presentations.</p>
-<%end%>
+	<h3>Presentations</h3>
+	
+	<%unless s.presentations.empty?%>
+		<p>
+			This slide belongs to following presentations:
+			<ul>
+				<%s.presentations.each do |p|%>
+					<li>
+						<%=link_to p.name, :controller => :presentations, :action => :show, :id => p.id%>
+						<%unless p.displays.empty?%>
+							<ul>
+								<li>Associated displays:</li>
+								<%p.displays.each do |d|%>
+									<li><%=link_to d.name, :controller => :displays, :action => :show, :id => d.id%></li>
+								<%end%>
+							</ul>
+						<%end%>
+					</li>
+				<%end #s.presentations.each%>
+			</ul>
+		</p>
+	<%else%>
+		<p>This slide doesn't belong to any presentations.</p>
+	<%end%>
 </div>

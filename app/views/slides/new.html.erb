@@ -1,56 +1,52 @@
 <h1>Create new slide</h1>
 
 <div id="tabs">
-  <ul>
-    <li><a href="#simple"><span>Simple Editor</span></a></li>
-    <li><a href="#inkscape"><span>Inkscape</span></a></li>
-    <li><a href="#httpslide"><span>HttpSlide</span></a></li>
-  </ul>
-    <div id="simple">
-      <h2>Create new simple slide</h2>
-      <%=form_for @slide, :url => {:action => :create} do |f|%>
+	<ul>
+		<li><a href="#simple"><span>Simple Editor</span></a></li>
+		<li><a href="#inkscape"><span>Inkscape</span></a></li>
+		<li><a href="#httpslide"><span>HttpSlide</span></a></li>
+	</ul>
+	
+	<div id="simple">
+		<h2>Create new simple slide</h2>
 
-        
-      	<%=hidden_field_tag :create_type, 'simple'%>
+		<%=form_for @slide, :url => {:action => :create} do |f|%>
+			<%=hidden_field_tag :create_type, 'simple'%>
+			<%=render :partial => 'simple_edit'%>
 
-        <%=render :partial => 'simple_edit'%>
-        
-        <p>
-        <%=f.submit "Create"%>
-        </p>
-        
-      <%end%>
+			<%=f.submit "Create"%>
+		<%end #Form_for (simple)%>
+	</div>
+	
+	<div id="inkscape">
+		<h2>Create new inkscape slide</h2>
+		
+		<%=form_for @slide, :url => {:action => :create} do |f|%>
+			<%=f.error_messages%>
+			<%=render :partial => 'form'%>
+			
+			<ul>
+				<li>
+					<%=radio_button_tag :create_type, 'empty_file', :checked => true%><b>Empty(ish) inkscape file</b>
+				</li>
+			</ul>
+			
+			<%=f.submit "Create"%>
+		<%end # form_for (inkscape)%>
+	</div>
+		
+	<div id="httpslide">
+		<h2>Create new http-fetcher slide</h2>
+		
+		<p>This slide will be automatically updated every 5 minutes.</p>
 
-    </div>
-    <div id="inkscape">
-      <h2>Create new inkscape slide</h2>
-      <%=form_for @slide, :url => {:action => :create} do |f|%>
-      	<%=f.error_messages%>
-      	<%=render :partial => 'form'%>
+		<%=form_for @slide, :url => {:action => :create} do |f|%>
+			<%=f.error_messages%>
+			<%=render :partial => 'form'%>
+			<%=hidden_field_tag :create_type, 'http_slide'%>
+			<%=render :partial => 'http_slide_form'%>
 
-  		<ul>
-  		  <li>
-  				<%=radio_button_tag :create_type, 'empty_file', :checked => true%><b>Empty(ish) inkscape file</b>
-  			</li>
-  		</ul>
-
-  	<%=f.submit "Create"%>
-  <%end%>  
-
-
-    </div>
-    <div id="httpslide">
-      <h2>Create new http-fetcher slide</h2>
-      <p>This slide will be automatically updated every 5 minutes.</p>
-      <%=form_for @slide, :url => {:action => :create} do |f|%>
-      	<%=f.error_messages%>
-      	<%=render :partial => 'form'%>
-        <%=hidden_field_tag :create_type, 'http_slide'%>
-        <%=render :partial => 'http_slide_form'%>
-
-  	    <%=f.submit "Create"%>
-  <%end%>
-    </div>
-    </div>
-    
-    
+			<%=f.submit "Create"%>
+		<%end # form_for (http_slide)%>
+	</div>
+</div>

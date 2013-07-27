@@ -2,9 +2,9 @@
 
 <%=form_for @slide, :as => :slide, :url => {:action => :update, :id => @slide.id} do |f|%>
 	<%=f.error_messages%>
-	<%=render :partial => 'form'%>
+	<%=render(:partial => 'form') %>
 	
-	<%=render :partial => 'http_slide_form'%>
+	<%=render(:partial => "http_slide_form")%>
 	
 	<%=f.submit "Update"%>
 <%end%>

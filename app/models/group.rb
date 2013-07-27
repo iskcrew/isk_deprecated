@@ -1,7 +1,7 @@
 class Group < ActiveRecord::Base
   belongs_to :master_group
   belongs_to :presentation, :touch => true
-  acts_as_list :scope => :presentation
+  sortable :scope => :presentation
   
   def to_hash
     hash = Hash.new
@@ -36,19 +36,5 @@ class Group < ActiveRecord::Base
   def name
     self.master_group.name
   end
-  
-  def presentation_id=(presentation_id)
-    if presentation_id != @presentation_id
-      self.transaction do
-        remove_from_list if in_list?
-        super
-        assume_bottom_position unless new_record?
-      end
-    end
-  end
-
-  def presentation=(presentation)
-    self.presentation_id = presentation.id
-  end
-    
+      
 end

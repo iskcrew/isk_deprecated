@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source "http://gems.github.com"
 
 gem 'rails', '3.2.13'
 
@@ -9,7 +10,9 @@ gem 'rails', '3.2.13'
 gem 'memcache-client'
 gem 'sqlite3'
 gem 'mysql2'
-gem 'acts_as_list'
+
+gem 'shuber-sortable', :require => 'sortable'
+#gem 'acts_as_list'
 gem 'will_paginate'
 gem 'rmagick', :require => 'RMagick'
 gem 'thin'

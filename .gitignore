@@ -15,6 +15,8 @@
 /tmp
 
 /data
+!/data/slides/schedule.svg.erb
+!/data/slides/simple.svg
 /config/database.yml
 
 /.svn

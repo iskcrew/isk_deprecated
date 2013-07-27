@@ -1,0 +1,6 @@
+$('form.edit_schedule').html('<%=j render :partial => 'form' %>');
+var message = noty({
+	text: '<%=@message%>',
+	type: 'Information',
+	timeout: 5000
+})

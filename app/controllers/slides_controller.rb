@@ -6,19 +6,12 @@ class SlidesController < ApplicationController
   cache_sweeper :slide_sweeper
   
   def index
-    if params[:filter] == 'edit'
-      @slides = Slide.can_edit(current_user).all
-      @filter = :edit
-    elsif params[:filter] == 'hide'
-      if current_user.has_role?('slide-hide')
-        @slides = Slide.current.public
-      else
-        @slides = Slide.can_edit(current_user).all
-      end
-      @filter = :hide
+    if params[:filter] == "thrashed"
+      @groups = [Event.current.thrashed]
+      @filter = :thrashed
     else
       @groups = Array.new
-      @groups << MasterGroup.ungrouped
+      @groups << Event.current.ungrouped
       @groups << MasterGroup.current.defined_groups.order("LOWER(name), name").includes(:slides).all
       @groups.flatten!
     end
@@ -131,7 +124,7 @@ class SlidesController < ApplicationController
 
   def to_inkscape
     slide = SvgSlide.find(params[:id])
-    ink = InkscapeSlide.copy! slide
+    ink = InkscapeSlide.create_from_simple(slide)
     
     flash[:notice] = "Slide was converted to inkscape slide"
     
@@ -206,25 +199,7 @@ class SlidesController < ApplicationController
     
     redirect_to :action => :show, :id => @slide.id
   end
-  
-  def replace
-    @slide = Slide.find(params[:id])
-    @slides = Slide.current.ungrouped
-  end
-  
-  def replace_slide
-    @slide = Slide.find(params[:id])
     
-    require_slide_edit(@slide)
-    
-    replacement = Slide.current.ungrouped.find(params[:slide][:replacement_id])
-    Slide.transaction do
-      @slide.replacement = replacement
-      @slide.save!
-    end
-    redirect_to :action => :show, :id => @slide.id
-  end
-  
   def clone
     old_slide = Slide.find(params[:id])
     slide = old_slide.clone!
@@ -293,7 +268,7 @@ class SlidesController < ApplicationController
     Slide.transaction do
       slide = Slide.find(params[:id])
       require_edit(slide)
-      slide.master_group_id = 1
+      slide.master_group_id = Event.current.ungrouped.id
       slide.save!
     end
 

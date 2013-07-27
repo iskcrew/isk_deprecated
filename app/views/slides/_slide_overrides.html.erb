@@ -1,28 +1,29 @@
-
 <div class='slide_overrides info_block'>
-  <%unless s.deleted? or s.replaced?%>
-    <h3>Override queues</h3>
-      <%unless s.override.empty?%>
-        <p>This slide is in the override queue for:</p>
-        <ul>
-          <%@slide.override.each do |d|%>
-            <li><%=link_to d.name, :controller => :displays, :action => :show, :id => d.id%></li>
-          <%end%>
-        </ul>
-      <%else%>
-        <p>This slide isn't in any displays override queue currently.</p>
-      <%end%>
-      
-      <%unless Display.can_override(current_user).empty?%>
-      <p>Add this slide to override queue:</p>
-      <%= form_for :add_to_override, :url => {:action => :add_to_override, :id => @slide.id} do |f|%>
-        <%=f.label :display_id, 'Display:'%> 
-        <%=f.select :display_id, options_for_select(Display.can_override(current_user).all.collect {|g| [ g.name, g.id ] })%>
-        <%=f.label :duration, 'Slide duration (sec):'%>
-        <%=f.text_field :duration, :value => 60, :size => 4, :class => 'duration_spinner'%>
-        <%=f.submit 'Add'%>
-        
-      <%end #formi%>
-      <%end%>
-    <%end%>
+	<%unless s.deleted? or s.replaced?%>
+		<h3>Override queues</h3>
+		
+		<%unless s.override.empty?%>
+			<p>This slide is in the override queue for:</p>
+			<ul>
+				<%@slide.override.each do |d|%>
+					<li><%=link_to d.name, :controller => :displays, :action => :show, :id => d.id%></li>
+				<%end%>
+			</ul>
+		<%else #override.empty?%>
+			<p>This slide isn't in any displays override queue currently.</p>
+		<%end%>
+
+		<%unless Display.can_override(current_user).empty?%>
+			<p>Add this slide to override queue:</p>
+			
+			<%=form_for :add_to_override, :url => {:action => :add_to_override, :id => @slide.id} do |f|%>
+				<%=f.label :display_id, 'Display:'%>
+				<%=f.select :display_id, options_for_select(Display.can_override(current_user).all.collect {|g| [ g.name, g.id ] })%>
+				<%=f.label :duration, 'Slide duration (sec):'%>
+				<%=f.text_field :duration, :value => 60, :size => 4, :class => 'duration_spinner'%>
+					
+				<%=f.submit 'Add'%>
+			<%end #form_for%>
+		<%end #Display.can_override?%>
+	<%end #s.deleted? or s.replaced?%>
 </div>

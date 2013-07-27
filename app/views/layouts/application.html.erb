@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Isk</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-  <%=render :partial => 'shared/display_warnings'%>
-    
-	<div class="topNavigation">&nbsp;
-	  <div class='tabs'>&nbsp;<%=navigation_links%></div>
-		<div class='logout'>
-		  I'm <b><%=current_user.username%></b>
-		  <%=link_to 'Logout', {:controller => :logins, :action => :destroy}, :method => :delete%>
+	<html>
+		<head>
+			<title>Isk</title>
+			<%= stylesheet_link_tag		 "application", :media => "all" %>
+			<%= javascript_include_tag "application" %>
+			<%= csrf_meta_tags %>
+		</head>
+		<body>
+			<%=render :partial => 'shared/display_warnings'%>
+		
+		<div class="topNavigation">&nbsp;
+			<div class='tabs'>&nbsp;<%=navigation_links%></div>
+			<div class='logout'>
+				I'm <b><%=current_user.username%></b>
+				<%=link_to 'Logout', {:controller => :logins, :action => :destroy}, :method => :delete%>
+			</div>
 		</div>
-	</div>
-	<%=render :partial => "navigation" %>
-	<div class='flash'>
-	<div class="error"><%= flash[:error]%></div>
-	<div class="notice"><%= flash[:notice] %></div>
-  </div>
-
-<div class='content'>
-
-<%= yield %>
-</div>
-</body>
+		<%=render :partial => "navigation" %>
+		<div class='flash'>
+			<div class="error"><%= flash[:error]%></div>
+			<div class="notice"><%= flash[:notice] %></div>
+		</div>
+		
+		<div class='content'>
+			<%= yield %>
+		</div>
+	
+	</body>
 </html>

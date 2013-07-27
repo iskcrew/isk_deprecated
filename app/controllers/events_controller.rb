@@ -13,15 +13,18 @@ class EventsController < ApplicationController
   end
   
   def create
-    @event = Event.new(params[:event])
-    if @event.save
-      flash[:notice] = "Event created."
-    else
-      flash[:error] = "Error creating event"
-      render :action => :new
-      return
+    Event.transaction do 
+      @event = Event.new(params[:event])
+    
+      if @event.save
+        flash[:notice] = "Event created."
+      else
+        flash[:error] = "Error creating event"
+        render :action => :new
+        return
+      end
+      redirect_to :action => :index
     end
-    redirect_to :action => :index
   end
 
   

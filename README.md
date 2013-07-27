@@ -5,6 +5,18 @@ System for centrally managing multiple screens running multiple presentation,
 possibly sharing slides / groups of slides. Has simple online-editor and a
 inkscape plugin for creating more complex slides.
 
+External dependencies
+---------------------
+
+Imagemagick (developed using  6.8.5-5, other versions probably fine)
+Nginx (or some other front-end webserver capable of proxying websocket connections)
+librsvg & rsvg-convert (developed with 2.36.4)
+memcached (1.4.5)
+redis (2.6.10)
+
+inkscape for external editing
+iskdpy ( http://github.com/deram/iskdpy/ ) for running the slideshows
+
 Installation
 ------------
 

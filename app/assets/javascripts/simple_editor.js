@@ -17,9 +17,9 @@ var xmlNS = "http://www.w3.org/XML/1998/namespace";
 var xlinkNS = "http://www.w3.org/1999/xlink";
 
 function prepare(){
-  INPUT_TEXT_ALIGN=document.getElementById("text_align");
-  INPUT_TEXT_SIZE=document.getElementById("text_size");
-  INPUT_COLOR=document.getElementById("color");
+  INPUT_TEXT_ALIGN=document.getElementById("slidedata_text_align");
+  INPUT_TEXT_SIZE=document.getElementById("slidedata_text_size");
+  INPUT_COLOR=document.getElementById("slidedata_color");
   INPUT_TEXT=document.getElementById("text");
   INPUT_HEAD=document.getElementById("head");
   CODE=document.getElementById("code");

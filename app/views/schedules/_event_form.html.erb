@@ -1,0 +1,30 @@
+<%=fields_for event_form do |f| %>
+<table class="schedule_events_edit">
+	<tr>
+		<th>
+			Time
+		</th>
+		<th>
+			Name
+		</th>
+		<th>
+			Major
+		</th>
+		<th />
+	</tr>
+	<tr>
+		<td>
+			<%=f.datetime_select :at%>
+		</td>
+		<td>
+			<%=f.text_field :name%>
+		</td>
+		<td>
+			<%=f.label :major%>: <%=f.check_box :major%>
+		</td>
+		<td>
+			<%=f.submit 'Add'%>
+		</td>
+	</tr>
+</table>
+<%end%>
