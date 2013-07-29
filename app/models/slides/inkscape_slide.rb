@@ -6,6 +6,11 @@ class InkscapeSlide < Slide
   
   InkscapeFragment = Rails.root.join('data','templates', 'inkscape_settings_fragment.xml')
   
+	before_create do |slide|
+		slide.is_svg = true
+		return true
+	end
+	
   def self.copy!(s)
     Slide.transaction do 
       orig_id = s.id
@@ -71,6 +76,21 @@ class InkscapeSlide < Slide
   
   protected
   
+  def rsvg_command(type)
+    command = 'cd ' << FilePath.to_s << ' && inkscape'
+    
+    if type == :full
+      command << ' -w ' << Slide::FullWidth.to_s
+      command << ' -h ' << Slide::FullHeight.to_s
+      command << ' -e ' << self.full_filename.to_s
+      command << ' ' << self.svg_filename.to_s
+    end
+    
+    return command
+  end  
+	
+	
+	
   def metadata_contents(svg = self.svg_data)
     svg.elements.delete_all('//metadata')
     metadata = svg.root.add_element('metadata')
