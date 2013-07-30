@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_filter :require_admin
+  before_filter :require_global_admin
 
   def index
     @users = User.all
@@ -87,15 +87,6 @@ class UsersController < ApplicationController
     else
       render :action=>"edit"
     end
-  end
-
-  private
-
-  def require_admin
-    unless current_user.has_role?('admin')
-      raise ApplicationController::PermissionDenied
-    end
-  end
-
+	end
 
 end

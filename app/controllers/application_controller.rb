@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+	
+	def require_global_admin
+		raise ApplicationController::PermissionDenied unless current_user.admin?
+	end
 
   def require_role(r)
     return false unless current_user
