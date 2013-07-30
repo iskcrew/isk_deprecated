@@ -108,7 +108,7 @@ class Schedule < ActiveRecord::Base
 			return self.up_next_group.slides.where(:type => ScheduleSlide.sti_name).first!
 		else
 			slide = ScheduleSlide.new
-			self.next_up_group.slides << slide
+			self.up_next_group.slides << slide
 			return slide
 		end
 	end
