@@ -17,6 +17,7 @@ loop do
 	Schedule.all.each do |schedule|
 		schedule.generate_slides
 	end
+<<<<<<< HEAD
 	
 	#Import assemblytv schedule
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
@@ -33,4 +34,7 @@ loop do
 	end
 	
 	sleep(60 * 5)
+=======
+	sleep(60)
+>>>>>>> master
 end
