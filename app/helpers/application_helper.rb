@@ -1,7 +1,7 @@
 module ApplicationHelper
   
   def navigation_links
-    controllers = ['Slides', 'Groups', 'Presentations', 'Displays']
+    controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
     admin_controllers = ['Users', 'Events']
     ret = String.new
     html_options = Hash.new
