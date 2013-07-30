@@ -17,8 +17,7 @@ loop do
 	Schedule.all.each do |schedule|
 		schedule.generate_slides
 	end
-<<<<<<< HEAD
-	
+
 	#Import assemblytv schedule
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
 		xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
@@ -29,12 +28,14 @@ loop do
 			event.save!
 		end
 		
+		#Remove cancelled programs
+		schedule.schedule_events.each do |event|
+			event.delete if xml.root.elements.to_a('entry[@id="'+event.external_id+'"]').blank?
+		end
+		
 		schedule.delay.generate_slides
 		
 	end
 	
-	sleep(60 * 5)
-=======
 	sleep(60)
->>>>>>> master
 end
