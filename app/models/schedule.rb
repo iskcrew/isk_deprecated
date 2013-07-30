@@ -24,14 +24,24 @@ class Schedule < ActiveRecord::Base
 	#Generate schedule slides
 	def generate_slides
 		slide_template = ERB.new(File.read(TemplateFile))
-		
-		
-		slides = paginate_events
-		total_slides = slides.size
+		slide_data = paginate_events
+		total_slides = slide_data.size
 		current_slide = 1
 		slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
 		
-		self.slidegroup.slides.destroy_all
+		
+		
+		add_scheduleslides(slide_data.count - schedule_slide_count)
+		
+		schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
+		
+		
+		slides = Array.new
+		slide_data.each_index do |i|
+			slides << [schedule_slides[i], slide_data[i]]
+		end
+		
+		self.slidegroup.hide_slides
 		
 		slides.each do |s|
 			if total_slides == 1
@@ -39,12 +49,13 @@ class Schedule < ActiveRecord::Base
 			else
 				@header = self.name + ' ' + current_slide.to_s + '/' + total_slides.to_s
 			end
-			slide = ScheduleSlide.new
+			slide = s.first
 			slide.name = @header
 			slide.description = slide_description
 			self.slidegroup.slides << slide
-			@items = s
+			slide.public = true
 			slide.save!
+			@items = s.last
 			slide.svg_data = slide_template.result(binding)
 			slide.delay.generate_images
 			
@@ -71,15 +82,16 @@ class Schedule < ActiveRecord::Base
 			up_next_items << {:name => event.name, :time => event.at.strftime('%H:%M')}
 		end
 		
-		self.up_next_group.slides.destroy_all
+		self.up_next_group.hide_slides
 		
 		if up_next_items.size > 0
 			
 		
-			up_next_slide = ScheduleSlide.new
+			up_next_slide = find_or_initialize_up_next_slide
 			up_next_slide.name = slide_name
 			up_next_slide.description = slide_description
 			self.up_next_group.slides << up_next_slide
+			up_next_slide.public = true
 			up_next_slide.save!
 			@header = "Next up: " + self.name
 			@items = up_next_items
@@ -89,6 +101,31 @@ class Schedule < ActiveRecord::Base
 		end
 		
 		return true
+	end
+	
+	def find_or_initialize_up_next_slide
+		if self.up_next_group.slides.where(:type => ScheduleSlide.sti_name).first.present?
+			return self.up_next_group.slides.where(:type => ScheduleSlide.sti_name).first!
+		else
+			slide = ScheduleSlide.new
+			self.next_up_group.slides << slide
+			return slide
+		end
+	end
+	
+	def schedule_slide_count
+		self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).count
+	end
+	
+	def add_scheduleslides(number)
+		slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
+		number.times do
+			slide = ScheduleSlide.new
+			slide.name = self.name
+			slide.description = slide_description
+			self.slidegroup.slides << slide
+			slide.save!
+		end
 	end
 	
 	
