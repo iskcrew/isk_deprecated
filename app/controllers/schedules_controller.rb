@@ -35,6 +35,7 @@ class SchedulesController < ApplicationController
 			
 			if @schedule.update_attributes(params[:schedule])
 				flash[:notice] = 'Schedule updated'
+				@schedule.delay.generate_slides
 				redirect_to :action => :show, :id => @schedule.id
 			else
 				flash[:error] = "Error updating schedule"
@@ -49,7 +50,7 @@ class SchedulesController < ApplicationController
 			@schedule = Schedule.find(params[:id])
 			event = @schedule.schedule_events.new 
 			event.update_attributes(params[:schedule_event])
-			
+			@schedule.delay.generate_slides
 			respond_to do |format|
 				format.html {
 					redirect_to :action => :show, :id => @schedule.id
