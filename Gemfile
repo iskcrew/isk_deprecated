@@ -24,6 +24,7 @@ gem 'jquery-ui-rails'
 
 gem 'websocket-rails'
 
+gem 'daemon'
 
 group :development do
   gem "rails-erd"
