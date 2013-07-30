@@ -1,7 +1,7 @@
 #ISK server background jobs
 require 'rubygems'
 require 'daemon'
-
+require 'net/http'
 
 puts 'Starting ISK server background process'
 
@@ -17,5 +17,20 @@ loop do
 	Schedule.all.each do |schedule|
 		schedule.generate_slides
 	end
+	
+	#Import assemblytv schedule
+	Schedule.where(:name => 'AssemblyTV').each do |schedule|
+		xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
+		xml.root.elements.each('//entry') do |entry|
+			event = schedule.schedule_events.where(:external_id => entry.attributes['id']).first_or_initialize
+			event.name = entry.elements.to_a('title[@lang="en"]').first.text
+			event.at = Time.parse(entry.elements.to_a('start_at').first.text)
+			event.save!
+		end
+		
+		schedule.delay.generate_slides
+		
+	end
+	
 	sleep(60 * 5)
 end
