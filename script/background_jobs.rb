@@ -17,5 +17,5 @@ loop do
 	Schedule.all.each do |schedule|
 		schedule.generate_slides
 	end
-	sleep(60 * 5)
+	sleep(60)
 end
