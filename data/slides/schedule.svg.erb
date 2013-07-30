@@ -6,7 +6,7 @@
 	xmlns:xlink='http://www.w3.org/1999/xlink'
 	xmlns='http://www.w3.org/2000/svg'>
 
-<%options = {subheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 160, item_spacing: 60 }%>	
+<%options = {subheader_x: 30, time_x: 60, item_name_x: 230, content_start_y: 180, item_spacing: 55 }%>	
 
 	<sodipodi:namedview
 		bordercolor='#e32966'
@@ -85,7 +85,7 @@
 		<text
 			fill='#ffd700'
 			font-family='Franklin Gothic Heavy'
-			font-size='56'
+			font-size='50'
 			font-weight='normal'
 			id='date_header<%=index%>'
 			sodipodi:linespacing='125%'
@@ -101,7 +101,7 @@
 		<text
 			fill='#ffffff'
 			font-family='Franklin Gothic Heavy'
-			font-size='56'
+			font-size='50'
 			font-weight='normal'
 			id='event_time<%=index%>'
 			sodipodi:linespacing='125%'
@@ -115,14 +115,14 @@
 		</text>
 	   <flowRoot 
 			id="event_name<%=index%>"
-			style="font-size:56px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;font-family:Franklin Gothic Heavy;-inkscape-font-specification:Franklin Gothic Heavy"
+			style="font-size:50px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;font-family:Franklin Gothic Heavy;-inkscape-font-specification:Franklin Gothic Heavy"
 			text-anchor='start'><flowRegion
 				id="flowRegion<%=index%>"><rect
 					id="rect<%=index%>"
 					width="800"
-					height="65"
+					height="60"
 					x="<%=options[:item_name_x]%>"
-					y="<%=options[:content_start_y] + (index * options[:item_spacing]) - 56%>"
+					y="<%=options[:content_start_y] + (index * options[:item_spacing]) - 50%>"
 					text-anchor="start"/></flowRegion><flowPara
 				id="flowPara<%=index%>"
 				style="stroke:#000000;stroke-width:2;fill:#ffffff"><%=i[:name]%></flowPara>
