@@ -91,7 +91,7 @@ class Schedule < ActiveRecord::Base
 			up_next_slide.name = slide_name
 			up_next_slide.description = slide_description
 			self.up_next_group.slides << up_next_slide
-			up_next_slide.publish = true
+			up_next_slide.publish
 			up_next_slide.save!
 			@header = "Next up: " + self.name
 			@items = up_next_items
