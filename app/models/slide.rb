@@ -64,6 +64,14 @@ class Slide < ActiveRecord::Base
   
   @_svg_data = nil  
   
+	def publish
+		self[:public] = true
+	end
+	
+	def hide
+		self[:public] = false
+	end
+	
   def grouped
     self.where('master_group_id != ?', Event.current.ungrouped.id)
   end
