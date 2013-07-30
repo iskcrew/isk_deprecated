@@ -53,7 +53,7 @@ class Schedule < ActiveRecord::Base
 			slide.name = @header
 			slide.description = slide_description
 			self.slidegroup.slides << slide
-			slide.public = true
+			slide.publish
 			slide.save!
 			@items = s.last
 			slide.svg_data = slide_template.result(binding)
@@ -91,7 +91,7 @@ class Schedule < ActiveRecord::Base
 			up_next_slide.name = slide_name
 			up_next_slide.description = slide_description
 			self.up_next_group.slides << up_next_slide
-			up_next_slide.public = true
+			up_next_slide.publish = true
 			up_next_slide.save!
 			@header = "Next up: " + self.name
 			@items = up_next_items
