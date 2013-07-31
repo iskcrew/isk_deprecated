@@ -364,7 +364,7 @@ class SlidesController < ApplicationController
         
 
         #Paistetaan uusi kuva simpleslidelle
-        @slide.delay.generate_images if @slide.needs_images?
+        @slide.delay.generate_images if @slide.is_a?(SimpleSlide)
         
         #Haetaan uusi kuva http-slidelle jos on tarvis
         @slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
