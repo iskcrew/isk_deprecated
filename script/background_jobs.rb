@@ -47,8 +47,12 @@ loop do
 				event.name = entry['name']
 				event.at = Time.parse(entry['start_time'])
 				event.save!
+				event.delete if entry['flags'].include?('cancelled')
 			end
 		end
+		
+		schedule.delay.generate_slides
+		
 		
 		
 	end
