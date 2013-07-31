@@ -5,7 +5,7 @@ require 'net/http'
 
 puts 'Starting ISK server background process'
 
-#Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
+Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
 
 puts Time.now.to_s + " Daemon started"
 
