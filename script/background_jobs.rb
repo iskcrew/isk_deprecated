@@ -20,39 +20,46 @@ loop do
 
 	#Import assemblytv schedule
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
-		xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
-		xml.root.elements.each('//entry') do |entry|
+		begin
+			xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
+			xml.root.elements.each('//entry') do |entry|
 			event = schedule.schedule_events.where(:external_id => entry.attributes['id']).first_or_initialize
 			event.name = entry.elements.to_a('title[@lang="en"]').first.text
 			event.at = Time.parse(entry.elements.to_a('start_at').first.text)
 			event.save!
 		end
 		
-		#Remove cancelled programs
-		schedule.schedule_events.each do |event|
-			event.delete if xml.root.elements.to_a('entry[@id="'+event.external_id+'"]').blank?
-		end
+			#Remove cancelled programs
+			schedule.schedule_events.each do |event|
+				event.delete if xml.root.elements.to_a('entry[@id="'+event.external_id+'"]').blank?
+			end
 		
-		schedule.delay.generate_slides
+			schedule.delay.generate_slides
+		rescue
+			#HTTP timeout, retry next time
+		end
 		
 	end
 	
 	#Fetch barro-schedule and update schedules based on it
 	Schedule.where(:name => 'Major events').each do |schedule|
-		barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
-		json = JSON.parse(barro_data)
-		json["events"].each do |entry|
-			if entry['flags'].include?('major') or entry['flags'].include?('bigscreen')
-				event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
-				event.name = entry['name']
-				event.at = Time.parse(entry['start_time'])
-				event.save!
-				event.delete if entry['flags'].include?('cancelled')
+		begin
+			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
+			json = JSON.parse(barro_data)
+			json["events"].each do |entry|
+				if entry['flags'].include?('major') or entry['flags'].include?('bigscreen')
+					event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
+					event.name = entry['name']
+					event.at = Time.parse(entry['start_time'])
+					event.save!
+					event.delete if entry['flags'].include?('cancelled')
+				end
 			end
+		
+			schedule.delay.generate_slides
+		rescue 
+		
 		end
-		
-		schedule.delay.generate_slides
-		
 		
 		
 	end
