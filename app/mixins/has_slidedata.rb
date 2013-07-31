@@ -15,23 +15,19 @@ module  HasSlidedata
   end
   
   def slidedata=(d)
-    if d.blank?
+    if d.nil?
 			d = self.class::DefaultSlidedata
 		end
-		
-		#Varmisetetaan että kaikki hashin avaimet ovat symboleja
-    d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
-
-
-    # Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
+	
+		# Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
     d = self.slidedata.merge(d)
 
     #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
-      self.class::DefaultSlidedata.keys.include? k
+      self.class::DefaultSlidedata.key? k
     end
   
-    if d.keys.include? :url
+    if d.key? :url
       #Varmistetaan että url on ok (heittää URI::InvalidURIError jos ei ole ok)
       URI::parse d[:url].strip
     
