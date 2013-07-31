@@ -1,4 +1,12 @@
 <svg xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' width='1280' height='720'>
+	<font id='franklin'>
+	<font-face font-family='Franklin Gothic Heavy'>
+		<font-face-src>
+			<font-face-name name='Franklin Gothic Heavy' />
+			<font-face-uri xlink:href='/fonts/Franklin_Gothic_Heavy-Regular.eot' />
+		</font-face-src>
+	</font-face>
+	</font>
 
  <g>
   <title>taustakuva</title>
@@ -11,8 +19,7 @@
 	font-family='Franklin Gothic Heavy'
 	font-size='70'
 	font-weight='normal'
-	id='event_time<%=index%>'
-	sodipodi:linespacing='125%'
+	id='header'
 	stroke='#000000'
 	stroke-width='2'
 	text-anchor='start'
@@ -25,8 +32,7 @@
 	font-family='Franklin Gothic Heavy'
 	font-size='48'
 	font-weight='normal'
-	id='event_time<%=index%>'
-	sodipodi:linespacing='125%'
+	id='slide_content'
 	stroke='#000000'
 	stroke-width='2'
 	text-anchor='start'
