@@ -35,7 +35,7 @@
 				<%=link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id}, :confirm=>"Are you sure?", :method=>:delete, :class => 'button' %>
 			
 			<%else # Can't edit slide'%>
-				<%=hide_button_or_status(s)%>
+				<%=hide_button_or_status(slide)%>
 				<%=inactive_toggle 'Clock', slide.show_clock%>
 				
 				<%if slide.grouped?%>
