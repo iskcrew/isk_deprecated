@@ -6,7 +6,7 @@ class HttpSlide < Slide
   
   TypeString = 'http'
   
-  DefaultSlidedata = {:url => 'http://', :user => nil, :password => nil}
+  DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(:url => 'http://', :user => nil, :password => nil)
   include HasSlidedata
   
   after_create do |s|
