@@ -55,11 +55,6 @@ class InkscapeSlide < Slide
     
   end
   
-  def initialize
-    super
-    self.is_svg = true
-  end
-  
   def update_metadata!
     svg = REXML::Document.new(File.read(self.svg_filename))
     
