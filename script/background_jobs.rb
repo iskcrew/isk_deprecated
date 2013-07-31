@@ -1,7 +1,7 @@
 #ISK server background jobs
 require 'rubygems'
 require 'daemon'
-require 'net/http'
+
 
 puts 'Starting ISK server background process'
 
@@ -11,20 +11,13 @@ puts Time.now.to_s + " Daemon started"
 
 ActiveRecord::Base.connection.reconnect!
 loop do
-	HttpSlide.all.each do |slide|
-		slide.delay.fetch!
-	end
-	Schedule.all.each do |schedule|
-		schedule.generate_slides
-	end
-
 	#Import assemblytv schedule
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
 		begin
 			xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
 			xml.root.elements.each('//entry') do |entry|
 			event = schedule.schedule_events.where(:external_id => entry.attributes['id']).first_or_initialize
-			event.name = entry.elements.to_a('title[@lang="en"]').first.text
+			event.name =e ntry.elements.to_a('title[@lang="en"]').first.text
 			event.at = Time.parse(entry.elements.to_a('start_at').first.text)
 			event.save!
 		end
@@ -34,7 +27,6 @@ loop do
 				event.delete if xml.root.elements.to_a('entry[@id="'+event.external_id+'"]').blank?
 			end
 		
-			schedule.delay.generate_slides
 		rescue
 			#HTTP timeout, retry next time
 		end
@@ -55,7 +47,6 @@ loop do
 				end
 			end
 		
-			schedule.delay.generate_slides
 		rescue 
 		
 		end
@@ -76,14 +67,17 @@ loop do
 				end
 			end
 		
-			schedule.delay.generate_slides
 		rescue 
 		
 		end
 	end
 	
+	HttpSlide.all.each do |slide|
+		slide.delay.fetch!
+	end
+	Schedule.all.each do |schedule|
+		schedule.generate_slides
+	end
 	
-	
-	
-	sleep(60)
+	sleep(180)
 end
