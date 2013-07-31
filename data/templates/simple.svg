@@ -6,11 +6,32 @@
  </g>
  <g>
   <title>teksti</title>
-  <text font-family='Franklin Gothic Heavy' text-anchor='start' font-weight='normal' id='header' font-size='70' fill='#ffffff' stroke-width='2' stroke='#000000' x='30' y='100'>
+  <text
+	fill='#ffffff'
+	font-family='Franklin Gothic Heavy'
+	font-size='70'
+	font-weight='normal'
+	id='event_time<%=index%>'
+	sodipodi:linespacing='125%'
+	stroke='#000000'
+	stroke-width='2'
+	text-anchor='start'
+	x='30'
+	y='100'>
    <tspan xml:space='preserve' id='svg_17'>Slide header</tspan>
   </text>
-  <text font-family='Franklin Gothic Heavy' text-anchor='start' font-weight='normal' id='slide_content' font-size='48' style='cursor: move;' fill='#ffffff' stroke='#000000' stroke-width='2' x='30' y='200'>
-   <tspan xml:space='preserve' id='svg_166'>slide contents</tspan>
+  <text 
+	fill='#ffffff'
+	font-family='Franklin Gothic Heavy'
+	font-size='48'
+	font-weight='normal'
+	id='event_time<%=index%>'
+	sodipodi:linespacing='125%'
+	stroke='#000000'
+	stroke-width='2'
+	text-anchor='start'
+	x='30'
+	y='200'><tspan xml:space='preserve' id='svg_166'>slide contents</tspan>
    <tspan dy='1em' xml:space='preserve' id='svg_167' x='30'>continues</tspan>
    <tspan dy='1em' xml:space='preserve' id='svg_168' x='30'>couple lines</tspan>
    <tspan dy='1em' xml:space='preserve' id='svg_169' x='30'>
