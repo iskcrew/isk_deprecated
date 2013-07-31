@@ -1,4 +1,8 @@
 class SchedulesController < ApplicationController
+	#TODO: correct ACL
+	
+	before_filter :require_global_admin
+
 	def index
 		@schedules = Schedule.all
 	end

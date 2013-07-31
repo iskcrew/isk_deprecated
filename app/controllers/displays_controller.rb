@@ -99,7 +99,7 @@ class DisplaysController < ApplicationController
     end
     
     respond_to do |format|
-      format.html
+      format.html {redirect_to :action => :show, :id => @display.id}
       format.js {render :show}
     end
     
