@@ -4,10 +4,10 @@
 			<th>
 				<%unless group.id == Event.current.ungrouped.id%>
 					<%=group_link_tag(group)%>
-					<%slides = group.slides%>
+					<%slides = group.slides.current%>
 				<%else #group is current events ungrouped slide group%>
 					<a name="group_<%=group.id%>">Ungrouped slides</a>
-					<%slides = group.slides.order('id desc')%>
+					<%slides = group.slides.current.order('id desc')%>
 				<%end%>
 			</th>
 		</tr>
