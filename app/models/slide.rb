@@ -181,33 +181,17 @@ class Slide < ActiveRecord::Base
     end
   end
   
-  
-  #TODO: muuta tää korvausjuttu replace! -kutsuksi ja pistä noi replaement-accessorit privaateiksi!
-  
-  #Korvataan slide kaikista paikoista uudella
-  def replacement=(replacement)
-    unless replacement.nil?
-      self.replacement_id = replacement.id
-    end   
-  end
-  
-  def replacement_id=(rep_id)
-    rep = Slide.find(rep_id)
-
-    return false if self.replaced? || rep.replaced?
-    self.transaction do
-     self[:replacement_id] = rep_id
-     position = self.position
-     rep.master_group_id = self.master_group_id
-     self.master_group_id = Event.current.ungrouped.id
-     self[:deleted] = true
-     rep.insert_at(position)
-     self.save!
-     self.reload 
-    end
-  end
-  
-  
+	
+	def replace!(slide)
+		Slide.transaction do
+			self.replacement = slide
+			slide.position = self.position
+			slide.master_group = self.master_group
+			slide.save!
+			self.destroy
+		end
+	end
+	
   #Paistetaan kelmusta kuvat ja pingataan websockettia niistä.
   def generate_images
     if self.is_svg?
