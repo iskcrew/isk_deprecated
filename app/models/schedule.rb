@@ -13,12 +13,19 @@ class Schedule < ActiveRecord::Base
 	TimeTolerance = 15.minutes
 	
 	after_create do |schedule|
-		slidegroup = MasterGroup.create(:name => ("Slides for schedule: " + schedule.name), :event_id => Event.current.id)
-		up_next_group = MasterGroup.create(:name => ('Next up on schedule: ' + schedule.name), :event_id => Event.current.id)
+		slidegroup = MasterGroup.create(:name => ("Schedule: " + schedule.name), :event_id => Event.current.id + ' slides')
+		up_next_group = MasterGroup.create(:name => ('Schedule: ' + schedule.name), :event_id => Event.current.id + ' up next')
     
 		schedule.slidegroup = slidegroup
 		schedule.up_next_group = up_next_group
 		schedule.save!
+	end
+	
+	after_update do |schedule|
+		schedule.slidegroup.name = 'Schedule: ' + schedule.name + ' slides'
+		schedule.slidegroup.save!
+		schedule.up_next_group.name = 'Schedule: ' + schedule.name + ' up next'
+		schedule.up_next_group.save!
 	end
 	
 	#Generate schedule slides
