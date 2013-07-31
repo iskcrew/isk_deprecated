@@ -59,7 +59,10 @@ class GroupsController < ApplicationController
           end
         end
         group.reload
-        render :partial => 'slide_items', :locals => {:group => group}
+				@group = group
+				respond_to do |format|
+        	format.js {render :sortable_items}
+				end
       else
         render :text => "Invalid slide count, try refreshing", :status => 400
       end

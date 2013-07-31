@@ -11,7 +11,7 @@ $().ready(function() {
 	  	console.log('Updating slide data: ' + window.location.protocol + "/slides/" + slide.id);
 		
 		//Tarkistetaan että onko kelmua hötömölössä ennen kuin haetaan ajaxia
-		if ($('#slide_' + slide.id).length == 0) return
+		if ($('div#slide_' + slide.id).length == 0) return
 		
 		$.ajax({
 		  type: "GET",
