@@ -1,5 +1,12 @@
 class Slide < ActiveRecord::Base
   require 'rexml/document'
+ 
+ 	before_create do |s|
+		if s.master_group.blank?
+			s.master_group_id = Event.current.ungrouped.id
+		end
+		return true
+	end
   
   after_create do |s|
     s.update_column :filename, "slide_" + s.id.to_s

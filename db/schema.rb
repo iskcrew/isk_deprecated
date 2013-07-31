@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130730160858) do
+ActiveRecord::Schema.define(:version => 20130731175751) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(:version => 20130730160858) do
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
     t.boolean  "ready",                            :default => false
-    t.integer  "master_group_id",                  :default => 1
+    t.integer  "master_group_id"
     t.integer  "position"
     t.boolean  "deleted",                          :default => false
     t.boolean  "is_svg",                           :default => false
