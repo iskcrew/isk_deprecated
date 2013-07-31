@@ -5,7 +5,7 @@ require 'net/http'
 
 puts 'Starting ISK server background process'
 
-Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
+#Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
 
 puts Time.now.to_s + " Daemon started"
 
@@ -36,6 +36,24 @@ loop do
 		schedule.delay.generate_slides
 		
 	end
+	
+	#Fetch barro-schedule and update schedules based on it
+	Schedule.where(:name => 'Major events').each do |schedule|
+		barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
+		json = JSON.parse(barro_data)
+		json["events"].each do |entry|
+			if entry['flags'].include?('major') or entry['flags'].include?('bigscreen')
+				event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
+				event.name = entry['name']
+				event.at = Time.parse(entry['start_time'])
+				event.save!
+			end
+		end
+		
+		
+	end
+	
+	
 	
 	sleep(60)
 end
