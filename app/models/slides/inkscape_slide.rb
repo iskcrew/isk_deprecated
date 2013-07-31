@@ -33,10 +33,12 @@ class InkscapeSlide < Slide
     end
   end
   
-  def self.create_from_simple(simple_slide)
-    
-    
-    return nil unless simple_slide.is_a? SimpleSlide
+	def self.create_from_simple(simple_slide)
+		self.create_from_svg(simple_slide)
+	end
+	
+  def self.create_from_svg(simple_slide)
+    return nil unless simple_slide.is_a? SvgSlide
     
     ink = InkscapeSlide.new
     

@@ -118,7 +118,7 @@ class SlidesController < ApplicationController
     @slide.svg_data= params[:svg]
 
     @slide.delay.generate_images
-
+ 
     render :nothing => true
   end
 
