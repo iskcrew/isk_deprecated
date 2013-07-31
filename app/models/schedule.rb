@@ -13,8 +13,8 @@ class Schedule < ActiveRecord::Base
 	TimeTolerance = 15.minutes
 	
 	after_create do |schedule|
-		slidegroup = MasterGroup.create(:name => ("Schedule: " + schedule.name), :event_id => Event.current.id + ' slides')
-		up_next_group = MasterGroup.create(:name => ('Schedule: ' + schedule.name), :event_id => Event.current.id + ' up next')
+		slidegroup = MasterGroup.create(:name => ("Schedule: " + schedule.name + ' slides'), :event_id => Event.current.id)
+		up_next_group = MasterGroup.create(:name => ('Schedule: ' + schedule.name + 'up next'), :event_id => Event.current.id)
     
 		schedule.slidegroup = slidegroup
 		schedule.up_next_group = up_next_group
