@@ -83,9 +83,9 @@ class UsersController < ApplicationController
     end
     if @user.save
       flash[:notice]="User updated"
-      redirect_to :action => 'list'
+      redirect_to :action => :index
     else
-      render :action=>"edit"
+      render :action=>:edit
     end
 	end
 
