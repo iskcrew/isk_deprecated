@@ -22,10 +22,8 @@ class Schedule < ActiveRecord::Base
 	end
 	
 	after_update do |schedule|
-		schedule.slidegroup.name = 'Schedule: ' + schedule.name + ' slides'
-		schedule.slidegroup.save!
-		schedule.up_next_group.name = 'Schedule: ' + schedule.name + ' up next'
-		schedule.up_next_group.save!
+		schedule.slidegroup.update_attributes(:name => ('Schedule: ' + schedule.name + ' slides'))
+		schedule.up_next_group.update_attributes(:name => ('Schedule: ' + schedule.name + ' up next'))
 	end
 	
 	#Generate schedule slides
