@@ -20,7 +20,7 @@ module  HasSlidedata
 	
 	
 		# Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
-    d =s lidedata.merge(d)
+    d = slidedata.merge(d)
 
     #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
