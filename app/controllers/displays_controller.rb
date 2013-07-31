@@ -153,7 +153,10 @@ class DisplaysController < ApplicationController
           oq.save
         end
         d.reload
-        render :partial => 'slide_items', :locals => {:override => d.override_queues}
+				@display = d
+				respond_to do |format|
+					format.js {render :sortable_items}
+				end
       else
         render :text => "Invalid slide count, try refreshing", :status => 400
       end

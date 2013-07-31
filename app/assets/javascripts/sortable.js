@@ -9,9 +9,6 @@ $(document).ready(function() {
 			        data: order,
 					error:function (xhr, ajaxOptions, thrownError){
 						alert("Error updating order, try reloading the page");
-					},
-					success: function (response) {
-						$('[data-sortable]').html(response);
 					}
 			});
 			 
