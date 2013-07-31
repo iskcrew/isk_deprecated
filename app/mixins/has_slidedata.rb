@@ -6,12 +6,11 @@ module  HasSlidedata
   
   
   def slidedata
-    return @_slidedata if @_slidedata.present?
+		return @_slidedata if @_slidedata
     if !self.new_record? && File.exists?(self.data_filename.to_s)
-      return @_slidedata = YAML.load(File.read(self.data_filename))
-    else
-      return @_slidedata = self.class::DefaultSlidedata
-    end
+      @_slidedata = YAML.load(File.read(self.data_filename))
+		end
+		return @_slidedata.blank? ? self.class::DefaultSlidedata : @_slidedata
   end
   
   def slidedata=(d)
@@ -19,8 +18,9 @@ module  HasSlidedata
 			d = self.class::DefaultSlidedata
 		end
 	
+	
 		# Jos jotain avainta ei ole uudessa hashissä käytetään vanhaa
-    d = self.slidedata.merge(d)
+    d = slidedata.merge(d)
 
     #Heitetään ylimääräiset avaimet pois ettei tallenneta paskaa levylle
     d.keep_if do |k, v|
