@@ -3,13 +3,12 @@ class SvgSlide < Slide
   TypeString = 'svg-edit'
 
   @_svg_data = nil
-#TODO: svg-datan käsittely tänne kontrollerista
-  
-  def initialize(data)
-    super(data)
-    self.is_svg = true
-  end
-    
+	
+	before_create do |slide|
+		slide.is_svg = true
+		return true
+	end
+	  
   #TODO: tee tästä ennemminkin kopiointifunkkari suoraan inkscapeslideen...
   def to_inkscape_slide!
     return nil unless self.is_svg?

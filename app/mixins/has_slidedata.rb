@@ -6,7 +6,7 @@ module  HasSlidedata
   
   
   def slidedata
-    return @_slidedata if @_slidedata
+    return @_slidedata if @_slidedata.present?
     if !self.new_record? && File.exists?(self.data_filename.to_s)
       return @_slidedata = YAML.load(File.read(self.data_filename))
     else
@@ -15,7 +15,11 @@ module  HasSlidedata
   end
   
   def slidedata=(d)
-    #Varmisetetaan että kaikki hashin avaimet ovat symboleja
+    if d.blank?
+			d = self.class::DefaultSlidedata
+		end
+		
+		#Varmisetetaan että kaikki hashin avaimet ovat symboleja
     d = d.each_with_object({}){|(k,v), h| h[k.to_sym] = v}
 
 
