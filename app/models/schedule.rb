@@ -30,48 +30,48 @@ class Schedule < ActiveRecord::Base
 	
 	#Generate schedule slides
 	def generate_slides
-		slide_template = ERB.new(File.read(TemplateFile))
-		slide_data = paginate_events
-		total_slides = slide_data.size
-		current_slide = 1
-		slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
+		Schedule.transaction do
+			slide_template = ERB.new(File.read(TemplateFile))
+			slide_data = paginate_events
+			total_slides = slide_data.size
+			current_slide = 1
+			slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
 		
+			add_scheduleslides(slide_data.count - schedule_slide_count)
 		
+			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
 		
-		add_scheduleslides(slide_data.count - schedule_slide_count)
-		
-		schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
-		
-		
-		slides = Array.new
-		slide_data.each_index do |i|
-			slides << [schedule_slides[i], slide_data[i]]
-		end
-		
-		self.slidegroup.hide_slides
-		
-		slides.each do |s|
-			if total_slides == 1
-				@header = self.name
-			else
-				@header = self.name + ' ' + current_slide.to_s + '/' + total_slides.to_s
+			slides = Array.new
+			slide_data.each_index do |i|
+				slides << [schedule_slides[i], slide_data[i]]
 			end
-			slide = s.first
-			slide.name = @header
-			slide.description = slide_description
-			self.slidegroup.slides << slide
-			slide.publish
-			slide.save!
-			@items = s.last
-			slide.svg_data = slide_template.result(binding)
-			slide.delay.generate_images
-			
-			current_slide += 1
-		end
 		
-		if self.up_next and self.schedule_events.present?
-			generate_up_next_slide
-		end
+			self.slidegroup.hide_slides
+		
+			slides.each do |s|
+				if total_slides == 1
+					@header = self.name
+				else
+					@header = self.name + ' ' + current_slide.to_s + '/' + total_slides.to_s
+				end
+				slide = s.first
+				slide.name = @header
+				slide.description = slide_description
+				self.slidegroup.slides << slide
+				slide.publish
+				slide.save!
+				@items = s.last
+				slide.svg_data = slide_template.result(binding)
+				slide.delay.generate_images
+			
+				current_slide += 1
+			end # slides.each
+		
+			if self.up_next and self.schedule_events.present?
+				generate_up_next_slide
+			end
+		
+		end #Transaction
 		
 		return true
 	end
@@ -92,8 +92,6 @@ class Schedule < ActiveRecord::Base
 		self.up_next_group.hide_slides
 		
 		if up_next_items.size > 0
-			
-		
 			up_next_slide = find_or_initialize_up_next_slide
 			up_next_slide.name = slide_name
 			up_next_slide.description = slide_description
