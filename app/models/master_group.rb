@@ -4,7 +4,7 @@ class MasterGroup < ActiveRecord::Base
 
 
   has_many :slides, :order => 'position ASC'
-  has_many :groups
+  has_many :groups, :dependent => :destroy
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
   belongs_to :event
 

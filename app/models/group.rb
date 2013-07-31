@@ -1,7 +1,7 @@
 class Group < ActiveRecord::Base
   belongs_to :master_group
   belongs_to :presentation, :touch => true
-  sortable :scope => :presentation
+  sortable :scope => :presentation_id
   
   def to_hash
     hash = Hash.new

@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
     require_edit @group
     @group.destroy
     
-    redirect_to :back
+    redirect_to :action => :index
   end
   
   #Add multiple slides to group, render the selection form for all ungrouped slides

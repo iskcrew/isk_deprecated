@@ -125,7 +125,7 @@ class SlidesController < ApplicationController
   def to_inkscape
     slide = SvgSlide.find(params[:id])
     ink = InkscapeSlide.create_from_simple(slide)
-    
+    slide.replace! ink
     flash[:notice] = "Slide was converted to inkscape slide"
     
     redirect_to :action => :show, :id => ink.id
