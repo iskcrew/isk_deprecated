@@ -1,12 +1,20 @@
 <svg xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' width='1280' height='720'>
-	<font id='franklin'>
-	<font-face font-family='Franklin Gothic Heavy'>
-		<font-face-src>
-			<font-face-name name='Franklin Gothic Heavy' />
-			<font-face-uri xlink:href='/fonts/Franklin_Gothic_Heavy-Regular.eot' />
-		</font-face-src>
-	</font-face>
-	</font>
+
+
+	<style type="text/css">
+		@font-face{
+		font-family: 'Franklin Gothic Heavy';
+		src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
+		     url('/fonts/Franklin_Gothic_Heavy-Regular.eot'); /* IE9 */
+		}
+
+		@font-face{
+		font-family: 'Franklin Gothic Heavy';
+		src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
+		     url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
+		font-style: italic;
+		}
+	</style>
 
  <g>
   <title>taustakuva</title>
