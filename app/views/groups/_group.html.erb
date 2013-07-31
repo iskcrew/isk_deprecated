@@ -15,12 +15,12 @@
   
   
   <div class="slides_in_group">
-    <%if group.slides.empty?%>
+    <%if group.slides.current.empty?%>
       <div class="no_slides">
       This group doesn't contain any slides.
       </div>
     <%else%>
-      <%group.slides.each do |s|%>
+      <%group.slides.current.each do |s|%>
         <%=slide_thumb_to_show_tag(s)%>
       <%end%>
     <%end%>
