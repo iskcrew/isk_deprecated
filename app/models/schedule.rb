@@ -39,6 +39,8 @@ class Schedule < ActiveRecord::Base
 		
 			add_scheduleslides(slide_data.count - schedule_slide_count)
 		
+			self.slidegroup.hide_slides
+			
 			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
 		
 			slides = Array.new
@@ -46,7 +48,7 @@ class Schedule < ActiveRecord::Base
 				slides << [schedule_slides[i], slide_data[i]]
 			end
 		
-			self.slidegroup.hide_slides
+			
 		
 			slides.each do |s|
 				if total_slides == 1
