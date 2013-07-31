@@ -5,7 +5,7 @@ require 'net/http'
 
 puts 'Starting ISK server background process'
 
-Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
+#Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
 
 puts Time.now.to_s + " Daemon started"
 
@@ -38,10 +38,9 @@ loop do
 		rescue
 			#HTTP timeout, retry next time
 		end
-		
 	end
 	
-	#Fetch barro-schedule and update schedules based on it
+	#Fetch barro-schedule and update schedules based on it (major events)
 	Schedule.where(:name => 'Major events').each do |schedule|
 		begin
 			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
@@ -49,7 +48,7 @@ loop do
 			json["events"].each do |entry|
 				if entry['flags'].include?('major') or entry['flags'].include?('bigscreen')
 					event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
-					event.name = entry['name']
+					event.name = entry['name'].strip
 					event.at = Time.parse(entry['start_time'])
 					event.save!
 					event.delete if entry['flags'].include?('cancelled')
@@ -60,9 +59,29 @@ loop do
 		rescue 
 		
 		end
-		
-		
 	end
+	
+	#Fetch barro-schedule and update schedules based on it (seminars)
+	Schedule.where(:name => 'ARTtech Seminars').each do |schedule|
+		begin
+			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
+			json = JSON.parse(barro_data)
+			json["events"].each do |entry|
+				if entry['categories'].include?('Seminar')
+					event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
+					event.name = entry['name'].split('ARTtech seminars:').last.strip
+					event.at = Time.parse(entry['start_time'])
+					event.save!
+					event.delete if entry['flags'].include?('cancelled')
+				end
+			end
+		
+			schedule.delay.generate_slides
+		rescue 
+		
+		end
+	end
+	
 	
 	
 	
