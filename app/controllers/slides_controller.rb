@@ -113,10 +113,12 @@ class SlidesController < ApplicationController
   
   #TODO: oikeudet, sisääntulevan inkscape-svg:n validointi
   def svg_save
-    @slide = Slide.find(params[:id])
+		Slide.transaction do
+    	@slide = Slide.find(params[:id])
 
-    @slide.svg_data= params[:svg]
-
+			@slide.svg_data = params[:svg]
+			@slide.save!
+		end
     @slide.delay.generate_images
  
     render :nothing => true
