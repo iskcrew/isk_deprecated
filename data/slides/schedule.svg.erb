@@ -119,7 +119,7 @@
 			text-anchor='start'><flowRegion
 				id="flowRegion<%=index%>"><rect
 					id="rect<%=index%>"
-					width="800"
+					width="<%=1280 - options[:content_start_y] - 10%>"
 					height="60"
 					x="<%=options[:item_name_x]%>"
 					y="<%=options[:content_start_y] + (index * options[:item_spacing]) - 50%>"
