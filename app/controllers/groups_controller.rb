@@ -83,7 +83,7 @@ class GroupsController < ApplicationController
     @group = MasterGroup.find(params[:id])
     require_edit @group
     
-    @slides = Event.current.ungrouped.slides.all
+    @slides = Event.current.ungrouped.slides.current.all
   end
   
   #Add multiple slides to group
