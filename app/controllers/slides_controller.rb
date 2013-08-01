@@ -39,10 +39,10 @@ class SlidesController < ApplicationController
   end
 
   def add_to_group
-    slide = Slide.current.ungrouped.find(params[:id])
+    slide = Event.current.ungrouped.slides.find(params[:id])
     require_edit(slide)
     
-    group = MasterGroup.current.defined_groups.find(params[:add_to_group][:group_id])
+    group = Event.current.master_groups.find(params[:add_to_group][:group_id])
     require_edit(group)
     
     group.slides << slide
