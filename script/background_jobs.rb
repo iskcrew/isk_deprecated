@@ -1,7 +1,7 @@
 #ISK server background jobs
 require 'rubygems'
 require 'daemon'
-
+require 'net/http'
 
 puts 'Starting ISK server background process'
 
