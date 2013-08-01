@@ -83,7 +83,7 @@ class Schedule < ActiveRecord::Base
 	def generate_up_next_slide
 		slide_template = ERB.new(File.read(TemplateFile))
 		slide_description = "Next " + EventsPerSlide.to_s + " events on schedule " + self.name
-		slide_name = "Up next on schedule: " + self.name
+		slide_name = "Next up: " + self.name
 		
 		slides = paginate_events(events_array(false))
 		slides.each do |slide|
@@ -91,10 +91,10 @@ class Schedule < ActiveRecord::Base
 			uns.name = slide_name
 			uns.description = slide_description
 			@header = slide_name
-			puts 'fooo' + slide.inspect
 			@items = slide
 			uns.svg_data = slide_template.result(binding)
 			uns.save!
+			uns.delay.generate_images
 			break
 		end
 		return true
