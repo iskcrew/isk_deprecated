@@ -91,7 +91,7 @@ loop do
 			picture = Net::HTTP.get(URI.parse(item.elements.to_a('link').first.text + '/_full.jpg'))
 			rm_picture = Magick::Image.from_blob(picture).first
 	
-			if (rm_picture.columns.to_f / rm_picture.rows.to_f) - 1.5 < 0.01
+			if ((rm_picture.columns.to_f / rm_picture.rows.to_f) - 1.5).abs < 0.01
 				puts 'Got picture!'
 				puts item.elements.to_a('link').first.text + '/_full.jpg'
 				slide = Slide.find(slides[slides_index])
