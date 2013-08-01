@@ -12,7 +12,7 @@ metadata = REXML::XPath.first( xml, "//metadata" )
 data = metadata.text
 
 
-bg = REXML::XPath.each( xml, '//image[@id="background_picture"]' ) do |element|
+REXML::XPath.each( xml, '//image[@id="background_picture"]' ) do |element|
 	href = element.attribute('xlink:href').to_s
 	element.add_attribute 'xlink:href', 'backgrounds' + href.partition('backgrounds').last
 end
