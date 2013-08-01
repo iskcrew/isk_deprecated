@@ -1,5 +1,4 @@
 #Tungetaan kuva ISK:hon!
-
 require 'net/http'
 require 'rexml/document'
 
@@ -13,9 +12,10 @@ metadata = REXML::XPath.first( xml, "//metadata" )
 data = metadata.text
 
 
-bg = REXML::XPath.first( xml, "//image[@xlink:href]" )
-href = bg.attributes['xlink:href']
-bg.attributes['xlink:href'] = "backgrounds" << href.partition('backgrounds')[2]
+REXML::XPath.each( xml, '//image[@id="background_picture"]' ) do |element|
+	href = element.attribute('xlink:href').to_s
+	element.add_attribute 'xlink:href', 'backgrounds' + href.partition('backgrounds').last
+end
 
 id, isk_server = data.split('!')
 
