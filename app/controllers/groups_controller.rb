@@ -90,15 +90,18 @@ class GroupsController < ApplicationController
   def adopt_slides
     @group = MasterGroup.find(params[:id])
     require_edit @group
-    MasterGroup.transaction do 
+    MasterGroup.transaction do
+			notice = String.new 
       params[:slides].each_value do |s|
         if s[:add] == "1"
-          s = Slide.current.ungrouped.find(s[:id])
-          flash[:notice] = 'Adding slide ' << s.name
+          s = Event.current.ungrouped.slides.find(s[:id])
+          flash[:notice]
+					notice << 'Adding slide ' << s.name << "\n"
           s.master_group_id = @group.id
           s.save!
         end
       end
+			flash[:notice] = notice
     end
     
     redirect_to :action => :show, :id => @group.id
