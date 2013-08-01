@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130731175751) do
+ActiveRecord::Schema.define(:version => 20130801174037) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(:version => 20130731175751) do
     t.boolean  "cancelled",   :default => false
     t.boolean  "rescheduled", :default => false
     t.string   "external_id"
+    t.integer  "linecount",   :default => 1
   end
 
   create_table "schedules", :force => true do |t|

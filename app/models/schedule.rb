@@ -31,6 +31,7 @@ class Schedule < ActiveRecord::Base
 		Schedule.transaction do
 			slide_template = ERB.new(File.read(TemplateFile))
 			slide_data = paginate_events
+			
 			total_slides = slide_data.size
 			current_slide = 1
 			slide_description = "Automatically generated from schedule " + self.name + " at " + (I18n.l(Time.now, :format => :short))
@@ -149,9 +150,9 @@ class Schedule < ActiveRecord::Base
 			
 				#Insert a subheader if next event is in different day
 				unless (e.at.to_date === last_date)
-					slide_items << {:subheader => (e.at.strftime('%A %d.%m.'))}
+					slide_items << {:subheader => (e.at.strftime('%A %d.%m.')), :linecount => 1}
 				end
-				slide_items << {:name => e.name, :time => e.at.strftime("%H:%M")}
+				slide_items << {:name => e.name, :time => e.at.strftime("%H:%M"), :linecount => e.linecount}
 				last_date = e.at.to_date
 			end
 		end
@@ -172,9 +173,24 @@ class Schedule < ActiveRecord::Base
 				this_slide << last_subheader
 			end
 		
-			this_slide << item
+			if item[:linecount] == 1
+				this_slide << item
+			else
+				puts item
+				if (this_slide.size + item[:linecount]) > Schedule::EventsPerSlide
+					slides << this_slide
+					this_slide << last_subheader
+				end
+				lines = item[:name].split("\n")
+				this_slide << {:name => lines.first, :time => item[:time]}
+				lines.delete_at 0
+				(item[:linecount] - 1).times do
+					this_slide << {:name => lines.first, :time => ''}
+					lines.delete_at 0
+				end
+			end
 		
-			if this_slide.size == Schedule::EventsPerSlide
+			if this_slide.size >= Schedule::EventsPerSlide
 				slides << this_slide
 				this_slide = Array.new
 			end			
