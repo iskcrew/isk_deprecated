@@ -15,12 +15,12 @@ loop do
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
 		begin
 			xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
-			xml.root.elements.each('//entry') do |entry|
-			event = schedule.schedule_events.where(:external_id => entry.attributes['id']).first_or_initialize
-			event.name =e ntry.elements.to_a('title[@lang="en"]').first.text
-			event.at = Time.parse(entry.elements.to_a('start_at').first.text)
-			event.save!
-		end
+				xml.root.elements.each('//entry') do |entry|
+					event = schedule.schedule_events.where(:external_id => entry.attributes['id']).first_or_initialize
+					event.name =entry.elements.to_a('title[@lang="en"]').first.text
+					event.at = Time.parse(entry.elements.to_a('start_at').first.text)
+					event.save!
+			end
 		
 			#Remove cancelled programs
 			schedule.schedule_events.each do |event|
@@ -37,6 +37,7 @@ loop do
 		begin
 			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
 			json = JSON.parse(barro_data)
+			schedule.schedule_events.delete_all
 			json["events"].each do |entry|
 				if entry['flags'].include?('major') or entry['flags'].include?('bigscreen')
 					event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
@@ -57,6 +58,7 @@ loop do
 		begin
 			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
 			json = JSON.parse(barro_data)
+			schedule.schedule_events.delete_all
 			json["events"].each do |entry|
 				if entry['categories'].include?('Seminar')
 					event = schedule.schedule_events.where(:external_id => entry['key']).first_or_initialize
