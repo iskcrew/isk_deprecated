@@ -1,6 +1,6 @@
 class Presentation < ActiveRecord::Base
 
-  has_many :groups, :order => "position ASC", :after_add => :add_group, :before_remove => :remove_group
+  has_many :groups, :order => "position ASC"
   belongs_to :effect
   has_many :displays
   
