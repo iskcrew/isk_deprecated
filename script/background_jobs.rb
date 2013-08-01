@@ -72,6 +72,50 @@ loop do
 		end
 	end
 	
+	#Generate slides for 5 latest photos from assembly gallery
+	begin
+		require 'net/http'
+		require 'uri'
+		require 'base64'
+		require 'rexml/document'
+
+		rss = `wget http://assembly.galleria.fi/kuvat/rss/ -O -`
+		xml = REXML::Document.new(rss)
+
+		slides_index = 0
+		slides = [300]
+
+		xml.root.elements.each('//item') do |item|
+			picture = Net::HTTP.get(URI.parse(item.elements.to_a('link').first.text + '/_full.jpg'))
+			rm_picture = Magick::Image.from_blob(picture).first
+	
+			if (rm_picture.columns.to_f / rm_picture.rows.to_f) - 1.5 < 0.01
+				puts 'Got picture!'
+				puts item.elements.to_a('link').first.text + '/_full.jpg'
+				slide = Slide.find(slides[slides_index])
+				svg = svg = REXML::Document.new(slide.svg_data)
+				encoded = 'data:image/jpeg;base64,' + Base64.encode64(picture)
+				picture_element = svg.root.elements.to_a('//image#gallery_picture').last
+				picture_element.add_attribute('xlink:href', encoded)
+		
+				File.open(slide.svg_filename, 'w+') do |f|
+					f.puts svg.to_s
+				end
+				slide.generate_images
+		
+				slides_index+= 1
+				break if slides_index >= slides.size
+			end
+	
+	
+		end
+		
+		
+	rescue
+		
+	end
+	
+	
 	HttpSlide.all.each do |slide|
 		slide.delay.fetch!
 	end
