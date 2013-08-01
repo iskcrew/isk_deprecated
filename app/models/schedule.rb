@@ -30,7 +30,7 @@ class Schedule < ActiveRecord::Base
 	def generate_slides
 		Schedule.transaction do
 			slide_template = ERB.new(File.read(TemplateFile))
-			slide_data = paginate_events
+			slide_data = paginate_events(events_array)
 			
 			total_slides = slide_data.size
 			current_slide = 1
@@ -82,30 +82,21 @@ class Schedule < ActiveRecord::Base
 	
 	def generate_up_next_slide
 		slide_template = ERB.new(File.read(TemplateFile))
-		up_next_items = Array.new
 		slide_description = "Next " + EventsPerSlide.to_s + " events on schedule " + self.name
 		slide_name = "Up next on schedule: " + self.name
 		
-		self.schedule_events.where('at > ?', (Time.now - TimeTolerance)).limit(9).each do |event|
-			up_next_items << {:name => event.name, :time => event.at.strftime('%H:%M')}
+		slides = paginate_events(events_array(false))
+		slides.each do |slide|
+			uns = find_or_initialize_up_next_slide
+			uns.name = slide_name
+			uns.description = slide_description
+			@header = slide_name
+			puts 'fooo' + slide.inspect
+			@items = slide
+			uns.svg_data = slide_template.result(binding)
+			uns.save!
+			break
 		end
-		
-		self.up_next_group.hide_slides
-		
-		if up_next_items.size > 0
-			up_next_slide = find_or_initialize_up_next_slide
-			up_next_slide.name = slide_name
-			up_next_slide.description = slide_description
-			self.up_next_group.slides << up_next_slide
-			up_next_slide.publish
-			up_next_slide.save!
-			@header = "Next up: " + self.name
-			@items = up_next_items
-			up_next_slide.svg_data = slide_template.result(binding)
-			up_next_slide.save!
-			up_next_slide.delay.generate_images
-		end
-		
 		return true
 	end
 	
@@ -135,28 +126,31 @@ class Schedule < ActiveRecord::Base
 	end
 	
 	
-	#Create an array containing items for each slide suitable for the template
-	#A slide contains at most EventsPerSlide number of events in it
-	#If day changes between slides a new header will be added
-	#If the new day would have less than self.min_events_on_next_day events after it on the current slide
-	#create a new slide.
-	def paginate_events
+	def events_array(do_subheaders = true)
 		slide_items = Array.new
 		last_date = nil
-	
+		
 		self.schedule_events.each do |e|
 			#Ignore events that are more than TimeTolerance in past
 			unless (e.at + TimeTolerance).past?
 			
 				#Insert a subheader if next event is in different day
-				unless (e.at.to_date === last_date)
+				if do_subheaders && !(e.at.to_date === last_date)
 					slide_items << {:subheader => (e.at.strftime('%A %d.%m.')), :linecount => 1}
 				end
 				slide_items << {:name => e.name, :time => e.at.strftime("%H:%M"), :linecount => e.linecount}
 				last_date = e.at.to_date
 			end
 		end
+		return slide_items
+	end
 	
+	#Create an array containing items for each slide suitable for the template
+	#A slide contains at most EventsPerSlide number of events in it
+	#If day changes between slides a new header will be added
+	#If the new day would have less than self.min_events_on_next_day events after it on the current slide
+	#create a new slide.
+	def paginate_events(slide_items)
 		#Break the events up on slides EventsPerSlide per slide
 		slides = Array.new
 		this_slide = Array.new
@@ -169,16 +163,16 @@ class Schedule < ActiveRecord::Base
 					this_slide = Array.new
 				end
 				last_subheader = item	
-			elsif this_slide.empty?
+			elsif this_slide.empty? && last_subheader
 				this_slide << last_subheader
 			end
 		
 			if item[:linecount] == 1
 				this_slide << item
 			else
-				puts item
 				if (this_slide.size + item[:linecount]) > Schedule::EventsPerSlide
 					slides << this_slide
+					this_slide = Array.new
 					this_slide << last_subheader
 				end
 				lines = item[:name].split("\n")
