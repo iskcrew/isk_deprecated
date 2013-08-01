@@ -115,8 +115,8 @@ class SlidesController < ApplicationController
   def svg_save
     @slide = Slide.find(params[:id])
 
-    @slide.svg_data= params[:svg]
-
+    @slide.svg_data = params[:svg]
+		@slide.save!
     @slide.delay.generate_images
  
     render :nothing => true
