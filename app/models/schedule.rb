@@ -171,6 +171,9 @@ class Schedule < ActiveRecord::Base
 				this_slide << item
 			else
 				if (this_slide.size + item[:linecount]) > Schedule::EventsPerSlide
+					if this_slide.last[:subheader]
+						this_slide = this_slide.pop
+					end
 					slides << this_slide
 					this_slide = Array.new
 					this_slide << last_subheader
