@@ -241,6 +241,12 @@ class SlidesController < ApplicationController
         case params[:create_type]
         when 'empty_file'
           FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
+				when 'image'
+					@slide.reload
+					Rails.logger.debug 'Fooooos' + @slide.original_filename.to_s
+					File.open(@slide.original_filename, 'w+b') do |f|
+						f.puts params[:upload].read
+					end
         end
                 
         unless @slide.can_edit? current_user

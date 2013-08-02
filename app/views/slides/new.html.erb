@@ -5,6 +5,7 @@
 		<li><a href="#simple"><span>Simple Editor</span></a></li>
 		<li><a href="#inkscape"><span>Inkscape</span></a></li>
 		<li><a href="#httpslide"><span>HttpSlide</span></a></li>
+		<li><a href="#image"><span>Upload image</span></a></li>
 	</ul>
 	
 	<div id="simple">
@@ -48,5 +49,16 @@
 
 			<%=f.submit "Create"%>
 		<%end # form_for (http_slide)%>
+	</div>
+	
+	<div id="image">
+		<h2>Create new slide by uploading a image</h2>
+		<%=form_for @slide, :url => {:action => :create}, :html => {:multipart => true} do |f|%>
+			<%=f.error_messages%>
+			<%=render :partial => 'form'%>
+			<p><b>Upload image:</b><%=file_field_tag :upload %></p>
+			<%=hidden_field_tag :create_type, 'image'%>
+			<%=f.submit 'Create'%>
+		<%end%>
 	</div>
 </div>
