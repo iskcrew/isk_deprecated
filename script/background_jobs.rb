@@ -3,9 +3,14 @@ require 'rubygems'
 require 'daemon'
 
 
-puts 'Starting ISK server background process'
 
-Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
+def stamped_puts(str)
+	puts Time.now.to_s + " " + __FILE__ + ":" + __LINE__.to_s + " " + str
+end
+
+stamped_puts 'Starting ISK server background process'
+
+#Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
 
 stamped_puts Time.now.to_s + " Daemon started"
 
@@ -21,9 +26,4 @@ loop do
 		schedule.generate_slides
 	end
 	sleep(60)
-end
-
-def stamped_puts(str)
-	puts Time.now.to_s + " " + __FILE__ + ":" + __LINE__ + " " + str
-	
 end
