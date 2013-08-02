@@ -139,7 +139,7 @@ module SlidesHelper
   end
   
   def simple_text_sizes
-    double_array [48,50,60,70,80,90,100]
+    double_array [48,50,60,70,80,90,100,120,160,200,300,400]
   end
   
   def double_array(v)
