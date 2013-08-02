@@ -97,6 +97,13 @@ class Slide < ActiveRecord::Base
     new_slide = self.dup
     new_slide.public = false
     new_slide.name = self.name.last.match(/\d+/) ? self.name.next : new_slide.name << ' (clone)'
+		if new_slide.name.split('(clone)').size > 2
+			new_slide.name = new_slide.name.gsub('(clone)', '(badger)') + " (mushroom)"
+		elsif new_slide.name.include?("(badger)") and !new_slide.name.include?('(mushroom) (mushroom)')
+			new_slide.name = new_slide.name.gsub('(clone)', '(mushroom)')
+		elsif new_slide.name.include?('(mushroom) (mushroom)')
+			new_slide.name = new_slide.name.gsub('(clone)', '')
+		end
     Slide.transaction do
       new_slide.save!
       
