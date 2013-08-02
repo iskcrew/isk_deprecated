@@ -3,6 +3,10 @@ class Display < ActiveRecord::Base
   
   before_save do
     self.metadata_updated_at = Time.now if self.presentation_id_changed?
+		if self.manual
+			self.do_overrides = false
+		end
+		return true
   end
   
   before_create do
@@ -27,7 +31,7 @@ class Display < ActiveRecord::Base
 
   include ModelAuthorization
   
-  attr_accessible :name, :presentation_id, :monitor, :manual
+  attr_accessible :name, :presentation_id, :monitor, :manual, :do_overrides
   
   def websocket_channel
     return "display_" + self.id.to_s
@@ -105,10 +109,12 @@ class Display < ActiveRecord::Base
     h[:created_at] = self.created_at.to_i
     h[:presentation] = self.presentation ? self.presentation.to_hash : Hash.new
     q = Array.new
-    self.override_queues.each do |oq|
-      q << oq.to_hash
-    end
-    h[:override_queue] = q
+		if self.do_overrides
+			self.override_queues.each do |oq|
+      	q << oq.to_hash
+    	end
+		end
+		h[:override_queue] = q
     return h
   end
   

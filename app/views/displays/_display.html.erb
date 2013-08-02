@@ -14,6 +14,7 @@
         </ul>
     </div>
     <div class="display_actions">
+		 <%=toggle_link_to 'Overrides', display.do_overrides, {:controller => :displays, :action => :update, :id => display.id, :display => {:do_overrides => !display.do_overrides}}, {:method => :put, :remote => true}%>
         <%=toggle_link_to 'Manual control', display.manual, {:controller => :displays, :action => :update, :id => display.id, :display => {:manual => !display.manual}}, {:method => :put, :remote => true}%>
 	    <%=link_to 'Details', {:controller => :displays, :action => :show, :id => display.id}, :class => 'button'%>
 	    <%=link_to 'Edit', {:controller => :displays, :action => :edit, :id => display.id}, :class => 'button'%>
