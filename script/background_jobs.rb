@@ -3,16 +3,22 @@ require 'rubygems'
 require 'daemon'
 require 'net/http'
 
-puts 'Starting ISK server background process'
+
+def stamped_puts(str)
+	puts Time.now.to_s + " " + __FILE__ + ":" + __LINE__.to_s + " " + str
+end
+
+stamped_puts 'Starting ISK server background process'
 
 Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
 
-puts Time.now.to_s + " Daemon started"
+stamped_puts Time.now.to_s + " Daemon started"
 
 ActiveRecord::Base.connection.reconnect!
 loop do
 	#Import assemblytv schedule
 	Schedule.where(:name => 'AssemblyTV').each do |schedule|
+		stamped_puts 'Fetching AssemblyTV schedule'
 		begin
 			xml = REXML::Document.new(Net::HTTP.get(URI.parse('http://elaine.aketzu.net/channels/9/playlist/schedule.xml')))
 				xml.root.elements.each('//entry') do |entry|
@@ -34,6 +40,7 @@ loop do
 	
 	#Fetch barro-schedule and update schedules based on it (major events)
 	Schedule.where(:name => 'Major events').each do |schedule|
+		stamped_puts 'Fetching Assmebly schedule, using major events'
 		begin
 			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
 			json = JSON.parse(barro_data)
@@ -55,6 +62,7 @@ loop do
 	
 	#Fetch barro-schedule and update schedules based on it (seminars)
 	Schedule.where(:name => 'ARTtech Seminars').each do |schedule|
+		stamped_puts 'Fetching Assembly schedule, using seminars'
 		begin
 			barro_data = Net::HTTP.get(URI.parse('http://schedule.assembly.org/asms13/schedules/events.json'))
 			json = JSON.parse(barro_data)
@@ -81,7 +89,9 @@ loop do
 		require 'base64'
 		require 'rexml/document'
 
-		rss = `wget http://assembly.galleria.fi/kuvat/rss/ -O -`
+		stamped_puts 'Fetching latests assembly.galleria.fi pictures'
+
+		rss = `wget http://assembly.galleria.fi/kuvat/rss/ -O - 2>/dev/null`
 		xml = REXML::Document.new(rss)
 
 		slides_index = 0
@@ -92,8 +102,6 @@ loop do
 			rm_picture = Magick::Image.from_blob(picture).first
 	
 			if ((rm_picture.columns.to_f / rm_picture.rows.to_f) - 1.5).abs < 0.01
-				puts 'Got picture!'
-				puts item.elements.to_a('link').first.text + '/_full.jpg'
 				slide = Slide.find(slides[slides_index])
 				svg = svg = REXML::Document.new(slide.svg_data)
 				encoded = 'data:image/jpeg;base64,' + Base64.encode64(picture)
@@ -118,9 +126,12 @@ loop do
 	end
 	
 	
+	stamped_puts 'Fetching http-slides'
 	HttpSlide.all.each do |slide|
 		slide.delay.fetch!
 	end
+	
+	stamped_puts 'Generating schedule slides'
 	Schedule.all.each do |schedule|
 		schedule.generate_slides
 	end
