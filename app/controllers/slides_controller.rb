@@ -296,7 +296,7 @@ class SlidesController < ApplicationController
           if @slide.ready
             send_file(@slide.preview_filename, {:disposition => 'inline'})
           else
-            send_file(Rails.root.join('public','no_image.jpg'), {:disposition => 'inline'})
+            send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
           end
         }
         format.js {render :show}
@@ -313,7 +313,7 @@ class SlidesController < ApplicationController
           if @slide.ready
             send_file(@slide.thumb_filename, {:disposition => 'inline'})
           else
-            send_file(Rails.root.join('public','no_image.jpg'), {:disposition => 'inline'})
+            send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
           end
         }
         format.js {render :show}
