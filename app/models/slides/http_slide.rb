@@ -53,7 +53,7 @@ class HttpSlide < Slide
     request = Net::HTTP::Get.new(uri.request_uri)
 
 
-    unless self.slidedata[:user].empty?
+    unless self.slidedata[:user].blank?
       request.basic_auth(self.slidedata[:user], self.slidedata[:password])
     end
 
