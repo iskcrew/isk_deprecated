@@ -96,7 +96,7 @@ class Slide < ActiveRecord::Base
   def clone!
     new_slide = self.dup
     new_slide.public = false
-    new_slide.name = new_slide.name << ' (clone)'
+    new_slide.name = self.name.last.match(/\d+/) ? self.name.next : new_slide.name << ' (clone)'
     Slide.transaction do
       new_slide.save!
       
