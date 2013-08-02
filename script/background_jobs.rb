@@ -5,7 +5,7 @@ require 'daemon'
 
 
 def stamped_puts(str)
-	puts Time.now.to_s + " " + __FILE__ + ":" + __LINE__.to_s + " " + str
+	puts Time.now.to_s + caller[0] + ' ' + str
 end
 
 stamped_puts 'Starting ISK server background process'
