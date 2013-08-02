@@ -81,6 +81,7 @@ class InkscapeSlide < Slide
       command << ' -h ' << Slide::FullHeight.to_s
       command << ' -e ' << self.full_filename.to_s
       command << ' ' << self.svg_filename.to_s
+			command << ' 1>/dev/null'
     end
     
     return command
