@@ -1,7 +1,7 @@
 <% slidedata = (@slide.is_a?(HttpSlide) ? @slide.slidedata : HttpSlide::DefaultSlidedata)%>
 
 <%=fields_for @slide do |f|%>
-	<%=fields_for :slidedata do |f|%>
+	<%=f.fields_for :slidedata do |f|%>
 		<p>
 			<%=f.label :url, 'URL to fetch from (http or https)'%>
 			<%=f.url_field :url, :value => slidedata[:url]%>
