@@ -235,7 +235,10 @@ class SlidesController < ApplicationController
         end
         
         unless @slide.save
-          render :action => :new and return
+					if Slide.admin?
+          	render :action => :new and return
+					else
+						render :new_simple and return
         end
         
         case params[:create_type]
