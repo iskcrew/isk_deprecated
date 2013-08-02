@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130801174037) do
+ActiveRecord::Schema.define(:version => 20130802185930) do
+
+  create_table "ceremonies", :force => true do |t|
+    t.string   "name"
+    t.integer  "slidegroup_id"
+    t.integer  "event_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -55,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20130801174037) do
     t.datetime "last_hello"
     t.integer  "websocket_connection_id"
     t.boolean  "manual",                                :default => false
+    t.boolean  "do_overrides",                          :default => true
   end
 
   add_index "displays", ["last_contact_at"], :name => "index_displays_on_last_contact_at"
