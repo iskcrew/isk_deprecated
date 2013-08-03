@@ -23,6 +23,19 @@ class GroupsController < ApplicationController
     @group =MasterGroup.find(params[:id])
     require_edit @group
     
+		if @group.is_a? PrizeGroup
+			data = Array.new
+			params[:data].each_key do |k|
+				data << {
+					:name => params[:data][k][:name], 
+					:by => params[:data][k][:by],
+					:pts => params[:data][k][:pts]
+				}
+			end
+			@group.data = data
+		end
+		
+		
     if @group.update_attributes(params[:master_group])
       flash[:notice] = 'Group was successfully updated.'
       redirect_to :action => 'show', :id => @group.id

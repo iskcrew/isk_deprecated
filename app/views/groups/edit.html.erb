@@ -3,8 +3,14 @@
 <%=form_for @group, :url => {:action => :update} do |f|%>
 	<%=f.error_messages%>
 	<%=render :partial => 'form'%>
+	<%if @group.is_a? PrizeGroup%>
+		<%=render :partial => 'prize_form'%>
+	<%end%>
+	
 	<%=f.submit "Update"%>
 <%end%>
+
+
 
 <h2>Reorder slides</h2>
 

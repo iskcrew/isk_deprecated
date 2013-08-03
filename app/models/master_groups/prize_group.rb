@@ -11,20 +11,21 @@ class	PrizeGroup < MasterGroup
 	
 	after_save do
 		write_data
+		generate_slides
 	end
 	
 	
   def data
-		return @_data if @_data
+		return @_data if @_data.present?
     if !self.new_record? && File.exists?(data_filename)
       @_data = YAML.load(File.read(data_filename))
 		end
-		return @_data.blank? ? self.class::DefaulData : @_data
+		return @_data.blank? ? self.class::DefaultData : @_data
   end
   
   def data=(d)
     if d.nil?
-			d = self.class::DefaulData
+			d = self.class::DefaultData
 		end
 	
 	  @_data=d
@@ -36,12 +37,13 @@ class	PrizeGroup < MasterGroup
 		
 		index = 1
 		data.each do |d|
-			if d[:name]
+			if d[:name].present?
 				@data << {:place => index.ordinalize, :name => d[:name]}
 				@data << {:pts => d[:pts], :name => d[:by]}
 				index += 1
 			end
 		end
+		@entries = index
 		
 		(index - self.slides.where(:type => InkscapeSlide.sti_name).count).times do
 			slide = InkscapeSlide.new
@@ -49,6 +51,7 @@ class	PrizeGroup < MasterGroup
 			self.slides << slide
 			slide.save!
 		end
+		
 		
 		self.hide_slides
 		
@@ -60,6 +63,7 @@ class	PrizeGroup < MasterGroup
 			slide = result_slides.last
 			slide.name = @header
 			self.slides << slide
+			slide.publish
 			slide.svg_data = template.result(binding)
 			slide.save!
 			slide.delay.generate_images
