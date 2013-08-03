@@ -17,5 +17,16 @@ $(document).ready(function() {
 			});
 		};
 	});
+	
+	$('div.flash > div.warning').each(function() {
+		$(this).hide();
+		if (this.textContent) {
+			var information = $('div.flash').noty({
+				text: this.textContent, 
+				type: 'warning',
+				timeout: 10000 //10s
+			});
+		};
+	});
 
 });
