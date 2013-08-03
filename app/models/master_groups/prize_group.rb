@@ -43,7 +43,7 @@ class	PrizeGroup < MasterGroup
 				index += 1
 			end
 		end
-		@entries = index
+		@entries = index - 1
 		
 		(index - self.slides.where(:type => InkscapeSlide.sti_name).count).times do
 			slide = InkscapeSlide.new
