@@ -64,7 +64,7 @@ class SlidesController < ApplicationController
     end
 		
 		unless display.do_overrides
-			flash[:error] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
+			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
 		end
     flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
 
