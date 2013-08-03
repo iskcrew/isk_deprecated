@@ -1,5 +1,15 @@
 <h1>Information for group: <%=@group.name%></h1>
 
+<%if @group.is_a? PrizeGroup%>
+<h2>Prize group information:</h2>
+<ol>
+	<%@group.data.each do |d|%>
+		<li><b>Name</b> <%=d[:name]%> <b>By:</b> <%=d[:by]%> <b>Pts:</b> <%=d[:pts]%></li> 
+	<%end%>
+</ol>
+
+<%end%>
+
 <%unless @group.presentations.empty?%>
 <p>This group is part of following presentations:</p>
 <ul>

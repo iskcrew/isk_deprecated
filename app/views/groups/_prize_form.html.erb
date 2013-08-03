@@ -1,0 +1,13 @@
+<h3>Awards</h3>
+<%data = (@group.is_a?(PrizeGroup) ? @group.data : PrizeGroup::DefaultData)%>
+<%=fields_for :data do |f|%>
+	<%data.each_index do |i|%>
+	<%=f.fields_for i.to_s do |ff|%>
+		<p>
+			Name: <%=ff.text_field :name, :value => data[i][:name]%>
+			By: <%=ff.text_field :by, :value => data[i][:by]%>
+			Pts: <%=ff.text_field :pts, :value => data[i][:pts]%>
+		</p>
+	<%end%>
+	<%end%>
+<%end%>
