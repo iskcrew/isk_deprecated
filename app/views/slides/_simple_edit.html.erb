@@ -2,8 +2,6 @@
 	<%=fields_for @slide do |f|%>
 		<% slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)%>
 
-		<%=f.error_messages%>
-
 		<%=f.submit%>
 
 		<div class='simple_editor_controls'>

@@ -1,7 +1,6 @@
 <h1>Editing simple slide</h1>
 <%=form_for @slide, :as => 'slide', :url => {:action => :update, :id => @slide.id} do |f|%>
+	<%=f.error_messages%>
   
-  
-<%=render :partial => 'simple_edit'%>
-
+	<%=render :partial => 'simple_edit'%>
 <%end%>
