@@ -135,8 +135,12 @@ class DisplaysController < ApplicationController
       oq.duration = params[:duration]
       oq.save!
     end
+		
+		unless display.do_overrides
+			flash[:error] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
+		end
     
-    flash[:notice] = 'Added slide ' << slide.name << ' to the override queue'
+		flash[:notice] = 'Added slide ' << slide.name << ' to the override queue'
     redirect_to :action => :show, :id => display.id
     
   end
