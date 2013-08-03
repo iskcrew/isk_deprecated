@@ -1,0 +1,30 @@
+<h1>Creating new group</h1>
+
+<div id="tabs">
+	<ul>
+		<li><a href="#normal"><span>Normal</span></a></li>
+		<li><a href="#prize"><span>Prize Ceremony</span></a></li>
+	</ul>
+	
+	<div id="normal">
+		<h2>Creating a normal group</h2>
+		<%=form_for @group, :url => {:action => :create} do |f|%>
+			<%=f.error_messages%>
+			<%=render :partial => 'form'%>
+			<%=f.submit 'Create'%>
+		<%end%>
+	</div>
+
+	<div id="prize">
+		<h2>Creating a prize ceremony group</h2>
+		<%=form_for @group, :url => {:action => :create} do |f|%>
+			<%=f.error_messages%>
+			<%=hidden_field_tag :prize, true%>
+			<%=render :partial => 'form'%>
+			<%=render :partial => 'prize_form'%>
+			
+			<%=f.submit 'Create'%>
+		<%end%>
+		
+	</div>
+</div>

@@ -106,19 +106,41 @@ class GroupsController < ApplicationController
     
     redirect_to :action => :show, :id => @group.id
   end
+	
+	def new
+		@group = MasterGroup.new
+	end
   
-  def create
-    new_group = MasterGroup.new(params[:master_group])
-    new_group.event = Event.current
-    if new_group.save
-      flash[:notice] = "Group created."
-      new_group.authorized_users << current_user unless MasterGroup.admin? current_user
-    else
-      flash[:error] = "Error saving group"
-    end
-    redirect_to :action => :index
-      
-  end
+	def create
+		if params[:prize]
+			#Create new prize ceremony group
+			@group = PrizeGroup.new(params[:master_group])
+			@group.event = Event.current
+			data = Array.new
+			params[:data].each_key do |k|
+				data << {
+					:name => params[:data][k][:name], 
+					:by => params[:data][k][:by],
+					:pts => params[:data][k][:pts]
+				}
+			end
+			@group.data = data
+			
+			
+		else
+			@group = MasterGroup.new(params[:master_group])
+			@group.event = Event.current
+		end
+		if @group.save
+			flash[:notice] = "Group created."
+			@group.authorized_users << current_user unless MasterGroup.admin? current_user
+			redirect_to :action => :show, :id => @group.id
+		else
+			flash[:error] = "Error saving group"
+			render :new and return
+		end 
+		  
+	end
   
   def deny
     group = MasterGroup.find(params[:id])
