@@ -7,8 +7,8 @@
 	xmlns='http://www.w3.org/2000/svg'>
 
 <%options = {subheader_x: 30, place_x: 40, name_x: 240, item_spacing: 50 }%>	
-<%options[:spacer] = (5 - @entries) * 20%>
-<%options[:content_end_y] = 50 + (options[:item_spacing] * 2 * @entries) + (options[:spacer] * @entries)%>
+<%options[:spacer] = (5 - @entries) * 30%>
+<%options[:content_end_y] = 115 + (options[:item_spacing] * 2 * @entries) + (options[:spacer] * @entries)%>
 
 	<sodipodi:namedview
 		bordercolor='#e32966'
@@ -83,6 +83,7 @@
 		</text>
 		<% index = 0 %>
 		<% @data.each do |i|%>
+		<% _y = options[:content_end_y] - (index * options[:item_spacing]) - ((index / 2) * options[:spacer])%>
 		<%if i[:place]%>
 		<text
 			fill='#ffd700'
@@ -95,7 +96,7 @@
 			stroke-width='2'
 			text-anchor='start'
 			x='<%=options[:place_x]%>'
-			y='<%=options[:content_end_y] - (index * options[:item_spacing]) - (index / 2 * options[:spacer])%>'><tspan 
+			y='<%=_y %>'><tspan 
 				sodipodi:role='line'><tspan><%=i[:place]%></tspan>
 			</tspan>
 		</text>
@@ -111,7 +112,7 @@
 			stroke-width='2'
 			text-anchor='start'
 			x='<%=options[:place_x]%>'
-			y='<%=options[:content_end_y] - (index * options[:item_spacing]) - (index / 2 * options[:spacer]) -5%>'><tspan 
+			y='<%=_y %>'><tspan 
 				sodipodi:role='line'><tspan><%=i[:pts]%></tspan>
 			</tspan>
 		</text>
@@ -125,7 +126,7 @@
 					width="<%=1280 - options[:name_x] - 10%>"
 					height="60"
 					x="<%=options[:name_x]%>"
-					y="<%=options[:content_end_y] - (index * options[:item_spacing]) - (index / 2 * options[:spacer]) - 45%>"
+					y="<%=_y - 45%>"
 					text-anchor="start"/></flowRegion><flowPara
 				id="flowPara<%=index%>"
 				style="stroke:#000000;stroke-width:2;fill:#ffffff"><%=ERB::Util.h i[:name]%></flowPara>
