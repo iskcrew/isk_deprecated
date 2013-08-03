@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130802185930) do
+ActiveRecord::Schema.define(:version => 20130803132933) do
 
   create_table "ceremonies", :force => true do |t|
     t.string   "name"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20130802185930) do
     t.datetime "updated_at",                                   :null => false
     t.integer  "event_id"
     t.boolean  "internal",                  :default => false
+    t.string   "type"
   end
 
   add_index "master_groups", ["event_id"], :name => "index_master_groups_on_event_id"
