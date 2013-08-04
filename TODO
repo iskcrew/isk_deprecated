@@ -6,6 +6,14 @@
 
 - presentation.clone!
 
+- uuden eventin luonti kloonaten vanhan-
+
+- parempi html-otsikko
+
+-favicon
+
+-inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
+
 - admincontroller
 	- clear cache action: cache_store.clear
 	- regenerate all slides
