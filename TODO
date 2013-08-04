@@ -1,3 +1,11 @@
+- gridfs
+
+- websocket chat
+
+- master_group.clone!
+
+- presentation.clone!
+
 - admincontroller
 	- clear cache action: cache_store.clear
 	- regenerate all slides
