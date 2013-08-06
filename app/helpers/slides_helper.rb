@@ -1,4 +1,15 @@
 module SlidesHelper
+
+	def slide_duration(slide)
+		if slide.duration == -1
+			return 'Using presentation default'
+		elsif slide.duration == 0
+			return 'Infinite'
+		else
+			return slide.duration.to_s + " seconds"
+		end
+	end
+	
   
   def slide_preview_image_tag(slide)
     html_options = {
