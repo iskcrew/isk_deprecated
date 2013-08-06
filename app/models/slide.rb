@@ -135,7 +135,8 @@ class Slide < ActiveRecord::Base
     hash = Hash.new
     hash[:id] = self.id
     hash[:name] = self.name
-    hash[:group] = self.master_group_id
+    hash[:master_group] = self.master_group_id
+		hash[:group] = self.presentation_group_id if attribute_present? :presentation_group_id
     hash[:position] = self.position
     hash[:ready] = self.ready
     hash[:deleted] = self.deleted
