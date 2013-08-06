@@ -47,6 +47,7 @@
 		
 		<ul>
 			<li>Slide class: <%=slide_class @slide%></li>
+			<li>Duration: <%=slide_duration @slide%>
 			<li>Last modified: <%=I18n.l(@slide.updated_at, :format => :short) %></li>
 			<li>Images generated? <%=@slide.ready ? 'Yes' : 'No'%></li>
 			<li>Images updated at: <%=l @slide.updated_at, :format => :short%></li>

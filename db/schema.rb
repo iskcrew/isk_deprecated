@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130803132933) do
+ActiveRecord::Schema.define(:version => 20130806200111) do
 
   create_table "ceremonies", :force => true do |t|
     t.string   "name"
@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20130803132933) do
     t.string   "type"
     t.text     "description"
     t.datetime "images_updated_at"
+    t.integer  "duration",                         :default => -1
   end
 
   add_index "slides", ["id", "public"], :name => "index_slides_on_id_and_public"

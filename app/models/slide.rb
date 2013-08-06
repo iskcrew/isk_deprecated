@@ -25,8 +25,9 @@ class Slide < ActiveRecord::Base
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
 
   validates :name, :presence => true, :length => { :maximum => 100 }
+	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
   
-  attr_accessible :name, :show_clock, :description, :public
+  attr_accessible :name, :show_clock, :description, :public, :duration
   
   scope :public, where(:public => true)
   scope :hidden, where(:public => false)
@@ -130,7 +131,7 @@ class Slide < ActiveRecord::Base
   end
   
   #TODO durationille jotain
-  def to_hash(duration = 20)
+  def to_hash(dur = 20)
     hash = Hash.new
     hash[:id] = self.id
     hash[:name] = self.name
@@ -140,7 +141,14 @@ class Slide < ActiveRecord::Base
     hash[:deleted] = self.deleted
     hash[:created_at] = self.created_at.to_i
     hash[:updated_at] = self.updated_at.to_i
-    hash[:duration] = duration
+		if self.duration == -1
+			#Use presentation duration
+    	hash[:duration] = dur
+		else
+			#Special duration defined for this slide
+			hash[:duration] = self.duration
+		end
+			
     hash[:images_updated_at] = self.images_updated_at.to_i
     hash[:effect] = 0
     hash[:show_clock] = self.show_clock
