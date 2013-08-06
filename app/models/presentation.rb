@@ -37,6 +37,10 @@ class Presentation < ActiveRecord::Base
     self.groups.includes(:master_group => :slides).each do |g|
       hash[:groups]  << g.to_hash
     end
+		hash[:slides] = Array.new
+		self.slides.each do |slide|
+			hash[:slides] << slide.to_hash(self.duration)
+		end
     return hash
   end
   
