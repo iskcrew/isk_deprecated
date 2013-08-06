@@ -24,6 +24,10 @@ class Presentation < ActiveRecord::Base
   def slides
     Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}).order('groups.position, slides.position')
   end
+	
+	def ready_slides
+		Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil}).order('groups.position, slides.position').select('slides.*, groups.id AS presentation_group_id')
+	end
   
   def to_hash
     hash = Hash.new
@@ -39,7 +43,7 @@ class Presentation < ActiveRecord::Base
       hash[:groups]  << g.to_hash
     end
 		hash[:slides] = Array.new
-		self.slides.each do |slide|
+		self.ready_slides.each do |slide|
 			hash[:slides] << slide.to_hash(self.duration)
 		end
     return hash
