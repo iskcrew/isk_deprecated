@@ -21,6 +21,8 @@
 
 - Conffien hallinta
 - Palkintojenjakogeneraattori
+	- tupla-escape pois pms-importista
+
 - inkscape -> simple conversio
 - näytin loggaamaan vielä enemmän: kaikki näytetyt kalvot omalle tietokantarivilleen
 - näytin loggaamaan kaikki hellot
