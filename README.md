@@ -8,14 +8,14 @@ inkscape plugin for creating more complex slides.
 External dependencies
 ---------------------
 
-Imagemagick (developed using  6.8.5-5, other versions probably fine)
-Nginx (or some other front-end webserver capable of proxying websocket connections)
-librsvg & rsvg-convert (developed with 2.36.4)
-memcached (1.4.5)
-redis (2.6.10)
-
-inkscape for external editing
-iskdpy ( http://github.com/deram/iskdpy/ ) for running the slideshows
+ * Imagemagick (developed using  6.8.5-5, other versions probably fine)
+ * Nginx (or some other front-end webserver capable of proxying websocket connections)
+ * librsvg & rsvg-convert (developed with 2.36.4)
+ 	* soon to be eliminated in favour of inkscape
+ * memcached (1.4.5)
+ * redis (2.6.10)
+ * inkscape ( for external editing and converting some of the slides from .svg to .png)
+ * iskdpy ( http://github.com/deram/iskdpy/ ) for running the slideshows
 
 Installation
 ------------
