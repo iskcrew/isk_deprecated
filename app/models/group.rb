@@ -1,3 +1,10 @@
+# ISK - A web controllable slideshow system
+#
+# Author::    Vesa-Pekka Palmu
+# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# License::   Licensed under GPL v3, see LICENSE.md
+
+
 class Group < ActiveRecord::Base
   belongs_to :master_group
   belongs_to :presentation, :touch => true
