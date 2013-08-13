@@ -1,3 +1,13 @@
+# ISK - A web controllable slideshow system
+#
+# master_group.rb STI inherited group with a generator
+# for making price ceremony slidesets
+#
+# Author::    Vesa-Pekka Palmu
+# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# License::   Licensed under GPL v3, see LICENSE.md
+
+
 class	PrizeGroup < MasterGroup
   DefaultData = [
   	{:name => '1', :by => '', :pts => ''},

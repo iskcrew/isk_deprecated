@@ -1,4 +1,13 @@
-#Tungetaan kuva ISK:hon!
+# ISK - A web controllable slideshow system
+#
+# ISK export plugin for inkscape, allows for one-click
+# exporting the slide back to the server
+#
+# Author::    Vesa-Pekka Palmu
+# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# License::   Licensed under GPL v3, see LICENSE.md
+
+
 require 'net/http'
 require 'rexml/document'
 

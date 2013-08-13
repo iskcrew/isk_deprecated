@@ -1,3 +1,13 @@
+# ISK - A web controllable slideshow system
+#
+# has_slidedata.rb - Shared functionality of storing variable
+# data of the slide outside of the db.
+#
+# Author::    Vesa-Pekka Palmu
+# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# License::   Licensed under GPL v3, see LICENSE.md
+
+
 module  HasSlidedata
 
   def data_filename
