@@ -234,7 +234,7 @@ class Slide < ActiveRecord::Base
 			#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
 			picture = Magick::ImageList.new(self.original_filename).first
 			
-			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}") { |cols, rows, img|
+			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
 				#if the cols or rows are smaller then our predefined sizes
 				#build a white background and center the image in it
 				if cols < Slide::FullWidth || rows < Slide::FullHeight
