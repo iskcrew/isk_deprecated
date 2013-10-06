@@ -141,5 +141,9 @@ function onload() {
     update();
 };
 
-window.addEventListener ?  window.addEventListener("load",onload,false) : 
-window.attachEvent && window.attachEvent("onload",onload);
+function register_simple_edit() {
+	setTimeout(onload, 1000)
+}
+
+window.addEventListener ?  window.addEventListener("load",register_simple_edit,false) : 
+window.attachEvent && window.attachEvent("onload",register_simple_edit);
