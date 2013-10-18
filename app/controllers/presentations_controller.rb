@@ -118,7 +118,7 @@ class PresentationsController < ApplicationController
     @presentation = Presentation.find(params[:id])
     require_edit @presentation
     
-    @orphan_groups = MasterGroup.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('(groups.presentation_id AND master_groups.id <> 1) IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq.all
+    @orphan_groups = Event.current.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id  IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq.all
   end  
     
   def update
