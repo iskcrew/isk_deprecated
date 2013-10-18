@@ -23,9 +23,9 @@ class IskdpyController < WebsocketRails::BaseController
   def current_slide
       d = Display.find(message[:display_id])
       if message[:override_queue_id]
-        d.override_shown(message[:override_queue_id])
+        d.override_shown(message[:override_queue_id], connection.id)
       else
-        d.set_current_slide(message[:group_id], message[:slide_id])
+        d.set_current_slide(message[:group_id], message[:slide_id], connection.id)
       end
       d.save!
       data = {:display_id => message[:display_id], :group_id => d.current_group_id, :slide_id => d.current_slide_id}
