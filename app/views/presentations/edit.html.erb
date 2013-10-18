@@ -10,7 +10,7 @@
 
 <%if @presentation.can_edit? current_user%>
 <%=form_for :group, :url => {:action => :add_group, :id => @presentation.id} do |f|%>
-	<p><b>Add group to end of presentation (all groups):</b> <%=f.select :id, MasterGroup.defined_groups.all.collect {|p| [ p.name, p.id ] }%>
+	<p><b>Add group to end of presentation (all groups):</b> <%=f.select :id, Event.current.master_groups.defined_groups.all.collect {|p| [ p.name, p.id ] }%>
 		<%=f.submit "add"%>
 	</p>
 <%end%>
