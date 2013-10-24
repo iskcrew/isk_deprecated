@@ -33,9 +33,6 @@ server {
 
 	# Default location directive
 	location / {
-		proxy_set_header	X-Real-IP  $remote_addr;
-		proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header	Host $http_host;
 		proxy_redirect	 	off;
 		
 		# Serve maintanance.html if it exists, then a file if it exists, then proxy to rails
@@ -55,6 +52,11 @@ server {
 	location @ruby {
 		# Make sure to update this mapping for x-accel to work
 		proxy_set_header X-Accel-Mapping /var/isk/rails/isk/data/=/isk_data/;
+		
+		proxy_set_header	X-Real-IP  $remote_addr;
+		proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header	Host $http_host;
+		
 		proxy_pass http://isk;
 	}
 
