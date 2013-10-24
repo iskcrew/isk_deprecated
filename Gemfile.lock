@@ -42,6 +42,7 @@ GEM
     coffee-script-source (1.6.2)
     daemon (1.1.0)
     daemons (1.1.9)
+    dalli (2.6.4)
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_active_record (0.4.4)
@@ -73,7 +74,6 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    memcache-client (1.8.5)
     mime-types (1.23)
     multi_json (1.7.6)
     mysql2 (0.3.11)
@@ -165,11 +165,11 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   daemon
   daemons
+  dalli
   delayed_job_active_record
   dynamic_form
   jquery-rails
   jquery-ui-rails
-  memcache-client
   mysql2
   rails (= 3.2.13)
   rails-erd
