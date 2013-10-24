@@ -76,7 +76,7 @@
 		text-anchor='start'
 		x='30'
 		y='100'><tspan
-				sodipodi:role='line'><tspan><%=@header%></tspan>
+				sodipodi:role='line'><tspan><%=ERB::Util.h @header%></tspan>
 			</tspan>
 		</text>
 		<% index = 0 %>
@@ -110,7 +110,7 @@
 			text-anchor='start'
 			x='<%=options[:time_x]%>'
 			y='<%=options[:content_start_y] + (index * options[:item_spacing])%>'><tspan 
-				sodipodi:role='line'><tspan><%=i[:time]%></tspan>
+				sodipodi:role='line'><tspan><%=ERB::Util.h i[:time]%></tspan>
 			</tspan>
 		</text>
 	   <flowRoot 
