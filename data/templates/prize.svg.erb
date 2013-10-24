@@ -78,7 +78,7 @@
 		text-anchor='start'
 		x='30'
 		y='100'><tspan
-				sodipodi:role='line'><tspan><%=@header%></tspan>
+				sodipodi:role='line'><tspan><%=ERB::Util.h @header%></tspan>
 			</tspan>
 		</text>
 		<% index = 0 %>
@@ -97,7 +97,7 @@
 			text-anchor='start'
 			x='<%=options[:place_x]%>'
 			y='<%=_y %>'><tspan 
-				sodipodi:role='line'><tspan><%=i[:place]%></tspan>
+				sodipodi:role='line'><tspan><%=ERB::Util.h i[:place]%></tspan>
 			</tspan>
 		</text>
 		<%else%>
@@ -113,7 +113,7 @@
 			text-anchor='start'
 			x='<%=options[:place_x]%>'
 			y='<%=_y %>'><tspan 
-				sodipodi:role='line'><tspan><%=i[:pts]%></tspan>
+				sodipodi:role='line'><tspan><%=ERB::Util.h i[:pts]%></tspan>
 			</tspan>
 		</text>
 		<%end%>
