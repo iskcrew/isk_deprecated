@@ -17,12 +17,16 @@ class Display < ActiveRecord::Base
   end
   
   before_create do
+		ds = DisplayState.new
+		self.display_state = ds
+		ds.save!
     self.metadata_updated_at = Time.now
   end
   
   belongs_to :presentation
   belongs_to :current_group, :class_name => "Group"
   belongs_to :current_slide, :class_name => "Slide"
+	has_one :display_state
   has_many :override_queues, :order => :position
   has_many :display_counts
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
@@ -40,6 +44,13 @@ class Display < ActiveRecord::Base
   
   attr_accessible :name, :presentation_id, :monitor, :manual, :do_overrides
   
+	delegate :last_contact_at, 					to: :display_state, allow_nil: true
+	delegate :last_hello_at, 						to: :display_state, allow_nil: true
+	delegate :websocket_connection_id, 	to: :display_state, allow_nil: true
+	delegate :current_slide_id, 				to: :display_state, allow_nil: true
+	delegate :current_group_id, 				to: :display_state, allow_nil: true
+	
+	
   def websocket_channel
     return "display_" + self.id.to_s
   end
