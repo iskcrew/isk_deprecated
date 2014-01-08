@@ -163,8 +163,6 @@ Isk::Application.routes.draw do
       get 'presentation'
       get 'slide_queue'
       get 'slide_stats'
-      post 'current_slide'
-      post 'slide_shown'
       get 'add_slide'
       post 'sort_queue'
       post 'queue_slide'

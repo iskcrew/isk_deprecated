@@ -9,7 +9,7 @@ class DisplaysController < ApplicationController
   before_filter :require_create, :only => [:new, :create]
   
   
-  skip_before_filter :require_login, :only => [:show, :hello, :slide_shown, :current_slide]
+  skip_before_filter :require_login, :only => [:show]
     
   def index
     @displays = Display.order(:name).all
@@ -20,38 +20,7 @@ class DisplaysController < ApplicationController
     end
     
   end
-  
-  #Näytin esittäytyy uniikilla nimellään
-  def hello
-    if request.headers['HTTP_X_FORWARDED_FOR']
-      display_ip = request.headers['HTTP_X_FORWARDED_FOR']
-    else
-      display_ip = request.ip
-    end
-    d = Display.hello(params[:name], ip)
-    render :text => d.id
-  end
-  
-  #Näytin kertoo mitä kalvoa näytetään
-  def current_slide
-    d = Display.find(params[:id])
     
-    d.set_current_slide params[:group], params[:slide]
-    
-    d.save!
-    render :nothing => true
-  end
-  
-  #Näytin kertoo kun ohisyötön kalvo on näytetty
-  def slide_shown
-    Display.transaction do
-      d = Display.find(params[:id])
-      d.override_shown(params[:override])
-      d.save!
-    end
-    render :nothing => true
-  end
-  
   def show
     @display = Display.includes(:presentation, :override_queues => :slide).find(params[:id])
     
