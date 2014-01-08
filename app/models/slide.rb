@@ -43,6 +43,8 @@ class Slide < ActiveRecord::Base
   
 	sortable :scope => :master_group_id
   
+	
+	
 	Host = 'http://isk:Kissa@isk0.asm.fi'
   
 	FullWidth = 1280
@@ -58,6 +60,8 @@ class Slide < ActiveRecord::Base
 
 	FilePath = Rails.root.join('data','slides')
 
+	UsePresentationDelay = -1 #Set duration to this to use presentation setting
+	
 
 	include ModelAuthorization
   
