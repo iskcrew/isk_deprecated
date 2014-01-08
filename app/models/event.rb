@@ -44,7 +44,7 @@ class Event < ActiveRecord::Base
   
   #Varmistetaan että vain yhdella tapahtumalla on current -bitti päällä
   def set_current_event
-    if self.current
+    if self.current && self.changed?
       Event.update_all :current => false
     end
   end
