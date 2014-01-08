@@ -58,7 +58,9 @@ class Presentation < ActiveRecord::Base
   
   
   def duration
-    self.total_slides * self.delay
+		default_slides_time = self.delay * self.ready_slides.where(slides: {duration: Slide::UsePresentationDelay}).count
+		special_slides_time = self.ready_slides.where('duration != ?', Slide::UsePresentationDelay).sum('duration')
+		return default_slides_time + special_slides_time
   end
   
   def slide(group, slide)
