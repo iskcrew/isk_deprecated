@@ -14,8 +14,8 @@
 		<ul>
 			<li>IP: <%=@display.ip%></li>
 			<li>Last contact at: <%=l @display.last_contact_at, :format => :short%></li>
-			<li>Metadata updated at: <%=l @display.metadata_updated_at, :format => :short%></li>
-			<li>Updated at: <%=l @display.updated_at, :format => :short%></li>
+			<li>State updated at: <%=l @display.state_updated_at, :format => :short%></li>
+			<li>Metadata Updated at: <%=l @display.updated_at, :format => :short%></li>
 			<li>Created at: <%=l @display.created_at, :format => :short%></li>
 		</ul>
 		<%=authorized_users(@display)%>

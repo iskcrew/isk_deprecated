@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130806200111) do
+ActiveRecord::Schema.define(:version => 20140108174243) do
 
   create_table "ceremonies", :force => true do |t|
     t.string   "name"
@@ -49,24 +49,28 @@ ActiveRecord::Schema.define(:version => 20130806200111) do
   add_index "display_counts", ["display_id"], :name => "index_display_counts_on_display_id"
   add_index "display_counts", ["slide_id"], :name => "index_display_counts_on_slide_id"
 
-  create_table "displays", :force => true do |t|
-    t.string   "name",                    :limit => 50
-    t.string   "ip",                      :limit => 12
-    t.integer  "presentation_id"
-    t.datetime "created_at",                                               :null => false
-    t.datetime "updated_at",                                               :null => false
-    t.boolean  "monitor",                               :default => true
+  create_table "display_states", :force => true do |t|
+    t.integer  "display_id"
     t.integer  "current_group_id"
     t.integer  "current_slide_id"
     t.datetime "last_contact_at"
-    t.datetime "metadata_updated_at"
     t.datetime "last_hello"
     t.integer  "websocket_connection_id"
-    t.boolean  "manual",                                :default => false
-    t.boolean  "do_overrides",                          :default => true
+    t.string   "ip",                      :limit => 12
+    t.boolean  "monitor",                               :default => true
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
   end
 
-  add_index "displays", ["last_contact_at"], :name => "index_displays_on_last_contact_at"
+  create_table "displays", :force => true do |t|
+    t.string   "name",            :limit => 50
+    t.integer  "presentation_id"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+    t.boolean  "manual",                        :default => false
+    t.boolean  "do_overrides",                  :default => true
+  end
+
   add_index "displays", ["name"], :name => "index_displays_on_name", :unique => true
   add_index "displays", ["presentation_id"], :name => "index_displays_on_presentation_id"
 
