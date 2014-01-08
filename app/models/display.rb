@@ -52,6 +52,8 @@ class Display < ActiveRecord::Base
     oq = self.override_queues.new
     oq.duration = duration
     oq.slide = slide
+		self.metadata_updated_at = Time.now
+		self.save!
     oq.save!
   end
   
