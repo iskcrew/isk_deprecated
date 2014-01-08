@@ -51,7 +51,7 @@ class Presentation < ActiveRecord::Base
     end
 		hash[:slides] = Array.new
 		self.ready_slides.each do |slide|
-			hash[:slides] << slide.to_hash(self.duration)
+			hash[:slides] << slide.to_hash(self.delay)
 		end
     return hash
   end
