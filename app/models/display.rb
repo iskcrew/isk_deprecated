@@ -9,24 +9,26 @@ class Display < ActiveRecord::Base
   
   
   before_save do
-    self.metadata_updated_at = Time.now if self.presentation_id_changed?
-		if self.manual
+    if self.manual
 			self.do_overrides = false
 		end
 		return true
   end
+	
+	after_save do |display|
+		display.display_state.save if display.display_state.changed?
+	end
   
   before_create do
 		ds = DisplayState.new
 		self.display_state = ds
 		ds.save!
-    self.metadata_updated_at = Time.now
   end
   
   belongs_to :presentation
-  belongs_to :current_group, :class_name => "Group"
-  belongs_to :current_slide, :class_name => "Slide"
 	has_one :display_state
+	has_one :current_group, through: :display_state
+  has_one :current_slide, through: :display_state
   has_many :override_queues, :order => :position
   has_many :display_counts
   has_and_belongs_to_many :authorized_users, :class_name => 'User'
@@ -44,11 +46,14 @@ class Display < ActiveRecord::Base
   
   attr_accessible :name, :presentation_id, :monitor, :manual, :do_overrides
   
-	delegate :last_contact_at, 					to: :display_state, allow_nil: true
-	delegate :last_hello_at, 						to: :display_state, allow_nil: true
-	delegate :websocket_connection_id, 	to: :display_state, allow_nil: true
-	delegate :current_slide_id, 				to: :display_state, allow_nil: true
-	delegate :current_group_id, 				to: :display_state, allow_nil: true
+	delegate :last_contact_at, :last_contact_at=, 								to: :display_state, allow_nil: true
+	delegate :last_hello, :last_hello=,											to: :display_state, allow_nil: true
+	delegate :websocket_connection_id, :websocket_connection_id=,	to: :display_state, allow_nil: true
+	delegate :current_slide_id, :current_slide_id=, 							to: :display_state, allow_nil: true
+	delegate :current_group_id, :current_group_id=,								to: :display_state, allow_nil: true
+	delegate :ip, :ip=, 																					to: :display_state, allow_nil: true
+	delegate :monitor,:monitor=, 																	to: :display_state, allow_nil: true
+	delegate :updated_at, to: :display_state, prefix: :state
 	
 	
   def websocket_channel
@@ -63,8 +68,7 @@ class Display < ActiveRecord::Base
     oq = self.override_queues.new
     oq.duration = duration
     oq.slide = slide
-		self.metadata_updated_at = Time.now
-		self.save!
+		self.touch!
     oq.save!
   end
   
@@ -101,7 +105,7 @@ class Display < ActiveRecord::Base
 
   
   def self.late
-    Display.where('monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)
+    Display.joins(:display_state).where('display_states.monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)
   end
   
   def late?
@@ -120,11 +124,12 @@ class Display < ActiveRecord::Base
   
   def to_hash
     h = Hash.new
-    h[:metadata_updated_at] = self.metadata_updated_at.to_i
+    h[:updated_at] = self.state_updated_at.to_i
+    h[:metadata_updated_at] = self.updated_at.to_i
+		h[:state_updated_at] = self.state_updated_at.to_i
     h[:id] = self.id
     h[:name] = self.name
     h[:last_contact_at] = self.last_contact_at.to_i
-    h[:updated_at] = self.updated_at.to_i
     h[:manual] = self.manual
     h[:current_slide_id] = self.current_slide_id
     h[:current_group_id] = self.current_group_id
