@@ -1,3 +1,5 @@
+- Kakku ei aina päivittynyt alteilla
+
 - gridfs
 
 - websocket chat
@@ -6,15 +8,10 @@
 
 - presentation.clone!
 
-- uuden eventin luonti kloonaten vanhan-
-
-- parempi html-otsikko
-
--favicon
+- uuden eventin luonti kloonaten vanhan
 
 - rdoc!
 
--inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
 
 - admincontroller
 	- clear cache action: cache_store.clear
@@ -33,6 +30,14 @@
 http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
  tuolta relatiiviset sidotuksi inkscapen työhakemistoon
  iski työkalupalkkiin?
+-inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
+
+- tikettijärjestelmä
+
+- käyttäjille ilmoitukset luoduista kalvoista
+
+- uusittu simple-editor
+  - luodaan svg rubyllä ja pyöritetään websocketin kautta
 
 -Käyttäjähallinta
   -Viewit kuntoon:
@@ -43,7 +48,7 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 
 - slidejen pohjakuvan valinta kälistä
 
-- inkscape TEHTY!!!
+- inkscape muistilappu:
   -inkscape tahtoo multilineä varten vähän eri juttuja:
     -sodipodi: -attribuutit
       -sodipodi:linespacing="125%" <text> elementtiin
@@ -53,10 +58,10 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 
 -Täysikokoisten kuvien vertailu?
 
--Uusi json-formaatti
-
-
 -Tally??
+
+- functional / unit testit
+
 
 - SQL lukitus?
 
