@@ -24,13 +24,13 @@ END//
 DROP PROCEDURE IF EXISTS presentation_timestamps//
 CREATE PROCEDURE presentation_timestamps(in presentation_id INT)
 BEGIN
-	update displays set displays.metadata_updated_at = UTC_TIMESTAMP() where displays.presentation_id = presentation_id;
+	update displays set displays.updated_at = UTC_TIMESTAMP() where displays.presentation_id = presentation_id;
 END//
 
 DROP PROCEDURE IF EXISTS override_queue_timestamps//
 CREATE PROCEDURE override_queue_timestamps(in display_id INT)
 BEGIN
-	update displays set displays.metadata_updated_at = UTC_TIMESTAMP() where displays.id = display_id;
+	update displays set displays.updated_at = UTC_TIMESTAMP() where displays.id = display_id;
 END//
 
 DROP TRIGGER IF EXISTS update_slides//
