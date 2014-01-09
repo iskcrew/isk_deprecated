@@ -15,7 +15,7 @@
 
 
 			<%=f.fields_for :slidedata do |f|%>
-				<%=f.text_area :heading, {:id => "head", :rows => 1, :cols => 31, :wrap => "off", :value => slidedata[:heading]}%>
+				<%=f.text_area :heading, {:id => "head", :rows => 1, :cols => 31, :wrap => "soft", :value => slidedata[:heading]}%>
 				<br/>
 				<%=f.text_area :text, {:id => "text", :rows => 6, :cols => 53, :value => slidedata[:text]}%>
 
