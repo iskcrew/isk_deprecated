@@ -28,7 +28,7 @@ class IskdpyController < WebsocketRails::BaseController
         d.set_current_slide(message[:group_id], message[:slide_id], connection.id)
       end
       d.save!
-      data = {:display_id => message[:display_id], :group_id => d.current_group_id, :slide_id => d.current_slide_id}
+      data = {:display_id => d.id, :group_id => d.current_group.id, :slide_id => d.current_slide.id}
       WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
       trigger_success data
   end
