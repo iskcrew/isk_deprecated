@@ -134,7 +134,8 @@ class Slide < ActiveRecord::Base
 	end
   
 	def displays
-		Display.joins(:presentation => {:groups => {:master_group => :slides}}, :override_queues => :slide).where(:slides => {:id => self.id}).uniq
+		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
+		return displays_via_presentation.all | override.all
 	end
   
 	def override
