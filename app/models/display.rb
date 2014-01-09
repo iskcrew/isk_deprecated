@@ -124,7 +124,13 @@ class Display < ActiveRecord::Base
   
   def to_hash
     h = Hash.new
-    h[:updated_at] = self.state_updated_at.to_i
+		#Legacy stuff, updated at used to get touched when anything happened
+		if self.state_updated_at > self.updated_at
+    	h[:updated_at] = self.state_updated_at.to_i
+		else
+			h[:updated_at] = self.updated_at.to_i
+		end
+			
     h[:metadata_updated_at] = self.updated_at.to_i
 		h[:state_updated_at] = self.state_updated_at.to_i
     h[:id] = self.id
