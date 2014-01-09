@@ -27,8 +27,6 @@ class DisplaysController < ApplicationController
     respond_to do |format|
       format.html 
       format.json {
-        @display.last_contact_at = Time.now
-	      @display.save!
         render(:json =>JSON.pretty_generate(@display.to_hash))
       }
       format.js
