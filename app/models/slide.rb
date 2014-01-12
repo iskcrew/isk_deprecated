@@ -272,10 +272,8 @@ class Slide < ActiveRecord::Base
 		self.ready = true
 		self.images_updated_at = Time.now
 		self.save!
-    
-		updated_image_notifications
-    
-	end
+ 
+ 	end
   
   
 	def svg_filename
@@ -354,6 +352,11 @@ class Slide < ActiveRecord::Base
     
 	end
 
+	def updated_image_notifications
+		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
+	end  
+
+
 
   
 	protected
@@ -365,10 +368,6 @@ class Slide < ActiveRecord::Base
 			end
 		end
 	end
-  
-	def updated_image_notifications
-		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
-	end  
   
   
 	def ensure_master_group_exists

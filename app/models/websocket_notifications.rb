@@ -22,6 +22,11 @@ class WebsocketNotifications < ActiveRecord::Observer
     event = :update
     data = {:id => obj.id}
     
+		if obj.changed.include?('images_updated_at')
+			Rails.logger.debug "-> Slide image has been updated, sendin notifications"
+			obj.updated_image_notifications
+		end
+		
     display_datas(obj)
     trigger obj, event, data
   end
