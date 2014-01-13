@@ -20,6 +20,10 @@ Isk::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+	#Memcached using dalli_store
+	config.cache_store = :dalli_store, 'localhost',
+	  { :namespace => "ISK", :expires_in => 5.minutes, :compress => true }
+
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 
@@ -42,6 +46,7 @@ Isk::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
   
-  #Websocketsiä
+  #Websockets needs this, otherwise the websocket connection will
+	#lock the server up completely.
   config.middleware.delete Rack::Lock
 end
