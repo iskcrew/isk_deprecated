@@ -32,7 +32,7 @@ class Presentation < ActiveRecord::Base
     Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}).order('groups.position, slides.position')
   end
 	
-	def ready_slides
+	def public_slides
 		Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil}).order('groups.position, slides.position').select('slides.*, groups.id AS presentation_group_id')
 	end
   
@@ -50,7 +50,7 @@ class Presentation < ActiveRecord::Base
       hash[:groups]  << g.to_hash
     end
 		hash[:slides] = Array.new
-		self.ready_slides.each do |slide|
+		self.public_slides.each do |slide|
 			hash[:slides] << slide.to_hash(self.delay)
 		end
     return hash
@@ -58,8 +58,8 @@ class Presentation < ActiveRecord::Base
   
   
   def duration
-		default_slides_time = self.delay * self.ready_slides.where(slides: {duration: Slide::UsePresentationDelay}).count
-		special_slides_time = self.ready_slides.where('duration != ?', Slide::UsePresentationDelay).sum('duration')
+		default_slides_time = self.delay * self.public_slides.where(slides: {duration: Slide::UsePresentationDelay}).count
+		special_slides_time = self.public_slides.where('duration != ?', Slide::UsePresentationDelay).sum('duration')
 		return default_slides_time + special_slides_time
   end
   
