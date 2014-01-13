@@ -268,11 +268,9 @@ class Slide < ActiveRecord::Base
     
 		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
 		thumb_picture.write(self.thumb_filename)
-		self.with_lock do
-			self.ready = true
-			self.images_updated_at = Time.now
-			self.save!
-		end
+		self.ready = true
+		self.images_updated_at = Time.now
+		self.save!
 	end
   
   
