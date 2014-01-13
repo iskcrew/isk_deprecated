@@ -317,7 +317,7 @@ class SlidesController < ApplicationController
   
   def preview
     @slide = Slide.find(params[:id])
-    if stale?(:last_modified => @slide.updated_at.utc, :etag => @slide)
+    if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
 
       respond_to do |format|
         format.html {
@@ -334,7 +334,7 @@ class SlidesController < ApplicationController
 
   def thumb
     @slide = Slide.find(params[:id])
-    if stale?(:last_modified => @slide.updated_at.utc, :etag => @slide)
+    if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
 
       respond_to do |format|
         format.html {
