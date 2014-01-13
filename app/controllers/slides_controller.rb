@@ -30,29 +30,35 @@ class SlidesController < ApplicationController
   end
 
   def deny
-    slide = Slide.find(params[:id])
-    user = User.find(params[:user_id])
-    slide.authorized_users.delete(user)
-
-    redirect_to :back
+		Slide.transaction do
+    	slide = Slide.find(params[:id], lock: true)
+    	user = User.find(params[:user_id], lock: true)
+    	slide.authorized_users.delete(user)
+		end
+    
+		redirect_to :back
   end
   
   def grant
-    slide = Slide.find(params[:id])
-    user = User.find(params[:grant][:user_id])
-    slide.authorized_users << user
+		Slide.transaction do 
+    	slide = Slide.find(params[:id], lock: true)
+    	user = User.find(params[:grant][:user_id], lock: true)
+    	slide.authorized_users << user
+		end
 
     redirect_to :back    
   end
 
   def add_to_group
-    slide = Event.current.ungrouped.slides.find(params[:id])
-    require_edit(slide)
+		Slide.transaction do
+    	slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
+    	require_edit(slide)
     
-    group = Event.current.master_groups.find(params[:add_to_group][:group_id])
-    require_edit(group)
+    	group = Event.current.master_groups.find(params[:add_to_group][:group_id], lock: true)
+    	require_edit(group)
     
-    group.slides << slide
+    	group.slides << slide
+		end
     
     flash[:notice] = "Added slide " << slide.name << " to group " << group.name
 
@@ -60,15 +66,16 @@ class SlidesController < ApplicationController
   end
   
   def add_to_override
-    slide = Slide.current.find(params[:id])
+		Slide.transaction do
+		
+			slide = Slide.current.find(params[:id], lock: true)
+    	display = Display.find(params[:add_to_override][:display_id], lock: true)
     
-    display = Display.find(params[:add_to_override][:display_id])
+    	raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
-    raise ApplicationController::PermissionDenied unless display.can_override? current_user
-    
-    Display.transaction do
-      display.add_to_override(slide, params[:add_to_override][:duration].to_i)
-    end
+    	display.add_to_override(slide, params[:add_to_override][:duration].to_i)
+    	
+		end
 		
 		unless display.do_overrides
 			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
@@ -84,16 +91,17 @@ class SlidesController < ApplicationController
 
 
   def hide
-    @slide = Slide.find(params[:id])
+		Slide.transaction do
+			slide = Slide.find(params[:id], lock: true)
     
-    unless @slide.can_hide? current_user
-      flash[:error] = "Not allowed"
-      redirect_to :back and return
-    end
+			unless slide.can_hide? current_user
+      	flash[:error] = "Not allowed"
+      	redirect_to :back and return
+    	end
     
-    @slide.public = false
-    
-    @slide.save!
+			slide.public = false
+    	slide.save!
+		end
 
     respond_to do |format|
         format.html {redirect_to :back}
@@ -125,7 +133,7 @@ class SlidesController < ApplicationController
   #TODO: oikeudet, sisääntulevan inkscape-svg:n validointi
   def svg_save
 		Slide.transaction do
-    	@slide = Slide.find(params[:id])
+    	@slide = Slide.find(params[:id], lock: true)
 
 			@slide.svg_data = params[:svg]
 			@slide.save!
@@ -136,9 +144,11 @@ class SlidesController < ApplicationController
   end
 
   def to_inkscape
-    slide = SvgSlide.find(params[:id])
-    ink = InkscapeSlide.create_from_simple(slide)
-    slide.replace! ink
+		Slide.transaction do
+    	slide = SvgSlide.find(params[:id])
+    	ink = InkscapeSlide.create_from_simple(slide)
+    	slide.replace! ink
+		end
     flash[:notice] = "Slide was converted to inkscape slide"
     
     redirect_to :action => :show, :id => ink.id
@@ -190,10 +200,10 @@ class SlidesController < ApplicationController
   end
   
   def destroy
-    @slide = Slide.find(params[:id])
-    require_slide_edit @slide
-    
     Slide.transaction do
+    	@slide = Slide.find(params[:id], lock: true)
+    	require_slide_edit @slide
+    
       @slide.destroy
       @slide.save!
       
@@ -202,12 +212,12 @@ class SlidesController < ApplicationController
   end
   
   def undelete
-    @slide = Slide.find(params[:id])
-    
-    require_slide_edit(@slide)
-    
     Slide.transaction do
-      @slide.undelete
+	    @slide = Slide.find(params[:id], lock: true)
+    
+	    require_slide_edit(@slide)
+    
+		  @slide.undelete
       @slide.save!
     end
     
@@ -253,12 +263,13 @@ class SlidesController < ApplicationController
 					end
         end
         
+				@slide.reload(lock: true)
+				
+				
         case params[:create_type]
         when 'empty_file'
           FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
 				when 'image'
-					@slide.reload
-					Rails.logger.debug 'Fooooos' + @slide.original_filename.to_s
 					File.open(@slide.original_filename, 'w+b') do |f|
 						f.puts params[:upload].read
 					end
@@ -288,9 +299,11 @@ class SlidesController < ApplicationController
     
   end
   
+	
+	#TODO: move ungroup -action into slide model
   def ungroup
     Slide.transaction do
-      slide = Slide.find(params[:id])
+      slide = Slide.find(params[:id], lock: true)
       require_edit(slide)
       slide.master_group_id = Event.current.ungrouped.id
       slide.save!
@@ -381,7 +394,7 @@ class SlidesController < ApplicationController
   def update
     Slide.transaction do
 
-      @slide =Slide.find(params[:id], :lock => true)
+      @slide =Slide.find(params[:id], lock: true)
       require_slide_edit(@slide)
   
       if @slide.update_attributes(params[:slide])
