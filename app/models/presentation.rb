@@ -113,15 +113,7 @@ class Presentation < ActiveRecord::Base
 	end
 	
 	private
-	
-	def add_group(group)
-		group.move_to_bottom
-	end
-	
-	def remove_group(group)
-		group.remove_from_list
-	end
-	
+		
 	def ensure_effect_exists
 		errors.add(:effect_id, "^Transition effect is invalid") if self.effect.nil?
 	end
