@@ -13,30 +13,30 @@ class WebsocketNotifications < ActiveRecord::Observer
   def after_create(obj)
     event = :create
     data = {:id => obj.id}
-    
+
+		trigger obj, event, data
     display_datas(obj)
-    trigger obj, event, data
   end
   
   def after_update(obj)
     event = :update
     data = {:id => obj.id}
     
+    trigger obj, event, data
+    display_datas(obj)
+    
 		if obj.changed.include?('images_updated_at')
 			Rails.logger.debug "-> Slide image has been updated, sendin notifications"
 			obj.updated_image_notifications
 		end
-		
-    display_datas(obj)
-    trigger obj, event, data
   end
   
   def after_destroy(obj)
     event = :destroy
     data = {:id => obj.id}
     
-    display_datas(obj)
     trigger obj, event, data
+    display_datas(obj)
   end
 
 
