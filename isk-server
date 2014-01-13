@@ -1,0 +1,57 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:            isk-server
+# Required-Start:      nginx memcached redis
+# Required-Stop:       nginx memcached redis 
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Start isk-server
+# Description:         Start up isk-server, a slideshow management system
+### END INIT INFO
+
+# Usage:
+# start, stop or restart
+
+case "$1" in
+  start)
+       echo "Starting ISK-server..."
+       RAILS_ENV=production script/delayed_job start > /dev/null
+       RAILS_ENV=production rails runner script/background_jobs.rb > /dev/null
+       rails s thin -d -p 12765 -e production > /dev/null
+       ;;
+  stop)
+       echo "Stopping ISK-server..."
+       kill $(cat tmp/pids/delayed_job.pid)
+       kill $(cat tmp/pids/background_jobs.pid)
+       kill $(cat tmp/pids/server.pid)
+       ;;
+
+  restart|force-reload)
+       #
+       #       If the "reload" option is implemented, move the "force-reload"
+       #       option to the "reload" entry above. If not, "force-reload" is
+       #       just the same as "restart".
+       #
+       echo "Restarting ISK-server..."
+       RAILS_ENV=production script/delayed_job restart > /dev/null
+       kill $(cat tmp/pids/background_jobs.pid)
+       RAILS_ENV=production rails runner script/background_jobs.rb
+       kill $(cat tmp/pids/server.pid)
+       rails s thin -d -p 12765 -e production > /dev/null
+       ;;
+  pull)
+       echo "Updating sources..."
+       git checkout db/schema.rb
+       git pull
+       bundle install
+       rake db:migrate
+       rake assets:precompile
+       ./isk-server restart
+       ;;
+  *)
+	echo "Usage: foo {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
