@@ -8,36 +8,28 @@
 class WebsocketNotifications < ActiveRecord::Observer
   #TODO näyttimelle kunnolla observointia...
   observe :slide, :master_group, :group, :presentation, :display, :override_queue
-
-
-  def after_create(obj)
-    event = :create
-    data = {:id => obj.id}
-
-		trigger obj, event, data
-    display_datas(obj)
-  end
-  
-  def after_update(obj)
-    event = :update
-    data = {:id => obj.id}
+  	
+	def after_commit(obj)
+    Rails.logger.debug '-> Prosessing after_commit callback...'
+		if obj.created_at == obj.updated_at
+			Rails.logger.debug '  -> new record!'
+			event = :create
+		else
+			Rails.logger.debug '  -> update'
+			event = :update
+		end
+		
+		data = {:id => obj.id}
     
+		
     trigger obj, event, data
     display_datas(obj)
     
-		if obj.changed.include?('images_updated_at')
+		if obj.changed.include?('images_updated_at') && event == :update
 			Rails.logger.debug "-> Slide image has been updated, sendin notifications"
 			obj.updated_image_notifications
 		end
-  end
-  
-  def after_destroy(obj)
-    event = :destroy
-    data = {:id => obj.id}
-    
-    trigger obj, event, data
-    display_datas(obj)
-  end
+	end
 
 
   private
