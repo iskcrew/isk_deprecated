@@ -358,7 +358,7 @@ class SlidesController < ApplicationController
       if slide.ready
         send_file(slide.full_filename, {:disposition => 'inline'})
       else
-        render :nothing => true, :status => 404
+        render :nothing => true, :status => 503
       end
     rescue ActiveRecord::RecordNotFound, ActionController::MissingFile
       render :nothing => true, :status => 404

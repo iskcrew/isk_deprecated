@@ -229,51 +229,54 @@ class Slide < ActiveRecord::Base
 	
 	#Paistetaan kelmusta kuvat ja pingataan websockettia niistä.
 	def generate_images
-		if self.is_svg?
-			#Generoidaan svg:stä png:t rsvg:llä
-			if system rsvg_command(:full)
-			end
-      
-      
-		else
-			#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
-			picture = Magick::ImageList.new(self.original_filename).first
+		self.class.transaction do
+			self.reload(lock: true)
 			
-			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
-				#if the cols or rows are smaller then our predefined sizes
-				#build a white background and center the image in it
-				if cols < Slide::FullWidth || rows < Slide::FullHeight
-					#resize our image
-					img.resize!(cols, rows)
-					#build the black background
-					bg = Magick::Image.new(Slide::FullWidth,Slide::FullHeight){self.background_color = "black"}
-					#center the image on our new white background
-					bg.composite(img, Magick::CenterGravity, Magick::OverCompositeOp)
- 
-				else
-					#in the unlikely event that the new geometry cols and rows match our predefined size
-					#we will not set a bg
-					img.resize!(cols, rows)
+			if self.is_svg?
+				#Generoidaan svg:stä png:t rsvg:llä
+				if system rsvg_command(:full)
 				end
-			}
-        
-			picture.write(self.full_filename)
-		end
-    
-		#Paistetaan ImageMagickillä previkat
-		picture = Magick::ImageList.new(self.full_filename).first
-		
-		preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
-		preview_picture.write(self.preview_filename)
-    
-		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
-		thumb_picture.write(self.thumb_filename)
-
-		self.ready = true
-		self.images_updated_at = Time.now
-		self.save!
+      
+      
+			else
+				#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
+				picture = Magick::ImageList.new(self.original_filename).first
+			
+				picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
+					#if the cols or rows are smaller then our predefined sizes
+					#build a white background and center the image in it
+					if cols < Slide::FullWidth || rows < Slide::FullHeight
+						#resize our image
+						img.resize!(cols, rows)
+						#build the black background
+						bg = Magick::Image.new(Slide::FullWidth,Slide::FullHeight){self.background_color = "black"}
+						#center the image on our new white background
+						bg.composite(img, Magick::CenterGravity, Magick::OverCompositeOp)
  
- 	end
+					else
+						#in the unlikely event that the new geometry cols and rows match our predefined size
+						#we will not set a bg
+						img.resize!(cols, rows)
+					end
+				}
+        
+				picture.write(self.full_filename)
+			end
+    
+			#Paistetaan ImageMagickillä previkat
+			picture = Magick::ImageList.new(self.full_filename).first
+		
+			preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
+			preview_picture.write(self.preview_filename)
+    
+			thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
+			thumb_picture.write(self.thumb_filename)
+
+			self.ready = true
+			self.images_updated_at = Time.now
+			self.save!
+		end
+	end
   
   
 	def svg_filename
