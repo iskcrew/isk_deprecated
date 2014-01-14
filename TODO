@@ -12,6 +12,7 @@
 
 - rdoc!
 
+-http-slidet merkkaamaan itsensä viallisiksi jos haku epäonnistuu
 
 - admincontroller
 	- clear cache action: cache_store.clear
