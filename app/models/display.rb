@@ -83,24 +83,29 @@ class Display < ActiveRecord::Base
   end
   
   def override_shown(override_id, connection_id = nil)
-    oq = self.override_queues.find(override_id)
-    self.last_contact_at = Time.now
-		self.websocket_connection_id = connection_id
-    oq.destroy
+		self.transaction do
+			oq = self.override_queues.find(override_id)
+    	self.last_contact_at = Time.now
+			self.websocket_connection_id = connection_id
+    	oq.destroy
+			self.save!
+		end
   end
   
   def set_current_slide(group_id, slide_id, connection_id = nil)
-    if group_id != -1
-      self.current_group = self.presentation.groups.find(group_id)
-    else
-      self.current_group_id = -1
-    end
-    s = Slide.find(slide_id)
-    self.current_slide = s
-    self.last_contact_at = Time.now
-		self.websocket_connection_id = connection_id
-    s.shown_on(self.id)
-    
+    self.transaction do
+			if group_id != -1
+      	self.current_group = self.presentation.groups.find(group_id)
+    	else
+      	self.current_group_id = -1
+    	end
+    	s = Slide.find(slide_id)
+    	self.current_slide = s
+    	self.last_contact_at = Time.now
+			self.websocket_connection_id = connection_id
+    	s.shown_on(self.id)
+			self.save!
+		end
   end
 
   
