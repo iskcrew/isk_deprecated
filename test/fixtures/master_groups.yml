@@ -17,3 +17,13 @@ no_slides:
     id: 4
     name: No slides in this one
     event_id: 2
+    
+hidden_slide:
+    id: 5
+    name: one public and one hidden slide
+    event_id: 2
+    
+not_ready_slide:
+    id: 6
+    name: one not ready slide
+    event_id: 2

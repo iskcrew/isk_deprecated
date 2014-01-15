@@ -19,7 +19,7 @@ group_3:
 group_4:
     id: 4
     position: 4
-    master_group_id: 4
+    master_group_id: 6
     presentation_id: 2
     
 group_5:
@@ -27,3 +27,27 @@ group_5:
     position: 1
     master_group_id: 3
     presentation_id: 3
+    
+group_6:
+    id: 6
+    position: 1
+    master_group_id: 5
+    presentation_id: 4
+    
+group_7:
+    id: 7
+    position: 2
+    master_group_id: 1
+    presentation_id: 4
+    
+group_8:
+    id: 8
+    position: 2
+    master_group_id: 2
+    presentation_id: 5
+
+group_9:
+    id: 9
+    position: 1
+    master_group_id: 5
+    presentation_id: 5

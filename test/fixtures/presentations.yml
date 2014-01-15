@@ -1,17 +1,29 @@
-empty_presentation:
+empty:
     id: 1
     name: Empty
     delay: 20
     effect_id: 1
     
-presentation_with_slides:
+with_slides:
     id: 2
-    name: I have slides!
+    name: I have 1+10+1+1 slides!
     delay: 20
     effect_id: 1
 
 with_empty_group:
     id: 3
-    name: I have overrides!
+    name: I have a empty group!
     delay: 30
+    effect_id: 1
+    
+with_hidden_slides:
+    id: 4
+    name: I have hidden slides
+    delay: 40
+    effect_id: 1
+    
+with_special_duration:
+    id: 5
+    name: I have slide with special duration
+    delay: 50
     effect_id: 1

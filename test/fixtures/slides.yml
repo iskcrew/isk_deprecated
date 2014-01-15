@@ -11,11 +11,11 @@ slide_1:
     deleted: false
     master_group_id: 1
 
-<%2.upto(11) do |i|%>
+<%2.upto(10) do |i|%>
 
 slide_<%=i%>:
     id: <%=i%>
-    position: <%=i - 1 %>
+    position: <%=i %>
     name: Slide id <%=i%>
     description: bar
     filename: slide_<%=i%>
@@ -28,6 +28,20 @@ slide_<%=i%>:
 
 <% end %>
 
+slide_11:
+    id: 11
+    position: 1
+    name: First in group order
+    description: Fooo
+    filename: slide_11
+    ready: true
+    public: true
+    show_clock: true
+    is_svg: true
+    deleted: false
+    master_group_id: 2
+
+
 not_ready:
     id: 12
     position: 1
@@ -39,20 +53,21 @@ not_ready:
     show_clock: true
     is_svg: true
     deleted: false
-    master_group_id: 4
+    master_group_id: 6
     
 no_clock:
     id: 13
     position: 2
     name: No clock
-    description: No clock shown
+    description: No clock shown and special duration
     filename: slide_13
     ready: true
     public: true
     show_clock: false
+    duration: 10
     is_svg: true
     deleted: false
-    master_group_id: 4
+    master_group_id: 5
 
 hidden:
     id: 14
@@ -65,4 +80,4 @@ hidden:
     show_clock: true
     is_svg: true
     deleted: false
-    master_group_id: 4
+    master_group_id: 5
