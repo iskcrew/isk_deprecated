@@ -4,8 +4,48 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+one:
+    id: 1
+    display_id: 1
+    monitor: true
+    current_group_id: 3
+    current_slide_id: 1
+    last_contact_at: <%=Time.now%>
+    last_hello: <%=Time.now%>
+    websocket_connection_id: 1
+    ip: 127.0.0.1
+
+
+two:
+    id: 2
+    display_id: 2
+    ip: 127.0.0.1
+    monitor: true
+    last_contact_at: <%=Time.now%>
+    last_hello: <%=Time.now%>
+    current_group_id: nil
+    current_slide_id: nil
+    last_contact_at: <%=3.hours.ago%>
+    last_hello: <%=5.hours.ago%>
+    ip: 127.0.0.1
+    
+    
+three:
+    id: 3
+    display_id: 3
+    monitor: true
+    current_group_id: 3
+    current_slide_id: 1
+    last_contact_at: <%=3.hours.ago%>
+    last_hello: <%=5.hours.ago%>
+    ip: 127.0.0.1
+    
+four:
+    id: 4
+    display_id: 4
+    monitor: true
+    current_group_id: -1
+    current_slide_id: 1
+    last_contact_at: <%=Time.now%>
+    last_hello: <%=Time.now%>
+    ip: 127.0.0.1
