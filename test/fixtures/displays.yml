@@ -1,45 +1,21 @@
 normal:
     id: 1
     name: Normal
-    ip: 127.0.0.1
     presentation_id: 2
-    monitor: true
-    current_group_id: 3
-    current_slide_id: 1
-    last_contact_at: <%=Time.now%>
-    metadata_updated_at: <%=Time.now%>
-    last_hello: <%=Time.now%>
     
 no_presentation:
     id: 2
     name: No presentation
-    ip: 127.0.0.1
-    monitor: true
-    last_contact_at: <%=Time.now%>
-    metadata_updated_at: <%=Time.now%>
-    last_hello: <%=Time.now%>
 
 late:
     id: 3
     name: Running late!
-    ip: 127.0.0.1
     presentation_id: 2
-    monitor: true
-    current_group_id: 3
-    current_slide_id: 1
-    last_contact_at: <%=3.hours.ago%>
-    metadata_updated_at: <%=Time.now%>
-    last_hello: <%=5.hours.ago%>
+    
 
 with_overrides:
     id: 4
     name: I have overrides
-    ip: 127.0.0.1
     presentation_id: 2
-    monitor: true
-    current_group_id: -1
-    current_slide_id: 1
-    last_contact_at: <%=Time.now%>
-    metadata_updated_at: <%=Time.now%>
-    last_hello: <%=Time.now%>
+    
     
