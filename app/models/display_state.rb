@@ -5,5 +5,9 @@ class DisplayState < ActiveRecord::Base
   belongs_to :current_group, :class_name => "Group"
   belongs_to :current_slide, :class_name => "Slide"
 	
+	validates :ip, :length => { :maximum => 12 }
+	validates :monitor, :inclusion => { :in => [true, false] }
+	validates :websocket_connection_id, :current_slide_id, :current_group_id, :numericality => {:only_integer => true}, :allow_nil => true
+	
 	
 end

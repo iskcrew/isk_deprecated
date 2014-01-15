@@ -34,9 +34,7 @@ class Display < ActiveRecord::Base
 	has_and_belongs_to_many :authorized_users, :class_name => 'User'
 	
 	validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 50 }
-	validates :ip, :length => { :maximum => 12 }
-	validates :monitor, :manual, :inclusion => { :in => [true, false] }
-	validates :websocket_connection_id, :presentation_id, :current_slide_id, :current_group_id, :numericality => {:only_integer => true}, :allow_nil => true
+	validates :manual, :inclusion => { :in => [true, false] }
 	
 	
 	
