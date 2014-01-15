@@ -66,7 +66,7 @@ class Display < ActiveRecord::Base
 		oq = self.override_queues.new
 		oq.duration = duration
 		oq.slide = slide
-		self.touch!
+		self.touch
 		oq.save!
 	end
 	
