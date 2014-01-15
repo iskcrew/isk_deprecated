@@ -20,7 +20,7 @@ two:
     id: 2
     display_id: 2
     ip: 127.0.0.1
-    monitor: true
+    monitor: false
     last_contact_at: <%=Time.now%>
     last_hello: <%=Time.now%>
     current_group_id: nil
