@@ -30,6 +30,7 @@ class DisplayTest < ActiveSupport::TestCase
 		d.override_shown 1
 		
 		assert_equal 2, d.override_queues.count, "Slide wasn't removed from queue"
+		assert_equal 1, DisplayCount.where(:display_id => d.id).count, "Should mark the slide as shown"
 	end
 	
 	test "select late displays" do
@@ -53,6 +54,11 @@ class DisplayTest < ActiveSupport::TestCase
 		assert_equal 60, d.override_queues.first!.duration
 		assert_equal s.id, d.override_queues.first!.slide_id
 		
+	end
+	
+	test "late?" do
+		assert displays(:late).late?
+		assert !displays(:normal).late?
 	end
 
 	
