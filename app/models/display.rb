@@ -88,6 +88,7 @@ class Display < ActiveRecord::Base
 			oq = self.override_queues.find(override_id)
 			self.last_contact_at = Time.now
 			self.websocket_connection_id = connection_id
+			oq.slide.shown_on self.id
 			oq.destroy
 			self.save!
 		end
