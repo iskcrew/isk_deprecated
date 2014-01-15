@@ -25,6 +25,9 @@ class Schedule < ActiveRecord::Base
     
 		schedule.slidegroup = slidegroup
 		schedule.up_next_group = up_next_group
+		unless schedule.event_id
+			schedule.event_id = Event.current.id
+		end
 		schedule.save!
 	end
 	
