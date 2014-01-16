@@ -62,7 +62,19 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 
 -Tally??
 
-- functional / unit testit
+- unit testit
+  - display: TEHTY
+  - presentation: TEHTY
+  - event: TEHTY
+  - master_group
+  - override_queue
+  - schedule: aloitettu
+  - slide
+  - user
+
+- functional testit
+  - gettaa kaikkia get-sivuja
+  - postaa ainankin yksi pyyntö posteihin
 
 
 - SQL lukitus?

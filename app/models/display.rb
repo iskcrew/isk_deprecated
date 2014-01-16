@@ -34,9 +34,7 @@ class Display < ActiveRecord::Base
 	has_and_belongs_to_many :authorized_users, :class_name => 'User'
 	
 	validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 50 }
-	validates :ip, :length => { :maximum => 12 }
-	validates :monitor, :manual, :inclusion => { :in => [true, false] }
-	validates :websocket_connection_id, :presentation_id, :current_slide_id, :current_group_id, :numericality => {:only_integer => true}, :allow_nil => true
+	validates :manual, :inclusion => { :in => [true, false] }
 	
 	
 	
@@ -64,14 +62,16 @@ class Display < ActiveRecord::Base
 		return [self]
 	end
 	
+	#Adds a slide to override queue for the display
 	def add_to_override(slide, duration)
 		oq = self.override_queues.new
 		oq.duration = duration
 		oq.slide = slide
-		self.touch!
+		self.touch
 		oq.save!
 	end
 	
+	#Either creates a new display with given name or returns exsisting display
 	def self.hello(display_name, display_ip, connection_id = nil)
 		display = Display.where(:name => display_name).first_or_initialize
 		display.ip = display_ip
@@ -82,16 +82,19 @@ class Display < ActiveRecord::Base
 		return display
 	end
 	
+	#Remove shown slide from override
 	def override_shown(override_id, connection_id = nil)
 		self.transaction do
 			oq = self.override_queues.find(override_id)
 			self.last_contact_at = Time.now
 			self.websocket_connection_id = connection_id
+			oq.slide.shown_on self.id
 			oq.destroy
 			self.save!
 		end
 	end
 	
+	#Set the current group and slide for the display and log the slide as shown
 	def set_current_slide(group_id, slide_id, connection_id = nil)
 		self.transaction do
 			if group_id != -1
@@ -108,11 +111,12 @@ class Display < ActiveRecord::Base
 		end
 	end
 
-	
+	#Relation for all monitored displays that are more than Timeout minutes late
 	def self.late
 		Display.joins(:display_state).where('display_states.monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)
 	end
 	
+	#Is this display more than Timeout minutes late?
 	def late?
 		if self.last_contact_at
 			return Time.diff(Time.now, self.last_contact_at,'%m')[:diff].to_i > Timeout
@@ -121,12 +125,17 @@ class Display < ActiveRecord::Base
 		end
 	end
 	
+	#Returns the time between the last hello and last contact
+	#Since the first thing a display does is to say hello this
+	#gives the time since last display reboot
 	def uptime
 		return nil unless self.last_hello && self.last_contact_at
 		
 		return Time.diff(self.last_hello, self.last_contact_at, '%h:%m:%s')[:diff]
 	end
 	
+	#Return a hash containing all associated data, including the slides
+	#in the presentation.
 	def to_hash
 		h = Hash.new
 		#Legacy stuff, updated at used to get touched when anything happened
