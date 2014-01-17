@@ -1,4 +1,5 @@
 - Kakku ei aina päivittynyt alteilla
+  - Kakutuksen voisi sitoa vaan muokkaus-timestamppeihin ja antaa memcachen tappaa vanhaa pois
 
 - gridfs
 
@@ -22,10 +23,9 @@
   - sido presikset eventteihin
   - sido näyttimet eventteihin
 	
+- Conffien hallinta paremmaksi (templaatit, fontit jne)
 
-- Conffien hallinta
-- Palkintojenjakogeneraattori
-	- tupla-escape pois pms-importista
+- Palkintojenjakogeneraattorin testausta
 
 - inkscape -> simple conversio
 
@@ -38,7 +38,6 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 -inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
 
 - tikettijärjestelmä
-
 - käyttäjille ilmoitukset luoduista kalvoista
 
 - uusittu simple-editor
@@ -69,15 +68,12 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
   - schedule: aloitettu
   - slide
   - user
-
 - functional testit
   - gettaa kaikkia get-sivuja
   - postaa ainankin yksi pyyntö posteihin
     - presentations: aloitettu
  	 - slides: aloitettu
-
 - testaa myös autentikaatio
-
 
 - SQL lukitus?
 
@@ -87,6 +83,4 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 - Välkkybitti slideihin valittavaksi
 
 - näyttimien rekisteröinti ja hallinta
-	- Näyttimien luominen
-
-- Kalvojen näyttömäärien valvonta
+	- Näyttimien luominen webistä käsin
