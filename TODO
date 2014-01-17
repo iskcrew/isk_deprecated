@@ -17,6 +17,10 @@
 - admincontroller
 	- clear cache action: cache_store.clear
 	- regenerate all slides
+
+- eventit
+  - sido presikset eventteihin
+  - sido näyttimet eventteihin
 	
 
 - Conffien hallinta
@@ -24,8 +28,8 @@
 	- tupla-escape pois pms-importista
 
 - inkscape -> simple conversio
-- näytin loggaamaan vielä enemmän: kaikki näytetyt kalvot omalle tietokantarivilleen
-- näytin loggaamaan kaikki hellot
+
+- näytin loggaamaan kaikki hellot omalle rivilleen kantaan
 
 - Inkscape forkki:
 http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
@@ -39,12 +43,6 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 
 - uusittu simple-editor
   - luodaan svg rubyllä ja pyöritetään websocketin kautta
-
--Käyttäjähallinta
-  -Viewit kuntoon:
-    -displays
-    -presentations
-    -groups
   
 - websocket-logittajasivu
 
@@ -75,6 +73,10 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 - functional testit
   - gettaa kaikkia get-sivuja
   - postaa ainankin yksi pyyntö posteihin
+    - presentations: aloitettu
+ 	 - slides: aloitettu
+
+- testaa myös autentikaatio
 
 
 - SQL lukitus?
