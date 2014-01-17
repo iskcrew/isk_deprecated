@@ -6,156 +6,180 @@
 
 
 class PresentationsController < ApplicationController
-  before_filter :require_create, :only => [:new, :create]
+	before_filter :require_create, :only => [:new, :create]
   
-  def index
-    @presentations = Presentation.all
-  end
+	# List all presentations
+	#TODO: bind presentations to events and only list current ones
+	def index
+		@presentations = Presentation.all
+	end
+   
+	# Show details of a presentation
+	# Supports html and json output
+	def show
+		@presentation = Presentation.find(params[:id])
+    
+		respond_to do |format|
+			format.html
+			format.json {render :json =>JSON.pretty_generate(@presentation.to_hash)}
       
-  def show
-    @presentation = Presentation.find(params[:id])
+		end
+	end
+  
+	#Change the order of groups in a presentation
+	#Triggered from jquery.sortable widged via ajax
+	def sort
+		p = Presentation.find(params[:id])
+		require_edit p
     
-    respond_to do |format|
-      format.html
-      format.json {render :json =>JSON.pretty_generate(@presentation.to_hash)}
+		if params[:group].count == p.groups.count
+			Presentation.transaction do
+				p.groups.each do |g|
+					g.position = params[:group].index(g.id.to_s) + 1
+					g.save
+				end
+			end
+			p.reload
+			render :partial => 'group_items', :locals => {:presentation => p}
+		else
+			render :text => "Invalid group count, try refreshing", :status => 400
+		end
+    
+	end
+  
+	#Add all slides in this presentation into override queue for a display
+	def add_to_override
+		presentation = Presentation.find(params[:id])
+		display = Display.find(params[:override][:display_id])
+		duration = params[:override][:duration].to_i
+    
+		if display.can_override?(current_user)
+			presentation.slides.each do |s|
+				display.add_to_override(s, duration)
+			end
+			flash[:notice] = "Added presentation " + presentation.name + " to override on display " + display.name
+		else
+			flash[:error] = "You can't add slides to the override queue on display " + display.name
+		end
+		redirect_to :action => :show, :id => presentation.id
+    
+	end
+  
+	#Add a single group to a presentation
+	#TODO: move the logic to model
+	def add_group
+		Presentation.transaction do
+			@presentation = Presentation.find(params[:id])
+			require_edit @presentation
       
-    end
-  end
+			g = @presentation.groups.new
+			g.master_group_id = params[:group][:id]
+			@presentation.groups << g
+			g.save!
+			flash[:notice] = "Added group " + g.name + " to presentation"
+			redirect_to :back
+		end
+	end
   
-  def sort
-    p = Presentation.find(params[:id])
-    require_edit p
+	#Remove a single group from this presentation
+	def remove_group
+		g = Group.find(params[:id])
+		p = g.presentation
+		require_edit p
     
-    if params[:group].count == p.groups.count
-      Presentation.transaction do
-        p.groups.each do |g|
-          g.position = params[:group].index(g.id.to_s) + 1
-          g.save
-        end
-      end
-      p.reload
-      render :partial => 'group_items', :locals => {:presentation => p}
-    else
-      render :text => "Invalid group count, try refreshing", :status => 400
-    end
+		g.destroy
+		flash[:notice] = "Removed group " + g.name + " from presentation"
+		redirect_to :back
+	end
+  
+	#TODO: check if this legacy stuff can be killed off
+	def next_slide
+		p = Presentation.find(params[:id])
+		next_slide = p.next_slide(params[:group], params[:slide])
     
-  end
+		render :text => p.id.to_s + '/' + next_slide[0].to_s + "/" + next_slide[1].to_s
+	end
   
-  def add_to_override
-    presentation = Presentation.find(params[:id])
-    display = Display.find(params[:override][:display_id])
-    duration = params[:override][:duration].to_i
+	#TODO: check if this legacy stuff can be killed off
+	def slide
+		p = Presentation.find(params[:id])
+		s = p.slide(params[:group], params[:slide])
+		render :text => url_for( :controller => :slides, :action => :full, :id => s.id)
+	end
+  
+	#Generate a preview of the presentation, showing all the slides in order
+	def preview
+		@presentation = Presentation.find(params[:id])
+	end
+  
+	#Render form for creating a new presentation  
+	def new
+		@presentation = Presentation.new
+	end
+  
+	#Create a new presentation
+	#If the current user isn't admin add him to the ACL list for this presentation
+	def create
+		@presentation = Presentation.new(params[:presentation])
+		if @presentation.save
+			@presentation.authorized_users << current_user unless Presentation.admin?(current_user)
+			flash[:notice] = 'Presentation was successfully created.'
+			redirect_to :action => :show, :id => @presentation.id
+		else
+			render :action => :new
+		end  
+	end
     
-    if display.can_override?(current_user)
-      presentation.slides.each do |s|
-        display.add_to_override(s, duration)
-      end
-      flash[:notice] = "Added presentation " + presentation.name + " to override on display " + display.name
-    else
-      flash[:error] = "You can't add slides to the override queue on display " + display.name
-    end
-    redirect_to :action => :show, :id => presentation.id
+	#Render the edit form for a presentation
+	def edit
+		@presentation = Presentation.find(params[:id])
+		require_edit @presentation
     
-  end
+		#Seeing what groups aren't already in the presentation is useful sometimes
+		@orphan_groups = Event.current.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id  IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq.all
+	end  
   
-  def add_group
-    Presentation.transaction do
-      @presentation = Presentation.find(params[:id])
-      require_edit @presentation
-      
-      g = @presentation.groups.new
-      g.master_group_id = params[:group][:id]
-      @presentation.groups << g
-      g.save!
-      flash[:notice] = "Added group " + g.name + " to presentation"
-      redirect_to :back
-    end
-  end
-  
-  def remove_group
-    g = Group.find(params[:id])
-    p = g.presentation
-    require_edit p
+	#Update a presentation
+	#TODO: rewrite the js so that #sort method can be killed off and use this instead  
+	def update
+		@presentation =Presentation.find(params[:id])
+		require_edit @presentation
     
-    g.destroy
-    flash[:notice] = "Removed group " + g.name + " from presentation"
-    redirect_to :back
-  end
+		if @presentation.update_attributes(params[:presentation])
+			flash[:notice] = 'Presentation was successfully updated.'
+			redirect_to :action => 'show', :id => @presentation.id
+		else
+			render :action => 'edit'
+		end
+	end
   
-  def next_slide
-    p = Presentation.find(params[:id])
-    next_slide = p.next_slide(params[:group], params[:slide])
-    
-    render :text => p.id.to_s + '/' + next_slide[0].to_s + "/" + next_slide[1].to_s
-  end
+	# Remove a user from the ACL for this presentation
+	def deny
+		presentation = Presentation.find(params[:id])
+		user = User.find(params[:user_id])
+		presentation.authorized_users.delete(user)
+		redirect_to :back
+	end
   
-  def slide
-    p = Presentation.find(params[:id])
-    s = p.slide(params[:group], params[:slide])
-    render :text => url_for( :controller => :slides, :action => :full, :id => s.id)
-  end
-  
-  def preview
-    @presentation = Presentation.find(params[:id])
-  end
-    
-  def new
-    @presentation = Presentation.new
-  end
-  
-  def create
-    @presentation = Presentation.new(params[:presentation])
-    if @presentation.save
-      @presentation.authorized_users << current_user unless Presentation.admin?(current_user)
-      flash[:notice] = 'Presentation was successfully created.'
-      redirect_to :action => :show, :id => @presentation.id
-    else
-      render :action => :new
-    end  
-  end
-    
-  def edit
-    @presentation = Presentation.find(params[:id])
-    require_edit @presentation
-    
-    @orphan_groups = Event.current.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id  IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq.all
-  end  
-    
-  def update
-    @presentation =Presentation.find(params[:id])
-    require_edit @presentation
-    
-    if @presentation.update_attributes(params[:presentation])
-      flash[:notice] = 'Presentation was successfully updated.'
-      redirect_to :action => 'show', :id => @presentation.id
-    else
-      render :action => 'edit'
-    end
-  end
-  
-  def deny
-    presentation = Presentation.find(params[:id])
-    user = User.find(params[:user_id])
-    presentation.authorized_users.delete(user)
-    redirect_to :back
-  end
-  
-  def grant
-    presentation = Presentation.find(params[:id])
-    user = User.find(params[:grant][:user_id])
-    presentation.authorized_users << user
-    redirect_to :back    
-  end
+	# Add a user to the ACL for this presentation
+	def grant
+		presentation = Presentation.find(params[:id])
+		user = User.find(params[:grant][:user_id])
+		presentation.authorized_users << user
+		redirect_to :back    
+	end
   
   
-  private
+	private
   
-  def require_admin
-    raise ApplicationController::PermissionDenied unless Presentation.admin? current_user
-  end
+	#Filter for actions requiring presentation_admin role
+	def require_admin
+		raise ApplicationController::PermissionDenied unless Presentation.admin? current_user
+	end
   
-  def require_create
-    raise ApplicationController::PermissionDenied unless Presentation.can_create? current_user
-  end
+	#Filter for actions requiring presentation_create role
+	def require_create
+		raise ApplicationController::PermissionDenied unless Presentation.can_create? current_user
+	end
     
 end
