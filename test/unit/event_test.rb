@@ -48,4 +48,11 @@ class EventTest < ActiveSupport::TestCase
 		assert_equal e, Event.current, "Event is no longger current"
 		
 	end
+	
+	test "try to remove current event" do
+		e = events(:event_2)
+		e.current = false
+		assert !e.save, "Shouldn't be able to unset the current flag"
+		assert e.errors.include?(:current)
+	end
 end
