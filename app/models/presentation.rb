@@ -81,42 +81,7 @@ class Presentation < ActiveRecord::Base
 		special_slides_time = self.public_slides.where('duration != ?', Slide::UsePresentationDelay).sum('duration')
 		return default_slides_time + special_slides_time
 	end
-	
-	#FIXME: Am I still used anywhere? can I be killed?
-	def slide(group, slide)
-		g = self.groups.where(:position => group).first!
-		return g.master_group.slides.where(:position => slide).first!
-	end
-	
-	#FIXME: Am I still used anywhere? can I be killed?
-	def next_slide(group, slide)
-		g = self.groups.where(:position => group).first!
-		s = g.master_group.slides.where(:position => slide).first!
-
-		if s.last?
-			if g.last?
-				g = p.groups.first!
-			else
-				g = g.lower_item
-			end
-			
-			#skip empty groups if needed
-			while g.slides.count == 0
-				if g.last?
-					g = p.groups.first!
-				else
-					g = g.lower_item
-				end
-			end
-			
-			s = g.slides.first!
-		else
-			s = s.lower_item
-		end
 		
-		return [g.position, s.position]
-	end
-	
 	private
 		
 	#Validation method for making sure the asigned effect is a valid object.
