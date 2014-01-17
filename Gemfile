@@ -32,6 +32,7 @@ group :development do
   gem "rails-erd"
 end
 
+gem 'simplecov', :require => false, :group => :test
 
 
 # Gems used only for assets and not required
