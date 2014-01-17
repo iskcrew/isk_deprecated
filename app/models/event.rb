@@ -20,7 +20,7 @@ class Event < ActiveRecord::Base
   validates :current, :inclusion => { :in => [true, false] }  
   validate :ensure_one_current_event
 	
-	
+	#After creating a new event create the associated internal slidegroups.
   after_create do |e|
     e.ungrouped = MasterGroup.where(:name => ('Ungrouped slides for ' + e.name)).first_or_create
     e.ungrouped.internal = true
@@ -37,20 +37,21 @@ class Event < ActiveRecord::Base
   end
   
   
-  #TODO: tietokannan päähän triggeri joka varmistaa että ainankin yksi tapahtuma on aktiivinen?
-  def self.current
+  #Finds the current event
+	def self.current
     self.where(:current => true).first!
   end
   
   private
   
-  #Varmistetaan että vain yhdella tapahtumalla on current -bitti päällä
+  #Callback that resets every other event to non-current when setting another as current one
   def set_current_event
     if self.current && self.changed.include?('current')
       Event.update_all :current => false
     end
   end
 	
+	#Validation that prevents clearing the current event -bit
 	def ensure_one_current_event
 		if !self.current && self.changed.include?('current')
 			errors.add(:current, "^Must have one current event")
