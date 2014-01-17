@@ -5,6 +5,11 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class EventsController < ApplicationController
+	# This controller deals with supporting different events with
+	# their own slidesets.
+	
+	# Only admins should be able to change stuff in here
+	before_filter :require_global_admin
   
   def index
     @events = Event.all
