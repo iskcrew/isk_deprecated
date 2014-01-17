@@ -6,14 +6,19 @@
 
 
 class Presentation < ActiveRecord::Base
+	#This class contains the logic for presentations
+	#Presentations are made up from ordered lists
+	#of master groups, containing ordered lists of slides
+	
 
 	has_many :groups, :order => "position ASC"
 	belongs_to :effect
 	has_many :displays
 	
 	has_and_belongs_to_many :authorized_users, :class_name => 'User'
-	#TODO: sido eventtiin	 
+	#TODO: Bind presentations to events also
 	
+	#Validation to ensure the asigned effect actually exists in db
 	validate :ensure_effect_exists
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
@@ -21,7 +26,7 @@ class Presentation < ActiveRecord::Base
 	
 	attr_accessible :name, :effect_id, :delay
 	
-	
+	#Module that contains our ACL logic.
 	include ModelAuthorization
 	
 	#Shorthand for returning the count of public slides
@@ -114,6 +119,7 @@ class Presentation < ActiveRecord::Base
 	
 	private
 		
+	#Validation method for making sure the asigned effect is a valid object.
 	def ensure_effect_exists
 		errors.add(:effect_id, "^Transition effect is invalid") if self.effect.nil?
 	end
