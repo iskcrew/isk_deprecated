@@ -18,7 +18,9 @@ class Event < ActiveRecord::Base
   
   validates :name, :uniqueness => true, :presence => true
   validates :current, :inclusion => { :in => [true, false] }  
-  
+  validate :ensure_one_current_event
+	
+	
   after_create do |e|
     e.ungrouped = MasterGroup.where(:name => ('Ungrouped slides for ' + e.name)).first_or_create
     e.ungrouped.internal = true
@@ -48,5 +50,11 @@ class Event < ActiveRecord::Base
       Event.update_all :current => false
     end
   end
+	
+	def ensure_one_current_event
+		if !self.current && self.changed.include?('current')
+			errors.add(:current, "^Must have one current event")
+		end
+	end
   
 end
