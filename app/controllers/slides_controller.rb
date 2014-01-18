@@ -292,7 +292,7 @@ class SlidesController < ApplicationController
       
     rescue Magick::ImageMagickError
       #image invalid
-      File::delete(@slide.original_filename)
+      File::delete(@slide.original_filename) if File.exists?(@slide.original_filename)
       flash[:error] = "Error creating slide, invalid image file"
       render :action => :new
     end
