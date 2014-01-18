@@ -52,8 +52,7 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
-	#FIXME: This test writes slidedata for slide id 15
-	#And the data doesn't look too healthy...
+	#FIXME: need to clear the files created
 	test "create new simple_slide" do
 		assert_difference('Slide.count', 1) do
 			post :create, @new_slide_data, @adminsession
