@@ -11,10 +11,14 @@ class SlidesControllerTest < ActionController::TestCase
 			slide: {
 				name: "New test slide",
 				public: "false",
-				show_clock: "false"
+				show_clock: "false",
+				svg_data: File.read(Rails.root.join('data', 'templates', 'simple.svg'))
 			},
 			create_type: 'simple'
 		}
+		
+		Slide.send(:remove_const, :FilePath)
+		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
 	end
 	
 	test "get index" do
@@ -48,10 +52,13 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
-	test "create new slide" do
+	#FIXME: This test writes slidedata for slide id 15
+	#And the data doesn't look too healthy...
+	test "create new simple_slide" do
 		assert_difference('Slide.count', 1) do
 			post :create, @new_slide_data, @adminsession
 		end
+		
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
