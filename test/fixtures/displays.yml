@@ -18,4 +18,10 @@ with_overrides:
     name: I have overrides
     presentation_id: 2
     
+manual_mode:
+    id: 5
+    name: I am in manual mode
+    presentation_id: 2
+    manual: true
+    do_overrides: false
     
