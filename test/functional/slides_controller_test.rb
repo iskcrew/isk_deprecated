@@ -29,9 +29,11 @@ class SlidesControllerTest < ActionController::TestCase
 	end
 	
 	test "get slide details" do
-		get :show, {id: slides(:no_clock)}, @adminsession
+		[:no_clock, :slide_1, :not_ready, :hidden].each do |s|
+			get :show, {id: slides(s)}, @adminsession
 		
-		assert_response :success
+			assert_response :success, "Error getting show for slide: " + s.to_s
+		end
 	end
 	
 	test "get new slide form" do
