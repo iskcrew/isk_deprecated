@@ -73,4 +73,20 @@ class PresentationsControllerTest < ActionController::TestCase
 		end
 	end
 	
+	test "add a group to presentation" do
+		add_group_data = {
+			id: presentations(:with_slides).id,
+			group: {
+				id: master_groups(:one_slide).id
+			}
+		}
+		assert_difference "presentations(:with_slides).groups.count" do
+			post :add_group, add_group_data, @adminsession
+		end
+		
+		assert_redirected_to root_path
+		
+		
+	end
+	
 end
