@@ -68,7 +68,6 @@ class PresentationsController < ApplicationController
 	#Add a single group to a presentation
 	#TODO: move the logic to model
 	def add_group
-		Presentation.transaction do
 			@presentation = Presentation.find(params[:id])
 			require_edit @presentation
       
@@ -78,7 +77,6 @@ class PresentationsController < ApplicationController
 			g.save!
 			flash[:notice] = "Added group " + g.name + " to presentation"
 			redirect_to :back
-		end
 	end
   
 	#Remove a single group from this presentation
