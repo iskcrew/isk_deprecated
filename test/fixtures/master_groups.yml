@@ -51,3 +51,24 @@ event2_thrashed:
     name: thrashed slides for event2
     event_id: 2
     internal: true
+    
+schedule_1_slide:
+    id: 11
+    name: "Schedule: No events slides"
+    event_id: 2
+    
+schedule_1_up_next:
+    id: 12
+    name: "Schedule: No events up next"
+    event_id: 2
+    
+schedule_2_slide:
+    id: 13
+    name: "Schedule: Normal slides"
+    event_id: 2
+    
+schedule_2_up_next:
+    id: 14
+    name: "Schedule: Normal slides"
+    event_id: 2
+
