@@ -15,6 +15,10 @@ class Schedule < ActiveRecord::Base
   
 	accepts_nested_attributes_for :schedule_events
   
+	validates :name, :presence => true
+	
+	
+	
 	TemplateFile = Rails.root.join('data', 'templates', 'schedule.svg.erb')
 	EventsPerSlide = 9
 	TimeTolerance = 15.minutes
