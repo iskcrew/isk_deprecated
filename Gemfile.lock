@@ -161,7 +161,6 @@ GEM
       rails
       redis
       thin
-    will_paginate (3.0.4)
 
 PLATFORMS
   ruby
@@ -192,4 +191,3 @@ DEPENDENCIES
   time_diff (~> 0.2.2)
   uglifier (>= 1.0.3)
   websocket-rails
-  will_paginate
