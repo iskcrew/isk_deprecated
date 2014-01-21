@@ -18,12 +18,14 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'dynamic_form'
 gem 'time_diff', '~> 0.2.2'
+
+#jquer javascript libraries
 gem 'jquery-ui-rails'
+gem 'jquery-rails'
 
 gem 'websocket-rails'
 
 gem 'daemon'
-gem 'daemons'
 gem 'rrd-ffi', :require => 'rrd'
 
 gem 'cashier'
@@ -48,7 +50,6 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
