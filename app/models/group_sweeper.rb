@@ -26,5 +26,8 @@ class GroupSweeper < ActionController::Caching::Sweeper
     
     
     expire_fragment(:controller => :groups, :action => :show, :id => group.id)
+		group.presentations.each do |p|
+			Rails.cache.delete p.hash_cache_name
+		end
   end
 end

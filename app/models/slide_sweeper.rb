@@ -28,5 +28,10 @@ class SlideSweeper < ActionController::Caching::Sweeper
     expire_fragment(:controller => :slides, :action => :show, :id => slide.id, :edit => true)
     expire_fragment(:controller => :slides, :action => :show, :id => slide.id, :hide => true)
     expire_fragment(:controller => :slides, :action => :show, :id => slide.id)
+		
+		slide.presentations.each do |p|
+			Rails.cache.delete p.hash_cache_name
+		end
+		
   end
 end
