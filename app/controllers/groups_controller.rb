@@ -23,11 +23,26 @@ class GroupsController < ApplicationController
   
   def edit
     @group = MasterGroup.find(params[:id])
+		
+		if @group.internal
+			#Do not allow editing of internal groups
+			flash[:error] = "Can't edit internal groups"
+			redirect_to group_path(@group) and return
+		end
     require_edit @group
+			
   end
   
   def update
     @group =MasterGroup.find(params[:id])
+
+		if @group.internal
+			#Do not allow editing of internal groups
+			flash[:error] = "Can't edit internal groups"
+			redirect_to group_path(@group) and return
+		end
+
+
     require_edit @group
     
 		if @group.is_a? PrizeGroup
