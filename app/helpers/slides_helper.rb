@@ -6,6 +6,12 @@
 
 
 module SlidesHelper
+	
+	#Cache key for user-dependant slide info block
+	def slide_key(slide)
+		'slide_' + slide.id.to_s + '_user_' + current_user.id.to_s
+	end
+	
 
 	def slide_duration(slide)
 		if slide.duration == -1
@@ -16,7 +22,6 @@ module SlidesHelper
 			return slide.duration.to_s + " seconds"
 		end
 	end
-	
   
   def slide_preview_image_tag(slide)
     html_options = {
