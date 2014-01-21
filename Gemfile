@@ -12,8 +12,6 @@ gem 'sqlite3'
 gem 'mysql2'
 
 gem 'shuber-sortable', :require => 'sortable'
-#gem 'acts_as_list'
-gem 'will_paginate'
 gem 'rmagick', :require => 'RMagick'
 gem 'thin'
 gem 'delayed_job_active_record'
