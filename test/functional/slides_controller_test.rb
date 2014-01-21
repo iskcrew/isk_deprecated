@@ -11,10 +11,14 @@ class SlidesControllerTest < ActionController::TestCase
 			slide: {
 				name: "New test slide",
 				public: "false",
-				show_clock: "false"
+				show_clock: "false",
+				svg_data: File.read(Rails.root.join('data', 'templates', 'simple.svg'))
 			},
 			create_type: 'simple'
 		}
+		
+		Slide.send(:remove_const, :FilePath)
+		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
 	end
 	
 	test "get index" do
@@ -25,9 +29,11 @@ class SlidesControllerTest < ActionController::TestCase
 	end
 	
 	test "get slide details" do
-		get :show, {id: slides(:no_clock)}, @adminsession
+		[:no_clock, :slide_1, :not_ready, :hidden].each do |s|
+			get :show, {id: slides(s)}, @adminsession
 		
-		assert_response :success
+			assert_response :success, "Error getting show for slide: " + s.to_s
+		end
 	end
 	
 	test "get new slide form" do
@@ -48,10 +54,12 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
-	test "create new slide" do
+	#FIXME: need to clear the files created
+	test "create new simple_slide" do
 		assert_difference('Slide.count', 1) do
 			post :create, @new_slide_data, @adminsession
 		end
+		
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	

@@ -106,7 +106,7 @@ class DisplaysController < ApplicationController
     Display.transaction do 
       oq = display.override_queues.new
       oq.slide = slide
-      oq.duration = params[:duration]
+      oq.duration = params[:duration] || 60
       oq.save!
     end
 		

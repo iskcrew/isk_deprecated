@@ -8,6 +8,8 @@
 class PresentationsController < ApplicationController
 	before_filter :require_create, :only => [:new, :create]
   
+	cache_sweeper :presentation_sweeper
+	
 	# List all presentations
 	#TODO: bind presentations to events and only list current ones
 	def index
@@ -68,7 +70,6 @@ class PresentationsController < ApplicationController
 	#Add a single group to a presentation
 	#TODO: move the logic to model
 	def add_group
-		Presentation.transaction do
 			@presentation = Presentation.find(params[:id])
 			require_edit @presentation
       
@@ -78,7 +79,6 @@ class PresentationsController < ApplicationController
 			g.save!
 			flash[:notice] = "Added group " + g.name + " to presentation"
 			redirect_to :back
-		end
 	end
   
 	#Remove a single group from this presentation
@@ -91,22 +91,7 @@ class PresentationsController < ApplicationController
 		flash[:notice] = "Removed group " + g.name + " from presentation"
 		redirect_to :back
 	end
-  
-	#TODO: check if this legacy stuff can be killed off
-	def next_slide
-		p = Presentation.find(params[:id])
-		next_slide = p.next_slide(params[:group], params[:slide])
     
-		render :text => p.id.to_s + '/' + next_slide[0].to_s + "/" + next_slide[1].to_s
-	end
-  
-	#TODO: check if this legacy stuff can be killed off
-	def slide
-		p = Presentation.find(params[:id])
-		s = p.slide(params[:group], params[:slide])
-		render :text => url_for( :controller => :slides, :action => :full, :id => s.id)
-	end
-  
 	#Generate a preview of the presentation, showing all the slides in order
 	def preview
 		@presentation = Presentation.find(params[:id])

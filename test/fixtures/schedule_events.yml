@@ -1,11 +1,37 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+
+#  create_table "schedule_events", :force => true do |t|
+#    t.integer  "schedule_id"
+#    t.datetime "at"
+#    t.string   "name"
+#    t.string   "description"
+#    t.string   "location"
+#    t.boolean  "major",       :default => false
+#    t.datetime "created_at",                     :null => false
+#    t.datetime "updated_at",                     :null => false
+#    t.boolean  "cancelled",   :default => false
+#    t.boolean  "rescheduled", :default => false
+#    t.string   "external_id"
+#    t.integer  "linecount",   :default => 1
+#  end
+
+event_1:
+    id: 1
+    schedule_id: 2
+    at: <%=2.hours.from_now%>
+    name: "In 2 hours"
+    
+event_2:
+    id: 2
+    schedule_id: 2
+    at: <%=1.hours.from_now%>
+    name: "In 1 hour"
+    
+<%(3..20).each do |i|%>
+event_<%=i%>:
+    id: <%=i%>
+    schedule_id: 2
+    at: <%=3.hours.from_now%>
+    name: "event <%=i%>"
+<%end%>

@@ -6,7 +6,7 @@
 <%end%>
 
 
-<%=form_for @schedule, :url => {:action => :update}, :method => :put do |f|%>
+<%=form_for @schedule, :url => {:action => :update} do |f|%>
 	<%=render :partial => 'form'%>
 	<%=f.submit%>
 <%end%>

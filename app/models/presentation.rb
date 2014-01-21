@@ -51,26 +51,31 @@ class Presentation < ActiveRecord::Base
 	#Creates a hash of the presentation data
 	#The has currently has two representations of the
 	#slides in the presentation due to legacy
+	#TODO: cache to_hash fragments
+	#Rails.cache.fetch("cache_key", run_if_not_found())
 	def to_hash
-		hash = Hash.new
-		hash[:name] = self.name
-		hash[:id] = self.id
-		hash[:effect] = self.effect_id
-		hash[:created_at] = self.created_at.to_i
-		hash[:updated_at] = self.updated_at.to_i
-		hash[:total_groups] = self.groups.count
-		hash[:total_slides] = self.total_slides
+		hash = Rails.cache.fetch hash_cache_name do
+			hash = Hash.new
+			hash[:name] = self.name
+			hash[:id] = self.id
+			hash[:effect] = self.effect_id
+			hash[:created_at] = self.created_at.to_i
+			hash[:updated_at] = self.updated_at.to_i
+			hash[:total_groups] = self.groups.count
+			hash[:total_slides] = self.total_slides
 		
-		#FIXME: When iskdpy is using the new format kill this.
-		hash[:groups] = Array.new
-		self.groups.includes(:master_group => :slides).each do |g|
-			hash[:groups]	 << g.to_hash
-		end
-		hash[:slides] = Array.new
+			#FIXME: When iskdpy is using the new format kill this.
+			hash[:groups] = Array.new
+			self.groups.includes(:master_group => :slides).each do |g|
+				hash[:groups]	 << g.to_hash
+			end
+			hash[:slides] = Array.new
 		
-		#The new format for presentation slides, requires less sql-queries to build
-		self.public_slides.each do |slide|
-			hash[:slides] << slide.to_hash(self.delay)
+			#The new format for presentation slides, requires less sql-queries to build
+			self.public_slides.each do |slide|
+				hash[:slides] << slide.to_hash(self.delay)
+			end
+			hash
 		end
 		return hash
 	end
@@ -82,43 +87,15 @@ class Presentation < ActiveRecord::Base
 		return default_slides_time + special_slides_time
 	end
 	
-	#FIXME: Am I still used anywhere? can I be killed?
-	def slide(group, slide)
-		g = self.groups.where(:position => group).first!
-		return g.master_group.slides.where(:position => slide).first!
+	
+	#What name to use as key for to_hash caching
+	def hash_cache_name
+		"presentation_" + self.id.to_s + "_hash"
 	end
 	
-	#FIXME: Am I still used anywhere? can I be killed?
-	def next_slide(group, slide)
-		g = self.groups.where(:position => group).first!
-		s = g.master_group.slides.where(:position => slide).first!
-
-		if s.last?
-			if g.last?
-				g = p.groups.first!
-			else
-				g = g.lower_item
-			end
-			
-			#skip empty groups if needed
-			while g.slides.count == 0
-				if g.last?
-					g = p.groups.first!
-				else
-					g = g.lower_item
-				end
-			end
-			
-			s = g.slides.first!
-		else
-			s = s.lower_item
-		end
 		
-		return [g.position, s.position]
-	end
-	
 	private
-		
+			
 	#Validation method for making sure the asigned effect is a valid object.
 	def ensure_effect_exists
 		errors.add(:effect_id, "^Transition effect is invalid") if self.effect.nil?

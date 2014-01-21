@@ -1,4 +1,5 @@
 - Kakku ei aina päivittynyt alteilla
+  - Kakutuksen voisi sitoa vaan muokkaus-timestamppeihin ja antaa memcachen tappaa vanhaa pois
 
 - gridfs
 
@@ -17,15 +18,18 @@
 - admincontroller
 	- clear cache action: cache_store.clear
 	- regenerate all slides
-	
 
-- Conffien hallinta
-- Palkintojenjakogeneraattori
-	- tupla-escape pois pms-importista
+- eventit
+  - sido presikset eventteihin
+  - sido näyttimet eventteihin
+	
+- Conffien hallinta paremmaksi (templaatit, fontit jne)
+
+- Palkintojenjakogeneraattorin testausta
 
 - inkscape -> simple conversio
-- näytin loggaamaan vielä enemmän: kaikki näytetyt kalvot omalle tietokantarivilleen
-- näytin loggaamaan kaikki hellot
+
+- näytin loggaamaan kaikki hellot omalle rivilleen kantaan
 
 - Inkscape forkki:
 http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
@@ -34,17 +38,10 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 -inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
 
 - tikettijärjestelmä
-
 - käyttäjille ilmoitukset luoduista kalvoista
 
 - uusittu simple-editor
   - luodaan svg rubyllä ja pyöritetään websocketin kautta
-
--Käyttäjähallinta
-  -Viewit kuntoon:
-    -displays
-    -presentations
-    -groups
   
 - websocket-logittajasivu
 
@@ -71,11 +68,12 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
   - schedule: aloitettu
   - slide
   - user
-
 - functional testit
   - gettaa kaikkia get-sivuja
   - postaa ainankin yksi pyyntö posteihin
-
+    - presentations: aloitettu
+ 	 - slides: aloitettu
+- testaa myös autentikaatio
 
 - SQL lukitus?
 
@@ -85,6 +83,4 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
 - Välkkybitti slideihin valittavaksi
 
 - näyttimien rekisteröinti ja hallinta
-	- Näyttimien luominen
-
-- Kalvojen näyttömäärien valvonta
+	- Näyttimien luominen webistä käsin
