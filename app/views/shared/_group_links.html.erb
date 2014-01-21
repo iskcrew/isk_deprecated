@@ -2,7 +2,7 @@
 #Luodaan vasemmalla leijuva lista kaikista ryhmistä joista voi scrollata ikkunan ryhmän kohdalle
 %>
 
-<%cache('group_links') do%>
+<%cache('group_links', tag: "groups") do%>
 <div class="grouplinks" id="scrollingDiv">
   <p>Goto group:</p>
   <ul>
