@@ -26,8 +26,18 @@ class CacheObserver < ActiveRecord::Observer
 	def expire_cache(obj)
 		if obj.is_a? Slide
 			Cashier.expire "slides"
+			
+			#Expire presentation fragments
 			obj.presentations.each do |p|
 				Cashier.expire p.cache_tag
+			end
+			
+			Cashier.expire obj.master_group.cache_tag
+			if obj.changed.include? 'master_group_id'
+				#We want to expire also the old group
+				if g = MasterGroup.where(id: obj.master_group_id_was).first
+					Cashier.expire g.cache_tag
+				end
 			end
 			
 		elsif obj.is_a? MasterGroup
