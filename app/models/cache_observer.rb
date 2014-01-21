@@ -13,12 +13,12 @@
 # slides:: 								Expires on any change to any slide 
 
 class CacheObserver < ActiveRecord::Observer
-	observe :slide, :master_group, :presentation
+	observe :slide, :master_group, :presentation, :user
 	
 	# We use after_commit callback because we are using multi-threaded
 	# server, and otherwise we might render the new fragments with old data
 	def after_commit(obj)
-		expire_cache(onj)
+		expire_cache(obj)
 	end
 	
 	private
@@ -26,20 +26,22 @@ class CacheObserver < ActiveRecord::Observer
 	def expire_cache(obj)
 		if obj.is_a? Slide
 			Cashier.expire "slides"
-			self.presentations.each do |p|
+			obj.presentations.each do |p|
 				Cashier.expire p.cache_tag
 			end
 			
 		elsif obj.is_a? MasterGroup
 	  	Cashier.expire "groups"
-			self.presentations.each do |p|
+			obj.presentations.each do |p|
 				Cashier.expire p.cache_tag
 			end
 	
 		elsif obj.is_a? Presentation
 			
+		elsif obj.is_a? User
+			
 		else
-			raise ArgumentError, "Argument needs to be either a Slide, MasterGroup or Presentation"
+			raise ArgumentError, "Argument needs to be either a User, Slide, MasterGroup or Presentation"
 		end
 		
 		Cashier.expire obj.cache_tag
