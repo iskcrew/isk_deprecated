@@ -6,4 +6,7 @@
 
 
 module GroupsHelper
+	def group_cache_key(group)
+		group.cache_key + '_user_' + current_user.id.to_s
+	end
 end
