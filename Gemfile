@@ -28,6 +28,8 @@ gem 'daemon'
 gem 'daemons'
 gem 'rrd-ffi', :require => 'rrd'
 
+gem 'cashier'
+
 group :development do
   gem "rails-erd"
 end
