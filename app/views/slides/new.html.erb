@@ -11,7 +11,7 @@
 	<div id="simple">
 		<h2>Create new simple slide</h2>
 
-		<%=form_for @slide, :url => {:action => :create} do |f|%>
+		<%=form_for @slide, :url => {:action => :create}, :html => {:id => 'new_simple_slide'} do |f|%>
 			<%=hidden_field_tag :create_type, 'simple'%>
 			<%=render :partial => 'simple_edit'%>
 
@@ -22,7 +22,7 @@
 	<div id="inkscape">
 		<h2>Create new inkscape slide</h2>
 		
-		<%=form_for @slide, :url => {:action => :create} do |f|%>
+		<%=form_for @slide, :url => {:action => :create}, :html => {:id => 'new_inkscape_slide'} do |f|%>
 			<%=f.error_messages%>
 			<%=render :partial => 'form'%>
 			
@@ -41,7 +41,7 @@
 		
 		<p>This slide will be automatically updated every 5 minutes.</p>
 
-		<%=form_for @slide, :url => {:action => :create} do |f|%>
+		<%=form_for @slide, :url => {:action => :create}, :html => {:id => 'new_http_slide'} do |f|%>
 			<%=f.error_messages%>
 			<%=render :partial => 'form'%>
 			<%=hidden_field_tag :create_type, 'http_slide'%>
@@ -53,7 +53,7 @@
 	
 	<div id="image">
 		<h2>Create new slide by uploading a image</h2>
-		<%=form_for @slide, :url => {:action => :create}, :html => {:multipart => true} do |f|%>
+		<%=form_for @slide, :url => {:action => :create}, :html => {:multipart => true, :id => 'new_image_slide'} do |f|%>
 			<%=f.error_messages%>
 			<%=render :partial => 'form'%>
 			<p><b>Upload image:</b><%=file_field_tag :upload %></p>

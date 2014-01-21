@@ -87,10 +87,7 @@ class Presentation < ActiveRecord::Base
 		return default_slides_time + special_slides_time
 	end
 	
-	def expire_cache
-		Cashier.expire cache_tag
-	end
-	
+	#Cache tag for all fragments depending on this presentation	
 	def cache_tag
 		"presentation_" + self.id.to_s
 	end

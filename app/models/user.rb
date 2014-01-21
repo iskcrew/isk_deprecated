@@ -82,6 +82,10 @@ class User < ActiveRecord::Base
       return nil
     end
   end
+	
+	def cache_tag
+		"user_" + self.id.to_s
+	end
 
   private
   

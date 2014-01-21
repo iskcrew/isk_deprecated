@@ -354,26 +354,22 @@ class Slide < ActiveRecord::Base
 		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
 	end  
 
-	def expire_cache
-		Cashier.expire "slides"
-		Cashier.expire self.cache_tag
-		self.presentations.each do |p|
-			Cashier.expire p.cache_tag
-		end
- 	end
-
+	#Cache tag for all fragments depending on this slide
 	def cache_tag
 		"slide_" + self.id.to_s
 	end
 	
+	#Cache key for info fragment with full edit priviledges
 	def rw_cache_key
 		self.cache_tag + "_edit"
 	end
 	
+	#Cache key for info fragment with hide priviledge
 	def hide_cache_key
 		self.cache_tag + "_hide"
 	end
 	
+	#Cache key for info fragment with no edit priviledges
 	def ro_cache_key
 		self.cache_tag + "_ro"
 	end

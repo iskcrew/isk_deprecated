@@ -76,16 +76,9 @@ class MasterGroup < ActiveRecord::Base
     end
   end
 	
+	#Tag for all cache fragments depending on this master_group
 	def cache_tag
 		"master_group_" + self.id.to_s
 	end
 	
-	
-	def expire_cache
-  	Cashier.expire "groups"
-		self.presentations.each do |p|
-			Cashier.expire p.cache_tag
-		end
-	end
-
 end

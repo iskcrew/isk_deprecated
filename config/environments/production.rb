@@ -76,5 +76,7 @@ Isk::Application.configure do
 	# Cashier for better caching
 	#config.cashier.adapter = :cache_store 
 	config.cashier.adapter = :redis_store
+	config.cashier.adapter.redis = Redis.new(:host => '127.0.0.1', :port => '3697') # or Resque.redis or any existing redis connection
+	
 	
 end

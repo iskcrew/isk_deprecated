@@ -13,21 +13,7 @@
 		</tr>
 		<tr>
 			<td>
-				<%slides.each do |slide|%>
-					<%if slide.can_edit?(current_user)%>
-						<%cache(slide.rw_cache_key, tag: slide.cache_tag) do %>
-							<%=render slide%>
-						<%end #cache%>
-					<%elsif slide.can_hide?(current_user)%>
-						<%cache(slide.hide_cache_key, tag: slide.cache_tag) do %>
-							<%=render slide%>
-						<%end #cache%>
-					<%else #user can't do anything to slide'%>
-						<%cache(slide.ro_cache_key, tag: slide.cache_tag) do %>
-							<%=render slide%>
-						<%end #cache%>
-					<%end #slide.can_edit?...%>
-				<%end%>
+				<%=render slides%>
 			</td>
 		</tr>
 	</table>
