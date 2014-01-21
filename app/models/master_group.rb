@@ -75,5 +75,17 @@ class MasterGroup < ActiveRecord::Base
       super
     end
   end
+	
+	def cache_tag
+		"master_group_" + self.id.to_s
+	end
+	
+	
+	def expire_cache
+  	Cashier.expire "groups"
+		self.presentations.each do |p|
+			Cashier.expire p.cache_tag
+		end
+	end
 
 end

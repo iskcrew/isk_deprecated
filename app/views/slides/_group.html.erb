@@ -15,15 +15,15 @@
 			<td>
 				<%slides.each do |slide|%>
 					<%if slide.can_edit?(current_user)%>
-						<%cache(:controller => :slides, :action => :show, :id => slide.id, :edit => true) do %>
+						<%cache(slide.rw_cache_key, tag: slide.cache_tag) do %>
 							<%=render slide%>
 						<%end #cache%>
 					<%elsif slide.can_hide?(current_user)%>
-						<%cache(:controller => :slides, :action => :show, :id => slide.id, :hide => true) do %>
+						<%cache(slide.hide_cache_key, tag: slide.cache_tag) do %>
 							<%=render slide%>
 						<%end #cache%>
 					<%else #user can't do anything to slide'%>
-						<%cache(:controller => :slides, :action => :show, :id => slide.id) do %>
+						<%cache(slide.ro_cache_key, tag: slide.cache_tag) do %>
 							<%=render slide%>
 						<%end #cache%>
 					<%end #slide.can_edit?...%>

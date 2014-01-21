@@ -354,8 +354,29 @@ class Slide < ActiveRecord::Base
 		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
 	end  
 
+	def expire_cache
+		Cashier.expire "slides"
+		Cashier.expire self.cache_tag
+		self.presentations.each do |p|
+			Cashier.expire p.cache_tag
+		end
+ 	end
 
-
+	def cache_tag
+		"slide_" + self.id.to_s
+	end
+	
+	def rw_cache_key
+		self.cache_tag + "_edit"
+	end
+	
+	def hide_cache_key
+		self.cache_tag + "_hide"
+	end
+	
+	def ro_cache_key
+		self.cache_tag + "_ro"
+	end
   
 	protected
   

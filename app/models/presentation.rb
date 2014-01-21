@@ -54,7 +54,7 @@ class Presentation < ActiveRecord::Base
 	#TODO: cache to_hash fragments
 	#Rails.cache.fetch("cache_key", run_if_not_found())
 	def to_hash
-		hash = Rails.cache.fetch hash_cache_name do
+		hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
 			hash = Hash.new
 			hash[:name] = self.name
 			hash[:id] = self.id
@@ -87,10 +87,17 @@ class Presentation < ActiveRecord::Base
 		return default_slides_time + special_slides_time
 	end
 	
+	def expire_cache
+		Cashier.expire cache_tag
+	end
+	
+	def cache_tag
+		"presentation_" + self.id.to_s
+	end
 	
 	#What name to use as key for to_hash caching
 	def hash_cache_name
-		"presentation_" + self.id.to_s + "_hash"
+		cache_tag + "_hash"
 	end
 	
 		

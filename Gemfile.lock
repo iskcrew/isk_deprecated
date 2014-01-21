@@ -32,6 +32,7 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
+    cashier (0.4.1)
     choice (0.1.6)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -167,6 +168,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
+  cashier
   coffee-rails (~> 3.2.1)
   daemon
   daemons
