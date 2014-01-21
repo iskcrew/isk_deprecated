@@ -8,8 +8,6 @@
 class PresentationsController < ApplicationController
 	before_filter :require_create, :only => [:new, :create]
   
-	cache_sweeper :presentation_sweeper
-	
 	# List all presentations
 	#TODO: bind presentations to events and only list current ones
 	def index

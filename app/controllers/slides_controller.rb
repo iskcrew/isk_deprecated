@@ -9,9 +9,7 @@ class SlidesController < ApplicationController
   before_filter :require_create, :only => [:new, :create]
   before_filter :require_admin, :only => [:deny, :grant, :to_inkscape]
   skip_before_filter :require_login, :only => [:svg_save, :preview, :full]
-  
-  cache_sweeper :slide_sweeper
-  
+    
   def index
     if params[:filter] == "thrashed"
       @groups = [Event.current.thrashed]
@@ -292,7 +290,7 @@ class SlidesController < ApplicationController
       
     rescue Magick::ImageMagickError
       #image invalid
-      File::delete(@slide.original_filename) if File.exists?(@slide.original_filename)
+      File::delete(@slide.original_filename)
       flash[:error] = "Error creating slide, invalid image file"
       render :action => :new
     end
