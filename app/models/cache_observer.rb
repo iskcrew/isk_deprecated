@@ -13,7 +13,7 @@
 # slides:: 								Expires on any change to any slide 
 
 class CacheObserver < ActiveRecord::Observer
-	observe :slide, :master_group, :presentation, :user, :group
+	observe :slide, :master_group, :presentation, :user, :group, :permission
 	
 	def after_commit(obj)
 		expire_cache(obj)
@@ -50,8 +50,10 @@ class CacheObserver < ActiveRecord::Observer
 			
 		elsif obj.is_a? Group
 			Cashier.expire obj.presentation.cache_tag
+		elsif obj.is_a? Permission
+			Cashier.expire obj.user.cache_tag
 		else
-			raise ArgumentError, "Argument needs to be either a User, Slide, MasterGroup or Presentation"
+			raise ArgumentError, "Unexpected object class: " + obj.class.name
 		end
 		
 		Cashier.expire obj.cache_tag
