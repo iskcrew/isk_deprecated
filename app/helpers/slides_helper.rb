@@ -9,7 +9,7 @@ module SlidesHelper
 	
 	#Cache key for user-dependant slide info block
 	def slide_key(slide)
-		'slide_' + slide.id.to_s + '_user_' + current_user.id.to_s
+		slide.cache_key + current_user.cache_key
 	end
 	
 

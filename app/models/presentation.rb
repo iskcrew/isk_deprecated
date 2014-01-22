@@ -94,7 +94,7 @@ class Presentation < ActiveRecord::Base
 	
 	#What name to use as key for to_hash caching
 	def hash_cache_name
-		cache_tag + "_hash"
+		cache_key + "_hash"
 	end
 	
 		
