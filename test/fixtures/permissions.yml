@@ -2,6 +2,7 @@
 <%1.upto(10) do |i|%>
 
 roles_users_admin_<%=i%>:
+    id: <%=i%>
     role_id: <%=i%>
     user_id: 1
 

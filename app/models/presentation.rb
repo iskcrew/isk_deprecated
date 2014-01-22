@@ -15,7 +15,8 @@ class Presentation < ActiveRecord::Base
 	belongs_to :effect
 	has_many :displays
 	
-	has_and_belongs_to_many :authorized_users, :class_name => 'User'
+	has_many :permissions
+	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	#TODO: Bind presentations to events also
 	
 	#Validation to ensure the asigned effect actually exists in db

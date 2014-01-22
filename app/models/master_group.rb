@@ -12,13 +12,15 @@ class MasterGroup < ActiveRecord::Base
 
   has_many :slides, :order => 'position ASC'
   has_many :groups, :dependent => :destroy
-  has_and_belongs_to_many :authorized_users, :class_name => 'User'
   belongs_to :event
 
   validates :name, :presence => true, :length => { :maximum => 100 }
   validates :internal, :inclusion => { :in => [true, false] }
 
-  include ModelAuthorization
+	has_many :permissions
+	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
+  
+	include ModelAuthorization
   
   scope :orphan, joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.id IS NULL and master_groups.id <> ?', MasterGroup::Ungrouped_id)
   scope :defined_groups, where(:internal => false).order('name')
