@@ -16,10 +16,10 @@ class User < ActiveRecord::Base
 	has_many :permissions
 	
   has_many :roles, 						through: :permissions, order: 'roles.role'
-  has_many :slides, 					through: :permissions
-  has_many :master_groups, 		through: :permissions
-  has_many :presentations, 		through: :permissions
-  has_many :displays, 				through: :permissions
+  has_many :slides, 					through: :permissions, order: 'slides.name'
+  has_many :master_groups, 		through: :permissions, order: 'master_groups.name'
+  has_many :presentations, 		through: :permissions, order: 'presentations.name'
+  has_many :displays, 				through: :permissions, order: 'displays.name'
   
   attr_protected :password
   attr_protected :salt
