@@ -43,5 +43,9 @@ class Group < ActiveRecord::Base
   def name
     self.master_group.name
   end
+	
+	def cache_tag
+		'group_' + self.id.to_s
+	end
       
 end
