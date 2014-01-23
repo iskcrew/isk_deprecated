@@ -1,5 +1,6 @@
-- Kakku ei aina päivittynyt alteilla
-  - Kakutuksen voisi sitoa vaan muokkaus-timestamppeihin ja antaa memcachen tappaa vanhaa pois
+- Kakkutus
+  - siirrytty Cashieriin ja kakutusta pitäis testata
+  - _slide -kakutuksessa ei huomioida mennäänkö isoon kuvaan vai :show...
 
 - gridfs
 
