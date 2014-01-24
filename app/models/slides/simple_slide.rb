@@ -129,6 +129,8 @@ class SimpleSlide < SvgSlide
 		
 		if size
 			element.attributes['font-size'] = size
+		else
+			size = element.attributes['font-size']
 		end
 		
 		first_line = true
@@ -142,7 +144,7 @@ class SimpleSlide < SvgSlide
 			if first_line
 				first_line = false
 			elsif l.strip.empty?
-				tspan.attributes['dy'] = '0.2em'
+				tspan.attributes['font-size'] = (size * 0.2).to_i
 			else
 				tspan.attributes['dy'] = '1em'
 			end
