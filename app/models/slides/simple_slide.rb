@@ -14,6 +14,9 @@ class SimpleSlide < SvgSlide
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left').freeze
   include HasSlidedata
 
+	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
+	HeadingSelector = "//text[@id = 'header']"
+	BodySelector = "//text[@id = 'slide_content']"
 
   after_create do |s|
     s.send(:write_slidedata)
@@ -88,6 +91,100 @@ class SimpleSlide < SvgSlide
     new_slide.slidedata = self.slidedata
     return new_slide
   end
+	
+	
+	# Take in the slide data and create a svg using them
+	# This is used both to save the slide and to display a preview
+	# in the simple editor page via websocket calls
+	#TODO: create inkscape compliant svg!
+	def self.create_svg(options)
+		text_align = options[:text_align] || DefaultSlidedata[:text_align]
+		text_size = options[:text_size] || DefaultSlidedata[:text_size]
+		color = options[:color] || DefaultSlidedata[:color]
+		heading = options[:heading] || ''
+		text = options[:text] || ''
+	
+		svg = REXML::Document.new(File.open(BaseTemplate))
+		
+		head = svg.elements[HeadingSelector]
+		body = svg.elements[BodySelector]
+		
+		head = set_text(head, heading, color)
+		body = set_text(body, text, color, text_size, text_align)
+		
+		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
+		
+		return svg
+	end
+	
+	private
+	
+	def self.set_text(element, text, color = nil,size = nil, align = nil)
+		element.elements.each do 
+			element.delete_element('*')
+		end
+		element.text = ""
+		element.attributes['sodipodi:linespacing'] = '125%'
+		
+		
+		if size
+			element.attributes['font-size'] = size
+		end
+		
+		first_line = true
+		
+		text.each_line do |l|
+			tspan = element.add_element 'tspan'
+			tspan.attributes['sodipodi:role'] = "line"
+			tspan.attributes["xml:space"] = "preserve"
+			
+			#First line requires little different attributes
+			if first_line
+				first_line = false
+			elsif l.strip.empty?
+				tspan.attributes['dy'] = '0.2em'
+			else
+				tspan.attributes['dy'] = '1em'
+			end
+			parts = l.split(/<([^>]*)>/)
+			parts.each_index do |i|
+				ts = tspan.add_element 'tspan'
+				if color && (i%2 == 1)
+					ts.attributes['fill'] = color
+				end
+				ts.text = parts[i] + ' '
+			end
+		end
+		
+		
+		return set_align(element, align)
+	end
+
+
+	#TODO: left centered / right centered???
+	def self.set_align(element, align)
+		if align
+			#TODO: move the coordinates to configuration
+			text_start_x = element.attributes['x']
+			
+			
+			case align.strip.downcase
+			when 'right'
+				text_x = Slide::FullWidth - text_start_x
+				text_anchor = 'end'
+			when 'centered'
+				text_x = Slide::FullWidth / 2
+				text_anchor = 'middle'
+			else
+				text_x = text_start_x
+				text_anchor = 'start'
+			end
+			
+			element.attributes['x'] = text_x
+			element.attributes['text-anchor'] = text_anchor	
+		end
+		return element
+	end
   
     
 end
