@@ -111,7 +111,7 @@ class SimpleSlide < SvgSlide
 	
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
-		svg.root.attributes['viewBox'] = "0 0 1280 720"
+		svg.root.attributes['viewBox'] = "0 0 " + Slide::FullWidth.to_s + " " + Slide::FullHeight.to_s
 		
 		head = svg.elements[HeadingSelector]
 		body = svg.elements[BodySelector]
@@ -214,7 +214,7 @@ class SimpleSlide < SvgSlide
 	end
 	
 	def self.margin_right
-		MarginRight
+		Slide::FullWidth - MarginRight
 	end
     
 end
