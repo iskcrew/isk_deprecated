@@ -117,7 +117,7 @@ class SimpleSlide < SvgSlide
 		
 		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
 		
-		return svg
+		return svg.write
 	end
 	
 	private
