@@ -1,88 +1,46 @@
-var SVG;
-var SVG_HEAD;
-var SVG_TEXT;
-var SVG_BGR;
-var INPUT_TEXT;
-var INPUT_TEXT_SIZE;
-var INPUT_TEXT_ALIGN;
-var INPUT_HEAD;
-var INPUT_COLOR;
-var CODE;
-var SERIALIZE;
-var TEMPLATE_TEXT_X;
-var TEMPLATE_WIDTH;
+var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 
-var svgNS = "http://www.w3.org/2000/svg";
-var xmlNS = "http://www.w3.org/XML/1998/namespace";
-var xlinkNS = "http://www.w3.org/1999/xlink";
-
-function prepare(){
-  INPUT_TEXT_ALIGN=document.getElementById("slide_slidedata_text_align");
-  INPUT_TEXT_SIZE=document.getElementById("slide_slidedata_text_size");
-  INPUT_COLOR=document.getElementById("slide_slidedata_color");
-  INPUT_TEXT=document.getElementById("text");
-  INPUT_HEAD=document.getElementById("head");
-  CODE=document.getElementById("code");
-
-  if (! (INPUT_TEXT_ALIGN && INPUT_TEXT_SIZE && INPUT_COLOR && INPUT_TEXT && INPUT_HEAD && CODE)) return false;
-  
-  INPUT_TEXT_ALIGN.addEventListener('change', update, false);
-
-  INPUT_TEXT_SIZE.addEventListener('change', update, false);
-
-  INPUT_COLOR.addEventListener('change', update, false);
-
-  INPUT_TEXT.addEventListener('input', update, false);
-  INPUT_TEXT.wrap='off';
-
-  INPUT_HEAD.addEventListener('input', update, false);
-  INPUT_HEAD.wrap='off';
-
-
-  SERIALIZE = new XMLSerializer();
-
-  var S=document.getElementById("svg");
-  try{SVG=S.contentDocument}
-  catch(err){SVG=S.getSVGDocument}
-
-  SVG_TEXT=SVG.getElementById('slide_content');
-  SVG_HEAD=SVG.getElementById('header');
-  SVG_BGR=SVG.getElementById('background_picture');
-
-  SVG_BGR.setAttributeNS(xlinkNS, 'xlink:href', '/' + SVG_BGR.getAttributeNS(xlinkNS, 'href'))
-
-  TEMPLATE_TEXT_X=parseInt(SVG_TEXT.getAttributeNS(null, 'x'));
-  TEMPLATE_WIDTH=parseInt(SVG.getElementsByTagName('svg')[0].getAttributeNS(null, 'width'));
-  return true;
+var success = function(task) { 
+	console.log("Got new svg");
+	$('#svg_container').html(task);
+	$('#updating_preview').hide();
 }
 
-function clear_element(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
+var failure = function(task) {
+  console.log("Failed to create svg....");
 }
 
-function create_text_tspan(text, fcolor) {
-  var tspan = document.createElementNS(svgNS, "tspan");
-  tspan.appendChild(SVG.createTextNode(text));
-  if (fcolor) tspan.setAttributeNS(null, "fill", fcolor);
-  return tspan;
+var expire = function( callback, interval ) {
+	var timer;
+	return function() {
+		clearTimeout( timer );
+		timer = setTimeout( callback, interval );
+	};
 }
 
-function create_line_tspan(text, fcolor) {
-  var array=text.split(/<([^>]*)>/g);
-  var tspan = document.createElementNS(svgNS, "tspan");
-  tspan.setAttributeNS(xmlNS, "xml:space", "preserve");
-  for (var i in array) {
-    if (i%2) {
-      if (array[i]) tspan.appendChild(create_text_tspan(array[i], fcolor));
-    } else {
-      if (array[i]) tspan.appendChild(create_text_tspan(array[i]));
-    }
-  }
-  tspan.appendChild(SVG.createTextNode(" "));
-  return tspan;
+var updateSlide = function() {
+	console.log("updating...");
+	var msg = {
+		simple: {
+			heading: $("#simple_head").val(),
+			text: $("#simple_text").val(),
+			text_size: $("#simple_text_size").val(),
+			text_align: $("#simple_text_align").val(),
+			color: $("#simple_color").val(),
+		}
+	};
+	dispatcher.trigger('svg.simple', msg, success, failure);
 }
+
+var delayedUpdater = expire(updateSlide, 500);
+ 
+$(function() {
+	$("[data-simple-field]").on("input", function(){
+		$("#updating_preview").show();
+		delayedUpdater();
+	});
+});
+
 
 
 function set_multiline_align(output, input, align) {
@@ -110,40 +68,3 @@ function set_multiline_align(output, input, align) {
     input.style.textAlign = "center";
   }
 }
-
-function set_multiline_text(output, input, size, fcolor) {
-  var linearray=input.value.split(/\r\n|\n|\r/);
-  clear_element(output);
-  if (size) output.setAttributeNS(null, "font-size", size);
-  var x=output.getAttributeNS(null, "x")
-  for (var i in linearray) {
-    var tspan = create_line_tspan(linearray[i], fcolor);
-    if (i > 0) tspan.setAttributeNS(null, "dy", "1em");
-    tspan.setAttributeNS(null, "x", x);
-    output.appendChild(tspan);
-  }
-}
-
-function update(){
-  set_multiline_text(SVG_HEAD, INPUT_HEAD);
-  var align=INPUT_TEXT_ALIGN.value;
-  var size=INPUT_TEXT_SIZE.value;
-  var color=INPUT_COLOR.value;
-  set_multiline_text(SVG_TEXT, INPUT_TEXT, size, color);
-  set_multiline_align(SVG_TEXT, INPUT_TEXT, align);
-  set_multiline_text(SVG_TEXT, INPUT_TEXT, size, color);
-
-  CODE.value=SERIALIZE.serializeToString(SVG);
-}
-
-function onload() {
-  if (prepare())
-    update();
-};
-
-function register_simple_edit() {
-	setTimeout(onload, 1000)
-}
-
-window.addEventListener ?  window.addEventListener("load",register_simple_edit,false) : 
-window.attachEvent && window.attachEvent("onload",register_simple_edit);
