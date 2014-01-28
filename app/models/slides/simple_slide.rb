@@ -111,6 +111,8 @@ class SimpleSlide < SvgSlide
 	
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
+		svg.root.attributes['viewBox'] = "0 0 1280 720"
+		
 		head = svg.elements[HeadingSelector]
 		body = svg.elements[BodySelector]
 		
