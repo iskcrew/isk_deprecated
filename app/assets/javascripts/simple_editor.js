@@ -39,6 +39,11 @@ $(function() {
 		$("#updating_preview").show();
 		delayedUpdater();
 	});
+	
+	$("[data-simple-field]").on("change", function(){
+		$("#updating_preview").show();
+		delayedUpdater();
+	});
 });
 
 
