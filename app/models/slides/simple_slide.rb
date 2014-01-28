@@ -141,21 +141,22 @@ class SimpleSlide < SvgSlide
 		first_line = true
 		
 		text.each_line do |l|
-			tspan = element.add_element 'tspan'
-			tspan.attributes['sodipodi:role'] = "line"
-			tspan.attributes["xml:space"] = "preserve"
+			row = element.add_element 'tspan'
+			row.attributes['x'] = row_x align
+			row.attributes['sodipodi:role'] = "line"
+			row.attributes["xml:space"] = "preserve"
 			
 			#First line requires little different attributes
 			if first_line
 				first_line = false
 			elsif l.strip.empty?
-				tspan.attributes['font-size'] = (size * 0.2).to_i
+				row.attributes['font-size'] = (size * 0.2).to_i
 			else
-				tspan.attributes['dy'] = '1em'
+				row.attributes['dy'] = '1em'
 			end
 			parts = l.split(/<([^>]*)>/)
 			parts.each_index do |i|
-				ts = tspan.add_element 'tspan'
+				ts = row.add_element 'tspan'
 				if color && (i%2 == 1)
 					ts.attributes['fill'] = color
 				end
@@ -166,15 +167,27 @@ class SimpleSlide < SvgSlide
 		
 		return set_align(element, align)
 	end
+	
+	def self.row_x(align)
+		if align
+			case align.strip.downcase
+			when 'right'
+				return margin_right
+			when 'centered'
+				return (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
+			else
+				return margin_left
+			end
+		else
+			return margin_left
+		end
+	end
 
 
 	#TODO: left centered / right centered???
 	def self.set_align(element, align)
 		if align
-			#TODO: move the coordinates to configuration
-			margin_right = MarginRight
-			margin_left = MarginLeft
-			
+			#TODO: move the coordinates to configuration			
 			
 			case align.strip.downcase
 			when 'right'
@@ -193,6 +206,13 @@ class SimpleSlide < SvgSlide
 		end
 		return element
 	end
-  
+	
+	def self.margin_left
+		MarginLeft
+	end
+	
+	def self.margin_right
+		MarginRight
+	end
     
 end
