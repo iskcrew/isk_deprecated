@@ -52,6 +52,20 @@ WebsocketRails::EventMap.describe do
   #   end
   # The above will handle an event triggered on the client like `product.new`.
 
+	namespace :svg do
+		# Create a new svg from suplied data using the SimpeSlide.create_svg method
+		# data = {
+		# 	simple: {
+		# 		heading: 'Slide heading',
+		# 		text: 'Slide contents...',
+		#  		color: Red,   # hilight color
+		# 		text_size: 72,
+		#     text_align: 'left' # left, right or centered
+		# 	}
+		# }
+		subscribe :simple,				to: SvgController, with_method: :simple
+	end
+
 
   namespace :iskdpy do
     #Näytin esittäytyy ja saa alkutietonsa
