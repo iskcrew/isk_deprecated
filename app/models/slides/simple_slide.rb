@@ -107,6 +107,8 @@ class SimpleSlide < SvgSlide
 		heading = options[:heading] || ''
 		text = options[:text] || ''
 	
+	
+	
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
 		head = svg.elements[HeadingSelector]
@@ -157,7 +159,7 @@ class SimpleSlide < SvgSlide
 				if color && (i%2 == 1)
 					ts.attributes['fill'] = color
 				end
-				ts.text = parts[i] + ' '
+				ts.text = parts[i]
 			end
 		end
 		
