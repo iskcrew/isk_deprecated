@@ -176,7 +176,7 @@ class SimpleSlide < SvgSlide
 			when 'right'
 				return margin_right
 			when 'centered'
-				return (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
+				return (margin_right - margin_left) / 2 + margin_left
 			else
 				return margin_left
 			end
@@ -193,17 +193,14 @@ class SimpleSlide < SvgSlide
 			
 			case align.strip.downcase
 			when 'right'
-				text_x = Slide::FullWidth - margin_right
 				text_anchor = 'end'
 			when 'centered'
-				text_x = (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
 				text_anchor = 'middle'
 			else
-				text_x = margin_left
 				text_anchor = 'start'
 			end
 			
-			element.attributes['x'] = text_x
+			element.attributes['x'] = row_x align
 			element.attributes['text-anchor'] = text_anchor	
 		end
 		return element
