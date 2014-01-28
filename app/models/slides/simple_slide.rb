@@ -17,6 +17,9 @@ class SimpleSlide < SvgSlide
 	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
 	HeadingSelector = "//text[@id = 'header']"
 	BodySelector = "//text[@id = 'slide_content']"
+	MarginLeft = 30
+	MarginRight = 30
+
 
   after_create do |s|
     s.send(:write_slidedata)
@@ -167,18 +170,19 @@ class SimpleSlide < SvgSlide
 	def self.set_align(element, align)
 		if align
 			#TODO: move the coordinates to configuration
-			text_start_x = element.attributes['x']
+			margin_right = MarginRight
+			margin_left = MarginLeft
 			
 			
 			case align.strip.downcase
 			when 'right'
-				text_x = Slide::FullWidth - text_start_x
+				text_x = Slide::FullWidth - margin_right
 				text_anchor = 'end'
 			when 'centered'
-				text_x = Slide::FullWidth / 2
+				text_x = (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
 				text_anchor = 'middle'
 			else
-				text_x = text_start_x
+				text_x = margin_left
 				text_anchor = 'start'
 			end
 			
