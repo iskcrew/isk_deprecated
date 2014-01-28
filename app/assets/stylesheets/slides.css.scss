@@ -259,3 +259,47 @@ div.right_column {
 		display: inline-block;
 	}
 }
+
+div.svg_container {
+	width: 400px;
+	height: 225px;
+	padding: 0px; 
+	border: 1px solid black;
+
+	svg {
+		width: 400px;
+		height: 225px;
+	}
+}
+
+textarea#simple_head {
+  font-family: 'Franklin Gothic Heavy';
+  font-weight: normal;
+  font-size: 2em;
+}
+
+textarea#simple_text {
+  font-family: 'Franklin Gothic Heavy';
+  font-weight: normal;
+  font-size: 1.2em;
+}
+
+textarea#code {
+	display: hidden;
+}
+
+div.simple_editor_controls {
+	max-width: 400px;
+	float: left;
+	margin-right: 5px;
+}
+
+div.simple_editor_preview {
+	border: 2px solid #555;
+	margin-left: 10px;
+	display: inline-block;
+}
+
+div.simple_editor_container {
+	min-width: 1200px;
+}
