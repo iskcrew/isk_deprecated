@@ -64,19 +64,19 @@ class SlidesController < ApplicationController
 	end
   
 	def add_to_override
-			slide = Slide.current.find(params[:id], lock: true)
-			display = Display.find(params[:add_to_override][:display_id], lock: true)
+		slide = Slide.current.find(params[:id], lock: true)
+		display = Display.find(params[:add_to_override][:display_id], lock: true)
     
-			raise ApplicationController::PermissionDenied unless display.can_override? current_user
+		raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
-			display.add_to_override(slide, params[:add_to_override][:duration].to_i)
+		display.add_to_override(slide, params[:add_to_override][:duration].to_i)
     	
-			unless display.do_overrides
-				flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
-			end
-			flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
+		unless display.do_overrides
+			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
+		end
+		flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
 
-			redirect_to :back
+		redirect_to :back
 	end
 
 	def hidden
