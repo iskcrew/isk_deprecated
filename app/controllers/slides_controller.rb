@@ -28,36 +28,30 @@ class SlidesController < ApplicationController
 	end
 
 	def deny
-		Slide.transaction do
-			slide = Slide.find(params[:id], lock: true)
-			user = User.find(params[:user_id], lock: true)
-			slide.authorized_users.delete(user)
-		end
+		slide = Slide.find(params[:id], lock: true)
+		user = User.find(params[:user_id], lock: true)
+		slide.authorized_users.delete(user)
     
 		redirect_to :back
 	end
   
 	def grant
-		Slide.transaction do 
-			slide = Slide.find(params[:id], lock: true)
-			user = User.find(params[:grant][:user_id], lock: true)
-			slide.authorized_users << user
-		end
-
+		slide = Slide.find(params[:id], lock: true)
+		user = User.find(params[:grant][:user_id], lock: true)
+		slide.authorized_users << user
+		
 		redirect_to :back    
 	end
 
 	def add_to_group
-		Slide.transaction do
-			slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
-			require_edit(slide)
+		slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
+		require_edit(slide)
     
-			group = Event.current.master_groups.find(params[:add_to_group][:group_id], lock: true)
-			require_edit(group)
+		group = Event.current.master_groups.find(params[:add_to_group][:group_id], lock: true)
+		require_edit(group)
     
-			group.slides << slide
-		end
-    
+		group.slides << slide
+		
 		flash[:notice] = "Added slide " << slide.name << " to group " << group.name
 
 		redirect_to :back
@@ -85,18 +79,16 @@ class SlidesController < ApplicationController
 
 
 	def hide
-		Slide.transaction do
-			slide = Slide.find(params[:id], lock: true)
+		slide = Slide.find(params[:id], lock: true)
     
-			unless slide.can_hide? current_user
-				flash[:error] = "Not allowed"
-				redirect_to :back and return
-			end
-    
-			slide.public = false
-			slide.save!
+		unless slide.can_hide? current_user
+			flash[:error] = "Not allowed"
+			redirect_to :back and return
 		end
-
+    
+		slide.public = false
+		slide.save!
+		
 		respond_to do |format|
 			format.html {redirect_to :back}
 			format.js {render :show}
@@ -126,23 +118,19 @@ class SlidesController < ApplicationController
   
 	#TODO: oikeudet, sisääntulevan inkscape-svg:n validointi
 	def svg_save
-		Slide.transaction do
-			@slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id], lock: true)
 
-			@slide.svg_data = params[:svg]
-			@slide.save!
-		end
+		@slide.svg_data = params[:svg]
+		@slide.save!
 		@slide.delay.generate_images
  
 		render :nothing => true
 	end
 
 	def to_inkscape
-		Slide.transaction do
-			slide = SvgSlide.find(params[:id])
-			ink = InkscapeSlide.create_from_simple(slide)
-			slide.replace! ink
-		end
+		slide = SvgSlide.find(params[:id])
+		ink = InkscapeSlide.create_from_simple(slide)
+		slide.replace! ink
 		flash[:notice] = "Slide was converted to inkscape slide"
     
 		redirect_to :action => :show, :id => ink.id
@@ -194,27 +182,23 @@ class SlidesController < ApplicationController
 	end
   
 	def destroy
-		Slide.transaction do
-			@slide = Slide.find(params[:id], lock: true)
-			require_slide_edit @slide
+		@slide = Slide.find(params[:id], lock: true)
+		require_slide_edit @slide
     
-			@slide.destroy
-			@slide.save!
+		@slide.destroy
+		@slide.save!
       
-		end
 		redirect_to :action => :show, :id => @slide.id
 	end
   
 	def undelete
-		Slide.transaction do
-			@slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id], lock: true)
     
-			require_slide_edit(@slide)
+		require_slide_edit(@slide)
     
-			@slide.undelete
-			@slide.save!
-		end
-    
+		@slide.undelete
+		@slide.save!
+	  
 		redirect_to :action => :show, :id => @slide.id
 	end
     
@@ -296,13 +280,11 @@ class SlidesController < ApplicationController
 	
 	#TODO: move ungroup -action into slide model
 	def ungroup
-		Slide.transaction do
-			slide = Slide.find(params[:id], lock: true)
-			require_edit(slide)
-			slide.master_group_id = Event.current.ungrouped.id
-			slide.save!
-		end
-
+		slide = Slide.find(params[:id], lock: true)
+		require_edit(slide)
+		slide.master_group_id = Event.current.ungrouped.id
+		slide.save!
+	
 		respond_to do |format|
 			format.html {redirect_to :back}
 			format.js {render :index}
