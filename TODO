@@ -25,6 +25,8 @@
   - sido näyttimet eventteihin
 	
 - Conffien hallinta paremmaksi (templaatit, fontit jne)
+	- polut yaml -tiedostoon configin alle
+	- muut eventtikohtaisesti slidedatojen tyyliin
 
 - Palkintojenjakogeneraattorin testausta
 
