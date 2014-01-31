@@ -56,6 +56,7 @@ class Display < ActiveRecord::Base
 	delegate :monitor,:monitor=,																	to: :display_state, allow_nil: true
 	delegate :updated_at, to: :display_state, prefix: :state
 	
+	alias_method :state, :display_state
 	
 	def websocket_channel
 		return "display_" + self.id.to_s
@@ -76,12 +77,12 @@ class Display < ActiveRecord::Base
 	
 	#Either creates a new display with given name or returns exsisting display
 	def self.hello(display_name, display_ip, connection_id = nil)
-		display = Display.where(:name => display_name).first_or_initialize
+		display = Display.where(:name => display_name).first_or_create
 		display.ip = display_ip
 		display.websocket_connection_id = connection_id 
 		display.last_contact_at = Time.now
 		display.last_hello = Time.now
-		display.save!
+		display.state.save!
 		return display
 	end
 	
@@ -93,25 +94,23 @@ class Display < ActiveRecord::Base
 			self.websocket_connection_id = connection_id
 			oq.slide.shown_on self.id
 			oq.destroy
-			self.save!
+			self.state.save!
 		end
 	end
 	
 	#Set the current group and slide for the display and log the slide as shown
 	def set_current_slide(group_id, slide_id, connection_id = nil)
-		self.transaction do
-			if group_id != -1
-				self.current_group = self.presentation.groups.find(group_id)
-			else
-				self.current_group_id = -1
-			end
-			s = Slide.find(slide_id)
-			self.current_slide = s
-			self.last_contact_at = Time.now
-			self.websocket_connection_id = connection_id
-			s.shown_on(self.id)
-			self.save!
+		if group_id != -1
+			self.current_group = self.presentation.groups.find(group_id)
+		else
+			self.current_group_id = -1
 		end
+		s = Slide.find(slide_id)
+		self.current_slide = s
+		self.last_contact_at = Time.now
+		self.websocket_connection_id = connection_id
+		s.shown_on(self.id)
+		self.state.save!
 	end
 
 	#Relation for all monitored displays that are more than Timeout minutes late
