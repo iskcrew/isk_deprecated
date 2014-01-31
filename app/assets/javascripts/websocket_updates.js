@@ -58,7 +58,7 @@ $().ready(function() {
 	displays = dispatcher.subscribe('display');
 	displays.bind('update', update_display);
 
-	display_states = dispatcher.subscribe('display_state');
+	display_states = dispatcher.subscribe('displaystate');
 	display_states.bind('update', update_display_state);
 
 	slidelist = dispatcher.subscribe('slide');
