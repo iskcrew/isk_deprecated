@@ -69,7 +69,7 @@ class SlidesController < ApplicationController
   
 	def add_to_override
 		slide = Slide.current.find(params[:id], lock: true)
-		display = Display.find(params[:add_to_override][:display_id], lock: true)
+		display = Display.find(params[:add_to_override][:display_id])
     
 		raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
