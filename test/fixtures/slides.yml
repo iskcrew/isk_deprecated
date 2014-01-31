@@ -81,3 +81,11 @@ hidden:
     is_svg: true
     deleted: false
     master_group_id: 5
+    
+ungrouped:
+    id: 15
+    position: 1
+    name: ungrouped slide
+    description: I am ungrouped slide for current event
+    filename: slide_15
+    master_group_id: 8    

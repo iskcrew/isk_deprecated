@@ -63,4 +63,13 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
+	test "add slide to group" do
+		assert_difference "MasterGroup.find(master_groups(:one_slide).id).slides.count" do
+			post :add_to_group, {id: slides(:ungrouped), add_to_group: {group_id: master_groups(:one_slide)}}, @adminsession
+		end
+		
+		assert_redirected_to root_path
+		
+	end
+	
 end
