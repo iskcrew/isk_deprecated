@@ -72,4 +72,20 @@ class SlidesControllerTest < ActionController::TestCase
 		
 	end
 	
+	test "ungroup a slide" do
+		assert_difference("Event.current.ungrouped.slides.count") do
+			post :ungroup, {id: slides(:no_clock)}, @adminsession
+		end
+		
+		assert_redirected_to root_path
+	end
+	
+	test "add a slide to override" do
+		assert_difference("Display.find(displays(:normal).id).override_queues.count") do
+			post :add_to_override, {id: slides(:no_clock),  add_to_override: {display_id: displays(:normal).id}}, @adminsession
+		end
+		
+		assert_redirected_to root_path
+	end
+	
 end
