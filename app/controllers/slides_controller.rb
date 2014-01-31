@@ -43,10 +43,20 @@ class SlidesController < ApplicationController
 		redirect_to :back    
 	end
 
+
+	# Add a slide from the current events ungrouped slides group to a real
+	# group.
 	def add_to_group
-		slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
-		require_edit(slide)
+		begin
+			slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
+		rescue ActiveRecord::RecordNotFound
+			# No slide was found in the current events ungrouped slides group
+			flash[:error] = "This slide is already in a group"
+			redirect_to :back and return
+		end
     
+		require_edit(slide)
+		
 		group = Event.current.master_groups.find(params[:add_to_group][:group_id], lock: true)
 		require_edit(group)
     
