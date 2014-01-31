@@ -20,6 +20,9 @@ class WebsocketNotifications < ActiveRecord::Observer
 		end
 		
 		data = {:id => obj.id}
+		if obj.attributes.include? 'display_id'
+			data[:display_id] = obj.display_id
+		end
 		
 		
 		trigger obj, event, data
