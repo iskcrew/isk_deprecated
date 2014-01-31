@@ -1,10 +1,15 @@
-<div class='simple_editor_container'>
 	<%=fields_for @slide do |f|%>
+
+<div class='simple_editor_container'>
 		<% slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)%>
 
-		<%=f.submit%>
-
 		<div class='simple_editor_controls'>
+			
+			<h2>Slide metadata and settings</h2>
+
+			<%=render :partial => 'form'%>
+			
+			
 			<h2>Slide contents</h2>
 
 			<p>Use &lt;foo&gt; to highlight text in the slide.</p>
@@ -16,7 +21,7 @@
 
 			<%=f.fields_for :slidedata do |f|%>
 				<%=f.text_area :heading, {:id => "head", :rows => 1, :cols => 31, :wrap => "soft", :value => slidedata[:heading]}%>
-				<br/>
+			
 				<%=f.text_area :text, {:id => "text", :rows => 6, :cols => 53, :value => slidedata[:text]}%>
 
 				<%=simple_text_align_select(f, slidedata[:text_align])%>
@@ -28,24 +33,17 @@
 			
 			<%=f.hidden_field :svg_data, {:id => "code"}%>
 			
-			<br />
-
-
-			<h2>Slide metadata and settings</h2>
-
-			<%=render :partial => 'form'%>
-
-			<p>
-				<%=f.submit%>
-			</p>
+			<%=f.submit%>
+						
 		</div>
-	<%end #fields for%>
+		
+		<div class="simple_editor_preview">
+			<h3>Preview</h3>
 
-	<div class="simple_editor_preview">
-		<h3>Preview</h3>
-
-		<div id="wrapper">
-			<object id="svg" type="image/svg+xml" data="/simple.svg"></object>
+			<div id="wrapper">
+				<object id="svg" type="image/svg+xml" data="/simple.svg"></object>
+			</div>
 		</div>
-	</div>
+		
 </div>
+	<%end # fields for%>
