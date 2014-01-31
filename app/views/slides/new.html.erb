@@ -14,9 +14,10 @@
 		<%=form_for @slide, :url => {:action => :create}, :html => {:id => 'new_simple_slide'} do |f|%>
 			<%=hidden_field_tag :create_type, 'simple'%>
 			<%=render :partial => 'simple_edit'%>
-
-			<%=f.submit "Create"%>
-		<%end #Form_for (simple)%>
+			<p>
+				<%=f.submit %>
+			</p>
+		<%end # Form_for (simple)%>
 	</div>
 	
 	<div id="inkscape">
@@ -32,7 +33,9 @@
 				</li>
 			</ul>
 			
-			<%=f.submit "Create"%>
+			<p>
+				<%=f.submit %>
+			</p>
 		<%end # form_for (inkscape)%>
 	</div>
 		
@@ -47,7 +50,9 @@
 			<%=hidden_field_tag :create_type, 'http_slide'%>
 			<%=render :partial => 'http_slide_form'%>
 
-			<%=f.submit "Create"%>
+			<p>
+				<%=f.submit %>
+			</p>
 		<%end # form_for (http_slide)%>
 	</div>
 	
@@ -58,7 +63,9 @@
 			<%=render :partial => 'form'%>
 			<p><b>Upload image:</b><%=file_field_tag :upload %></p>
 			<%=hidden_field_tag :create_type, 'image'%>
-			<%=f.submit 'Create'%>
+			<p>
+				<%=f.submit %>
+			</p>
 		<%end%>
 	</div>
 </div>
