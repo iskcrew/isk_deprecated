@@ -3,16 +3,16 @@
 <%=fields_for @slide do |f|%>
 	<%=f.fields_for :slidedata do |f|%>
 		<p>
-			<%=f.label :url, 'URL to fetch from (http or https)'%>
 			<%=f.url_field :url, :value => slidedata[:url]%>
+			<%=f.label :url, 'URL to fetch from (http or https)' %>
 		</p>
 		<p>
-			<%=f.label :user, "HTTP basic auth username (if needed)"%>
 			<%=f.text_field :user, :value => slidedata[:user]%>
+			<%=f.label :user, "HTTP basic auth username (if needed)"%>
 		</p>
 		<p>
-			<%=f.label :password, 'HTTP basic auth password (if needed, stored clear text)'%>
 			<%=f.text_field :password, :value => slidedata[:password]%>
+			<%=f.label :password, 'HTTP basic auth password (if needed, stored clear text)'%>
 		</p>
 	<%end%>
 <%end%>
