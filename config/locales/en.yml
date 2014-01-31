@@ -14,7 +14,7 @@ en:
                 effect_id: "Slide transition effect"
             slide:
                 show_clock: "Show overlay clock with this slide"
-                public: "Public slide (hidden slides won't be shown')"
+                public: "Public slide (hidden slides won't be shown)"
                 name: 'Slide name'
                 description: 'Slide description'
                 duration: 'Slide duration (seconds), -1 for presentation default, 0 for infinite'
