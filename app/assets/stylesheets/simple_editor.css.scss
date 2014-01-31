@@ -32,18 +32,24 @@ textarea#code {
 	display: hidden;
 }
 
-div.simple_editor_controls {
-	max-width: 400px;
-	float: left;
-	margin-right: 5px;
-}
-
-div.simple_editor_preview {
-	border: 2px solid #555;
-	margin-left: 10px;
-	display: inline-block;
-}
 
 div.simple_editor_container {
-	min-width: 1200px;
+	min-width: 900px;
+	overflow: auto;
+	
+	div.simple_editor_controls {
+		max-width: 400px;
+		float: left;
+		margin-right: 5px;
+	}
+	
+	div.simple_editor_preview {
+		border: 2px solid #555;
+		margin-left: 10px;
+		display: block;
+		position: absolute;
+		bottom: 50px;
+		left: 430px;
+	}
+	
 }
