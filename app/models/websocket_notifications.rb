@@ -7,7 +7,7 @@
 
 class WebsocketNotifications < ActiveRecord::Observer
 	#TODO näyttimelle kunnolla observointia...
-	observe :slide, :master_group, :group, :presentation, :display, :override_queue
+	observe :slide, :master_group, :group, :presentation, :display, :override_queue, :display_state
 		
 	def after_commit(obj)
 		Rails.logger.debug '-> Prosessing after_commit callback...'

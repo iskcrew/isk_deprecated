@@ -49,8 +49,17 @@ $().ready(function() {
 		});
 	};
 	
+	function update_display_state(display_state) {
+		console.log('New display state for display: ' + display_state.display_id);
+		display = {id: display_state.display_id};
+		update_display(display);
+	}
+	
 	displays = dispatcher.subscribe('display');
 	displays.bind('update', update_display);
+
+	display_states = dispatcher.subscribe('display_state');
+	display_states.bind('update', update_display_state);
 
 	slidelist = dispatcher.subscribe('slide');
 	slidelist.bind('update', replace_slideitem);

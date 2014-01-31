@@ -10,4 +10,12 @@ class DisplayState < ActiveRecord::Base
 	validates :websocket_connection_id, :current_slide_id, :current_group_id, :numericality => {:only_integer => true}, :allow_nil => true
 	
 	
+	def method_name
+		
+	end
+	
+	def displays
+		[]
+	end
+	
 end
