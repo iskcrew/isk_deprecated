@@ -11,9 +11,9 @@ class PresentationsController < ApplicationController
 	# List all presentations
 	#TODO: bind presentations to events and only list current ones
 	def index
-		@presentations = Presentation.order(:name).all
+		@presentations = Presentation.all
 	end
-   
+	
 	# Show details of a presentation
 	# Supports html and json output
 	def show
