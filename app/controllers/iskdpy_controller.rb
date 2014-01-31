@@ -41,7 +41,7 @@ class IskdpyController < WebsocketRails::BaseController
 		trigger_success data
 	end
 	
-	#Näytin kertoo esittäneensä ohisyötön
+	# FIXME: This _should_ be dead code now... verify and delete
 	def override_shown
 		Display.transaction do
 			d = Display.find(message[:display_id])
