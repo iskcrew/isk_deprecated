@@ -84,15 +84,15 @@ class SlidesController < ApplicationController
 	end
 
 	def hide
-		slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id], lock: true)
     
-		unless slide.can_hide? current_user
+		unless @slide.can_hide? current_user
 			flash[:error] = "Not allowed"
 			redirect_to :back and return
 		end
     
-		slide.public = false
-		slide.save!
+		@slide.public = false
+		@slide.save!
 		
 		respond_to do |format|
 			format.html {redirect_to :back}
