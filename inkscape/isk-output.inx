@@ -4,13 +4,10 @@
 	<id>org.asm.output.isk</id>
 	<dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
 	<dependency type="executable" location="extensions">isk-output.rb</dependency>
-<!--	<output>
-		<extension>.isk</extension>
-		<mimetype>image/svg</mimetype>
-		<_filetypename>Infoscreen Käkätin (*.isk)</_filetypename>
-		<_filetypetooltip>Export to ISK</_filetypetooltip>
-	</output>
--->
+	<param name="iskhost" type="string" _gui-text="ISK hostname">example.com</param>
+	<param name="username" type="string" _gui-text="ISK username">user</param>
+	<param name="password" type="string" _gui-text="ISK password"></param>
+
   <effect needs-live-preview="false">
     <object-type>all</object-type>
     <effects-menu>
