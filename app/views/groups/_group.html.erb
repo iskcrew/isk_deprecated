@@ -1,6 +1,6 @@
 <div id="<%=group.id%>" class="groupitem">
   <div class="groupheader">
-    <div class="groupname"><%=link_to group.name + " " + group.slides.public.count.to_s + "/" + group.slides.count.to_s + " slides, used in " + group.presentations.count.to_s + " presentations" , {:controller => :groups, :action => :show, :id => group.id}, :name => 'group_' + group.id.to_s%></div>
+    <div class="groupname"><%=link_to group.name + " " + group.slides.published.count.to_s + "/" + group.slides.count.to_s + " slides, used in " + group.presentations.count.to_s + " presentations" , {:controller => :groups, :action => :show, :id => group.id}, :name => 'group_' + group.id.to_s%></div>
   
     <div class="groupbuttons">
       <%=link_to 'Details', {:controller => :groups, :aciton => :show, :id => group.id}, :class => 'button'%>

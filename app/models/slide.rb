@@ -36,7 +36,7 @@ class Slide < ActiveRecord::Base
   
 	attr_accessible :name, :show_clock, :description, :public, :duration
   
-	scope :public, where(:public => true)
+	scope :published, where(:public => true)
 	scope :hidden, where(:public => false)
 	scope :current, where(:deleted => false).where(:replacement_id => nil)
 	scope :thrashed, where('replacement_id is not null OR deleted = ?', true)

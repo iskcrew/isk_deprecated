@@ -4,7 +4,7 @@
 
 		<div class="groupname">
 			<%=link_to group.name, :controller => :groups, :action => :show, :id => group.master_group_id %> - 
-			Slides: <%=group.slides.public.count%>/<%=group.slides.count%> - Position: <%=group.position%>
+			Slides: <%=group.slides.published.count%>/<%=group.slides.count%> - Position: <%=group.position%>
 		</div>
 		
 		<div class="actions">

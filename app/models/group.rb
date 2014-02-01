@@ -16,7 +16,7 @@ class Group < ActiveRecord::Base
     hash[:id] = self.id
     hash[:master_id] = self.master_group.id
     hash[:position] = self.position
-    hash[:total_slides] = self.master_group.slides.public.count
+    hash[:total_slides] = self.master_group.slides.published.count
     hash[:created_at] = self.master_group.created_at.to_i
     hash[:updated_at] = self.master_group.updated_at.to_i
     hash[:slides] = Array.new
