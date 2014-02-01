@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   before_filter :require_global_admin
 
   def index
-    @users = User.all
+    @users = User.order(:username).all
   end
 
   def roles
