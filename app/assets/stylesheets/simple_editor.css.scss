@@ -37,6 +37,14 @@ div.simple_editor_container {
 	min-width: 900px;
 	overflow: auto;
 	
+	textarea {
+		width: 400px;
+	}
+	
+	input#head {
+		width: 400px;
+	}
+	
 	div.simple_editor_controls {
 		max-width: 400px;
 		float: left;
