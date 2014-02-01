@@ -1,10 +1,25 @@
+<div class="slide_metadata">
 <%=fields_for @slide do |f|%>
-	<p><b><%=f.label :name%></b></p>
-	<p><%=f.text_field :name%> </p> 
-	<p><%=f.check_box :show_clock%> <b><%=f.label :show_clock%></b></p>
-	<p><%=f.check_box :public%> <b><%=f.label :public%></b> </p>
-	<p><%=f.text_field :duration, :size => 3%> <b><%=f.label :duration%></b> </p>
-
+	<h3><%=f.label :name%></h3>
+	<p><%=f.text_field :name%></p> 
+	
 	<h3><%=f.label :description%></h3>
-	<%=f.text_area :description, :cols => 50, :rows => 5%>
+	<p><%=f.text_area :description, :cols => 50, :rows => 5%></p>
+	
+	<h3>Settings</h3>
+	<table class="slide_settings">
+		<tr>
+			<td><%=f.check_box :show_clock%></td>
+			<td><%=f.label :show_clock%></td>
+		</tr>
+		<tr>
+			<td><%=f.check_box :public%></td>
+			<td><%=f.label :public%></td>
+		</tr>
+		<tr>
+			<td><%=f.text_field :duration, :size => 3%></td>
+			<td><%=f.label :duration%></td>
+		</tr>
+	</table>
 <%end%>
+</div>
