@@ -36,6 +36,11 @@ OptionParser.new do |opts|
 			options.host = host
 	end
 
+	# Need to specify this even when we don't use the id of selected object
+	opts.on("-e", "--id object_id", "Object id") do |id|
+			options.id = id
+	end
+
 	
 end.parse!
 
@@ -44,8 +49,7 @@ resp, data = http.post('/login', "username=#{options.username}&password=#{option
 cookie = resp.response['set-cookie'].split('; ')[0]
 
 unless resp.is_a? Net::HTTPFound
-	$stderr.puts "Error loggin into ISK, aborting"
-	exit -1
+	abort "Error loggin into ISK, aborting"
 end
 
 headers = {
@@ -58,8 +62,7 @@ headers = {
 resp, data = http.post('/slides', data, headers)
 
 unless resp.is_a? Net::HTTPFound
-	$stderr.puts "Error creating slide"
-	exit -1
+	abort "Error creating slide"
 end
 
 if resp.kind_of?(Net::HTTPRedirection)
