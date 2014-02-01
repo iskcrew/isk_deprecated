@@ -60,39 +60,40 @@ div.slidegroups {
 table.compact_slidelist {
 	width: 100%;
 	min-width: 430px;
-
-	div.hidden_slide, div.public_slide {
-		float: left;
-		margin: 2px;
-		padding: 5px;
-		border: 2px solid #d0d0d0;
-		border-radius: 10px;	
-	}
-	
-	div.hidden_slide {
-		background-color: #222;
-		img {
-				opacity: 0.6;
-		}
-	}
-
-	div.public_slide {
-		background-color: #666;
-	}
-	
-	form {
-		display: inline-block;
-		
-		div {
-			display: inline;
-			border: collapse;
-			padding: none;
-		
-		}
-	}
-	
-
 }
+
+
+div.hidden_slide, div.public_slide {
+	float: left;
+	margin: 2px;
+	padding: 5px;
+	border: 2px solid #d0d0d0;
+	border-radius: 10px;	
+}
+
+div.hidden_slide {
+	background-color: #222;
+	img {
+			opacity: 0.6;
+	}
+}
+
+div.public_slide {
+	background-color: #666;
+}
+
+form {
+	display: inline-block;
+	
+	div {
+		display: inline;
+		border: collapse;
+		padding: none;
+	
+	}
+}
+
+
 
 img.slide_hidden {
 	opacity: 0.6;
