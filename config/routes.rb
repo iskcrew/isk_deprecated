@@ -105,8 +105,6 @@ Isk::Application.routes.draw do
     end
     
     collection do
-      get 'thrashed'
-      get 'hidden'
     end
   end
   

@@ -83,11 +83,6 @@ class SlidesController < ApplicationController
 		redirect_to :back
 	end
 
-	def hidden
-		@slides = Slide.current.hidden.all
-	end
-
-
 	def hide
 		slide = Slide.find(params[:id], lock: true)
     
@@ -164,11 +159,6 @@ class SlidesController < ApplicationController
 			redirect_to :action => :show, :id => slide.id
   
 		end
-	end
-  
-  
-	def thrashed
-		@slides = Slide.thrashed.order("name ASC")
 	end
   
 	def show
