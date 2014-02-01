@@ -75,12 +75,15 @@ div.display_preview_wrapper {
 
 div.display_preview {
 	display: block;
-	background: red;
 	float: right;
     
     div.display_info {
         float: none;
     }
+	
+	img {
+		border: 5px solid red;
+	}
     
     div.control_buttons {
         border: 2px solid #d0d0d0;
