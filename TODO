@@ -1,54 +1,71 @@
-- Kakkutus
-  - siirrytty Cashieriin ja kakutusta pitäis testata
-  - _slide -kakutuksessa ei huomioida mennäänkö isoon kuvaan vai :show...
+- Cache
+	- Cashier seems to be working fine.. but tests would be nice
 
-- gridfs
+- DelayedJob
+	- Investigate different backends, as we have redis as a dependency already...
 
-- websocket chat
+- Inkscape plugins
+	- Better error handling
+	- Convert them to python for native inkscape support?
 
-- master_group.clone!
+- Websockets
+	- A ruby script to monitor and log the WS trafic as needed
+	- Notify upstream about websocket-rails logging huge amount of newlines
+	- Chat / better notification system for web users
 
-- presentation.clone!
+- MasterGroups
+	- Create STI classes for ungrouped, thrashed and schedule slides
+	- Deep clone for mastergroups, cloning all slides inside them
 
-- uuden eventin luonti kloonaten vanhan
+- Events
+	- Memoize Event.current like current_user
+	- Allow creating a new event by cloning a old one?
+	- Link presentations to events
+	- Link displays to events
+	- Store template config etc in the event data
+	- Allow choosing of the slide background from web
+
+- Slides
+	- Timed slide actions, like "this slide is public between 15:00 and 02:00"
+	- HttpSlide
+		- Mark slides as invalid if the fetch fails?
+	- Gridfs store for slide images?
+	- InkscapeSlide
+		- Allow converting inkscapeslides to simple slides?
+
+- Presentations
+	- Deep cloning of presentations. clone the presentation structure
+	- Link presentations to events
+
+- Displays
+	- Link displays to events
+	- Log all display boots (hello event) somewhere
 
 - rdoc!
-
--http-slidet merkkaamaan itsensä viallisiksi jos haku epäonnistuu
 
 - admincontroller
 	- clear cache action: cache_store.clear
 	- regenerate all slides
 
-- eventit
-  - sido presikset eventteihin
-  - sido näyttimet eventteihin
-	
-- Conffien hallinta paremmaksi (templaatit, fontit jne)
-	- polut yaml -tiedostoon configin alle
-	- muut eventtikohtaisesti slidedatojen tyyliin
+- config control
+	- Move all magic constants to web editable place
+	- All svg-manipulations should move to REXML so that they can be
+		stackked on top of each others
 
-- Palkintojenjakogeneraattorin testausta
+- Ticket system
+	- Create a simple way to request and track slide edit jobs
 
-- inkscape -> simple conversio
+- Simple editor
+	- A new and improved solution via websockets (ws_simple_edit branch)
 
-- näytin loggaamaan kaikki hellot omalle rivilleen kantaan
+
+TODO: organize the rest of this and translate...
 
 - Inkscape forkki:
 http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
  tuolta relatiiviset sidotuksi inkscapen työhakemistoon
  iski työkalupalkkiin?
 -inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
-
-- tikettijärjestelmä
-- käyttäjille ilmoitukset luoduista kalvoista
-
-- uusittu simple-editor
-  - luodaan svg rubyllä ja pyöritetään websocketin kautta
-  
-- websocket-logittajasivu
-
-- slidejen pohjakuvan valinta kälistä
 
 - inkscape muistilappu:
   -inkscape tahtoo multilineä varten vähän eri juttuja:
@@ -57,10 +74,6 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
       -sodipodi:role="line" <tspan> elementteihin
     -svg:space='preserve' attribuutit vittuun
     -sodipodi xlmns -esittely
-
--Täysikokoisten kuvien vertailu?
-
--Tally??
 
 - unit testit
   - display: TEHTY
@@ -78,12 +91,10 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
  	 - slides: aloitettu
 - testaa myös autentikaatio
 
-- SQL lukitus?
-
 - svg-pohjakirjasto
 	- Previkkakuvat
 
 - Välkkybitti slideihin valittavaksi
 
 - näyttimien rekisteröinti ja hallinta
-	- Näyttimien luominen webistä käsin
+	- Näyttimien luominen webistä käsin ja näytin-paketin kasaaminen
