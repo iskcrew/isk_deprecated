@@ -3,6 +3,7 @@
 
 - DelayedJob
 	- Investigate different backends, as we have redis as a dependency already...
+	- Investigate the way delayed jobs logs stuff, could use the same thing myself...
 
 - Inkscape plugins
 	- Better error handling
