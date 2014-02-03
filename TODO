@@ -41,6 +41,7 @@
 - Displays
 	- Link displays to events
 	- Log all display boots (hello event) somewhere
+	- Slides from override queues don't show in the _display partial
 
 - rdoc!
 
