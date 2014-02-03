@@ -89,6 +89,8 @@ class DisplaysController < ApplicationController
     redirect_to :controller => :presentations, :action => :show, :id => @display.presentation.id
   end
   
+	
+	#FIXME: is this even needed currently?
   def add_slide
     @display = Display.find(params[:id])
     require_edit @display
