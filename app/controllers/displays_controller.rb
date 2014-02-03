@@ -90,7 +90,7 @@ class DisplaysController < ApplicationController
   end
   
 	
-	#FIXME: is this even needed currently?
+	# FIXME: is this even needed currently?
   def add_slide
     @display = Display.find(params[:id])
     require_edit @display
@@ -99,6 +99,7 @@ class DisplaysController < ApplicationController
     @slides = Slide.current
   end
   
+	# FIXME: This logic needs to go to the model
   def queue_slide
     display = Display.find(params[:id])
     require_override display
@@ -121,6 +122,8 @@ class DisplaysController < ApplicationController
     
   end
   
+	
+	#FIXME: this logic needs to go to the model
   def sort_queue
     Display.transaction do
       d = Display.find(params[:id])
