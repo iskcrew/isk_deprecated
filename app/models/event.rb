@@ -13,8 +13,8 @@ class Event < ActiveRecord::Base
 	has_many :master_groups
 	
 	
-	belongs_to :thrashed, :class_name => 'MasterGroup', :foreign_key => 'thrashed_id'
-	belongs_to :ungrouped, :class_name => 'MasterGroup', :foreign_key => 'ungrouped_id'
+	belongs_to :thrashed, :class_name => 'ThrashGroup', :foreign_key => 'thrashed_id'
+	belongs_to :ungrouped, :class_name => 'UnGroup', :foreign_key => 'ungrouped_id'
 	
 	validates :name, :uniqueness => true, :presence => true
 	validates :current, :inclusion => { :in => [true, false] }	
@@ -74,13 +74,9 @@ class Event < ActiveRecord::Base
 	
 	#After creating a new event create the associated internal slidegroups.
 	after_create do |e|
-		e.ungrouped = MasterGroup.where(:name => ('Ungrouped slides for ' + e.name)).first_or_create
-		e.ungrouped.internal = true
-		e.ungrouped.save!
+		e.ungrouped = UnGroup.create(:name => ('Ungrouped slides for ' + e.name))
 		
-		e.thrashed = MasterGroup.where(:name => ('Thrashed slides for ' + e.name)).first_or_create
-		e.thrashed.internal = true
-		e.thrashed.save!
+		e.thrashed = ThrashGroup.create(:name => ('Thrashed slides for ' + e.name))
 		
 		e.master_groups << e.ungrouped
 		e.master_groups << e.thrashed
