@@ -3,7 +3,7 @@
 	<table class="compact_slidelist">
 		<tr>
 			<th>
-				<%unless group.id == Event.current.ungrouped.id%>
+				<%unless group.id == current_event.ungrouped.id%>
 					<%=group_link_tag(group)%>
 					<%slides = group.slides%>
 				<%else #group is current events ungrouped slide group%>
