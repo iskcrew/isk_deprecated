@@ -12,11 +12,11 @@ class SlidesController < ApplicationController
     
 	def index
 		if params[:filter] == "thrashed"
-			@groups = [Event.current.thrashed]
+			@groups = [current_event.thrashed]
 			@filter = :thrashed
 		else
 			@groups = Array.new
-			@groups << Event.current.ungrouped
+			@groups << current_event.ungrouped
 			@groups << MasterGroup.current.order("LOWER(name), name").includes(:slides).all
 			@groups.flatten!
 		end
@@ -48,7 +48,7 @@ class SlidesController < ApplicationController
 	# group.
 	def add_to_group
 		begin
-			slide = Event.current.ungrouped.slides.find(params[:id], lock: true)
+			slide = current_event.ungrouped.slides.find(params[:id], lock: true)
 		rescue ActiveRecord::RecordNotFound
 			# No slide was found in the current events ungrouped slides group
 			flash[:error] = "This slide is already in a group"
@@ -57,7 +57,7 @@ class SlidesController < ApplicationController
     
 		require_edit(slide)
 		
-		group = Event.current.master_groups.find(params[:add_to_group][:group_id], lock: true)
+		group = current_event.master_groups.find(params[:add_to_group][:group_id], lock: true)
 		require_edit(group)
     
 		group.slides << slide
@@ -282,7 +282,7 @@ class SlidesController < ApplicationController
 	def ungroup
 		slide = Slide.find(params[:id], lock: true)
 		require_edit(slide)
-		slide.master_group_id = Event.current.ungrouped.id
+		slide.master_group_id = current_event.ungrouped.id
 		slide.save!
 	
 		respond_to do |format|
