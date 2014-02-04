@@ -10,7 +10,6 @@
 class	ThrashGroup < MasterGroup
 	belongs_to :event
 	
-	#FIXME: make slides association only show thrashed slides
   has_many :slides, foreign_key: :master_group_id, order: 'position ASC', conditions: 'deleted = 1'
 	
 
