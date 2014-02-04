@@ -17,6 +17,8 @@
 				I'm <b><%=current_user.username%></b>
 				<%=link_to 'Logout', {:controller => :logins, :action => :destroy}, :method => :delete%>
 			</div>
+			<div class="current_event">Event: <%=current_event.name%></div>
+			
 		</div>
 		<%=render :partial => "navigation" %>
 		<div class='flash'>
