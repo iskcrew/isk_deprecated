@@ -33,24 +33,29 @@ event1_ungrouped:
     name: ungrouped slides for event1
     event_id: 1
     internal: true
+    type: <%=UnGroup.sti_name%>
     
 event2_ungrouped:
     id: 8
     name: ungrouped slides for event2
     event_id: 2
     internal: true
+    type: <%=UnGroup.sti_name%>
     
 event1_thrashed:
     id: 9
     name: thrashed slides for event1
     event_id: 1
     internal: true
+    type: <%=ThrashGroup.sti_name%>
     
 event2_thrashed:
     id: 10
     name: thrashed slides for event2
     event_id: 2
     internal: true
+    type: <%=ThrashGroup.sti_name%>
+
     
 schedule_1_slide:
     id: 11
