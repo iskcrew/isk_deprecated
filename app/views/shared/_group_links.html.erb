@@ -2,8 +2,8 @@
 #Luodaan vasemmalla leijuva lista kaikista ryhmistä joista voi scrollata ikkunan ryhmän kohdalle
 %>
 
-<%if @groups && @groups.size == 1%>
-	<%cache('group_links', tag: ["groups", "slides"]) do%>
+<%if @groups && @groups.size > 0%>
+	<%=cache('group_links', tag: ["groups", "slides"]) do%>
 	<div class="grouplinks" id="scrollingDiv">
 		<p>Goto group:</p>
 		<ul>
@@ -16,5 +16,5 @@
 			<%end%>
 		</ul>
 	</div>
-	<%end # cache%>
-<%end # if%>
+	<%end%>
+<%end%>
