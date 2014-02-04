@@ -1,6 +1,6 @@
 # ISK - A web controllable slideshow system
 #
-# Group for storing trashed slides in
+# Group for storing ungrouped slides in
 #
 # Author::    Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
