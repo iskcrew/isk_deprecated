@@ -10,14 +10,14 @@
 class	ThrashGroup < MasterGroup
 	belongs_to :event
 	
-  has_many :slides, foreign_key: :master_group_id, order: 'position ASC', conditions: 'deleted = 1'
-	
+  has_many :slides, foreign_key: :master_group_id, order: 'position ASC'
 
-	
-	def name
-		'Thrashed slides'
+	after_initialize do |g|
+		g.internal = true
 	end
-	
-	
+
+	def name
+		'Ungrouped slides'
+	end
 	
 end
