@@ -48,7 +48,7 @@ class SlidesController < ApplicationController
 	# group.
 	def add_to_group
 		begin
-			slide = current_event.ungrouped.slides.find(params[:id], lock: true)
+			slide = current_event.ungrouped.slides.find(params[:id])
 		rescue ActiveRecord::RecordNotFound
 			# No slide was found in the current events ungrouped slides group
 			flash[:error] = "This slide is already in a group"
@@ -280,9 +280,9 @@ class SlidesController < ApplicationController
 	
 	#TODO: move ungroup -action into slide model
 	def ungroup
-		slide = Slide.find(params[:id], lock: true)
+		slide = Slide.find(params[:id])
 		require_edit(slide)
-		slide.master_group_id = current_event.ungrouped.id
+		slide.master_group = current_event.ungrouped
 		slide.save!
 	
 		respond_to do |format|
