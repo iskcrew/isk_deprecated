@@ -67,6 +67,10 @@ module ApplicationHelper
       @_current_user ||= session[:user_id] &&
         User.includes(:permissions).find_by_id(session[:user_id])
   end
+
+  def current_event
+      @_current_event ||= Event.current
+  end
   
   
 end
