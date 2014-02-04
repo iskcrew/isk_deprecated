@@ -3,6 +3,5 @@
 	<%if Slide.can_create? current_user%>
 		<%=link_to "New", :controller => :slides, :action => :new%>
 	<%end%>
-	<%=link_to 'Hidden', :controller => :slides, :action => :hidden%>
 	<%= yield :navigation%>
 </div>
