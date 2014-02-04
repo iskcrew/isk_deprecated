@@ -8,12 +8,13 @@
 class Slide < ActiveRecord::Base
 	require 'rexml/document'
  
-	before_create do |s|
+ 	after_initialize do |s|
 		if s.master_group.blank?
 			s.master_group_id = Event.current.ungrouped.id
 		end
-		return true
+		return true		
 	end
+ 
   
 	after_create do |s|
 		s.update_column :filename, "slide_" + s.id.to_s
@@ -33,7 +34,8 @@ class Slide < ActiveRecord::Base
 
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
-  
+  validates :master_group, presence: true
+	
 	attr_accessible :name, :show_clock, :description, :public, :duration
   
 	scope :published, where(:public => true)
