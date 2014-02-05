@@ -8,7 +8,7 @@ class AddUngroups < ActiveRecord::Migration
 	end
 	
 	
-	class Ungroup < MasterGroup
+	class UnGroup < MasterGroup
 		
 	end
 	
