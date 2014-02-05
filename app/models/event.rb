@@ -74,14 +74,8 @@ class Event < ActiveRecord::Base
 	
 	#After creating a new event create the associated internal slidegroups.
 	after_create do |e|
-		e.ungrouped = UnGroup.create(:name => ('Ungrouped slides for ' + e.name))
-		
-		e.thrashed = ThrashGroup.create(:name => ('Thrashed slides for ' + e.name))
-		
-		e.master_groups << e.ungrouped
-		e.master_groups << e.thrashed
-		
-		e.save!
+		e.ungrouped = UnGroup.create(name: ('Ungrouped slides for ' + e.name), event_id: e.id)
+		e.thrashed = ThrashGroup.create(name: ('Thrashed slides for ' + e.name), event_id: e.id)
 	end
 	
 	
