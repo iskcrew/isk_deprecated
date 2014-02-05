@@ -17,7 +17,7 @@ class	ThrashGroup < MasterGroup
 	end
 
 	def name
-		'Ungrouped slides'
+		'Thrashed slides'
 	end
 	
 end
