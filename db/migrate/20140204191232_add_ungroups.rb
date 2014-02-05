@@ -1,4 +1,17 @@
 class AddUngroups < ActiveRecord::Migration
+	class Event < ActiveRecord::Base
+	
+	end
+	
+	class MasterGroup < ActiveRecord::Base
+	
+	end
+	
+	
+	class Ungroup < MasterGroup
+		
+	end
+	
   def up
 		Event.transaction do
 			Event.all.each do |e|

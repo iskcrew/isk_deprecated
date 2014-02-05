@@ -1,4 +1,19 @@
 class AddThrashGroupsStiModel < ActiveRecord::Migration
+	class Event < ActiveRecord::Base
+	
+	end
+
+	class MasterGroup < ActiveRecord::Base
+	
+	end
+
+	
+	class ThrashGroup < MasterGroup
+		
+	end
+	
+	
+	
   def up
 		Event.transaction do
 			Event.all.each do |e|
