@@ -60,6 +60,17 @@ class DisplayTest < ActiveSupport::TestCase
 		assert displays(:late).late?
 		assert !displays(:normal).late?
 	end
+	
+	test "to_hash" do
+		h = displays(:normal).to_hash
+		assert h[:id] = displays(:normal).id, "Hash had wrong display id"
+		assert h[:presentation][:name] = "I have 1+10+1+1 slides!", "Hash had wrong presentation name"
+		
+		h = displays(:no_presentation).to_hash
+		assert h[:id] = displays(:no_presentation).id, "Hash had wrong display id"
+		assert h[:presentation].empty?, "Hash contained a presentation"
+		
+	end
 
 	
 end
