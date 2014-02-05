@@ -16,6 +16,8 @@ class EventTest < ActiveSupport::TestCase
 		assert !e.current
 		assert_not_equal e, Event.current, "New event became current"
 		assert_equal c, Event.current, "Current event got changed"
+		assert_equal e.ungrouped.event_id, e.id, "Ungrouped group doesn't have correct event_id"
+		assert_equal e.thrashed.event_id, e.id, "Thrashed group doesn't have correct event_id"
 	end
 	
 	test "Create new current event" do
@@ -27,6 +29,8 @@ class EventTest < ActiveSupport::TestCase
 		assert e.save, "Error saving event"
 		assert e.current, "Event is the current one"
 		assert_equal e, Event.current, "New event isn't current one"
+		assert_equal e.ungrouped.event_id, e.id, "Ungrouped group doesn't have correct event_id"
+		assert_equal e.thrashed.event_id, e.id, "Thrashed group doesn't have correct event_id"
 		
 	end
 	
