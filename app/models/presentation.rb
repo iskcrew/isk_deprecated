@@ -13,6 +13,7 @@ class Presentation < ActiveRecord::Base
 
 	has_many :groups, :order => "position ASC"
 	belongs_to :effect
+	belongs_to :event
 	has_many :displays
 	
 	has_many :permissions

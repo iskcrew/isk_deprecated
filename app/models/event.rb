@@ -11,6 +11,7 @@ class Event < ActiveRecord::Base
 	before_save :set_current_event
 	
 	has_many :master_groups
+	has_many :presentations
 	
 	
 	belongs_to :thrashed, :class_name => 'ThrashGroup', :foreign_key => 'thrashed_id'
