@@ -16,6 +16,7 @@
 
 - MasterGroups
 	- Create STI classes for ungrouped, thrashed and schedule slides
+		- UnGroup and ThrashGroup have been created, need to update all view logic...
 	- Deep clone for mastergroups, cloning all slides inside them
 
 - Events
@@ -59,6 +60,9 @@
 
 - Simple editor
 	- A new and improved solution via websockets (ws_simple_edit branch)
+
+- Rake tasks
+	- Create a cleanup task to really delete the soft-deleted slides and their images
 
 
 TODO: organize the rest of this and translate...
