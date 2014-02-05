@@ -18,7 +18,7 @@ class AddThrashGroupsStiModel < ActiveRecord::Migration
 		Event.transaction do
 			Event.all.each do |e|
 				g = MasterGroup.find(e.thrashed_id)
-				g.type = ThrashGroup.sti_name
+				g.type = 'ThrashGroup'
 				g.save!
 			end
 		end
@@ -28,7 +28,7 @@ class AddThrashGroupsStiModel < ActiveRecord::Migration
 		Event.transaction do
 			Event.all.each do |e|
 				g = MasterGroup.find(e.thrashed_id)
-				g.type = MasterGroup.sti_name
+				g.type = nil
 				g.save!
 			end
 		end

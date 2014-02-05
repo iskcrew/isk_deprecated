@@ -16,7 +16,7 @@ class AddUngroups < ActiveRecord::Migration
 		Event.transaction do
 			Event.all.each do |e|
 				g = MasterGroup.find(e.ungrouped_id)
-				g.type = UnGroup.sti_name
+				g.type = 'UnGroup'
 				g.save!
 			end
 		end
@@ -26,7 +26,7 @@ class AddUngroups < ActiveRecord::Migration
 		Event.transaction do
 			Event.all.each do |e|
 				g = MasterGroup.find(e.ungrouped_id)
-				g.type = MasterGroup.sti_name
+				g.type = nil
 				g.save!
 			end
 		end
