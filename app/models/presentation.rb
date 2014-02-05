@@ -27,6 +27,15 @@ class Presentation < ActiveRecord::Base
 	
 	attr_accessible :name, :effect_id, :delay
 	
+	# Touch associated displays
+  after_save do |p|
+		p.displays.each do |d|
+			d.touch
+		end
+	end
+	
+	
+	
 	#Module that contains our ACL logic.
 	include ModelAuthorization
 	

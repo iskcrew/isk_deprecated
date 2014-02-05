@@ -10,7 +10,15 @@ class Group < ActiveRecord::Base
   belongs_to :presentation, :touch => true
   sortable :scope => :presentation_id
   
-  def to_hash
+	
+	# Touch associated displays
+  after_save do |g|
+		g.displays.each do |d|
+			d.touch
+		end
+	end
+  
+	def to_hash
     hash = Hash.new
     hash[:name] = self.name
     hash[:id] = self.id

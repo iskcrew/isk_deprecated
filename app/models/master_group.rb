@@ -25,6 +25,14 @@ class MasterGroup < ActiveRecord::Base
 		g.event = Event.current unless g.event
 	end
 	
+	# Touch associated displays
+  after_save do |mg|
+		mg.displays.each do |d|
+			d.touch
+		end
+	end
+	
+	
 	def self.ungrouped
 		Event.current.ungrouped
 	end

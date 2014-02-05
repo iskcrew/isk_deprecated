@@ -24,8 +24,13 @@ class Slide < ActiveRecord::Base
 		end
     
 	end
-  
-  
+
+	# Touch associated displays
+  after_save do |s|
+		s.displays.each do |d|
+			d.touch
+		end
+	end
     
 	belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
 	belongs_to :master_group, :touch => true

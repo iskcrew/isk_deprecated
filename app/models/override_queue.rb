@@ -6,12 +6,12 @@
 
 
 class OverrideQueue < ActiveRecord::Base
-  belongs_to :display
+  belongs_to :display, touch: true
   belongs_to :slide
 
   validates :duration, :numericality => {:only_integer => true}
   #TODO: varmista että presis ja slide on olemassa
-  
+	
   
   sortable :scope => :display_id
   
