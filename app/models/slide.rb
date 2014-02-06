@@ -35,8 +35,11 @@ class Slide < ActiveRecord::Base
 	belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
 	belongs_to :master_group, :touch => true
 	has_many :display_counts
-	has_and_belongs_to_many :authorized_users, :class_name => 'User'
-
+	
+	has_many :permissions
+	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
+	
+	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
   validates :master_group, presence: true
