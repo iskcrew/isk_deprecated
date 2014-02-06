@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140204191724) do
+ActiveRecord::Schema.define(:version => 20140206110620) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -66,14 +66,6 @@ ActiveRecord::Schema.define(:version => 20140204191724) do
   add_index "displays", ["name"], :name => "index_displays_on_name", :unique => true
   add_index "displays", ["presentation_id"], :name => "index_displays_on_presentation_id"
 
-  create_table "displays_users", :id => false, :force => true do |t|
-    t.integer "display_id"
-    t.integer "user_id"
-  end
-
-  add_index "displays_users", ["display_id"], :name => "index_displays_users_on_display_id"
-  add_index "displays_users", ["user_id"], :name => "index_displays_users_on_user_id"
-
   create_table "effects", :force => true do |t|
     t.string   "name",        :limit => 100
     t.string   "description", :limit => 200
@@ -115,14 +107,6 @@ ActiveRecord::Schema.define(:version => 20140204191724) do
 
   add_index "master_groups", ["event_id"], :name => "index_master_groups_on_event_id"
 
-  create_table "master_groups_users", :id => false, :force => true do |t|
-    t.integer "master_group_id"
-    t.integer "user_id"
-  end
-
-  add_index "master_groups_users", ["master_group_id"], :name => "index_master_groups_users_on_master_group_id"
-  add_index "master_groups_users", ["user_id"], :name => "index_master_groups_users_on_user_id"
-
   create_table "override_queues", :force => true do |t|
     t.integer  "display_id"
     t.integer  "position"
@@ -156,15 +140,8 @@ ActiveRecord::Schema.define(:version => 20140204191724) do
     t.datetime "updated_at",                                :null => false
     t.integer  "delay",                     :default => 30
     t.integer  "effect_id",                 :default => 1
+    t.integer  "event_id"
   end
-
-  create_table "presentations_users", :id => false, :force => true do |t|
-    t.integer "presentation_id"
-    t.integer "user_id"
-  end
-
-  add_index "presentations_users", ["presentation_id"], :name => "index_presentations_users_on_presentation_id"
-  add_index "presentations_users", ["user_id"], :name => "index_presentations_users_on_user_id"
 
   create_table "roles", :force => true do |t|
     t.string   "role",        :limit => 50,                  :null => false
@@ -224,14 +201,6 @@ ActiveRecord::Schema.define(:version => 20140204191724) do
   add_index "slides", ["id", "type"], :name => "index_slides_on_id_and_type"
   add_index "slides", ["master_group_id"], :name => "index_slides_on_master_group_id"
   add_index "slides", ["replacement_id"], :name => "index_slides_on_replacement_id"
-
-  create_table "slides_users", :id => false, :force => true do |t|
-    t.integer "slide_id"
-    t.integer "user_id"
-  end
-
-  add_index "slides_users", ["slide_id"], :name => "index_slides_users_on_slide_id"
-  add_index "slides_users", ["user_id"], :name => "index_slides_users_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "username",   :limit => 50
