@@ -7,17 +7,15 @@
 
 class Group < ActiveRecord::Base
   belongs_to :master_group
-  belongs_to :presentation, :touch => true
+  belongs_to :presentation
   sortable :scope => :presentation_id
   
 	
 	# Touch associated displays
-  after_save do |g|
-		g.displays.each do |d|
-			d.touch
-		end
-	end
-  
+  after_save :update_timestamps
+	after_destroy :update_timestamps
+	
+	  
 	def to_hash
     hash = Hash.new
     hash[:name] = self.name
@@ -56,4 +54,23 @@ class Group < ActiveRecord::Base
 		'group_' + self.id.to_s
 	end
       
+	private
+	
+	def update_timestamps
+		touch_by_presentation(self.presentation_id)
+		if changed.include? 'presentation_id'
+			touch_by_presentation(self.presentation_id_was)
+		end
+	end
+	
+	# We need to proganate timestamps down the presentation chain for
+	# the dpy, as it updates it's data based on timestamps
+	def touch_by_presentation(p_id)
+		d = Display.joins(:presentation).where(presentations: {id: p_id})
+		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		
+		Presentation.where(id: p_id).update_all(updated_at: Time.now.utc)
+	end
+	
+			
 end

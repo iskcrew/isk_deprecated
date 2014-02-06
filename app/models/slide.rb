@@ -26,14 +26,10 @@ class Slide < ActiveRecord::Base
 	end
 
 	# Touch associated displays
-  after_save do |s|
-		s.displays.each do |d|
-			d.touch
-		end
-	end
+  after_save :update_timestamps
     
 	belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
-	belongs_to :master_group, :touch => true
+	belongs_to :master_group
 	has_many :display_counts
 	has_one :event, through: :master_group
 	
@@ -414,6 +410,27 @@ class Slide < ActiveRecord::Base
 		end
     
 		return command
-	end  
+	end 
+	
+	private
+	
+	def update_timestamps
+		touch_by_group(self.master_group_id)
+		if changed.include? 'master_group_id'
+			touch_by_group(self.master_group_id_was)
+		end
+	end
+	
+	# We need to proganate timestamps down the presentation chain for
+	# the dpy, as it updates it's data based on timestamps
+	def touch_by_group(group_id)
+		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
+		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		
+		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
+		p.update_all("presentations.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		
+		MasterGroup.where(id: group_id).update_all(updated_at: Time.now.utc)
+	end
   
 end

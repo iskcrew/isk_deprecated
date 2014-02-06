@@ -12,6 +12,7 @@ class Presentation < ActiveRecord::Base
 	
 
 	has_many :groups, :order => "position ASC"
+	has_many :master_groups, through: :groups
 	belongs_to :effect
 	belongs_to :event
 	has_many :displays

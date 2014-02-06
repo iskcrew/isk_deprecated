@@ -26,11 +26,8 @@ class MasterGroup < ActiveRecord::Base
 	end
 	
 	# Touch associated displays
-  after_save do |mg|
-		mg.displays.each do |d|
-			d.touch
-		end
-	end
+  after_save :update_timestamps
+	after_destroy :update_timestamps
 	
 	
 	def self.ungrouped
@@ -86,5 +83,22 @@ class MasterGroup < ActiveRecord::Base
 	def cache_tag
 		"master_group_" + self.id.to_s
 	end
+	
+	private
+	
+	def update_timestamps
+		touch_by_group(self.id)
+	end
+	
+	# We need to proganate timestamps down the presentation chain for
+	# the dpy, as it updates it's data based on timestamps
+	def touch_by_group(group_id)
+		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
+		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		
+		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
+		p.update_all("presentations.updated_at = '#{Time.now.utc.to_s(:db)}'")
+	end
+	
 	
 end
