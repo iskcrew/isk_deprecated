@@ -35,6 +35,7 @@ class Slide < ActiveRecord::Base
 	belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
 	belongs_to :master_group, :touch => true
 	has_many :display_counts
+	has_one :event, through: :master_group
 	
 	has_many :permissions
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
