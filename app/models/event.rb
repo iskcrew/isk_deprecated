@@ -12,6 +12,8 @@ class Event < ActiveRecord::Base
 	
 	has_many :master_groups
 	has_many :presentations
+	has_many :schedules
+	has_many :slides, through: :master_groups
 	
 	
 	belongs_to :thrashed, :class_name => 'ThrashGroup', :foreign_key => 'thrashed_id'
