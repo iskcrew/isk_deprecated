@@ -46,6 +46,9 @@ $(function() {
 	});
 });
 
+$().ready(function() {
+	updateSlide();
+});
 
 
 function set_multiline_align(output, input, align) {
