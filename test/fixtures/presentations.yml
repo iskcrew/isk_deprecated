@@ -6,7 +6,7 @@ empty:
     
 with_slides:
     id: 2
-    name: I have 1+10+1+1 slides!
+    name: "I have 1+10+1+1 slides!"
     delay: 20
     effect_id: 1
 
