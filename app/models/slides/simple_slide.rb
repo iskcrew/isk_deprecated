@@ -154,6 +154,7 @@ class SimpleSlide < SvgSlide
 			elsif l.strip.empty?
 				row.attributes['font-size'] = (size.to_i * 0.4).to_i
 				row.attributes['dy'] = '1em'
+				l = ' '
 			else
 				row.attributes['dy'] = '1em'
 			end
