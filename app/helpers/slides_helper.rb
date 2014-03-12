@@ -108,15 +108,15 @@ module SlidesHelper
   end
   
   def simple_color_select(f, color)
-    f.select :color, options_for_select(simple_colors, color)
+    f.select :color, options_for_select(simple_colors, color), {}, id: 'simple_color', data: {simple_Field: true}
   end
   
   def simple_text_size_select(f, size)
-    f.select :text_size, options_for_select(simple_text_sizes, size)
+	  f.select :text_size, options_for_select(simple_text_sizes, size),  {}, id: 'simple_text_size', data: {simple_field: true}
   end
   
   def simple_text_align_select(f, align)
-    f.select :text_align, options_for_select(simple_aligns, align)
+    f.select :text_align, options_for_select(simple_aligns, align), {}, id: 'simple_text_align', data: {simple_field: true}
   end
   
   def hide_button_or_status(s, remote = false)

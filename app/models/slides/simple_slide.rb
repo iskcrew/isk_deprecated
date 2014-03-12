@@ -111,6 +111,8 @@ class SimpleSlide < SvgSlide
 	
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
+		svg.root.attributes['viewBox'] = "0 0 " + Slide::FullWidth.to_s + " " + Slide::FullHeight.to_s
+		
 		head = svg.elements[HeadingSelector]
 		body = svg.elements[BodySelector]
 		
@@ -150,7 +152,8 @@ class SimpleSlide < SvgSlide
 			if first_line
 				first_line = false
 			elsif l.strip.empty?
-				row.attributes['font-size'] = (size * 0.2).to_i
+				row.attributes['font-size'] = (size.to_i * 0.4).to_i
+				row.attributes['dy'] = '1em'
 			else
 				row.attributes['dy'] = '1em'
 			end
@@ -174,7 +177,7 @@ class SimpleSlide < SvgSlide
 			when 'right'
 				return margin_right
 			when 'centered'
-				return (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
+				return (margin_right - margin_left) / 2 + margin_left
 			else
 				return margin_left
 			end
@@ -191,17 +194,14 @@ class SimpleSlide < SvgSlide
 			
 			case align.strip.downcase
 			when 'right'
-				text_x = Slide::FullWidth - margin_right
 				text_anchor = 'end'
 			when 'centered'
-				text_x = (Slide::FullWidth - margin_right - margin_left) / 2 + margin_left
 				text_anchor = 'middle'
 			else
-				text_x = margin_left
 				text_anchor = 'start'
 			end
 			
-			element.attributes['x'] = text_x
+			element.attributes['x'] = row_x align
 			element.attributes['text-anchor'] = text_anchor	
 		end
 		return element
@@ -212,7 +212,7 @@ class SimpleSlide < SvgSlide
 	end
 	
 	def self.margin_right
-		MarginRight
+		Slide::FullWidth - MarginRight
 	end
     
 end

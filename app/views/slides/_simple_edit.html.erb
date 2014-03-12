@@ -20,9 +20,9 @@
 
 
 			<%=f.fields_for :slidedata do |f|%>
-				<%=f.text_area :heading, {:id => "head", :rows => 1, :cols => 31, :wrap => "soft", :value => slidedata[:heading]}%>
-			
-				<%=f.text_area :text, {:id => "text", :rows => 6, :cols => 53, :value => slidedata[:text]}%>
+				<%=f.text_area :heading, {:id => "simple_head", :rows => 1, :cols => 31, :wrap => "soft", :value => slidedata[:heading], data: {simple_field: true}}%>
+				<br/>
+				<%=f.text_area :text, {:id => "simple_text", :rows => 6, :cols => 53, :value => slidedata[:text], data: {simple_field: true}}%>
 
 				<%=simple_text_align_select(f, slidedata[:text_align])%>
 				<%=simple_text_size_select(f, slidedata[:text_size])%>
@@ -34,14 +34,17 @@
 			<%=f.hidden_field :svg_data, {:id => "code"}%>
 						
 		</div>
-		
-		<div class="simple_editor_preview">
-			<h3>Preview</h3>
+	<%end #fields for%>
 
-			<div id="wrapper">
-				<object id="svg" type="image/svg+xml" data="/simple.svg"></object>
-			</div>
+	<div class="simple_editor_preview">
+		<h3>Preview</h3>
+		<div id='updating_preview'><p>Updating preview...</p></div>
+
+		<div id="svg_container" class="svg_container" style="width: 400px; height 255px">
+			<svg id='svg'>
+		
+			</svg>
 		</div>
 		
+	</div>
 </div>
-	<%end # fields for%>
