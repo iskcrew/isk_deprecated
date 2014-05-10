@@ -19,6 +19,8 @@ gem 'daemons'
 gem 'dynamic_form'
 gem 'time_diff', '~> 0.2.2'
 
+gem 'slim'
+
 #jquer javascript libraries
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
