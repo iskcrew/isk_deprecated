@@ -10,13 +10,13 @@ div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id=
 	/ where the link on the slide preview leads
 	= cache slide_key(slide), tag: [slide.cache_tag, current_user.cache_tag] do
 		div.slidebuttons
-			-if slide.deleted?
+			- if slide.deleted?
 				p
 					| This slide has been deleted
 					- if slide.can_edit? current_user
 						= link_to 'Undelete', {:controller => :slides, :action => :undelete, 
 							:id => slide.id}, :method => :post, :class => 'button'
-			-elsif slide.can_edit? current_user
+			- elsif slide.can_edit? current_user
 				= slide_toggle_button 'Public', slide, :public
 				= slide_toggle_button 'Clock', slide, :show_clock
 				= slide_edit_link(slide)
@@ -25,7 +25,7 @@ div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id=
 					= slide_ungroup_button(slide)
 				= slide_clone_button(slide)
 				= slide_delete_button(slide)
-			-else
+			- else
 				/ can't edit
 				= slide_hide_button_or_status(slide)
 				= inactive_toggle 'Clock', slide.show_clock
