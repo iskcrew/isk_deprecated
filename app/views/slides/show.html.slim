@@ -9,6 +9,7 @@ div.slideinfo
 		/ List of displays where this slide is in their override queue
 		= render :partial => 'slide_overrides', :locals => {:s => @slide}
 	div class="slide_metadata info_block right_column"
+		/ Only render the slide description if it has been actually used
 		- unless @slide.description.blank?
 			h2 Slide description
 			== simple_format @slide.description
@@ -29,8 +30,9 @@ div.slideinfo
 			div.warning
 				p
 					| This slide has been deleted!
-					= button_to 'Undelete', action: :undelete, id: @slide.id, 
-						class: 'button' if Slide.admin?(current_user)
+					- if Slide.admin? current_user
+						= button_to 'Undelete', action: :undelete, id: @slide.id, 
+							class: 'button'
 		ul
 			li Slide class: #{slide_class @slide}
 			li Duration: #{slide_duration @slide}
@@ -38,6 +40,7 @@ div.slideinfo
 			li Images generated? #{@slide.ready ? 'Yes' : 'No'}
 			li Images updated at: #{l @slide.updated_at, format: :short}
 
+/If current user can edit this slide add the appropriate links to navigation bar
 -if @slide.can_edit? current_user
 	- content_for :navigation do
 		= link_to 'Edit', {action: :edit, id: @slide.id}, confirm: \
