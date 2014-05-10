@@ -1,0 +1,43 @@
+div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id="slide_#{slide.id}"
+	div.slideheader
+		div.slidename = link_to slide.name, :controller => :slides, :action => :show, :id => slide.id
+		div.slidetype class=(slide.type_str) = slide.type_str
+	- if defined?(to_full)
+		= slide_preview_to_show_tag(slide)
+	- else
+		= slide_preview_to_full_tag(slide)
+	
+	= cache slide_key(slide), tag: [slide.cache_tag, current_user.cache_tag] do
+		div.slidebuttons
+			-if slide.deleted?
+				p
+					| This slide has been deleted
+					- if slide.can_edit? current_user
+						= link_to 'Undelete', {:controller => :slides, :action => :undelete, 
+							:id => slide.id}, :method => :post, :class => 'button'
+			-elsif slide.can_edit? current_user
+				= slide_toggle_button 'Public', slide, :public
+				= slide_toggle_button 'Clock', slide, :show_clock
+				= link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, 
+					:class => 'button', :confirm => (slide.public ? \
+					'This is a public slide, are you sure you want to edit it?' : nil)
+				= link_to 'SVG', {:controller => :slides, :action => :svg_data, :id => slide.id},
+				 :class => 'button', :confirm => (slide.public ? \ 
+				 'This is a public slide, are you sure you want to edit it?' : nil)
+				- if slide.grouped?
+					=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => slide.id},
+					 :method => :post, :class => 'button ungroup'
+				= link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id},
+				 	:method => :post, :title => 'Create clone of this slide', :class => 'button'
+				= link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id},
+				 	:confirm=>"Are you sure?", :method=>:delete, :class => 'button'
+			-else
+				/ can't edit
+				= hide_button_or_status(slide)
+				= inactive_toggle 'Clock', slide.show_clock
+				a.button class="inactive"
+					-if slide.grouped?
+						| Grouped
+					-else
+						| Ungrouped
+				
