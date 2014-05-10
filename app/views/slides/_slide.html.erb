@@ -1,4 +1,3 @@
-<%(slides ||= [slide]).each do |slide|%>
 	<div class="<%=slide.public ? 'public_slide' : 'hidden_slide' %> compact_slideitem" id="slide_<%=slide.id.to_s%>">
 		<div class='slideheader'>
 			<div class="slidename"><%=link_to slide.name, :controller => :slides, :action => :show, :id => slide.id%></div>
@@ -49,4 +48,3 @@
 		</div>
 	</div>
 	<%end%>
-<%end%>
