@@ -1,0 +1,12 @@
+= cache group_cache_key(group), tag: group.cache_tag do
+	- unless group.slides.empty?
+		table.compact_slidelist
+			tr
+				th
+					-if group.is_a? UnGroup
+						a name="group_#{group.id}" Ungrouped slides
+					-else
+						= group_link_tag(group)
+			tr
+				td
+					= render group.slides
