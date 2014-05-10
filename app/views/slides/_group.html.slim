@@ -1,5 +1,7 @@
-= cache group_cache_key(group), tag: group.cache_tag do
+= cache group_cache_key(group), tag: [group.cache_tag, current_user.cache_tag] do
 	- unless group.slides.empty?
+		p 
+			= group.cache_key
 		table.compact_slidelist
 			tr
 				th
