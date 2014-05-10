@@ -20,6 +20,8 @@ class DisplaysControllerTest < ActionController::TestCase
 		@remove_queue_data = {
 			id: 2
 		}
+		
+		@all_displays = [:normal, :no_presentation, :late, :with_overrides, :manual_mode, :no_timestamps]
   end
 	
 	
@@ -30,7 +32,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	end
 	
 	test "get display info" do
-		[:normal, :no_presentation, :late, :with_overrides, :manual_mode].each do |d|
+		@all_displays.each do |d|
 			get :show, {:id => displays(d)}, @adminsession
 			assert_response :success, "Error getting info for display: " + d.to_s
 		end

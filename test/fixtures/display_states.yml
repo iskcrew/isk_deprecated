@@ -60,3 +60,11 @@ five:
     last_hello: <%=Time.now%>
     websocket_connection_id: 1
     ip: 127.0.0.1
+
+six:
+    id: 6 
+    display_id: 6
+    monitor: true
+    current_group_id: 3
+    current_slide_id: 1
+    websocket_connection_id: 1

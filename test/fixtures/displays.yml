@@ -25,3 +25,10 @@ manual_mode:
     manual: true
     do_overrides: false
     
+no_timestamps:
+    id: 6
+    name: "I have missing timestamps"
+    presentation_id: 2
+    manual: false
+    do_overrides: true
+    

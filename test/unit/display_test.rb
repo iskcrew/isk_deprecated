@@ -12,6 +12,8 @@ class DisplayTest < ActiveSupport::TestCase
 		d = Display.hello "Hi, I'm new", "127.0.0.1"
 		
 		assert_equal 1, Display.where(name: "Hi, I'm new").count, "Display not found in db"
+		assert d.last_contact_at != nil, "Displays last contact timestamp is missing"
+		assert d.last_hello != nil, "Displays last hello timestamp is missing"
 	end
 	
 	test "set current slide" do
