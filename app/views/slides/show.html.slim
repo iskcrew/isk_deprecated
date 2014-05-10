@@ -1,0 +1,48 @@
+h1	Information for slide: #{@slide.name}
+
+div.slideinfo
+	div class="slide_metadata info_block left_column"
+		/ Normal slide-block
+		= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
+		/ List of presentations this slide belongs to
+		= render :partial => 'slide_presentation_list', :locals => {:s => @slide}
+		/ List of displays where this slide is in their override queue
+		= render :partial => 'slide_overrides', :locals => {:s => @slide}
+	div class="slide_metadata info_block right_column"
+		- unless @slide.description.blank?
+			h2 Slide description
+			== simple_format @slide.description
+		h2 Slide metadata
+		-if @slide.public
+			div.warning
+				p This slide is public, you should hide it before editing it.
+		-else
+			div
+				p This slide is hidden. It won't be shown on any presentations.
+					| You need to publish it before it can be shown.
+		-if @slide.replaced?
+			div.warning
+				p
+					| This slide has been replaced! The replacement slide is: 
+					= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
+		-elsif @slide.deleted
+			div.warning
+				p
+					| This slide has been deleted!
+					= button_to 'Undelete', action: :undelete, id: @slide.id, 
+						class: 'button' if Slide.admin?(current_user)
+		ul
+			li Slide class: #{slide_class @slide}
+			li Duration: #{slide_duration @slide}
+			li Last modified: #{l @slide.updated_at, format: :short}
+			li Images generated? #{@slide.ready ? 'Yes' : 'No'}
+			li Images updated at: #{l @slide.updated_at, format: :short}
+
+-if @slide.can_edit? current_user
+	- content_for :navigation do
+		= link_to 'Edit', {action: :edit, id: @slide.id}, confirm: \
+			(@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+		-if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
+			= link_to 'Convert to inkscape', {action: :to_inkscape, id: @slide.id}, method: :post
+		= link_to 'Download', {action: :svg_data, id: @slide.id}, confirm: \
+			(@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
