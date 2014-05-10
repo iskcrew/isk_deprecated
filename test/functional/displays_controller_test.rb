@@ -39,9 +39,10 @@ class DisplaysControllerTest < ActionController::TestCase
 	end
 	
 	test "get edit form" do
-		get :edit, {:id => displays(:normal)}, @adminsession
-		
-		assert_response :success
+		@all_displays.each do |d|
+			get :edit, {:id => displays(d)}, @adminsession
+			assert_response :success, "Error getting edit for display: " + d.to_s
+		end
 	end
 	
 	test "update display" do
