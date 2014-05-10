@@ -24,11 +24,16 @@ module DisplaysHelper
       html_class = 'on_time'
     end
     
-    ping_seconds = (Time.now - d.last_contact_at).to_i
-    
-    if ping_seconds > 60
-      ping_seconds = ">60"
-    end
+		if d.last_contact_at
+    	ping_seconds = (Time.now - d.last_contact_at).to_i
+
+	    if ping_seconds > 60
+	      ping_seconds = ">60"
+	    end
+		else
+			ping_seconds = "UNKNOWN"
+		end
+		
     
     return content_tag(:span, 'Ping: ' + ping_seconds.to_s + " s.", :class => html_class)
     

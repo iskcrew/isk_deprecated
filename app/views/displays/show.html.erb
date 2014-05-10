@@ -13,8 +13,12 @@
 		<h2>Extra information</h2>
 		<ul>
 			<li>IP: <%=@display.ip%></li>
-			<li>Last contact at: <%=l @display.last_contact_at, :format => :short%></li>
-			<li>Last hello at: <%=l @display.last_hello, format: :short%></li>
+			<%if @display.last_contact_at%>
+				<li>Last contact at: <%=l @display.last_contact_at, :format => :short%></li>
+			<%end%>
+			<%if @display.last_hello%>
+				<li>Last hello at: <%=l @display.last_hello, format: :short%></li>
+			<%end%>
 			<li>State updated at: <%=l @display.state_updated_at, :format => :short%></li>
 			<li>Metadata Updated at: <%=l @display.updated_at, :format => :short%></li>
 			<li>Created at: <%=l @display.created_at, :format => :short%></li>
