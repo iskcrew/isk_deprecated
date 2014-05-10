@@ -119,7 +119,7 @@ module SlidesHelper
     f.select :text_align, options_for_select(simple_aligns, align), {}, id: 'simple_text_align', data: {simple_field: true}
   end
   
-  def hide_button_or_status(s, remote = false)
+  def slide_hide_button_or_status(s, remote = false)
     if s.can_edit? current_user
       return slide_toggle_button('Public', s, :public)
 	  elsif s.can_hide?(current_user) && s.public == true
@@ -132,6 +132,34 @@ module SlidesHelper
   def slide_toggle_button(name, slide, attrib)
     toggle_link_to name, slide.send(attrib), {:controller => :slides, :action => :update, :id => slide.id, :slide => {attrib => !slide.send(attrib)}}, :method => :put, :remote => true
   end
+	
+	def slide_edit_link(slide)
+		link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, 
+			:class => 'button', title: 'Edit slide metadata', :confirm => (
+			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+	end
+	
+	def slide_svg_link(slide)
+		link_to 'Download', {:controller => :slides, :action => :svg_data, :id => slide.id},
+						 :class => 'button', title: 'Download slide in SVG format',:confirm => (
+						 slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+	end
+	
+	def slide_clone_button(slide)
+		link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id},
+						 	:method => :post, :title => 'Create clone of this slide', :class => 'button'
+	end
+	
+	def slide_delete_button(slide)
+		link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id},
+						 	:confirm=>"Are you sure?", title: 'Mark this slide as deleted, you can undo later',
+							:method=>:delete, :class => 'button'
+	end
+	
+	def slide_ungroup_button(slide)
+		link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => slide.id},
+							 :method => :post, :class => 'button ungroup'
+	end
       
   def slide_class(s)
     return 'Inkscape slide' if s.is_a? InkscapeSlide

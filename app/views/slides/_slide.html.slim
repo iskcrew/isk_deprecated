@@ -18,22 +18,15 @@ div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id=
 			-elsif slide.can_edit? current_user
 				= slide_toggle_button 'Public', slide, :public
 				= slide_toggle_button 'Clock', slide, :show_clock
-				= link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, 
-					:class => 'button', :confirm => (slide.public ? \
-					'This is a public slide, are you sure you want to edit it?' : nil)
-				= link_to 'SVG', {:controller => :slides, :action => :svg_data, :id => slide.id},
-				 :class => 'button', :confirm => (slide.public ? \ 
-				 'This is a public slide, are you sure you want to edit it?' : nil)
+				= slide_edit_link(slide)
+				= slide_svg_link(slide)
 				- if slide.grouped?
-					=link_to 'Ungroup', {:controller => :slides, :action => :ungroup, :id => slide.id},
-					 :method => :post, :class => 'button ungroup'
-				= link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id},
-				 	:method => :post, :title => 'Create clone of this slide', :class => 'button'
-				= link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id},
-				 	:confirm=>"Are you sure?", :method=>:delete, :class => 'button'
+					= slide_ungroup_button(slide)
+				= slide_clone_button(slide)
+				= slide_delete_button(slide)
 			-else
 				/ can't edit
-				= hide_button_or_status(slide)
+				= slide_hide_button_or_status(slide)
 				= inactive_toggle 'Clock', slide.show_clock
 				a.button class="inactive"
 					-if slide.grouped?
