@@ -225,6 +225,7 @@ class SlidesController < ApplicationController
 				case params[:create_type]
 				when 'simple'
 					@slide = SimpleSlide.new(params[:slide])
+					@slide.svg_data = SimpleSlide.create_svg(params[:slide][:slidedata])
 				when 'http_slide'
 					@slide = HttpSlide.new(params[:slide])
 				when 'empty_file'
@@ -374,7 +375,11 @@ class SlidesController < ApplicationController
 			require_slide_edit(@slide)
   
 			if @slide.update_attributes(params[:slide])
-        
+        if @slide.is_a? SimpleSlide
+					@slide.svg_data = SimpleSlide.create_svg(params[:slide][:slidedata])
+					@slide.ready = false
+					@slide.save!
+				end
 
 				#Paistetaan uusi kuva simpleslidelle
 				@slide.delay.generate_images if @slide.is_a?(SimpleSlide)
