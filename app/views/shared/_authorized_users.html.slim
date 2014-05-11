@@ -8,10 +8,10 @@
 			ul.userlist
 				- obj.authorized_users.each do |u|
 					li
-						= u.username
 						- if obj.admin? current_user
-							=< link_to 'X', {action: :deny, id: obj.id, user_id: u.id}, method: :post, 
+							=> link_to 'X', {action: :deny, id: obj.id, user_id: u.id}, method: :post, 
 								class: 'button delete'
+						= u.username			
 	- if obj.admin? current_user
 		= form_for :grant, url: {action: :grant, id: obj.id} do |f|
 			div
