@@ -29,6 +29,10 @@ class Presentation < ActiveRecord::Base
 	
 	attr_accessible :name, :effect_id, :delay
 	
+	before_create do |p|
+		p.event = Event.current
+	end
+	
 	# Touch associated displays
   after_save do |p|
 		p.displays.each do |d|
