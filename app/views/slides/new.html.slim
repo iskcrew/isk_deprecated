@@ -1,0 +1,49 @@
+h1 Create a new slide
+
+p Choose the slide type to create.
+div#tabs
+	ul
+		li: a href="#simple" Simple editor
+		li: a href="#inkscape" Inkscape
+		li: a href="#httpslide" Http fecher
+		li: a href="#image" Upload image
+	
+	div#simple
+		h2 New simple editor slide
+		= form_for @slide, html: {id: 'new_simple_slide'} do |f|
+			= f.error_messages
+			= hidden_field_tag :create_type, 'simple'
+			= render partial: 'simple_edit'
+			= f.submit
+	
+	div#inkscape
+		h2 New inkscape slide
+		p The slide will have the same starting template as a simple slide.
+		= form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
+			= f.error_messages
+			= hidden_field_tag :create_type, 'inkscape'
+			= render partial: 'form'
+			= f.submit
+	
+	div#httpslide
+		h2 New http fecher slide
+		p The slide will be automatically updated periodically by the background process.
+		= form_for @slide, html: {id: 'new_http_slide'} do |f|
+			= f.error_messages
+			= hidden_field_tag :create_type, 'http_slide'
+			= render partial: 'form'
+			= render partial: 'http_slide_form'
+			= f.submit
+		
+	div#image
+		h2 New slide from image
+		p 
+			| You can upload a image in any format understood by imagemagick library.
+			|  The image will be shown centered on a black background and resized down if needed.
+		= form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
+			= f.error_messages
+			= hidden_field_tag :create_type, 'image'
+			= render partial: 'form'
+			p: b Choose the image to upload:
+			= file_field_tag :upload
+			= f.submit

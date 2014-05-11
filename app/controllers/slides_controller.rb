@@ -227,7 +227,7 @@ class SlidesController < ApplicationController
 					@slide = SimpleSlide.new(params[:slide])
 				when 'http_slide'
 					@slide = HttpSlide.new(params[:slide])
-				when 'empty_file'
+				when 'empty_file', 'inkscape'
 					@slide = InkscapeSlide.new(params[:slide])
 				else
 					@slide = Slide.new(params[:slide])
@@ -245,7 +245,7 @@ class SlidesController < ApplicationController
 				
 				
 				case params[:create_type]
-				when 'empty_file'
+				when 'empty_file', 'inkscape'
 					FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
 				when 'image'
 					File.open(@slide.original_filename, 'w+b') do |f|
