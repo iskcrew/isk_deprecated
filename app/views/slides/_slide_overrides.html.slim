@@ -1,0 +1,23 @@
+- unless @slide.deleted? || @slide.replaced?
+	div.slide_overrides.info_block
+		h3 Override queues
+		- if @slide.override.empty?
+			p This slide isn't on any displays override queue currently.
+		- else
+			p This slide is in override queue for the following displays:
+			ul
+				- @slide.override.each do |d|
+					li = link_to d.name, displays_path(d)
+		/ If there are displays the current user can add this slide as override render
+		/ the form for doing so
+		- unless Display.can_override(current_user).empty?
+			h4 Add this slide as override
+			= form_for :add_to_override, :url => {action: :add_to_override, id: @slide.id} do |f|
+				= f.label :display_id, 'On display:'
+				= f.select :display_id, options_for_select(Display.can_override(current_user \
+					).order(:name).all.collect {|g| [ g.name, g.id ] })
+				br
+				= f.label :duration, 'How many seconds should the slide be shown:'
+				= f.text_field :duration, :value => 60, :size => 4, :class => 'duration_spinner'
+				br
+				= f.submit 'Add'
