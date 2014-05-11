@@ -17,18 +17,18 @@ div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id=
 						= link_to 'Undelete', {:controller => :slides, :action => :undelete, 
 							:id => slide.id}, :method => :post, :class => 'button'
 			- elsif slide.can_edit? current_user
-				= slide_toggle_button 'Public', slide, :public
-				= slide_toggle_button 'Clock', slide, :show_clock
-				= slide_edit_link(slide)
-				= slide_svg_link(slide)
+				=< slide_toggle_button 'Public', slide, :public
+				=< slide_toggle_button 'Clock', slide, :show_clock
+				=< slide_edit_link(slide)
+				=< slide_svg_link(slide)
 				- if slide.grouped?
-					= slide_ungroup_button(slide)
-				= slide_clone_button(slide)
-				= slide_delete_button(slide)
+					=< slide_ungroup_button(slide)
+				=< slide_clone_button(slide)
+				=< slide_delete_button(slide)
 			- else
 				/ can't edit
-				= slide_hide_button_or_status(slide)
-				= inactive_toggle 'Clock', slide.show_clock
+				=< slide_hide_button_or_status(slide)
+				=<> inactive_toggle 'Clock', slide.show_clock
 				a.button class="inactive"
 					-if slide.grouped?
 						| Grouped
