@@ -48,6 +48,8 @@ class Slide < ActiveRecord::Base
 	scope :current, where(:deleted => false).where(:replacement_id => nil)
 	scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
   
+	delegate :name, to: :master_group, prefix: :master_group 
+
 	sortable :scope => :master_group_id
   
 	
