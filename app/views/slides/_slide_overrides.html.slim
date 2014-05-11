@@ -7,7 +7,7 @@
 			p This slide is in override queue for the following displays:
 			ul
 				- @slide.override.each do |d|
-					li = link_to d.name, displays_path(d)
+					li = link_to d.name, display_path(d)
 		/ If there are displays the current user can add this slide as override render
 		/ the form for doing so
 		- unless Display.can_override(current_user).empty?
