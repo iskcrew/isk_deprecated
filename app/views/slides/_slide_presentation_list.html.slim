@@ -1,0 +1,15 @@
+div.info_block.slide_presentation_list
+	h2 Presentations
+	- if @slide.presentations.empty?
+		p This slide doesn't belong to any presentations.
+	- else
+		p This slide belongs to the following presentations
+		ul
+			- @slide.presentations.each do |p|
+				li
+					=> link_to p.name, presentation_path(p)
+					- unless p.displays.empty?
+						| running on displays:
+						ul
+							- p.displays.each do |d|
+								li =link_to d.name, display_path(d)
