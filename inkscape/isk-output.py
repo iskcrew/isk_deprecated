@@ -1,3 +1,17 @@
+# coding=utf-8
+
+# ISK - A web controllable slideshow system
+#
+# ISK export plugin for inkscape, allows for one-click
+# exporting the slide back to the server
+#
+# Originally work of Vesa-Pekka Palmu
+# This is an Python rewrite of isk-output.rb
+#
+# Author::    Jarkko Räsänen
+# Copyright:: Copyright (c) 2014 Jarkko Räsänen
+# License::   Licensed under GPL v3, see LICENSE.md
+
 import argparse
 import urllib
 import urllib2
@@ -14,8 +28,6 @@ parser.add_argument("-i", "--iskhost", dest="hostname", help="Specify ISK server
 parser.add_argument("-e", "--id", dest="object_id", help="Specify object ID")
 parser.add_argument("svg_file", help="Name of the file containing SVG data")
 args = parser.parse_args()
-
-print args
 
 cookiejar = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
