@@ -1,22 +1,23 @@
-/ Only render this block if the object has authorized users or current user
-/ is admin and thus can add users
-- if !obj.authorized_users.empty? || obj.admin?(current_user)
-	h2 Authorized users
-	- unless obj.authorized_users.empty?
-		div
-			p Following users have edit priviledges for this object. Not including global permissions.
-			ul.userlist
-				- obj.authorized_users.each do |u|
-					li
-						- if obj.admin? current_user
-							=> link_to 'X', {action: :deny, id: obj.id, user_id: u.id}, method: :post, 
-								class: 'button delete'
-						= u.username			
-	- if obj.admin? current_user
-		= form_for :grant, url: {action: :grant, id: obj.id} do |f|
+div.info_block
+	/ Only render this block if the object has authorized users or current user
+	/ is admin and thus can add users
+	- if !obj.authorized_users.empty? || obj.admin?(current_user)
+		h2 Authorized users
+		- unless obj.authorized_users.empty?
 			div
-				p
-					| Add user:
-					=< f.select :user_id, options_for_select(User.all.collect {|u| [ u.username, 
+				p Following users have edit priviledges for this object. 
+					Not including global permissions.
+				ul.userlist
+					- obj.authorized_users.each do |u|
+						li
+							- if obj.admin? current_user
+								=> link_to 'X', {action: :deny, id: obj.id, user_id: u.id}, method: :post, 
+									class: 'button delete'
+							= u.username			
+		- if obj.admin? current_user
+			= form_for :grant, url: {action: :grant, id: obj.id} do |f|
+				div
+					p Add edit priviledges for a user
+					= f.select :user_id, options_for_select(User.all.collect {|u| [ u.username, 
 						u.id ] })
-					= f.submit 'Allow'
+					=< f.submit 'Add'
