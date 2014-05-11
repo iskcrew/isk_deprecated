@@ -1,0 +1,32 @@
+= fields_for @slide do |f|
+	div.simple_editor_container
+		/ Since when creating a new slide we have instance of Slide instead of SimpleSlide we need
+		/ to make sure we have some defaults.
+		ruby:
+			slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
+		
+		div.simple_editor_controls
+			= render partial: 'form'
+			
+			h2 Slide contents
+			p 
+			 | Use &lt;foo&gt; to highlight text in the slide.
+			= f.fields_for :slidedata do |f|
+				p Slide heading
+				= f.text_area :heading, {id: "simple_head", rows: 1, cols: 31, wrap: "soft",
+					value: slidedata[:heading], data: {simple_field: true}}
+				p Slide text
+				= f.text_area :text, {id: "simple_text", rows: 6, cols: 53, value: slidedata[:text],
+					data: {simple_field: true}}
+				= simple_text_align_select(f, slidedata[:text_align])
+				= simple_text_size_select(f, slidedata[:text_size])
+				= simple_color_select(f, slidedata[:color])
+			/ FIXME: find if I still need this with ws-simple editor!
+			= f.hidden_field :svg_data, {:id => "code"}
+		
+		div.simple_editor_preview
+			h2 Preview
+			div#updating_preview
+				p Updating preview...
+			div#svg_container.svg_container
+				svg#svg
