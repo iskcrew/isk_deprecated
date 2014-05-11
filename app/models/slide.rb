@@ -250,7 +250,7 @@ class Slide < ActiveRecord::Base
 			
 			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
 				#if the cols or rows are smaller then our predefined sizes
-				#build a white background and center the image in it
+				#build a black background and center the image in it
 				if cols < Slide::FullWidth || rows < Slide::FullHeight
 					#resize our image
 					img.resize!(cols, rows)
