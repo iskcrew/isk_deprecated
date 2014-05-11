@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140206110620) do
+ActiveRecord::Schema.define(:version => 20140510192530) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20140206110620) do
     t.integer  "current_slide_id"
     t.datetime "last_contact_at"
     t.datetime "last_hello"
-    t.integer  "websocket_connection_id"
+    t.string   "websocket_connection_id"
     t.string   "ip",                      :limit => 12
     t.boolean  "monitor",                               :default => true
     t.datetime "created_at",                                              :null => false

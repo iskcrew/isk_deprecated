@@ -16,7 +16,14 @@ options.username = nil
 options.password = nil
 options.slidename = nil
 
-
+# We will get our settings from the inkscape by command line parameters
+# --username for ISK username
+# --password for ISK password
+# --slidename for the name of the new slide to be created
+# --iskhost for the ISK host url
+# In addition to that inkscape gives us the selected object id with
+# -- id that we don't use
+# last parameter on the command line is a file containing the svg data
 OptionParser.new do |opts|
   opts.banner = "Usage: example.rb [options]"
 
@@ -44,6 +51,7 @@ OptionParser.new do |opts|
 	
 end.parse!
 
+# Login to ISK and scoop the session cookie for later use.
 http = Net::HTTP.new(options.host)
 resp, data = http.post('/login', "username=#{options.username}&password=#{options.password}")
 cookie = resp.response['set-cookie'].split('; ')[0]
@@ -54,10 +62,11 @@ end
 
 headers = {
   'Cookie' => cookie,
- }
+}
 
- data = "slide[name]=#{options.slidename}"
- data << "&create_type=empty_file"
+# Build the data for the post request to create a new slide
+data = "slide[name]=#{options.slidename}"
+data << "&create_type=empty_file"
 
 resp, data = http.post('/slides', data, headers)
 
@@ -65,6 +74,7 @@ unless resp.is_a? Net::HTTPFound
 	abort "Error creating slide"
 end
 
+# Find the url for the new slide, we need to handle http redirections
 if resp.kind_of?(Net::HTTPRedirection)
 	if resp['location'].nil?
 		slide_url = resp.body.match(/<a href=\"([^>]+)\">/i)[1]
@@ -73,10 +83,13 @@ if resp.kind_of?(Net::HTTPRedirection)
 	end
 end
 
+# Grap the slide id from the url, it will be the last digits after the final /
 slide_id = slide_url.split('/').last.to_i
 
+# Get the svg for this new slide
 resp, data = http.get('/slides/' + slide_id.to_s + '/svg_data', headers)
 
+# Inkscape expects the effect plugin to return the modified svg via STDOUT so do so
 puts resp.body
 
 exit
