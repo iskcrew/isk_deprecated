@@ -79,6 +79,7 @@ class Event < ActiveRecord::Base
 	after_create do |e|
 		e.ungrouped = UnGroup.create(name: ('Ungrouped slides for ' + e.name), event_id: e.id)
 		e.thrashed = ThrashGroup.create(name: ('Thrashed slides for ' + e.name), event_id: e.id)
+		e.save!
 	end
 	
 	
