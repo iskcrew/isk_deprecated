@@ -12,4 +12,4 @@ div.slide_group_info.info_block
 			p Add this slide to group:
 			= f.select :group_id, options_for_select( MasterGroup.can_edit( \
 				current_user).current.all.collect {|g| [ g.name, g.id ] })
-			= f.submit "Add"
+			=< f.submit "Add"
