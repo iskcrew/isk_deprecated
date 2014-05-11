@@ -1,7 +1,8 @@
 doctype 5
 html
 	head
-		title ISK @ #{request.host} : #{controller.controller_name.capitalize}
+		title 
+			| ISK @ #{request.host} : #{controller.controller_name.capitalize}
 			=< controller.action_name.capitalize
 		= stylesheet_link_tag :application, media: :all
 		= javascript_include_tag :application
