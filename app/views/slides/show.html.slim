@@ -5,9 +5,9 @@ div.slideinfo
 		/ Normal slide-block
 		= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
 		/ List of presentations this slide belongs to
-		= render :partial => 'slide_presentation_list', :locals => {:s => @slide}
+		= render :partial => 'slide_presentation_list'
 		/ List of displays where this slide is in their override queue
-		= render :partial => 'slide_overrides', :locals => {:s => @slide}
+		= render :partial => 'slide_overrides'
 	div class="slide_metadata info_block right_column"
 		/ Only render the slide description if it has been actually used
 		- unless @slide.description.blank?
