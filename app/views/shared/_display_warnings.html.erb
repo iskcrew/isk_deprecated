@@ -1,5 +1,0 @@
-<div class="topNotification" id="display_warnings" data-refresh-url="<%=url_for :controller => :displays, :action => :index%>">
-  <%Display.late.each do |d|%>
-    <%=late_display_warning(d) %><br />
-  <%end%>
-</div>
