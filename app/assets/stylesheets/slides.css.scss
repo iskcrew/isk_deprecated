@@ -159,10 +159,12 @@ div.slidetype {
 }
 
 div.warning {
-	background-color: #770;
-	font-weight: bold;
-	padding: 0.1em 1em;
-	display: inline-block;
+	p {
+		background-color: #770;
+		font-weight: bold;
+		padding: 1em;
+		display: inline-block;
+	}
 }
 
 div.slidefilter {
