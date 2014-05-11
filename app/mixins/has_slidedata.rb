@@ -16,7 +16,7 @@ module  HasSlidedata
   
   
   def slidedata
-		return @_slidedata if @_slidedata
+		return @_slidedata if @_slidedata.present?
     if !self.new_record? && File.exists?(self.data_filename.to_s)
       @_slidedata = YAML.load(File.read(self.data_filename))
 		end
