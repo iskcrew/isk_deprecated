@@ -40,7 +40,6 @@ class Display < ActiveRecord::Base
 	validates :manual, :inclusion => { :in => [true, false] }
 	
 	
-	
 	Timeout = 5 #minutes
 
 	include ModelAuthorization
@@ -78,7 +77,7 @@ class Display < ActiveRecord::Base
 	#Either creates a new display with given name or returns exsisting display
 	def self.hello(display_name, display_ip = nil, connection_id = nil)
 		display = Display.where(:name => display_name).first_or_create
-		display.ip = (display_ip || 'UNKNOWN')
+		display.ip = display_ip
 		display.websocket_connection_id = connection_id 
 		display.last_contact_at = Time.now
 		display.last_hello = Time.now
