@@ -39,6 +39,8 @@ div.slideinfo
 			li Last modified: #{l @slide.updated_at, format: :short}
 			li Images generated? #{@slide.ready ? 'Yes' : 'No'}
 			li Images updated at: #{l @slide.updated_at, format: :short}
+		= render partial: "slide_group_info"
+		= render partial: "shared/authorized_users", locals: {obj: @slide}
 
 /If current user can edit this slide add the appropriate links to navigation bar
 -if @slide.can_edit? current_user
