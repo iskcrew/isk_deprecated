@@ -13,4 +13,16 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+	
+	def clear_slide_files(s)
+		['.svg', '_full.png', '_preview.png', '_thumb.png', '_data', '_original'].each do |t|
+			f = Rails.root.join('tmp','test', "slide_#{s.id.to_s + t}")
+			Rails.logger.warn 'Foo: ' + f.to_s
+			if File.exists? f
+				Rails.logger.warn 'delete!'
+				File.delete f
+			end
+		end
+	end
+	
 end
