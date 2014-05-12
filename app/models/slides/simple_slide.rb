@@ -20,6 +20,14 @@ class SimpleSlide < SvgSlide
 	MarginLeft = 30
 	MarginRight = 30
 
+	before_save do
+		if @_slidedata.present?
+			self.svg_data = SimpleSlide.create_svg(self.slidedata)
+			self.ready = false
+			return true
+		end
+	end
+
 
   after_create do |s|
     s.send(:write_slidedata)
@@ -215,5 +223,23 @@ class SimpleSlide < SvgSlide
 	def self.margin_right
 		Slide::FullWidth - MarginRight
 	end
+   
+	protected
+	
+  def rsvg_command(type)
+    command = 'cd ' << FilePath.to_s << ' && inkscape'
     
+    if type == :full
+      command << ' -w ' << Slide::FullWidth.to_s
+      command << ' -h ' << Slide::FullHeight.to_s
+      command << ' -e ' << self.full_filename.to_s
+      command << ' ' << self.svg_filename.to_s
+			command << ' >/dev/null'
+    end
+    
+    return command
+  end  
+	
+		
+		
 end

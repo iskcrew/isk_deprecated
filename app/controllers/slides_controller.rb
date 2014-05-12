@@ -374,10 +374,8 @@ class SlidesController < ApplicationController
 			require_slide_edit(@slide)
   
 			if @slide.update_attributes(params[:slide])
-        
-
 				#Paistetaan uusi kuva simpleslidelle
-				@slide.delay.generate_images if @slide.is_a?(SimpleSlide)
+				@slide.delay.generate_images if @slide.is_a?(SimpleSlide) && !@slide.ready
         
 				#Haetaan uusi kuva http-slidelle jos on tarvis
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?

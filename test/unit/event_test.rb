@@ -27,6 +27,7 @@ class EventTest < ActiveSupport::TestCase
 		e.current = true
 		
 		assert e.save, "Error saving event"
+		assert e.reload
 		assert e.current, "Event is the current one"
 		assert_equal e, Event.current, "New event isn't current one"
 		assert_equal e.ungrouped.event_id, e.id, "Ungrouped group doesn't have correct event_id"

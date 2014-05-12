@@ -5,6 +5,8 @@ class PresentationTest < ActiveSupport::TestCase
 		p = Presentation.new
 		p.name = "Test presentation"
 		assert p.save, "Error saving presentation"
+		p.reload
+		assert_equal Event.current.id, p.event.id, "Presentation is not in current event"
 	end
 	
 	test 'slide count' do

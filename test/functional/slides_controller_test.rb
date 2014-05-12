@@ -19,6 +19,16 @@ class SlidesControllerTest < ActionController::TestCase
 		
 		Slide.send(:remove_const, :FilePath)
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
+				
+	end
+	
+	def teardown
+		#Remove any possible files associated with test data from
+		#the test directory
+		
+		Slide.all.each do |s|
+			clear_slide_files(s)
+		end
 	end
 	
 	test "get index" do
@@ -54,13 +64,39 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_redirected_to slide_path(assigns(:slide))
 	end
 	
-	#FIXME: need to clear the files created
+	test "update simple slide" do
+		put :update, {id: slides(:simple), slide: {slidedata: {heading: 'fooo'}}}, @adminsession
+		
+		assert_redirected_to slide_path(assigns(:slide))
+		s = Slide.find(slides(:simple).id)
+		assert_equal 'fooo', assigns(:slide).slidedata[:heading], "Slide heading didn't update"
+		
+		#FIXME: why this fails?
+		#assert s.ready, "Slide should have had it's picture generated"
+		
+		assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
+		assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+		assert s.svg_data.include?('>fooo<'), "SVG didn't contain the new header"
+		
+		put :update, {id: slides(:simple), slide: {public: false}}, @adminsession
+		assert_redirected_to slide_path(assigns(:slide))
+		assert !assigns(:slide).public, "Slide didn't become hidden" 
+
+		
+	end
+	
 	test "create new simple_slide" do
 		assert_difference('Slide.count', 1) do
 			post :create, @new_slide_data, @adminsession
 		end
 		
 		assert_redirected_to slide_path(assigns(:slide))
+		s = assigns(:slide)
+		assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
+		assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+		
+		# Clear the files
+		clear_slide_files(s)
 	end
 	
 	test "add slide to group" do

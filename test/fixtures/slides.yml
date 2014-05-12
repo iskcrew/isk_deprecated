@@ -88,4 +88,14 @@ ungrouped:
     name: ungrouped slide
     description: I am ungrouped slide for current event
     filename: slide_15
-    master_group_id: 8    
+    master_group_id: 8
+    
+simple:
+    id: 16
+    name: Simple slide
+    filename: slide_16
+    master_group_id: 8
+    type: <%=SimpleSlide.sti_name%>
+    ready: true
+    public: true
+    is_svg: true
