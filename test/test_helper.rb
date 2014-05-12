@@ -17,9 +17,8 @@ class ActiveSupport::TestCase
 	def clear_slide_files(s)
 		['.svg', '_full.png', '_preview.png', '_thumb.png', '_data', '_original'].each do |t|
 			f = Rails.root.join('tmp','test', "slide_#{s.id.to_s + t}")
-			Rails.logger.warn 'Foo: ' + f.to_s
 			if File.exists? f
-				Rails.logger.warn 'delete!'
+				Rails.logger.info "Deleting temporary slide datafile: #{f.to_s}"
 				File.delete f
 			end
 		end
