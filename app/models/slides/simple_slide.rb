@@ -20,6 +20,10 @@ class SimpleSlide < SvgSlide
 	MarginLeft = 30
 	MarginRight = 30
 
+	before_save do |s|
+		s.svg_data = SimpleSlide.create_svg(s.slidedata)
+	end
+
 
   after_create do |s|
     s.send(:write_slidedata)
