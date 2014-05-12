@@ -115,7 +115,7 @@ EM.run {
 				
 			else
 				say 'iskdpy.hello unsuccesful, got reply:'
-				say event.data
+				puts JSON.pretty_generate JSON.parse(event.data)
 				abort 'exiting'
 			end
 			
