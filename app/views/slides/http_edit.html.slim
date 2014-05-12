@@ -1,0 +1,7 @@
+h1 Editing http fetcher slide: #{@slide.name}
+
+= form_for @slide, :as => :slide do |f|
+	= f.error_messages
+	= render partial: 'form'
+	= render partial: "http_slide_form"
+	= f.submit
