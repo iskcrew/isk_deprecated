@@ -21,8 +21,6 @@
 				= simple_text_align_select(f, slidedata[:text_align])
 				= simple_text_size_select(f, slidedata[:text_size])
 				= simple_color_select(f, slidedata[:color])
-			/ FIXME: find if I still need this with ws-simple editor!
-			= f.hidden_field :svg_data, {:id => "code"}
 		
 		div.simple_editor_preview
 			h2 Preview
