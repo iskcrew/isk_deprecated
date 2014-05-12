@@ -14,6 +14,9 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 	
+	# During testing we will end up generating slide datafiles in a temporary location.
+	# This method will clear any such files out and is generally called on teardown in tests
+	# involving slides.
 	def clear_slide_files(s)
 		['.svg', '_full.png', '_preview.png', '_thumb.png', '_data', '_original'].each do |t|
 			f = Rails.root.join('tmp','test', "slide_#{s.id.to_s + t}")
