@@ -25,6 +25,12 @@ class SchedulesControllerTest < ActionController::TestCase
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
 	end
   
+	def teardown
+		#Clean up all created slides
+		Slide.all.each do |s|
+			clear_slide_files(s)
+		end
+	end
 	
 	test "get index" do
 		get :index, nil, @adminsession
