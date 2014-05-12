@@ -6,8 +6,6 @@
 			slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
 		
 		div.simple_editor_controls
-			= render partial: 'form'
-			
 			h2 Slide contents
 			p 
 			 | Use &lt;foo&gt; to highlight text in the slide.

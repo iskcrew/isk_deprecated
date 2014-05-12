@@ -359,12 +359,6 @@ class SlidesController < ApplicationController
   
 		require_slide_edit(@slide)
     
-		case @slide.type
-		when SimpleSlide.sti_name
-			render :simple_edit and return
-		when HttpSlide.sti_name
-			render :http_edit and return
-		end
 	end
   
 	def update

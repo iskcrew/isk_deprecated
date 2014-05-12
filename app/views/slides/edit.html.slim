@@ -4,4 +4,8 @@ h1 Editing slide: #{@slide.name}
 = form_for @slide, :as => :slide, :url => slide_path(@slide) do |f|
 	= f.error_messages
 	= render partial: "form"
+	- if @slide.is_a? HttpSlide
+		= render partial: "http_slide_form"
+	- elsif @slide.is_a? SimpleSlide
+		= render partial: 'simple_edit'
 	= f.submit
