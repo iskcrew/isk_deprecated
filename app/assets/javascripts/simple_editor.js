@@ -47,7 +47,11 @@ $(function() {
 });
 
 $().ready(function() {
-	updateSlide();
+	if( $("[data-simple-field]").length )         // use this if you are using id to check
+	{
+	     updateSlide();
+	}
+	
 });
 
 
