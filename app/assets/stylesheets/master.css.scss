@@ -70,19 +70,35 @@ div.flash {
 	display: block;
 	font-size: 1.5em;
 	
-	div.notice {
+	div {
 		padding-left: 10px;
+	}
+	
+	div.notice {
 		background: green;
 	}
 
 	div.error {
-		padding-left: 10px;
 		background: red;
+	}
+	
+	div.warnng {
+		background: yellow;
 	}
 }
 div.content {
 	padding: 0.5em 0.5em;
 }
+
+div.warning {
+	p {
+		background-color: #770;
+		font-weight: bold;
+		padding: 1em;
+		display: inline-block;
+	}
+}
+
 
 a:link, a:visited {
 	color: inherit;
@@ -91,3 +107,7 @@ a:link, a:visited {
 a:hover {
 	color: $link_hover_color;
 };
+
+form {
+	display: inline-block;
+}
