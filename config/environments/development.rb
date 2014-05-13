@@ -50,6 +50,10 @@ Isk::Application.configure do
 	#lock the server up completely.
   config.middleware.delete Rack::Lock
 	
+	# Rewrite rules so the simple editor view finds it's backgrounds
+	config.middleware.insert(0, Rack::Rewrite) do
+	  rewrite %r{/backgrounds/(.*)}, "/backgrounds/$1"
+	end
 	
 	#Use cashier for better caching
 	#config.cashier.adapter = :cache_store 

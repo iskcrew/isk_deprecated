@@ -35,6 +35,9 @@ gem 'rrd-ffi', :require => 'rrd'
 # Better caching
 gem 'cashier'
 
+# For simple-edit previews to work in development
+gem 'rack-rewrite', '~> 1.2.1'
+
 group :development do
   gem "rails-erd"
 end
