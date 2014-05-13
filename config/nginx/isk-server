@@ -19,6 +19,9 @@ server {
 	# Update me with your hostname
 	server_name isk.example.com;
 	
+	# Rewrite the slides/123/backgrounds/foo.png to /backgrounds/foo.png
+	rewrite /backgrounds/(.*) /backgrounds/$1 break;
+	
 	# Disable limits on http request sizes.
 	# We are moving svg -files with possible large
 	# embedded images thru post-requests.

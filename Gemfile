@@ -6,8 +6,10 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-
+# Better memcached interface
 gem 'dalli'
+
+# Database interfaces
 gem 'sqlite3'
 gem 'mysql2'
 
@@ -25,18 +27,26 @@ gem 'slim'
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 
+# Currently, websocket-rails 0.7.0 breaks sync between the threads horribly
 gem 'websocket-rails', '0.6.2'
 
+# For background stuff
 gem 'daemon'
 gem 'rrd-ffi', :require => 'rrd'
 
+# Better caching
 gem 'cashier'
+
+# For simple-edit previews to work in development
+gem 'rack-rewrite', '~> 1.2.1'
 
 group :development do
   gem "rails-erd"
 end
 
+# Code coverage report generator
 gem 'simplecov', :require => false, :group => :test
+# We do loads in after_commit callbacks so need to include them in tests
 gem 'test_after_commit', :group => :test
 
 # Gems used only for assets and not required
