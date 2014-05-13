@@ -1,7 +1,7 @@
-div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id="slide_#{slide.id}"
-	div.slideheader
-		div.slidename = link_to slide.name, :controller => :slides, :action => :show, :id => slide.id
-		div.slidetype class=(slide.type_str) = slide.type_str
+div.slide class=(slide.public ? 'public' : 'hidden') id="slide_#{slide.id}"
+	div.slide_header
+		div.slide_name = link_to slide.name, :controller => :slides, :action => :show, :id => slide.id
+		div.slide_type class=(slide.type_str) = slide.type_str
 	- if defined?(to_full)
 		= slide_preview_to_full_tag(slide)
 	- else
@@ -9,7 +9,7 @@ div.compact_slideitem class=(slide.public ? 'public_slide' : 'hidden_slide') id=
 	/ cache is here instead of top of the file because we want to be able to control
 	/ where the link on the slide preview leads
 	= cache slide_key(slide), tag: [slide.cache_tag, current_user.cache_tag] do
-		div.slidebuttons
+		div.slide_buttons
 			- if slide.deleted?
 				p
 					| This slide has been deleted
