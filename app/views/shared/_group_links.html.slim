@@ -1,9 +1,9 @@
 - if @groups && @groups.size > 1
 	= cache('group_links', tag: ["groups", "slides"]) do
-		div.group_links#scrollingDiv
+		div.group_links#scrolling_div
 			p Goto group:
 			ul
 				- @groups.each do |group|
 					- unless group.slides.count == 0
 						li
-							a.grouplink href="#group_#{group.id}" = group.name
+							a.group_link href="#group_#{group.id}" = group.name
