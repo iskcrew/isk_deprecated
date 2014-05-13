@@ -11,14 +11,13 @@ html
 		link rel="icon" type="image/x-icon" href="/favicon.ico"
 	body
 		= render partial: "shared/display_warnings"
-		div.topNavigation 
-			| &nbsp;
+		div.top_navigation
 			div.tabs 
-				| &nbsp;
 				= navigation_links
 			div.logout
 				| I'm #{current_user.username}
-				= link_to 'Logout', {controller: :logins, action: :destroy}, method: :delete
+				= link_to 'Logout', {controller: :logins, action: :destroy}, method: :delete, 
+					class: 'logout'
 			div.current_event Event: #{current_event.name}
 		= render partial: 'navigation'
 		div.flash

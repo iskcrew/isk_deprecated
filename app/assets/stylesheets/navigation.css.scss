@@ -1,77 +1,52 @@
-div.topNavigation, div.navigation {
+/* ISK stylesheet for the navigation bars at the top of the page
+ * 
+*/
+
+@import 'variables';
+
+div.navigation {
 	font-size: 1.4em;
 }
 
-div.topNotification {
-	font-size: 1.4em;
-	background-color: #900;
-	padding: 0px;
-}
-
-div.topNavigation {
+div.top_navigation {
 	border-bottom: 2px solid #DDD;
-	padding-top: 0.3em;
-	padding-bottom: 1px;
+	padding-top: 0.5em;
+	font-size: 1.4em;
+	
+	a {
+		display: inline-block;
+		border-right: 1px solid black;
+		border-left: 1px solid black;
+		border-top: 1px solid black;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		background-color: $nav_tab_color;
+		text-decoration: none;
+		padding: 0.2em 0.5em 0px 0.5em;
+		margin: 0px 0.1em;
+	}
+	
+	a.current {
+		background-color: $nav_current_color;
+	}
 
-
+	
 	div.logout {
 		float: right;
-		padding: 0px;
-		margin: 0px;
-		height: 100%;
+		display: inline;
 		
-		a {
-			height: 100%;
-			display: inline-block;
-			text-decoration: none;
-			padding: 0px 0.5em;
-			margin: 0px 0px 0px 0px;
-			border-right: 1px solid black;
-			border-left: 1px solid black;
-			border-top: 1px solid black;
-			border-radius: 10px;
-			background-color: #900;	
-	
-		}
-		
-		input[type=submit] {
-			font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-			font-size: 1,5em;
-			text-decoration: none;
-			padding-bottom: 4px;
-			padding-top: 4px;
-		}
-		
+		a.logout {
+			background-color: $button_warning_color;		
+		}		
 	}
 	
 	div.tabs {
-		float: left;
-		
-		a {
-			display: inline-block;
-			vertical-align: middle;
-			height: 100%;
-			padding: 0px 0.5em;
-			margin: 0px 0.2em;
-			border-right: 1px solid black;
-			border-left: 1px solid black;
-			border-top: 1px solid black;
-			border-top-left-radius: 10px;
-			border-top-right-radius: 10px;
-			background-color: #666;
-			text-decoration: none;
-			float: left;
-		}
-		
-		a.current {
-			background-color: #7A7;
-		}
+		display: inline;
 	}
 	
 	div.current_event {
-		float: right;
-		display: inline-block;
-		margin-right: 1em;
+		display: inline;
+		margin-left: 1em;
 	}
 	
 	
@@ -79,7 +54,7 @@ div.topNavigation {
 
 div.navigation {
 	border-bottom: 2px solid #DDD;
-	background-color: #777;
+	background-color: $nav_tab_color;
 	
 	a {
 		display: inline-block;
