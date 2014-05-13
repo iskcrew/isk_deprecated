@@ -12,9 +12,8 @@ var refreshTimer = $.timer(function() {
 }, 300000, true);
 
 $().ready(function() {
-	
-	$('#scrollingDiv').waypoint('sticky', {
-	  wrapper: '<div class="scrollingDiv-wrapper" />',
+	$('#scrolling_div').waypoint('sticky', {
+	  wrapper: '<div class="scrolling_div-wrapper" />',
 	  stuckClass: 'stuck'
 	});	
 });
@@ -25,7 +24,7 @@ function scrollToAnchor(aid){
 };
 
 jQuery(function($) {
-	$(".grouplink").click(function(e) {
+	$(".group_link").click(function(e) {
    		e.preventDefault();
 		var full_url = this.href;
 
