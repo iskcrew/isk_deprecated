@@ -23,7 +23,7 @@ gem 'time_diff', '~> 0.2.2'
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 
-gem 'websocket-rails'
+gem 'websocket-rails', '0.6.2'
 
 gem 'daemon'
 gem 'rrd-ffi', :require => 'rrd'
