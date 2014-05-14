@@ -55,12 +55,12 @@ table.compact_slidelist {
 
 
 div.slide {
-	float: left;
 	margin: 2px;
 	padding: 5px;
 	border: 2px solid #d0d0d0;
 	border-radius: 10px;
 	background-color: #666;
+	display: inline-block;
 	
 	div.slide_header {
 		width: 400px;
@@ -112,6 +112,7 @@ div.slide {
 	
 	
 	div.slide_buttons {
+		margin-top: 5px;
 		text-align: center;
 		min-height: 22px;
 		width: 400px;
@@ -162,31 +163,58 @@ div.slide_filter {
 	}
 }
 
-div.info_block {
-	margin-right: 10px;
-}
 
-div.left_column {
-	float: left;
-	max-width: 420px;
-}
+// slide#show
+div.slide_info {
+	div.info_block {
+		margin: 0.5em 0px;
+		padding: 5px;
+		border: 2px solid #d0d0d0;
+		border-radius: 10px;
+		
+		h2 {
+			margin-top: 0px;
+		}
+	}
 
-div.right_column {
-}
+	div.left_column, div.right_column {
+		margin: 10px;
+	}
 
-div.slide_metadata {
-	h3 {
-		text-size: 1.2em;
+	div.left_column {
+		float:left;
+		max-width: 440px;
+	}
+
+	div.right_column {
+		max-width: 440px;
+		float: left;
 	}
 	
+	table.add_override {
+		border: none;
+		
+		tr {
+			border: none;
+			
+			td {
+				border: none;
+			}
+		}
+	}
+}
+
+
+div.slide_metadata {	
 	textarea {
 		width: 400px;
 	}
-	
+
 	input#slide_name {
 		width: 400px;
 	}
 }
+
 
 
 div.simple_editor_container {

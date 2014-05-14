@@ -1,7 +1,7 @@
-div.info_block
-	/ Only render this block if the object has authorized users or current user
-	/ is admin and thus can add users
-	- if !obj.authorized_users.empty? || obj.admin?(current_user)
+/ Only render this block if the object has authorized users or current user
+/ is admin and thus can add users
+- if !obj.authorized_users.empty? || obj.admin?(current_user)
+	div.authorized_users.info_block
 		h2 Authorized users
 		- unless obj.authorized_users.empty?
 			div

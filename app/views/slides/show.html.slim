@@ -1,44 +1,45 @@
 h1	Information for slide: #{@slide.name}
 
-div.slideinfo
-	div class="slide_metadata info_block left_column"
+div.slide_info
+	div class="left_column"
 		/ Normal slide-block
 		= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
 		/ List of presentations this slide belongs to
 		= render :partial => 'slide_presentation_list'
 		/ List of displays where this slide is in their override queue
 		= render :partial => 'slide_overrides'
-	div class="slide_metadata info_block right_column"
-		/ Only render the slide description if it has been actually used
-		- unless @slide.description.blank?
-			h2 Slide description
-			== simple_format @slide.description
-		h2 Slide metadata
-		-if @slide.public
-			div.warning
-				p This slide is public, you should hide it before editing it.
-		-else
-			div
-				p This slide is hidden. It won't be shown on any presentations.
-					| You need to publish it before it can be shown.
-		-if @slide.replaced?
-			div.warning
-				p
-					| This slide has been replaced! The replacement slide is: 
-					= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
-		-elsif @slide.deleted
-			div.warning
-				p
-					| This slide has been deleted!
-					- if Slide.admin? current_user
-						= button_to 'Undelete', action: :undelete, id: @slide.id, 
-							class: 'button'
-		ul
-			li Slide class: #{slide_class @slide}
-			li Duration: #{slide_duration @slide}
-			li Last modified: #{l @slide.updated_at, format: :short}
-			li Images generated? #{@slide.ready ? 'Yes' : 'No'}
-			li Images updated at: #{l @slide.updated_at, format: :short}
+	div class="right_column"
+		div.slide_metadata.info_block
+			h2 Slide metadata
+			/ Only render the slide description if it has been actually used
+			- unless @slide.description.blank?
+				h3 Slide description
+				== simple_format @slide.description
+			-if @slide.public
+				div.warning
+					p This slide is public, you should hide it before editing it.
+			-else
+				div
+					p This slide is hidden. It won't be shown on any presentations.
+						| You need to publish it before it can be shown.
+			-if @slide.replaced?
+				div.warning
+					p
+						| This slide has been replaced! The replacement slide is: 
+						= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
+			-elsif @slide.deleted
+				div.warning
+					p
+						| This slide has been deleted!
+						- if Slide.admin? current_user
+							= button_to 'Undelete', action: :undelete, id: @slide.id, 
+								class: 'button'
+			ul
+				li Slide class: #{slide_class @slide}
+				li Duration: #{slide_duration @slide}
+				li Last modified: #{l @slide.updated_at, format: :short}
+				li Images generated? #{@slide.ready ? 'Yes' : 'No'}
+				li Images updated at: #{l @slide.updated_at, format: :short}
 		= render partial: "slide_group_info"
 		= render partial: "shared/authorized_users", locals: {obj: @slide}
 
