@@ -10,47 +10,31 @@ div.navigation {
 
 div.top_navigation {
 	border-bottom: 2px solid #DDD;
-	padding-top: 0.5em;
-	font-size: 1.4em;
-	
-	a {
-		display: inline-block;
-		border-right: 1px solid black;
-		border-left: 1px solid black;
-		border-top: 1px solid black;
-		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
-		background-color: $nav_tab_color;
-		text-decoration: none;
-		padding: 0.2em 0.5em 0px 0.5em;
-		margin: 0px 0.1em;
-	}
-	
-	a.current {
-		background-color: $nav_current_color;
-	}
-
-	
-	div.logout {
-		float: right;
-		display: inline;
+	font-size: 110%;
+	padding: 0px;		
 		
-		a.logout {
-			background-color: $button_warning_color;		
-		}		
+	div#current_event {
+		float: right;
+		padding: 0px;
+		margin: 0px 2em;
 	}
-	
-	div.tabs {
-		display: inline;
+		
+	ul.tabs {
+		display: inline-block;
 	}
-	
-	div.current_event {
-		display: inline;
-		margin-left: 1em;
-	}
-	
-	
-}
+		
+	ul#logout {
+		float: right;
+		
+		li{
+			background-image: none;
+			border-color: #300;
+			background-color: $button_warning_color;
+		}
+	} 
+		
+}	
+
 
 div.navigation {
 	border-bottom: 2px solid #DDD;
