@@ -13,8 +13,9 @@ div.slide_info
 			h2 Slide metadata
 			/ Only render the slide description if it has been actually used
 			- unless @slide.description.blank?
-				h3 Slide description
-				== simple_format @slide.description
+				table.slide_description
+					 tr: th Slide description
+					 tr: td == simple_format @slide.description
 			-if @slide.public
 				div.warning
 					p This slide is public, you should hide it before editing it.
