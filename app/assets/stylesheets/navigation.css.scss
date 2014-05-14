@@ -4,16 +4,11 @@
 
 @import 'variables';
 
-div.navigation {
-	font-size: 1.4em;
-}
-
 div.top_navigation {
-	border-bottom: 2px solid #DDD;
-	font-size: 110%;
+	font-size: 120%;
 	padding: 0px;
-	height: 34px;
-	overflow: hidden;		
+	height: 36px;
+	border-bottom: 2px solid $nav_bar_border;		
 		
 	div#current_event {
 		float: right;
@@ -24,6 +19,14 @@ div.top_navigation {
 		
 	ul.tabs {
 		display: inline-block;
+		
+		li.ui-tabs-active {
+			background-image: none;
+			background-color: $nav_bar_bg;
+			border-color: $nav_bar_border;
+			border-bottom: 2px solid $nav_bar_bg;
+			font-weight: bold;
+		}
 	}
 		
 	ul#logout {
@@ -40,28 +43,23 @@ div.top_navigation {
 
 
 div.navigation {
-	border-bottom: 2px solid #DDD;
-	background-color: $nav_tab_color;
+	border-bottom: 2px solid $nav_bar_border;
+	background-color: $nav_bar_bg;
+	width: 100%;
+	height: 36px;
+	font-size: 120%;
 	
 	a {
 		display: inline-block;
-		vertical-align: middle;
-		height: 100%;
-		padding: 0em 0.3em;
-		margin: 0px 0px 0px 0px;
-		border-right: 1px solid #DDD;
-		border-left: 1px solid #DDD;
-		border-collapse: collapse;
+		padding: 2px 0.3em;
+		margin: 5px;
+		border: 1px solid $nav_bar_border;
+		background-color: $nav_bar_button_bg;
+		border-radius: 6px;
 		text-decoration: none;
 		float: left;
 	}
-	
-	a.current {
-		background-color: white;
-		border-bottom: 2px solid white;
-	
-	}
-	
+			
 }
 
 
