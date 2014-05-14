@@ -1,6 +1,7 @@
 / Render info about any presentations this slide belongs to
 / Also show all associated displays for each presentation
-div.slide_presentation_list.info_block
+
+div.slide_presentation_list.info_block#presentations
 	h2 Presentations
 	- if @slide.presentations.empty?
 		p This slide doesn't belong to any presentations.

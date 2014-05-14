@@ -166,11 +166,16 @@ div.slide_filter {
 
 // slide#show
 div.slide_info {
+	div.slide {
+		float: left;
+	}
+	
+	div#tabs {
+		float: left;
+	}
+	
 	div.info_block {
-		margin: 0.5em 0px;
-		padding: 5px;
-		border: 2px solid #d0d0d0;
-		border-radius: 10px;
+		width: 525px;
 		
 		h2 {
 			margin-top: 0px;
@@ -211,7 +216,8 @@ div.slide_info {
 }
 
 
-div.slide_metadata {	
+div.slide_form {
+	max-width: 420px;	
 	textarea {
 		width: 400px;
 	}

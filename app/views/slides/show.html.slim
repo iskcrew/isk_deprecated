@@ -1,15 +1,21 @@
 h1	Information for slide: #{@slide.name}
 
 div.slide_info
-	div class="left_column"
-		/ Normal slide-block
-		= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
+	/ Normal slide-block
+	= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
+	div#tabs
+		ul
+			li: a href="#metadata" Slide metadata
+			li: a href="#group_info" Group
+			li: a href="#presentations" Presentations
+			li: a href="#overrides" Overrides
+			li: a href="#authorized_users" Authorized users
+		
 		/ List of presentations this slide belongs to
 		= render :partial => 'slide_presentation_list'
 		/ List of displays where this slide is in their override queue
 		= render :partial => 'slide_overrides'
-	div class="right_column"
-		div.slide_metadata.info_block
+		div.info_block#metadata
 			h2 Slide metadata
 			/ Only render the slide description if it has been actually used
 			- unless @slide.description.blank?
