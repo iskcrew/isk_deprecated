@@ -20,6 +20,10 @@ div.top_navigation {
 	ul.tabs {
 		display: inline-block;
 		
+		li:hover {
+			border-color: #FFF;
+		}
+		
 		li.ui-tabs-active {
 			background-image: none;
 			background-color: $nav_bar_bg;
@@ -36,6 +40,11 @@ div.top_navigation {
 			background-image: none;
 			border-color: #300;
 			background-color: $button_warning_color;
+		}
+		
+		li:hover {
+			border-color: #900;
+			background-color: #A00;
 		}
 	} 
 		
