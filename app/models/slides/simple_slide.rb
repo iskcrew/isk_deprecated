@@ -114,17 +114,21 @@ class SimpleSlide < SvgSlide
 		color = options[:color] || DefaultSlidedata[:color]
 		heading = options[:heading] || ''
 		text = options[:text] || ''
-	
-	
-	
+
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
+		# FIXME: Read up on viewboxes and see how this relates to supporting different slide sizes
 		svg.root.attributes['viewBox'] = "0 0 " + Slide::FullWidth.to_s + " " + Slide::FullHeight.to_s
 		
 		head = svg.elements[HeadingSelector]
-		body = svg.elements[BodySelector]
+		head.delete_element('*')
+		head_tspan = head.add_element 'tspan'
+		head_tspan.attributes['sodipodi:role'] = "line"
+		head_tspan.attributes["xml:space"] = "preserve"
+		head_tspan.text = heading
 		
-		head = set_text(head, heading, color)
+		
+		body = svg.elements[BodySelector]
 		body = set_text(body, text, color, text_size, text_align)
 		
 		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
