@@ -1,0 +1,9 @@
+/ This template is for users that are only allowed to create
+/ new slides using the simple editor
+h2 New simple editor slide
+= form_for @slide, html: {id: 'new_simple_slide'} do |f|
+	= f.error_messages
+	= hidden_field_tag :create_type, 'simple'
+	= render partial: 'form'
+	= render partial: 'simple_edit'
+	p = f.submit

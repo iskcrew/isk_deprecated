@@ -1,0 +1,28 @@
+doctype 5
+html
+	head
+		title 
+			| ISK @ #{request.host} : #{controller.controller_name.capitalize}
+			=< controller.action_name.capitalize
+		= stylesheet_link_tag :application, media: :all
+		= javascript_include_tag :application
+		= csrf_meta_tags
+		link rel="icon" type="image/gif" href="/favicon.gif"
+		link rel="icon" type="image/x-icon" href="/favicon.ico"
+	body
+		= render partial: "shared/display_warnings"
+		div.top_navigation.ui-tabs.ui-widget.ui-widget-content.ui-widget-header
+				ul.tabs.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix 
+					= navigation_links
+				ul.tabs.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix#logout
+					li.ui-state-default.ui-corner-top 
+						= link_to "Logout (#{current_user.username})", {controller: :logins, 
+							action: :destroy}, method: :delete
+				div#current_event: p Current event: #{current_event.name}
+		= render partial: 'navigation'
+		div.flash
+			div.error = flash[:error]
+			div.notice = flash[:notice]
+			div.warning = flash[:warning]
+		div.content
+			== yield

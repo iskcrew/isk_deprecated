@@ -36,6 +36,7 @@ textarea#code {
 div.simple_editor_container {
 	min-width: 900px;
 	overflow: auto;
+	display: inline-block;
 	
 	textarea {
 		width: 400px;
@@ -54,10 +55,8 @@ div.simple_editor_container {
 	div.simple_editor_preview {
 		border: 2px solid #555;
 		margin-left: 10px;
-		display: block;
-		position: absolute;
-		bottom: 50px;
-		left: 430px;
+		margin-top: 20px;
+		float: left;
 	}
 	
 }

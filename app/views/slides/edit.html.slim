@@ -1,0 +1,11 @@
+h1 Editing slide: #{@slide.name}
+
+/ @slide is STI model, so we need to cast it into the base model name or rails gets too clever
+= form_for @slide, :as => :slide, :url => slide_path(@slide) do |f|
+	= f.error_messages
+	= render partial: "form"
+	- if @slide.is_a? HttpSlide
+		= render partial: "http_slide_form"
+	- elsif @slide.is_a? SimpleSlide
+		= render partial: 'simple_edit'
+	= f.submit

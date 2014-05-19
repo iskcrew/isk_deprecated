@@ -48,6 +48,8 @@ class Slide < ActiveRecord::Base
 	scope :current, where(:deleted => false).where(:replacement_id => nil)
 	scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
   
+	delegate :name, to: :master_group, prefix: :master_group 
+
 	sortable :scope => :master_group_id
   
 	
@@ -247,7 +249,7 @@ class Slide < ActiveRecord::Base
 			
 			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
 				#if the cols or rows are smaller then our predefined sizes
-				#build a white background and center the image in it
+				#build a black background and center the image in it
 				if cols < Slide::FullWidth || rows < Slide::FullHeight
 					#resize our image
 					img.resize!(cols, rows)

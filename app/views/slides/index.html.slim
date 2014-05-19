@@ -1,0 +1,8 @@
+h1 Listing slides for event #{current_event.name}
+
+div.slide_filter
+	= slide_filter_links @filter
+	
+div.slide_list
+	= render partial: "shared/group_links"
+	= render partial: "slidegroups"

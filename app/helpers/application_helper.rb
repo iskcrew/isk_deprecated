@@ -11,16 +11,15 @@ module ApplicationHelper
     controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
     admin_controllers = ['Users', 'Events']
     ret = String.new
-    html_options = Hash.new
-    controllers.each do |c|
-      html_options = controller.class.name.include?(c) ? {:class => 'current'} : {}
-      ret << link_to(c, {:controller => c.downcase}, html_options)
-    end
-    if current_user.admin?
-      admin_controllers.each do |c|
-        html_options = controller.class.name.include?(c) ? {:class => 'current'} : {}
-        ret << link_to(c, {:controller => c.downcase}, html_options)
-      end
+    base_html_options = {class: 'ui-state-default ui-corner-top'}
+		tabs = controllers
+		tabs += admin_controllers if current_user.admin?
+    tabs.each do |c|
+			html_options = {class: 'ui-state-default ui-corner-top'}
+			if controller.class.name.include?(c)
+      	html_options[:class] <<  ' ui-tabs-active ui-state-active'
+			end
+      ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
     end
     return ret.html_safe 
   end

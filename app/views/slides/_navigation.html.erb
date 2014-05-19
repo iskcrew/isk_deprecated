@@ -1,7 +1,0 @@
-<div class="navigation">&nbsp;
-	<%=link_to 'List', :controller => :slides, :action => :index%>
-	<%if Slide.can_create? current_user%>
-		<%=link_to "New", :controller => :slides, :action => :new%>
-	<%end%>
-	<%= yield :navigation%>
-</div>

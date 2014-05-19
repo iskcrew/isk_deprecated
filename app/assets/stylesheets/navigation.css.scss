@@ -1,105 +1,74 @@
-div.topNavigation, div.navigation {
-	font-size: 1.4em;
-}
+/* ISK stylesheet for the navigation bars at the top of the page
+ * 
+*/
 
-div.topNotification {
-	font-size: 1.4em;
-	background-color: #900;
+@import 'variables';
+
+div.top_navigation {
+	font-size: 120%;
 	padding: 0px;
-}
-
-div.topNavigation {
-	border-bottom: 2px solid #DDD;
-	padding-top: 0.3em;
-	padding-bottom: 1px;
-
-
-	div.logout {
+	height: 36px;
+	border-bottom: 2px solid $nav_bar_border;		
+		
+	div#current_event {
 		float: right;
 		padding: 0px;
-		margin: 0px;
-		height: 100%;
-		
-		a {
-			height: 100%;
-			display: inline-block;
-			text-decoration: none;
-			padding: 0px 0.5em;
-			margin: 0px 0px 0px 0px;
-			border-right: 1px solid black;
-			border-left: 1px solid black;
-			border-top: 1px solid black;
-			border-radius: 10px;
-			background-color: #900;	
-	
-		}
-		
-		input[type=submit] {
-			font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-			font-size: 1,5em;
-			text-decoration: none;
-			padding-bottom: 4px;
-			padding-top: 4px;
-		}
-		
+		margin: 0px 2em;
+		font-weight: normal;
 	}
-	
-	div.tabs {
-		float: left;
 		
-		a {
-			display: inline-block;
-			vertical-align: middle;
-			height: 100%;
-			padding: 0px 0.5em;
-			margin: 0px 0.2em;
-			border-right: 1px solid black;
-			border-left: 1px solid black;
-			border-top: 1px solid black;
-			border-top-left-radius: 10px;
-			border-top-right-radius: 10px;
-			background-color: #666;
-			text-decoration: none;
-			float: left;
-		}
-		
-		a.current {
-			background-color: #7A7;
-		}
-	}
-	
-	div.current_event {
-		float: right;
+	ul.tabs {
 		display: inline-block;
-		margin-right: 1em;
+		
+		li:hover {
+			border-color: #FFF;
+		}
+		
+		li.ui-tabs-active {
+			background-image: none;
+			background-color: $nav_bar_bg;
+			border-color: $nav_bar_border;
+			border-bottom: 2px solid $nav_bar_bg;
+			font-weight: bold;
+		}
 	}
-	
-	
-}
+		
+	ul#logout {
+		float: right;
+		
+		li{
+			background-image: none;
+			border-color: #300;
+			background-color: $button_warning_color;
+		}
+		
+		li:hover {
+			border-color: #900;
+			background-color: #A00;
+		}
+	} 
+		
+}	
+
 
 div.navigation {
-	border-bottom: 2px solid #DDD;
-	background-color: #777;
+	border-bottom: 2px solid $nav_bar_border;
+	background-color: $nav_bar_bg;
+	width: 100%;
+	height: 36px;
+	font-size: 120%;
 	
 	a {
 		display: inline-block;
-		vertical-align: middle;
-		height: 100%;
-		padding: 0em 0.3em;
-		margin: 0px 0px 0px 0px;
-		border-right: 1px solid #DDD;
-		border-left: 1px solid #DDD;
-		border-collapse: collapse;
+		padding: 2px 0.3em;
+		margin: 5px;
+		border: 1px solid $nav_bar_border;
+		background-color: $nav_bar_button_bg;
+		border-radius: 6px;
 		text-decoration: none;
 		float: left;
 	}
-	
-	a.current {
-		background-color: white;
-		border-bottom: 2px solid white;
-	
-	}
-	
+			
 }
 
 

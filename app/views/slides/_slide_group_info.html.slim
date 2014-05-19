@@ -1,0 +1,18 @@
+
+div.slide_group_info.info_block#group_info
+	h2 Group information
+	- if @slide.grouped?
+		ul
+			li
+				| This slide is in group:
+				=< link_to @slide.master_group_name, group_path(@slide.master_group)
+			li Position inside group: #{@slide.position}
+	- elsif @slide.can_edit? current_user
+		p 
+			| This slide doesn't belong to a group. As such this slide can't be a part of a 
+			| presentation until it is added to a group.
+		= form_for :add_to_group, url: add_to_group_slide_path(@slide.id) do |f|
+			h4 Add this slide to a group
+			= f.select :group_id, options_for_select( MasterGroup.can_edit( \
+				current_user).current.all.collect {|g| [ g.name, g.id ] })
+			=< f.submit "Add"

@@ -1,0 +1,61 @@
+h1	Information for slide: #{@slide.name}
+
+div.slide_info
+	/ Normal slide-block
+	= render :partial => 'slide', :locals => {:slide => @slide, :to_full => true}
+	div#tabs
+		ul
+			li: a href="#metadata" Slide metadata
+			li: a href="#group_info" Group
+			li: a href="#presentations" Presentations
+			li: a href="#overrides" Overrides
+			li: a href="#authorized_users" Authorized users
+		
+		/ List of presentations this slide belongs to
+		= render :partial => 'slide_presentation_list'
+		/ List of displays where this slide is in their override queue
+		= render :partial => 'slide_overrides'
+		div.info_block#metadata
+			h2 Slide metadata
+			/ Only render the slide description if it has been actually used
+			- unless @slide.description.blank?
+				table.slide_description
+					 tr: th Slide description
+					 tr: td == simple_format @slide.description
+			-if @slide.public
+				div.warning
+					p This slide is public, you should hide it before editing it.
+			-else
+				div
+					p This slide is hidden. It won't be shown on any presentations.
+						| You need to publish it before it can be shown.
+			-if @slide.replaced?
+				div.warning
+					p
+						| This slide has been replaced! The replacement slide is: 
+						= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
+			-elsif @slide.deleted
+				div.warning
+					p
+						| This slide has been deleted!
+						- if Slide.admin? current_user
+							= button_to 'Undelete', action: :undelete, id: @slide.id, 
+								class: 'button'
+			ul
+				li Slide class: #{slide_class @slide}
+				li Duration: #{slide_duration @slide}
+				li Last modified: #{l @slide.updated_at, format: :short}
+				li Images generated? #{@slide.ready ? 'Yes' : 'No'}
+				li Images updated at: #{l @slide.updated_at, format: :short}
+		= render partial: "slide_group_info"
+		= render partial: "shared/authorized_users", locals: {obj: @slide}
+
+/If current user can edit this slide add the appropriate links to navigation bar
+-if @slide.can_edit? current_user
+	- content_for :navigation do
+		= link_to 'Edit', {action: :edit, id: @slide.id}, confirm: \
+			(@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+		-if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
+			= link_to 'Convert to inkscape', {action: :to_inkscape, id: @slide.id}, method: :post
+		= link_to 'Download', {action: :svg_data, id: @slide.id}, confirm: \
+			(@slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)

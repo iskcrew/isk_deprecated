@@ -12,9 +12,8 @@ var refreshTimer = $.timer(function() {
 }, 300000, true);
 
 $().ready(function() {
-	
-	$('#scrollingDiv').waypoint('sticky', {
-	  wrapper: '<div class="scrollingDiv-wrapper" />',
+	$('#scrolling_div').waypoint('sticky', {
+	  wrapper: '<div class="scrolling_div-wrapper" />',
 	  stuckClass: 'stuck'
 	});	
 });
@@ -25,7 +24,7 @@ function scrollToAnchor(aid){
 };
 
 jQuery(function($) {
-	$(".grouplink").click(function(e) {
+	$(".group_link").click(function(e) {
    		e.preventDefault();
 		var full_url = this.href;
 
@@ -41,6 +40,9 @@ jQuery(function($) {
 jQuery(function($) {
 	$( ".duration_spinner" ).spinner({ min: 30, incremental: false, step: 30 });
 	$(document).tooltip({show: {duration: 1000, easing: 'easeInExpo'}});
-	$( "#tabs" ).tabs();
+	$( "#tabs" ).tabs({heightStyle: "auto"});
 });
 
+ $(function() {
+$( "#accordion" ).accordion();
+});

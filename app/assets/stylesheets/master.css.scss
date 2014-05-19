@@ -1,13 +1,31 @@
+/*
+ * Isk master stylesheet
+*/
+
+@import 'variables';
+
+/*
+ * TODO: Move to sensible files
+*/
+
+div.error_notification {
+	font-size: 1.4em;
+	background-color: $error_bg_color;
+	padding: 10px 20px;
+}
+
+
+
 body {
-	color:#ffffff;
-	background-color:#333;
-	font-size: 0.7em;
+	color: $font_color;
+	background-color: $background_color;
+	font-size: $font_size;
 	margin:0px;
 	min-width: 600px;
 }
 
 body,p,h1,h2,h3,h4,table,td,th,ul,ol,textarea,input {
-	font-family:verdana,helvetica,arial,sans-serif;
+	font-family: $font_family;
 }
 
 h1 {font-size:220%;margin-top:0px;font-weight:normal}
@@ -19,8 +37,6 @@ h6 {font-size:110%;}
 
 h1,h2,h3,h4,h5,h6 {
 	background-color:transparent;
-	color:#ffffff;
-	margin-left: 5px;
 }
 
 table,th,td,input,textarea {
@@ -28,7 +44,7 @@ table,th,td,input,textarea {
 }
 
 img {
-	border:0
+	border: none;
 }
 
 ul {
@@ -39,7 +55,6 @@ ul {
 	list-style-type: circle;
 		
 	li {
-		margin: 5px;
 	}
 	
 }
@@ -54,29 +69,44 @@ div.flash {
 	display: block;
 	font-size: 1.5em;
 	
-	div.notice {
+	div {
 		padding-left: 10px;
+	}
+	
+	div.notice {
 		background: green;
 	}
 
 	div.error {
-		padding-left: 10px;
 		background: red;
+	}
+	
+	div.warnng {
+		background: yellow;
 	}
 }
 div.content {
 	padding: 0.5em 0.5em;
 }
 
-form.button_to {
-	display: inline-block;
+div.warning {
+	p {
+		background-color: #770;
+		font-weight: bold;
+		padding: 1em;
+		display: inline-block;
+	}
 }
+
 
 a:link, a:visited {
 	color: inherit;
 }
 
-a:visited {
-	
-}
+a:hover {
+	color: $link_hover_color;
+};
 
+form {
+	display: inline-block;
+}
