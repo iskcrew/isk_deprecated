@@ -1,0 +1,5 @@
+h1 Edit event #{@event.name}
+= form_for @event do |f|
+	= error_messages_for :event
+	= render partial: 'form'
+	= f.submit
