@@ -1,12 +1,12 @@
 var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 
-var success = function(task) { 
+var got_svg = function(task) { 
 	console.log("Got new svg");
 	$('#svg_container').html(task);
 	$('#updating_preview').hide();
 }
 
-var failure = function(task) {
+var ws_error = function(task) {
   console.log("Failed to create svg....");
 }
 
@@ -29,7 +29,7 @@ var updateSlide = function() {
 			color: $("#simple_color").val(),
 		}
 	};
-	dispatcher.trigger('svg.simple', msg, success, failure);
+	dispatcher.trigger('svg.simple', msg, got_svg, ws_error);
 }
 
 var delayedUpdater = expire(updateSlide, 500);
