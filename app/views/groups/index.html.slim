@@ -1,12 +1,4 @@
-h1 Group management
-
-= form_for @new_group, url: groups_path(@new_group) do |f|
-	p
-		b Create a new group with name:
-		= f.text_field :name
-	= f.submit 'Create group'
-
-h2 All groups in current event (#{current_event.name})
+h1 All groups in current event (#{current_event.name})
 
 = render partial: 'shared/group_links'
 
