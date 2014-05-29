@@ -127,7 +127,6 @@ ActiveRecord::Schema.define(:version => 20140529131728) do
     t.integer  "role_id"
     t.integer  "user_id"
     t.integer  "master_group_id"
-    t.integer  "display_id_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "display_id"
