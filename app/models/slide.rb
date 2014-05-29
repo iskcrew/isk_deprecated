@@ -177,16 +177,13 @@ class Slide < ActiveRecord::Base
 		end
 		
 		#Effect id selection, id specified at group level overrides presentation default
-		if attribute_present?(:override_effect_id) && self.override_effect_id
-			hash[:effect_id] = self.override_effect_id
-		elsif attribute_present?(:group_effect_id) && self.group_effect_id
+		if attribute_present?(:group_effect_id) && self.group_effect_id
 			hash[:effect_id] = self.group_effect_id
 		elsif attribute_present?(:presentation_effect_id)
 			hash[:effect_id] = self.presentation_effect_id
 		end
 			
 		hash[:images_updated_at] = self.images_updated_at.to_i
-		hash[:effect] = 0
 		hash[:show_clock] = self.show_clock
 		hash[:type] = self.is_a?(VideoSlide) ? 'video' : 'image'
 		return hash
