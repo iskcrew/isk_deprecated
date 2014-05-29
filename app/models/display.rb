@@ -66,10 +66,10 @@ class Display < ActiveRecord::Base
 	end
 	
 	#Adds a slide to override queue for the display
-	def add_to_override(slide, duration, effect_id = Effect.first!.id)
+	def add_to_override(slide, duration, effect = Effect.first!)
 		oq = self.override_queues.new
 		oq.duration = duration
-		oq.effect_id = effect_id
+		oq.effect = effect
 		oq.slide = slide
 		self.touch
 		oq.save!

@@ -73,13 +73,14 @@ class SlidesController < ApplicationController
     
 		raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
-		display.add_to_override(slide, params[:add_to_override][:duration].to_i, 
-			params[:add_to_override][:effect_id])
+		effect = Effect.find params[:add_to_override][:effect_id]
+		
+		display.add_to_override(slide, params[:add_to_override][:duration].to_i, effect)
     	
 		unless display.do_overrides
 			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
 		end
-		flash[:notice] = 'Added slide ' << slide.name << ' to override queue for display ' << display.name
+		flash[:notice] = "Added slide #{slide.name} to override queue for display #{display.name} with effect #{effect.name}"
 
 		redirect_to :back
 	end
