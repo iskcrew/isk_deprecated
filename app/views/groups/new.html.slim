@@ -1,0 +1,26 @@
+h1 Create a new group
+
+div#tabs
+	ul
+		li: a href="#normal": span Normal group
+		li: a href="#prize": span Prize ceremony
+	
+	div#normal
+		h2 Create a normal group
+		= form_for @group, url: groups_path(@group) do |f|
+			= f.error_messages
+			= render partial: 'form'
+			= f.submit 'Create group'
+	
+	div#prize
+		h2 Create a prize ceremony group
+		p 
+			| This is a special group intended for price ceremonies.
+			| It will automatically generate slides with all given places, revealing
+			| the names in reverse order.
+		= form_for @group, url: groups_path(@group) do |f|
+			= f.error_messages
+			= hidden_field_tag :prize, true
+			= render partial: 'form'
+			= render partial: 'prize_form'
+			= f.submit 'Create prize group'
