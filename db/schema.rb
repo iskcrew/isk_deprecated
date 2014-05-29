@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(:version => 20140529131728) do
     t.integer  "slide_id"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
-    t.integer  "effect_id"
+    t.integer  "effect_id",  :default => 1
   end
 
   add_index "override_queues", ["display_id", "position"], :name => "index_override_queues_on_display_id_and_position"
