@@ -73,7 +73,8 @@ class SlidesController < ApplicationController
     
 		raise ApplicationController::PermissionDenied unless display.can_override? current_user
     
-		display.add_to_override(slide, params[:add_to_override][:duration].to_i)
+		display.add_to_override(slide, params[:add_to_override][:duration].to_i, 
+			params[:add_to_override][:effect_id])
     	
 		unless display.do_overrides
 			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"

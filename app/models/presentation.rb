@@ -60,7 +60,13 @@ class Presentation < ActiveRecord::Base
 	#The slides are in presentation order and have the group.id selected
 	#as presentation_group_id so that it is accessible in the slide objects returned.
 	def public_slides
-		Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil}).order('groups.position, slides.position').select('slides.*, groups.id AS presentation_group_id')
+		Slide.joins(:master_group => {:groups => :presentation})
+			.where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil})
+			.order('groups.position, slides.position')
+			.select('slides.*, groups.id AS presentation_group_id, 
+				master_groups.effect_id as group_effect_id,
+				presentations.delay as presentation_delay,
+				presentations.effect_id as presentation_effect_id')
 	end
 	
 	

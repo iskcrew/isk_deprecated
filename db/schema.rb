@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140511205538) do
+ActiveRecord::Schema.define(:version => 20140529131728) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -103,8 +103,10 @@ ActiveRecord::Schema.define(:version => 20140511205538) do
     t.integer  "event_id"
     t.boolean  "internal",                  :default => false
     t.string   "type"
+    t.integer  "effect_id"
   end
 
+  add_index "master_groups", ["effect_id"], :name => "index_master_groups_on_effect_id"
   add_index "master_groups", ["event_id"], :name => "index_master_groups_on_event_id"
 
   create_table "override_queues", :force => true do |t|
@@ -114,9 +116,11 @@ ActiveRecord::Schema.define(:version => 20140511205538) do
     t.integer  "slide_id"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.integer  "effect_id"
   end
 
   add_index "override_queues", ["display_id", "position"], :name => "index_override_queues_on_display_id_and_position"
+  add_index "override_queues", ["effect_id"], :name => "index_override_queues_on_effect_id"
   add_index "override_queues", ["slide_id"], :name => "index_override_queues_on_slide_id"
 
   create_table "permissions", :force => true do |t|

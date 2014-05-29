@@ -1,0 +1,24 @@
+h1 Edit group: #{@group.name}
+
+h2 Group metadata
+
+= form_for @group, url: group_path(@group) do |f|
+	= f.error_messages
+	= render partial: 'form'
+	- if @group.is_a? PrizeGroup
+		= render partial: 'prize_form'
+	= f.submit 'Update group'
+	
+h2 Reorder slides in this group
+p Drag slides to reorder them.
+ul#slides.sortable data-sortable=url_for(:controller => :groups, :action => :sort, :id => @group.id)
+	= render partial: 'slide_items', locals: {group: @group}
+	
+= content_for :navigation do
+	= link_to 'Details', :action => :show, :id => @group.id
+	= link_to 'Hide all slides', {:action => :hide_all, :id => @group.id}, :method => :post
+	= link_to 'Publish all slides', {:action => :publish_all, :id => @group.id}, :method => :post
+	= link_to 'Add slides', :action => :add_slides, :id => @group.id
+	= link_to 'Delete',{:action => :destroy, :id => @group.id}, :method => :delete,
+		:confirm => "Are you sure?"
+	

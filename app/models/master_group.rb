@@ -9,6 +9,7 @@ class MasterGroup < ActiveRecord::Base
 	
 	has_many :slides, :order => 'position ASC', conditions: 'deleted != 1'
 	has_many :groups, :dependent => :destroy
+	belongs_to :effect
 	belongs_to :event
 
 	validates :name, :presence => true, :length => { :maximum => 100 }

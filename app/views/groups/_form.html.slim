@@ -1,0 +1,9 @@
+= fields_for @group do |f|
+	p
+		b 
+		 	| Group name: 
+			= f.text_field :name
+	p
+		b 
+			| Transition effect:
+			= f.collection_select(:effect_id, Effect.all, :id, :name, {:include_blank => true})

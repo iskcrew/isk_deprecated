@@ -165,10 +165,24 @@ class Slide < ActiveRecord::Base
 		hash[:updated_at] = self.updated_at.to_i
 		if self.duration == -1
 			#Use presentation duration
-			hash[:duration] = dur
+			#FIXME: remove the duration parameter from this method and use sql selects?
+			if attribute_present? :presentation_delay
+				hash[:duration] = self.presentation_delay
+			else
+				hash[:duration] = dur
+			end
 		else
 			#Special duration defined for this slide
 			hash[:duration] = self.duration
+		end
+		
+		#Effect id selection, id specified at group level overrides presentation default
+		if attribute_present?(:override_effect_id) && self.override_effect_id
+			hash[:effect_id] = self.override_effect_id
+		elsif attribute_present?(:group_effect_id) && self.group_effect_id
+			hash[:effect_id] = self.group_effect_id
+		elsif attribute_present?(:presentation_effect_id)
+			hash[:effect_id] = self.presentation_effect_id
 		end
 			
 		hash[:images_updated_at] = self.images_updated_at.to_i

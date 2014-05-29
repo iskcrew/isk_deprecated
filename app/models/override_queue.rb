@@ -8,6 +8,7 @@
 class OverrideQueue < ActiveRecord::Base
   belongs_to :display, touch: true
   belongs_to :slide
+	belongs_to :effect
 
   validates :duration, :numericality => {:only_integer => true}
   #TODO: varmista että presis ja slide on olemassa
@@ -16,9 +17,10 @@ class OverrideQueue < ActiveRecord::Base
   sortable :scope => :display_id
   
   def to_hash
-    h = self.slide.to_hash(self.duration)
+    h = self.slide.to_hash
     h[:override_queue_id] = self.id
-    
+    h[:duration] = self.duration
+		h[:effect_id] = self.effect_id
     return h
   end
   
