@@ -118,7 +118,9 @@ class SlidesControllerTest < ActionController::TestCase
 	
 	test "add a slide to override" do
 		assert_difference("Display.find(displays(:normal).id).override_queues.count") do
-			post :add_to_override, {id: slides(:no_clock),  add_to_override: {display_id: displays(:normal).id}}, @adminsession
+			post :add_to_override, {id: slides(:no_clock),  
+				add_to_override: {display_id: displays(:normal).id, effect_id: effects(:fancy)}}, 
+				@adminsession
 		end
 		
 		assert_redirected_to root_path
