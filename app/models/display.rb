@@ -29,7 +29,7 @@ class Display < ActiveRecord::Base
 	has_one :display_state
 	has_one :current_group, through: :display_state
 	has_one :current_slide, through: :display_state
-	has_many :override_queues, :order => :position
+	has_many :override_queues, order: :position, include: :slide
 	has_many :display_counts
 
 	has_many :permissions

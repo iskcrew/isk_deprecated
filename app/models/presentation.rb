@@ -23,8 +23,8 @@ class Presentation < ActiveRecord::Base
 	
 	#Validation to ensure the asigned effect actually exists in db
 	validate :ensure_effect_exists
-	validates :name, :presence => true, :length => { :maximum => 100 }
-	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
+	validates :name, presence: true, length: { :maximum => 100 }
+	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
 
 	
 	attr_accessible :name, :effect_id, :delay
@@ -34,7 +34,7 @@ class Presentation < ActiveRecord::Base
 	end
 	
 	# Touch associated displays
-  after_save do |p|
+	after_save do |p|
 		p.displays.each do |d|
 			d.touch
 		end
@@ -66,7 +66,8 @@ class Presentation < ActiveRecord::Base
 			.select('slides.*, groups.id AS presentation_group_id, 
 				master_groups.effect_id as group_effect_id,
 				presentations.delay as presentation_delay,
-				presentations.effect_id as presentation_effect_id')
+				presentations.effect_id as presentation_effect_id,
+				master_groups.name as master_group_name')
 	end
 	
 	
@@ -85,17 +86,12 @@ class Presentation < ActiveRecord::Base
 			hash[:updated_at] = self.updated_at.to_i
 			hash[:total_groups] = self.groups.count
 			hash[:total_slides] = self.total_slides
-		
-			#FIXME: When iskdpy is using the new format kill this.
-			hash[:groups] = Array.new
-			self.groups.includes(:master_group => :slides).each do |g|
-				hash[:groups]	 << g.to_hash
-			end
+			
 			hash[:slides] = Array.new
 		
 			#The new format for presentation slides, requires less sql-queries to build
 			self.public_slides.each do |slide|
-				hash[:slides] << slide.to_hash(self.delay)
+				hash[:slides] << slide.to_hash
 			end
 			hash
 		end
@@ -109,7 +105,7 @@ class Presentation < ActiveRecord::Base
 		return default_slides_time + special_slides_time
 	end
 	
-	#Cache tag for all fragments depending on this presentation	
+	#Cache tag for all fragments depending on this presentation 
 	def cache_tag
 		"presentation_" + self.id.to_s
 	end

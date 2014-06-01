@@ -1,34 +1,34 @@
 # ISK - A web controllable slideshow system
 #
-# Author::    Vesa-Pekka Palmu
+# Author::		Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
-# License::   Licensed under GPL v3, see LICENSE.md
+# License::		Licensed under GPL v3, see LICENSE.md
 
 
 class Slide < ActiveRecord::Base
 	require 'rexml/document'
  
- 	after_initialize do |s|
+	after_initialize do |s|
 		if s.master_group.blank?
 			s.master_group_id = Event.current.ungrouped.id
 		end
 		return true		
 	end
  
-  
+	
 	after_create do |s|
 		s.update_column :filename, "slide_" + s.id.to_s
-    
+		
 		if @_svg_data
 			s.send(:write_svg_data)
 		end
-    
+		
 	end
 
 	# Touch associated displays
-  after_save :update_timestamps
-    
-	belongs_to :replacement, :class_name => "Slide", :foreign_key => "replacement_id"
+	after_save :update_timestamps
+		
+	belongs_to :replacement, class_name: "Slide", foreign_key: "replacement_id"
 	belongs_to :master_group
 	has_many :display_counts
 	has_one :event, through: :master_group
@@ -37,31 +37,31 @@ class Slide < ActiveRecord::Base
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
-	validates :name, :presence => true, :length => { :maximum => 100 }
-	validates :duration, :presence => true, :numericality => {:only_integer => true, :greater_than_or_equal_to => -1}
-  validates :master_group, presence: true
+	validates :name, presence: true, length: { maximum: 100 }
+	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
+	validates :master_group, presence: true
 	
 	attr_accessible :name, :show_clock, :description, :public, :duration
-  
+	
 	scope :published, where(:public => true)
 	scope :hidden, where(:public => false)
 	scope :current, where(:deleted => false).where(:replacement_id => nil)
 	scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
-  
+	
 	delegate :name, to: :master_group, prefix: :master_group 
 
 	sortable :scope => :master_group_id
-  
+	
 	
 	
 	Host = 'http://isk:Kissa@isk0.asm.fi'
-  
+	
 	FullWidth = 1280
 	FullHeight = 720
-  
+	
 	PreviewWidth = 400
 	PreviewHeight = 225
-  
+	
 	ThumbWidth = 128
 	ThumbHeight = 72
 
@@ -73,15 +73,15 @@ class Slide < ActiveRecord::Base
 	
 
 	include ModelAuthorization
-  
-  
+	
+	
 	def self.inherited(child)
 		child.instance_eval do
 			def model_name
 				self.base_class.model_name
 			end
 		end
-    
+		
 		child.class_eval do
 			def to_partial_path
 				'slides/slide'
@@ -89,9 +89,9 @@ class Slide < ActiveRecord::Base
 		end
 		super
 	end
-  
-	@_svg_data = nil  
-  
+	
+	@_svg_data = nil	
+	
 	def publish
 		self[:public] = true
 	end
@@ -103,16 +103,16 @@ class Slide < ActiveRecord::Base
 	def grouped
 		self.where('master_group_id != ?', Event.current.ungrouped.id)
 	end
-  
+	
 	def ungrouped
 		self.where(:master_group_id => Event.current.ungrouped.id)
 	end
-  
+	
 	#Log that the slide has been shown on display_id just now.
 	def shown_on(display_id)
 		self.display_counts.create(:display_id => display_id)
 	end
-  
+	
 	#Create new ungrouped hidden clone of the slide
 	def clone!
 		new_slide = self.dup
@@ -127,7 +127,7 @@ class Slide < ActiveRecord::Base
 		end
 		Slide.transaction do
 			new_slide.save!
-      
+			
 			FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
 			FileUtils.copy(self.original_filename, new_slide.original_filename) unless self.is_svg?
 			if self.ready
@@ -137,27 +137,28 @@ class Slide < ActiveRecord::Base
 		end
 		return new_slide
 	end
-  
+	
 	def presentations
 		Presentation.includes(:displays).joins(:groups => {:master_group => :slides}).where(:slides => {:id => self.id}).uniq
 	end
-  
+	
 	def displays
 		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
 		return displays_via_presentation.all | override.all
 	end
-  
+	
 	def override
 		Display.joins(:override_queues => :slide).where(:slides => {:id => self.id}).uniq
 	end
-  
+	
 	#TODO durationille jotain
-	def to_hash(dur = 20)
+	def to_hash
 		hash = Hash.new
 		hash[:id] = self.id
 		hash[:name] = self.name
 		hash[:master_group] = self.master_group_id
 		hash[:group] = self.presentation_group_id if attribute_present? :presentation_group_id
+		hash[:group_name] = self.master_group_name if attribute_present? :master_group_name
 		hash[:position] = self.position
 		hash[:ready] = self.ready
 		hash[:deleted] = self.deleted
@@ -165,17 +166,15 @@ class Slide < ActiveRecord::Base
 		hash[:updated_at] = self.updated_at.to_i
 		if self.duration == -1
 			#Use presentation duration
-			#FIXME: remove the duration parameter from this method and use sql selects?
 			if attribute_present? :presentation_delay
 				hash[:duration] = self.presentation_delay
 			else
-				hash[:duration] = dur
+				hash[:duration] = -1
 			end
 		else
 			#Special duration defined for this slide
 			hash[:duration] = self.duration
 		end
-		
 		#Effect id selection, id specified at group level overrides presentation default
 		if attribute_present?(:group_effect_id) && self.group_effect_id
 			hash[:effect_id] = self.group_effect_id
@@ -188,53 +187,53 @@ class Slide < ActiveRecord::Base
 		hash[:type] = self.is_a?(VideoSlide) ? 'video' : 'image'
 		return hash
 	end
-  
+	
 	#Tätä käytetään html:ssa luomaan ikonit eri slidetyypeille
 	def type_str
 		self.class::TypeString
 	end
-      
+			
 	def grouped?
 		self[:master_group_id] != Event.current.ungrouped.id
 	end
-  
+	
 	def replaced?
 		!self.replacement.nil?
 	end
-  
+	
 	def is_svg?
 		self.is_svg
 	end
-  
+	
 	#Luetaan svg-data ja pistetään se muistiin kakkuun siltä varalta että tarvitaan uusiksi
 	def svg_data
 		return @_svg_data if (@_svg_data or self.new_record?)
-    
+		
 		
 		@_svg_data = File.read(self.svg_filename) if File.exists?(self.svg_filename)
-    
+		
 		return @_svg_data
 	end
-  
+	
 	def needs_images?
 		return @_needs_images ||= false
 	end
-  
+	
 	#Kirjoitetaan uusi svg-data tiedostoon ja merkitään kelmun kuva epäkelvoksi
 	#Ei tehdä mitään jos uusi svg on sama kuin vanha, tällä säästetään vähän kuvien
 	#paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
 	def svg_data=(svg)
 		#Simple-editin taustat on sidottu webbiserverin roottiin
 		if self.svg_data != svg
-      
+			
 			@_svg_data = svg
 			write_svg_data
-    
+		
 			self.ready = false
 			@_needs_images = true
 		end
 	end
-  
+	
 	
 	def replace!(slide)
 		Slide.transaction do
@@ -247,15 +246,15 @@ class Slide < ActiveRecord::Base
 	end
 	
 	#Paistetaan kelmusta kuvat ja pingataan websockettia niistä.
-	def generate_images	
+	def generate_images 
 		if self.is_svg?
 			#Generoidaan svg:stä png:t rsvg:llä
 			if system rsvg_command(:full)
 			end
-      
-      
+			
+			
 		else
-			#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat  
+			#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat	 
 			picture = Magick::ImageList.new(self.original_filename).first
 			
 			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
@@ -275,24 +274,24 @@ class Slide < ActiveRecord::Base
 					img.resize!(cols, rows)
 				end
 			}
-        
+				
 			picture.write(self.full_filename)
 		end
-    
+		
 		#Paistetaan ImageMagickillä previkat
 		picture = Magick::ImageList.new(self.full_filename).first
 		
 		preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
 		preview_picture.write(self.preview_filename)
-    
+		
 		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
 		thumb_picture.write(self.thumb_filename)
 		self.ready = true
 		self.images_updated_at = Time.now
 		self.save!
 	end
-  
-  
+	
+	
 	def svg_filename
 		FilePath.join(self.filename + '.svg')
 	end
@@ -301,37 +300,37 @@ class Slide < ActiveRecord::Base
 		FilePath.join(self.filename + '_thumb.png')
 	end
 
-  
+	
 	def preview_filename
 		FilePath.join(self.filename + '_preview.png')
 	end
-  
+	
 	def full_filename
 		FilePath.join(self.filename + '_full.png')
 	end
-  
+	
 	def original_filename
 		FilePath.join(self.filename + '_original')
 	end
-  
+	
 	def destroy
 		self.deleted = true
 		self.master_group_id = Event.current.thrashed.id
 		self.save!
 	end
-  
+	
 	def undelete
 		self.deleted = false
 		self.save!
 	end
-  
-  
+	
+	
 	#Konvertoidaan svg-kalvo (svg-editin tuottamassa muodossa) muotoon jota inkscape tykkää syödä
 	#Ilman näitä muutoksia mm. rivitys kusee inkscapessa.
 	def svg_edit_to_inscape!
-    
+		
 		return unless self.is_svg?
-    
+		
 		svg = REXML::Document.new(File.read(self.svg_filename))
 		svg.elements.delete_all('//metadata')
 		metadata = svg.root.add_element('metadata')
@@ -366,12 +365,12 @@ class Slide < ActiveRecord::Base
 		@_svg_data = svg_data
 
 		write_svg_data
-    
+		
 	end
 
 	def updated_image_notifications
 		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
-	end  
+	end	 
 
 	#Cache tag for all fragments depending on this slide
 	def cache_tag
@@ -392,9 +391,9 @@ class Slide < ActiveRecord::Base
 	def ro_cache_key
 		self.cache_tag + "_ro"
 	end
-  
+	
 	protected
-  
+	
 	def write_svg_data
 		unless self.new_record?
 			File.open(self.svg_filename, 'w') do |f|
@@ -402,16 +401,16 @@ class Slide < ActiveRecord::Base
 			end
 		end
 	end
-  
-  
+	
+	
 	def ensure_master_group_exists
 		errors.add(:master_group_id, "^Group is invalid") if self.master_group.nil?
 	end
-  
-  
+	
+	
 	def rsvg_command(type)
 		command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
-    
+		
 		if type == :full
 			command << ' -w ' << Slide::FullWidth.to_s
 			command << ' -h ' << Slide::FullHeight.to_s
@@ -420,7 +419,7 @@ class Slide < ActiveRecord::Base
 			command << ' -o ' << self.full_filename.to_s
 			command << ' ' << self.svg_filename.to_s
 		end
-    
+		
 		return command
 	end 
 	
@@ -444,5 +443,5 @@ class Slide < ActiveRecord::Base
 		
 		MasterGroup.where(id: group_id).update_all(updated_at: Time.now.utc)
 	end
-  
+	
 end
