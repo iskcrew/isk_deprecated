@@ -57,7 +57,7 @@ class SlidesController < ApplicationController
     
 		require_edit(slide)
 		
-		group = current_event.master_groups.find(params[:add_to_group][:group_id], lock: true)
+		group = current_event.master_groups.find(params[:add_to_group][:group_id])
 		require_edit(group)
     
 		group.slides << slide
@@ -68,7 +68,7 @@ class SlidesController < ApplicationController
 	end
   
 	def add_to_override
-		slide = Slide.current.find(params[:id], lock: true)
+		slide = Slide.current.find(params[:id])
 		display = Display.find(params[:add_to_override][:display_id])
     
 		raise ApplicationController::PermissionDenied unless display.can_override? current_user
@@ -366,7 +366,7 @@ class SlidesController < ApplicationController
 	def update
 		Slide.transaction do
 
-			@slide =Slide.find(params[:id], lock: true)
+			@slide =Slide.find(params[:id])
 			require_slide_edit(@slide)
   
 			if @slide.update_attributes(slide_params)
