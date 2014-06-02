@@ -52,7 +52,7 @@ class Schedule < ActiveRecord::Base
 		
 			self.slidegroup.hide_slides
 			
-			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
+			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).to_a
 		
 			slides = Array.new
 			slide_data.each_index do |i|
