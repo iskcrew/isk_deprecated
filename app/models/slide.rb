@@ -48,7 +48,9 @@ class Slide < ActiveRecord::Base
 	
 	delegate :name, to: :master_group, prefix: :master_group 
 
-	sortable :scope => :master_group_id
+
+	include RankedModel
+	ranks :position, :with_same => :master_group_id 
 	
 	
 	

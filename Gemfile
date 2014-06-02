@@ -17,7 +17,7 @@ gem 'dalli'
 gem 'sqlite3'
 gem 'mysql2'
 
-gem 'shuber-sortable', :require => 'sortable'
+gem 'ranked-model'
 gem 'rmagick', :require => 'RMagick'
 gem 'thin'
 gem 'delayed_job_active_record'

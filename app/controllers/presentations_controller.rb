@@ -35,7 +35,7 @@ class PresentationsController < ApplicationController
 		if params[:group].count == p.groups.count
 			Presentation.transaction do
 				p.groups.each do |g|
-					g.position = params[:group].index(g.id.to_s) + 1
+					g.position_position = params[:group].index(g.id.to_s) + 1
 					g.save
 				end
 			end
