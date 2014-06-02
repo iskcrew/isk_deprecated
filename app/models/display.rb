@@ -12,7 +12,7 @@ class Display < ActiveRecord::Base
 		if self.manual
 			self.do_overrides = false
 		end
-		return true
+		true
 	end
 	
 	after_save do |display|

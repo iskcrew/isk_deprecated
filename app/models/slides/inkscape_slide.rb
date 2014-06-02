@@ -15,7 +15,7 @@ class InkscapeSlide < Slide
   
 	before_create do |slide|
 		slide.is_svg = true
-		return true
+		true
 	end
 	
   def self.copy!(s)

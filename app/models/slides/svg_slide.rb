@@ -13,7 +13,7 @@ class SvgSlide < Slide
 	
 	before_create do |slide|
 		slide.is_svg = true
-		return true
+		true
 	end
 		
 	#TODO: tee tästä ennemminkin kopiointifunkkari suoraan inkscapeslideen...

@@ -13,10 +13,10 @@ class VideoSlide < Slide
 
   VideoThumbnail = Rails.root.join('data','video','no_video.png')
 
-  def initialize
-    super
+  after_initialize do
     self.is_svg = false
     self.show_clock = false
+		true
   end
 
   def preview_filename

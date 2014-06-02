@@ -24,8 +24,8 @@ class SimpleSlide < SvgSlide
 		if @_slidedata.present?
 			self.svg_data = SimpleSlide.create_svg(self.slidedata)
 			self.ready = false
-			true
 		end
+		true
 	end
 
 	after_create :write_slidedata

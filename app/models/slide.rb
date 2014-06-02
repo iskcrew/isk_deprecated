@@ -12,7 +12,7 @@ class Slide < ActiveRecord::Base
 		if s.master_group.blank?
 			s.master_group_id = Event.current.ungrouped.id
 		end
-		return true		
+		true		
 	end
  
 	

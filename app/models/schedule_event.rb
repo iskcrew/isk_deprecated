@@ -24,6 +24,6 @@ class ScheduleEvent < ActiveRecord::Base
 			self.linecount = self.name.split("\n").size
 		end
 		
-		return true
+		true
 	end
 end

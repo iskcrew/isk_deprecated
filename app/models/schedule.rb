@@ -21,17 +21,7 @@ class Schedule < ActiveRecord::Base
 	EventsPerSlide = 9
 	TimeTolerance = 15.minutes
 	
-	after_create do |schedule|
-		slidegroup = MasterGroup.create(:name => ("Schedule: " + schedule.name + ' slides'), :event_id => Event.current.id)
-		up_next_group = MasterGroup.create(:name => ('Schedule: ' + schedule.name + 'up next'), :event_id => Event.current.id)
-    
-		schedule.slidegroup = slidegroup
-		schedule.up_next_group = up_next_group
-		unless schedule.event_id
-			schedule.event_id = Event.current.id
-		end
-		schedule.save!
-	end
+	after_create :create_groups
 	
 	after_update do |schedule|
 		schedule.slidegroup.update_attributes(:name => ('Schedule: ' + schedule.name + ' slides'))
@@ -91,6 +81,18 @@ class Schedule < ActiveRecord::Base
 	
 	private
 	
+	# Create the associated groups when a new schedule is created
+	def create_groups
+		sg = MasterGroup.create(:name => ("Schedule: " + self.name + ' slides'), :event_id => Event.current.id)
+		ung = MasterGroup.create(:name => ('Schedule: ' + self.name + 'up next'), :event_id => Event.current.id)
+    
+		self.slidegroup = sg
+		self.up_next_group = ung
+		unless self.event_id
+			self.event_id = Event.current.id
+		end
+		self.save!
+	end
 	
 	def generate_up_next_slide
 		slide_template = ERB.new(File.read(TemplateFile))
