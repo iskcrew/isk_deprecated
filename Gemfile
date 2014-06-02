@@ -32,7 +32,7 @@ gem 'jquery-ui-rails'
 gem 'jquery-rails'
 
 # Currently, websocket-rails 0.7.0 breaks sync between the threads horribly
-gem 'websocket-rails'
+gem 'websocket-rails', '~> 0.6.2'
 
 # For background stuff
 gem 'daemon'

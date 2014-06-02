@@ -103,8 +103,6 @@ GEM
     ranked-model (0.4.0)
       activerecord (>= 3.1.12)
     redis (3.0.7)
-    redis-objects (0.9.1)
-      redis (>= 3.0.2)
     ref (1.0.5)
     rmagick (2.13.2)
     rrd-ffi (0.2.14)
@@ -157,14 +155,13 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     websocket-driver (0.3.3)
-    websocket-rails (0.7.0)
+    websocket-rails (0.6.2)
       em-synchrony
       faye-websocket
       hiredis
       rack
       rails
       redis
-      redis-objects
       thin
 
 PLATFORMS
@@ -199,4 +196,4 @@ DEPENDENCIES
   thin
   time_diff (~> 0.2.2)
   uglifier
-  websocket-rails
+  websocket-rails (~> 0.6.2)
