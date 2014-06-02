@@ -17,7 +17,7 @@ class SlidesController < ApplicationController
 		else
 			@groups = Array.new
 			@groups << current_event.ungrouped
-			@groups << MasterGroup.current.order("LOWER(name), name").includes(:slides).all
+			@groups << MasterGroup.current.order("LOWER(name), name").includes(:slides).to_a
 			@groups.flatten!
 		end
     
@@ -226,13 +226,13 @@ class SlidesController < ApplicationController
 				#Luodaan oikeanlainen slide
 				case params[:create_type]
 				when 'simple'
-					@slide = SimpleSlide.new(params[:slide])
+					@slide = SimpleSlide.new(slide_params)
 				when 'http_slide'
-					@slide = HttpSlide.new(params[:slide])
+					@slide = HttpSlide.new(slide_params)
 				when 'empty_file', 'inkscape'
-					@slide = InkscapeSlide.new(params[:slide])
+					@slide = InkscapeSlide.new(slide_params)
 				else
-					@slide = Slide.new(params[:slide])
+					@slide = Slide.new(slide_params)
 				end
         
 				unless @slide.save
@@ -369,7 +369,7 @@ class SlidesController < ApplicationController
 			@slide =Slide.find(params[:id], lock: true)
 			require_slide_edit(@slide)
   
-			if @slide.update_attributes(params[:slide])
+			if @slide.update_attributes(slide_params)
 				#Paistetaan uusi kuva simpleslidelle
 				@slide.delay.generate_images if @slide.is_a?(SimpleSlide) && !@slide.ready
         
@@ -397,6 +397,12 @@ class SlidesController < ApplicationController
 
 
 	private
+	
+	def slide_params
+		params.required(:slide).permit(
+			:name, :description, :show_clock, :public, :duration, {slidedata: params[:slide][:slidedata].try(:keys)}
+		)
+	end
     
 	def require_slide_edit(s)
 		#Varmistetaan oikeudet

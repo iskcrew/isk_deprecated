@@ -123,26 +123,29 @@ module SlidesHelper
     if s.can_edit? current_user
       return slide_toggle_button('Public', s, :public)
 	  elsif s.can_hide?(current_user) && s.public == true
-	    return toggle_link_to 'Public', s.public, {:controller => :slides, :action => :hide, :id => s.id}, :method => :post, :remote => true, :confirm => "Are you sure you want to hide this slide? You cannot publish it later!"
+	    return toggle_link_to 'Public', s.public, hide_slide_path(s), 
+				method: :post, remote: true, 
+				data: {confirm: "Are you sure you want to hide this slide? You cannot publish it later!"}
     else
 	    return inactive_toggle('Public', s.public)
     end
   end
   
+	# FIXME OLD STYLE LINK PARAMETERS
   def slide_toggle_button(name, slide, attrib)
     toggle_link_to name, slide.send(attrib), {:controller => :slides, :action => :update, :id => slide.id, :slide => {attrib => !slide.send(attrib)}}, :method => :put, :remote => true
   end
 	
 	def slide_edit_link(slide)
-		link_to 'Edit', {:controller => :slides, :action => :edit, :id => slide.id}, 
-			:class => 'button', title: 'Edit slide metadata', :confirm => (
-			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+		link_to 'Edit', edit_slide_path(slide), 
+			:class => 'button', title: 'Edit slide metadata', data: {confirm: (
+			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
 	
 	def slide_svg_link(slide)
-		link_to 'Download', {:controller => :slides, :action => :svg_data, :id => slide.id},
-						 :class => 'button', title: 'Download slide in SVG format',:confirm => (
-						 slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)
+		link_to 'Download', {controller: :slides, action: :svg_data, id: slide.id},
+						 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
+						 slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
 	
 	def slide_clone_button(slide)
@@ -151,9 +154,9 @@ module SlidesHelper
 	end
 	
 	def slide_delete_button(slide)
-		link_to 'Delete', {:controller => :slides, :action=>:destroy, :id=>slide.id},
-						 	:confirm=>"Are you sure?", title: 'Mark this slide as deleted, you can undo later',
-							:method=>:delete, :class => 'button'
+		link_to 'Delete', slide_path(slide),
+						 	data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
+							method: :delete, class: 'button'
 	end
 	
 	def slide_ungroup_button(slide)

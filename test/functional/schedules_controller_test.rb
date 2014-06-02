@@ -13,10 +13,10 @@ class SchedulesControllerTest < ActionController::TestCase
 			id: schedules(:normal).id,
 			schedule: {
 				name: "updated myself",
-				schedule_events_attributes: {
+				schedule_events_attributes: [{
 					id: schedule_events(:event_1).id,
 					name: "updated event"
-				}
+					}]
 			}
 		}
 	

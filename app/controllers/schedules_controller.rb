@@ -24,7 +24,7 @@ class SchedulesController < ApplicationController
 	
 	def create
 		Schedule.transaction do
-			@schedule = Schedule.new(params[:schedule])
+			@schedule = Schedule.new(schedule_params)
 			if @schedule.save
 				flash[:notice] = "Schedule created"
 				redirect_to :action => :show, :id => @schedule.id
@@ -44,7 +44,7 @@ class SchedulesController < ApplicationController
 		Schedule.transaction do
 			@schedule = Schedule.find(params[:id])
 			
-			if @schedule.update_attributes(params[:schedule])
+			if @schedule.update_attributes(schedule_params)
 				flash[:notice] = 'Schedule updated'
 				@schedule.delay.generate_slides
 				redirect_to :action => :show, :id => @schedule.id
@@ -93,6 +93,14 @@ class SchedulesController < ApplicationController
 			end
 			
 		end
+	end
+	
+	private
+	
+	def schedule_params
+		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
+			{schedule_events_attributes: [:name, :major, {at: [] } ]}
+			)
 	end
 	
 end

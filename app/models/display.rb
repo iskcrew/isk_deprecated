@@ -29,7 +29,7 @@ class Display < ActiveRecord::Base
 	has_one :display_state
 	has_one :current_group, through: :display_state
 	has_one :current_slide, through: :display_state
-	has_many :override_queues, order: :position, include: :slide
+	has_many :override_queues, -> { order(:position).includes(:slide) }
 	has_many :display_counts
 
 	has_many :permissions
@@ -43,8 +43,6 @@ class Display < ActiveRecord::Base
 	Timeout = 5 #minutes
 
 	include ModelAuthorization
-	
-	attr_accessible :name, :presentation_id, :monitor, :manual, :do_overrides
 	
 	delegate :last_contact_at, :last_contact_at=,									to: :display_state, allow_nil: true
 	delegate :last_hello, :last_hello=,											to: :display_state, allow_nil: true

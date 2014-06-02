@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 	before_filter :require_admin, :only => [:publish_all, :hide_all]
 	
 	def index
-		@groups = MasterGroup.current.defined_groups.all
+		@groups = MasterGroup.current.defined_groups
 		@new_group = MasterGroup.new
 	end
 	
@@ -55,7 +55,7 @@ class GroupsController < ApplicationController
 		end
 		
 		
-		if @group.update_attributes(params[:master_group])
+		if @group.update_attributes(master_group_params)
 			flash[:notice] = 'Group was successfully updated.'
 			redirect_to :action => 'show', :id => @group.id
 		else
@@ -147,7 +147,7 @@ class GroupsController < ApplicationController
 	def create
 		if params[:prize]
 			#Create new prize ceremony group
-			@group = PrizeGroup.new(params[:master_group])
+			@group = PrizeGroup.new(master_group_params)
 			@group.event = current_event
 			data = Array.new
 			params[:data].each_key do |k|
@@ -161,7 +161,7 @@ class GroupsController < ApplicationController
 			
 			
 		else
-			@group = MasterGroup.new(params[:master_group])
+			@group = MasterGroup.new(master_group_params)
 			@group.event = current_event
 		end
 		if @group.save
@@ -208,6 +208,10 @@ class GroupsController < ApplicationController
 	end
 	
 	private
+	
+	def master_group_params
+		params.required(:master_group).permit(:name, :effect_id)
+	end
 	
 	def require_create
 		raise ApplicationController::PermissionDenied unless MasterGroup.can_create?(current_user)

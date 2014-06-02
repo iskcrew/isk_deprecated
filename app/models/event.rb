@@ -6,8 +6,6 @@
 
 
 class Event < ActiveRecord::Base
-	attr_accessible :name, :current
-	
 	before_save :set_current_event
 	
 	has_many :master_groups

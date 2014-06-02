@@ -11,7 +11,7 @@ class Presentation < ActiveRecord::Base
 	#of master groups, containing ordered lists of slides
 	
 
-	has_many :groups, :order => "position ASC"
+	has_many :groups, -> {order "position ASC"}
 	has_many :master_groups, through: :groups
 	belongs_to :effect
 	belongs_to :event
@@ -25,9 +25,6 @@ class Presentation < ActiveRecord::Base
 	validate :ensure_effect_exists
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
-
-	
-	attr_accessible :name, :effect_id, :delay
 	
 	before_create do |p|
 		p.event = Event.current

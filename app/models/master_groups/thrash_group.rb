@@ -10,7 +10,7 @@
 class	ThrashGroup < MasterGroup
 	belongs_to :event
 	
-  has_many :slides, foreign_key: :master_group_id, order: 'position ASC'
+  has_many :slides, -> {order position: :asc}, foreign_key: :master_group_id
 
 	after_initialize do |g|
 		g.internal = true

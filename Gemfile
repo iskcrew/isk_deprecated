@@ -1,7 +1,11 @@
 source 'https://rubygems.org'
 source "http://gems.github.com"
 
-gem 'rails', '3.2.13'
+gem 'rails', '4.0.5'
+
+# We use observers
+
+gem 'rails-observers'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -28,7 +32,7 @@ gem 'jquery-ui-rails'
 gem 'jquery-rails'
 
 # Currently, websocket-rails 0.7.0 breaks sync between the threads horribly
-gem 'websocket-rails', '0.6.2'
+gem 'websocket-rails'
 
 # For background stuff
 gem 'daemon'
@@ -49,18 +53,15 @@ gem 'simplecov', :require => false, :group => :test
 # We do loads in after_commit callbacks so need to include them in tests
 gem 'test_after_commit', :group => :test
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+# Needed for rails 4.0
+gem 'sprockets', '<= 2.11.0'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
-  gem "therubyracer", :require => 'v8'
-
-  gem 'uglifier', '>= 1.0.3'
-end
+# Assets
+gem "sass-rails"
+gem 'coffee-rails'
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem "therubyracer", :require => 'v8'
+gem 'uglifier'
 
 
 # To use ActiveModel has_secure_password

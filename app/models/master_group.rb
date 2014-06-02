@@ -7,7 +7,7 @@
 
 class MasterGroup < ActiveRecord::Base
 	
-	has_many :slides, :order => 'position ASC', conditions: 'deleted != 1'
+	has_many :slides, -> {order('position ASC').where('deleted != 1') }
 	has_many :groups, :dependent => :destroy
 	belongs_to :effect
 	belongs_to :event
@@ -20,7 +20,7 @@ class MasterGroup < ActiveRecord::Base
 	
 	include ModelAuthorization
 	
-	scope :defined_groups, where(:internal => false).order('name')
+	scope :defined_groups, -> {where(:internal => false).order('name')}
 	
 	before_create do |g|
 		g.event = Event.current unless g.event
@@ -44,7 +44,7 @@ class MasterGroup < ActiveRecord::Base
 	end
 	
 	def presentations
-		Presentation.joins(:groups => :master_group).where('master_groups.id = ?', self.id).uniq.all
+		Presentation.joins(:groups => :master_group).where('master_groups.id = ?', self.id).uniq.to_a
 	end
 	
 	def displays

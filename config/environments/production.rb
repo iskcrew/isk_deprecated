@@ -68,15 +68,13 @@ Isk::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
 	
 	# Cashier for better caching
 	#config.cashier.adapter = :cache_store 
 	config.cashier.adapter = :redis_store
 	config.cashier.adapter.redis = Redis.new(:host => '127.0.0.1', :port => '6379') # or Resque.redis or any existing redis connection
 	
+	#FIXME: Description
+	config.eager_load = true
 	
 end

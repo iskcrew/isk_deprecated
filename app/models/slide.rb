@@ -41,12 +41,10 @@ class Slide < ActiveRecord::Base
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
 	validates :master_group, presence: true
 	
-	attr_accessible :name, :show_clock, :description, :public, :duration
-	
-	scope :published, where(:public => true)
-	scope :hidden, where(:public => false)
-	scope :current, where(:deleted => false).where(:replacement_id => nil)
-	scope :thrashed, where('replacement_id is not null OR deleted = ?', true)
+	scope :published, -> {where(public: true)}
+	scope :hidden, -> {where(public: false)}
+	scope :current, -> {where(deleted: false).where(:replacement_id => nil)}
+	scope :thrashed, -> {where('replacement_id is not null OR deleted = ?', true)}
 	
 	delegate :name, to: :master_group, prefix: :master_group 
 
@@ -144,7 +142,7 @@ class Slide < ActiveRecord::Base
 	
 	def displays
 		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
-		return displays_via_presentation.all | override.all
+		return displays_via_presentation.to_a | override.to_a
 	end
 	
 	def override

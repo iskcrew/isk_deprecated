@@ -12,7 +12,7 @@ class DisplaysController < ApplicationController
   skip_before_filter :require_login, :only => [:show]
     
   def index
-    @displays = Display.order(:name).all
+    @displays = Display.order(:name)
     
     respond_to do |format|
       format.js
@@ -65,7 +65,7 @@ class DisplaysController < ApplicationController
     @display = Display.find(params[:id])
     require_edit @display
 
-    if @display.update_attributes(params[:display])
+    if @display.update_attributes(display_params)
       flash[:notice] = 'Display was successfully updated.'
     else
       flash[:error] = "Error updating display."
@@ -171,6 +171,10 @@ class DisplaysController < ApplicationController
   
   
   private
+	
+	def display_params
+		params.required(:display).permit(:name, :presentation_id, :manual, :monitor)
+	end
   
   def require_admin
     raise ApplicationController::PermissionDenied unless Display.admin? current_user

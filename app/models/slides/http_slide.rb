@@ -23,8 +23,6 @@ class HttpSlide < Slide
     s.send(:write_slidedata)
     s.delay.fetch!
   end
-
-  attr_accessible :name, :description, :show_clock, :slidedata
   
   def clone!
     new_slide = super
