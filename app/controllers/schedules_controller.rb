@@ -99,7 +99,7 @@ class SchedulesController < ApplicationController
 	
 	def schedule_params
 		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
-			{schedule_events_attributes: [:name, :major, {at: [] } ]}
+			{schedule_events_attributes: [:id, :name, :major, {at: [] } ]}
 			)
 	end
 	
