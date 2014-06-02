@@ -132,7 +132,7 @@ class DisplaysController < ApplicationController
       
       if params[:override_queue].count == d.override_queues.count
         d.override_queues.each do |oq|
-          oq.position_position = params['override_queue'].index(oq.id.to_s) + 1
+          oq.position_position = params['override_queue'].index(oq.id.to_s)
           oq.save
         end
         d.reload

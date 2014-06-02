@@ -86,7 +86,7 @@ class GroupsController < ApplicationController
 			if params[:slide].count == group.slides.count
 				MasterGroup.transaction do
 					group.slides.each do |slide|
-						slide.position_position = params['slide'].index(slide.id.to_s) + 1
+						slide.position_position = params['slide'].index(slide.id.to_s)
 						slide.save
 					end
 				end
