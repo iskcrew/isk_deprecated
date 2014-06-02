@@ -41,6 +41,13 @@ server {
 		# Serve maintanance.html if it exists, then a file if it exists, then proxy to rails
 		try_files /system/maintenance.html $uri $uri/index.html $uri.html @ruby;
 	}
+	
+	location ~ ^/(assets)/  {
+	  root /path/to/public;
+	  gzip_static on; # to serve pre-gzipped version
+	  expires max;
+	  add_header Cache-Control public;
+	}
 
 	# proxy websocket connections to websocket-rails
 	location /websocket {
