@@ -73,7 +73,7 @@ class Presentation < ActiveRecord::Base
 	#TODO: cache to_hash fragments
 	#Rails.cache.fetch("cache_key", run_if_not_found())
 	def to_hash
-		#hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
+		hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
 			hash = Hash.new
 			hash[:name] = self.name
 			hash[:id] = self.id
@@ -90,7 +90,7 @@ class Presentation < ActiveRecord::Base
 				hash[:slides] << slide.to_hash
 			end
 			hash
-			#end
+		end
 		return hash
 	end
 		
