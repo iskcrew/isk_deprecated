@@ -56,16 +56,7 @@ class DisplaysControllerTest < ActionController::TestCase
 		
 		assert_response :success
 	end
-	
-	test "queue slide" do
-		assert_difference "displays(:normal).override_queues.count" do
-			post :queue_slide, @add_queue_data, @adminsession
-		end
 		
-		assert_redirected_to display_path(displays(:normal).id)
-		
-	end
-	
 	test "remove override" do
 		assert_difference "displays(:with_overrides).override_queues.count", -1 do
 			post :remove_override, @remove_queue_data, @adminsession

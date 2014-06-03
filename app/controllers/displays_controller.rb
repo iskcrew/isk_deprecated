@@ -83,46 +83,7 @@ class DisplaysController < ApplicationController
   def dpy_control
     @display = Display.find(params[:id])
   end
-    
-  def presentation
-    @display = Display.find(params[:id])
-    redirect_to :controller => :presentations, :action => :show, :id => @display.presentation.id
-  end
-  
-	
-	# FIXME: is this even needed currently?
-  def add_slide
-    @display = Display.find(params[:id])
-    require_edit @display
-
-
-    @slides = Slide.current
-  end
-  
-	# FIXME: This logic needs to go to the model
-  def queue_slide
-    display = Display.find(params[:id])
-    require_override display
-
-    slide = Slide.current.find(params[:slide_id])
-
-    Display.transaction do 
-      oq = display.override_queues.new
-      oq.slide = slide
-      oq.duration = params[:duration] || 60
-      oq.save!
-    end
-		
-		unless display.do_overrides
-			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
-		end
-    
-		flash[:notice] = 'Added slide ' << slide.name << ' to the override queue'
-    redirect_to :action => :show, :id => display.id
-    
-  end
-  
-	
+        	
 	#FIXME: this logic needs to go to the model
   def sort_queue
     Display.transaction do
