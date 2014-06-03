@@ -10,7 +10,7 @@ ul
 	h2 Displays showing this presentation
 	p This presentation is being shown on following displays:
 	ul
-		= @presentation.displays.each do |d|
+		- @presentation.displays.each do |d|
 			li = link_to d.name, display_path(d)
 
 = authorized_users(@presentation)
