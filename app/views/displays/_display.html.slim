@@ -1,0 +1,27 @@
+div.display_info class=(display.late? ? 'late' : '') id="display_#{display.id}"
+	div.display_header
+		= link_to display.name, display_path(display)
+	div.display_current_slide
+		= display_current_slide(display)
+	div.display_metadata
+		ul
+			li 
+				- if display.presentation
+					| Presentation: 
+					=< link_to display.presentation.name, presentations_path(display.presentation.id)
+				- else
+					| Presentation: Not defined
+			li Uptime: #{display.uptime}
+			li Last contact: #{display_last_contact(display)}
+			li = display_ping display
+			li Monitored: #{display.monitor ? 'Yes' : 'No'}
+
+	div.display_actions
+		= toggle_link_to 'Overrides', display.do_overrides, {controller: :displays, action: :update, 
+			id: display.id, display: {do_overrides: !display.do_overrides}}, {method: :put, remote: true}
+		= toggle_link_to 'Manual control', display.manual, {controller: :displays, action: :update, 
+			id: display.id, display: {manual: !display.manual}}, {method: :put, remote: true}
+		= link_to 'Details', display_path(display), class: 'button'
+		= link_to 'Edit', edit_display_path(display), class: 'button'
+		= link_to 'Remote control', {controller: :displays, action: :dpy_control, id: display.id},
+			class: :button
