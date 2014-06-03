@@ -56,6 +56,7 @@ class SchedulesController < ApplicationController
 		end
 	end
 	
+	#FIXME: Refactor this into update-action with nested parameters!
 	def add_event
 		@schedule = Schedule.find(params[:id])
 		event = @schedule.schedule_events.new 
@@ -72,7 +73,8 @@ class SchedulesController < ApplicationController
 			}
 		end
 	end
-	
+
+	#FIXME: Refactor this into update-action with nested parameters!	
 	def destroy_event
 		event = ScheduleEvent.find(params[:id])
 		@schedule = event.schedule
