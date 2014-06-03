@@ -29,18 +29,18 @@ class PresentationsController < ApplicationController
 	#Change the order of groups in a presentation
 	#Triggered from jquery.sortable widged via ajax
 	def sort
-		p = Presentation.find(params[:id])
-		require_edit p
+		@presentation = Presentation.find(params[:id])
+		require_edit @presentation
 		
-		if params[:group].count == p.groups.count
-			Presentation.transaction do
-				p.groups.each do |g|
-					g.position_position = params[:group].index(g.id.to_s)
-					g.save
-				end
+		if params[:group].count == @presentation.groups.count
+			@presentation.groups.each do |g|
+				g.position_position = params[:group].index(g.id.to_s)
+				g.save
 			end
-			p.reload
-			render :partial => 'group_items', :locals => {:presentation => p}
+			@presentation.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
+			end
 		else
 			render :text => "Invalid group count, try refreshing", :status => 400
 		end
