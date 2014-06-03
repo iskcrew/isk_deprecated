@@ -53,6 +53,7 @@ class Display < ActiveRecord::Base
 	delegate :monitor,:monitor=,																	to: :display_state, allow_nil: true
 	delegate :updated_at, to: :display_state, prefix: :state
 	
+	alias_method :queue, :override_queues
 	alias_method :state, :display_state
 	
 	def websocket_channel

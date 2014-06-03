@@ -29,14 +29,12 @@ class PresentationsController < ApplicationController
 	#Change the order of groups in a presentation
 	#Triggered from jquery.sortable widged via ajax
 	def sort
-		@presentation = Presentation.find(params[:id])
+		@presentation = Presentation.includes(groups: :master_group).find(params[:id])
 		require_edit @presentation
 		
-		if params[:group].count == @presentation.groups.count
-			@presentation.groups.each do |g|
-				g.position_position = params[:group].index(g.id.to_s)
-				g.save
-			end
+		if g = @presentation.groups.find(params[:element_id])
+			g.position_position = params[:element_position]
+			g.save!
 			@presentation.reload
 			respond_to do |format|
 				format.js {render :sortable_items}

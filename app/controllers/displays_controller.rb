@@ -86,26 +86,19 @@ class DisplaysController < ApplicationController
         	
 	#FIXME: this logic needs to go to the model
   def sort_queue
-    Display.transaction do
-      d = Display.find(params[:id])
-      require_override d
-      
-      
-      if params[:override_queue].count == d.override_queues.count
-        d.override_queues.each do |oq|
-          oq.position_position = params['override_queue'].index(oq.id.to_s)
-          oq.save
-        end
-        d.reload
-				@display = d
-				respond_to do |format|
-					format.js {render :sortable_items}
-				end
-      else
-        render :text => "Invalid slide count, try refreshing", :status => 400
-      end
-    end
-    
+		@display = Display.find(params[:id])
+		require_edit @display
+		
+		if oq = @display.queue.find(params[:element_id])
+			oq.position_position = params[:element_position]
+			oq.save!
+			@display.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
+			end
+		else
+			render :text => "Invalid request, try refreshing", :status => 400
+		end		    
   end
   
   def remove_override

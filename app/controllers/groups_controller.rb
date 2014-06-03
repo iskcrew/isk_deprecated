@@ -80,25 +80,19 @@ class GroupsController < ApplicationController
 	
 	#Change the order of slides in the group, used with jquerry sortable widget.
 	def sort
-		MasterGroup.transaction do
-			group = MasterGroup.find(params[:id])
-			require_edit group
-			if params[:slide].count == group.slides.count
-				MasterGroup.transaction do
-					group.slides.each do |slide|
-						slide.position_position = params['slide'].index(slide.id.to_s)
-						slide.save
-					end
-				end
-				group.reload
-				@group = group
-				respond_to do |format|
-					format.js {render :sortable_items}
-				end
-			else
-				render :text => "Invalid slide count, try refreshing", :status => 400
+		@group = MasterGroup.find(params[:id])
+		require_edit @group
+		
+		if s = @group.slides.find(params[:element_id])
+			s.position_position = params[:element_position]
+			s.save!
+			@group.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
 			end
-		end
+		else
+			render :text => "Invalid request data", :status => 400
+		end		
 	end
 
 	#Delete a group, all contained slides will become ungrouped

@@ -87,15 +87,16 @@ class PresentationsControllerTest < ActionController::TestCase
 		assert_redirected_to root_path
 	end
 	
+	# Move the first element of the presentation to last element
 	test "sort presentation" do
 		p = presentations(:with_slides)
-		data = {id: p.id, group: ['2', '3', '4', '1'], format: 'js'}
+		data = {id: p.id, element_id: 1, element_position: 3, format: 'js'}
 		post :sort, data, @adminsession
 		
 		p = assigns(:presentation)
 		p.reload
 		
-		assert_equal 2, p.groups.first!.id, "First group should be id 1"
+		assert_equal 2, p.groups.first!.id, "First group should be id 2"
 		assert_equal 1, p.groups.last!.id , "Last group should be id 1"
 		
 	end

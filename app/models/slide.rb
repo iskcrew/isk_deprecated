@@ -9,20 +9,17 @@ class Slide < ActiveRecord::Base
 	require 'rexml/document'
  
 	after_initialize do |s|
-		if s.master_group.blank?
+		if s.master_group_id == nil
 			s.master_group_id = Event.current.ungrouped.id
 		end
 		true		
 	end
  
-	
-	after_create do |s|
+ 	after_create do |s|
 		s.update_column :filename, "slide_" + s.id.to_s
-		
 		if @_svg_data
 			s.send(:write_svg_data)
-		end
-		
+		end		
 	end
 
 	# Touch associated displays
@@ -158,8 +155,7 @@ class Slide < ActiveRecord::Base
 		hash[:name] = self.name
 		hash[:master_group] = self.master_group_id
 		hash[:group] = self.presentation_group_id if attribute_present? :presentation_group_id
-		hash[:group_name] = self.master_group_name if attribute_present? :master_group_name
-		hash[:position] = self.position
+		hash[:group_name] = self.group_name if attribute_present? :group_name
 		hash[:ready] = self.ready
 		hash[:deleted] = self.deleted
 		hash[:created_at] = self.created_at.to_i
@@ -187,6 +183,9 @@ class Slide < ActiveRecord::Base
 		hash[:type] = self.is_a?(VideoSlide) ? 'video' : 'image'
 		return hash
 	end
+	alias_method :to_h, :to_hash
+	
+	
 	
 	#Tätä käytetään html:ssa luomaan ikonit eri slidetyypeille
 	def type_str

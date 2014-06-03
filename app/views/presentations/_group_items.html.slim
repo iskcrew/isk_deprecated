@@ -1,8 +1,8 @@
-- presentation.groups.each do |group|
+- Rails.logger.debug "Group items"
+- @presentation.groups.includes(:master_group).each do |group|
 	li id="group_#{group.id}"
 		div.handle ⇕
 		div.groupname
-			= link_to group.name, group_path(group.master_group)
-			=< "- Slides #{group.slides.published.count} / #{group.slides.count}"
+			= link_to group.master_group.name, group_path(group.master_group_id)
 		div.actions
 			= button_to 'remove', :action => :remove_group, :id => group.id

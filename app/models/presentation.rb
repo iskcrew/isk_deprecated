@@ -64,9 +64,8 @@ class Presentation < ActiveRecord::Base
 				master_groups.effect_id as group_effect_id,
 				presentations.delay as presentation_delay,
 				presentations.effect_id as presentation_effect_id,
-				master_groups.name as master_group_name')
+				master_groups.name as group_name')
 	end
-	
 	
 	#Creates a hash of the presentation data
 	#The has currently has two representations of the
@@ -74,7 +73,7 @@ class Presentation < ActiveRecord::Base
 	#TODO: cache to_hash fragments
 	#Rails.cache.fetch("cache_key", run_if_not_found())
 	def to_hash
-		hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
+		#hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
 			hash = Hash.new
 			hash[:name] = self.name
 			hash[:id] = self.id
@@ -91,10 +90,10 @@ class Presentation < ActiveRecord::Base
 				hash[:slides] << slide.to_hash
 			end
 			hash
-		end
+			#end
 		return hash
 	end
-	
+		
 	# Calculate the duration of this presentation and return it in seconds.
 	def duration
 		default_slides_time = self.delay * self.public_slides.where(slides: {duration: Slide::UsePresentationDelay}).count
