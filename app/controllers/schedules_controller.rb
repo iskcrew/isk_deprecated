@@ -57,45 +57,44 @@ class SchedulesController < ApplicationController
 	end
 	
 	def add_event
-		Schedule.transaction do 
-			@schedule = Schedule.find(params[:id])
-			event = @schedule.schedule_events.new 
-			event.update_attributes(params[:schedule_event])
-			@schedule.delay.generate_slides
-			respond_to do |format|
-				format.html {
-					redirect_to :action => :show, :id => @schedule.id
-				}
+		@schedule = Schedule.find(params[:id])
+		event = @schedule.schedule_events.new 
+		event.update_attributes(schedule_event_params)
+		@schedule.delay.generate_slides
+		respond_to do |format|
+			format.html {
+				redirect_to :action => :show, :id => @schedule.id
+			}
 				
-				format.js {
-					@message = 'Event added'
-					render :update_form
-				}
-			end
+			format.js {
+				@message = 'Event added'
+				render :update_form
+			}
 		end
 	end
 	
 	def destroy_event
-		Schedule.transaction do
-			event = ScheduleEvent.find(params[:id])
-			@schedule = event.schedule
-			event.destroy
+		event = ScheduleEvent.find(params[:id])
+		@schedule = event.schedule
+		event.destroy
 			
-			respond_to do |format|
-				format.html {
-					redirect_to :action => :show, :id => @schedule.id
-				}
+		respond_to do |format|
+			format.html {
+				redirect_to :action => :show, :id => @schedule.id
+			}
 				
-				format.js {
-					@message = "Event deleted"
-					render :update_form
-				}
-			end
-			
+			format.js {
+				@message = "Event deleted"
+				render :update_form
+			}
 		end
 	end
 	
 	private
+	
+	def schedule_event_params
+		params.required(:schedule_event).permit(:name,:major,:at)
+	end
 	
 	def schedule_params
 		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
