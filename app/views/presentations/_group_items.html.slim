@@ -1,0 +1,8 @@
+- presentation.groups.each do |group|
+	li id="group_#{group.id}"
+		div.handle ⇕
+		div.groupname
+			= link_to group.name, group_path(group.master_group)
+			=< "- Slides #{group.slides.published.count} / #{group.slides.count}"
+		div.actions
+			= button_to 'remove', :action => :remove_group, :id => group.id
