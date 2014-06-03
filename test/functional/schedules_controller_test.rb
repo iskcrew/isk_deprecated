@@ -99,7 +99,7 @@ class SchedulesControllerTest < ActionController::TestCase
 	
 	test "Add event to schedule via xhr" do
 		data = @add_event_data
-		data[format: :js]
+		data[:format] = :js
 		
 		assert_difference "schedules(:normal).schedule_events.count" do
 			post :add_event, data, @adminsession
