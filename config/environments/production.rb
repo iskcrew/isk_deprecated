@@ -71,9 +71,11 @@ Isk::Application.configure do
 	# Cashier for better caching
 	#config.cashier.adapter = :cache_store 
 	config.cashier.adapter = :redis_store
-	config.cashier.adapter.redis = Redis.new(:host => '127.0.0.1', :port => '6379') # or Resque.redis or any existing redis connection
+	config.cashier.adapter.redis = Redis.new(:host => '127.0.0.1', :port => '6379') 
+	# or Resque.redis or any existing redis connection
 	
-	#FIXME: Description
+	# Eager loads all registered config.eager_load_namespaces. 
+	# This includes your application, engines, Rails frameworks and any other registered namespace.
 	config.eager_load = true
 	
 end
