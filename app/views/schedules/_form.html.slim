@@ -1,0 +1,25 @@
+= fields_for @schedule do |f|
+	h2 Metadata and settings
+	table
+		tr: td #{f.label :name}: #{f.text_field :name}
+		/ TODO: spinner
+		tr: td #{f.label :max_slides}: #{f.text_field :max_slides, size: 3}
+		tr: td #{f.label :min_events_on_next_day}: #{f.text_field :min_events_on_next_day, size: 3}
+		tr: td #{f.label :up_next}: #{f.check_box :up_next}
+	= f.submit
+	
+	- if @schedule.schedule_events.present?
+		h2 Schedule events
+		table.schedule_events_edit
+			tr
+				th Time
+				th Name
+				th Major
+				th Delete
+			= f.fields_for :schedule_events do |e|
+				tr
+					td = e.datetime_select :at
+					td = e.text_field :name
+					td = e.check_box :major
+					td = e.check_box :_destroy
+		= f.submit

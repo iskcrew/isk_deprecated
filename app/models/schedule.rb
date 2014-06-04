@@ -11,7 +11,7 @@ class Schedule < ActiveRecord::Base
 	belongs_to :slidegroup, :class_name => 'MasterGroup'
 	belongs_to :up_next_group, :class_name => 'MasterGroup'
   
-	accepts_nested_attributes_for :schedule_events
+	accepts_nested_attributes_for :schedule_events, allow_destroy: true
   
 	validates :name, :presence => true
 	

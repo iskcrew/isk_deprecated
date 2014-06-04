@@ -22,11 +22,12 @@ class SchedulesControllerTest < ActionController::TestCase
 		
 		@add_event_data = {
 			id: schedules(:normal).id,
-			schedule_event: {
-				name: 'New event',
-				at: Time.now + 5.days,
-				major: true
-			}
+			schedule:{
+				schedule_events_attributes: [{
+					name: 'New event',
+					at: Time.now + 5.days,
+					major: true
+			}]}
 		}
 	
 		#We don't want to generate slides into the normal place
@@ -90,7 +91,7 @@ class SchedulesControllerTest < ActionController::TestCase
 	
 	test "Add event to schedule" do
 		assert_difference "schedules(:normal).schedule_events.count" do
-			post :add_event, @add_event_data, @adminsession
+			post :update, @add_event_data, @adminsession
 		end
 		
 		assert_redirected_to schedule_path(assigns(:schedule))
@@ -102,7 +103,7 @@ class SchedulesControllerTest < ActionController::TestCase
 		data[:format] = :js
 		
 		assert_difference "schedules(:normal).schedule_events.count" do
-			post :add_event, data, @adminsession
+			post :update, data, @adminsession
 		end
 
 		assert_equal "New event", assigns(:schedule).schedule_events.last!.name
@@ -110,8 +111,16 @@ class SchedulesControllerTest < ActionController::TestCase
 	end
 	
 	test "Delete event from schedule" do
+		data = {
+			id: schedules(:normal).id,
+			schedule: {
+				schedule_events_attributes: [{
+					id: schedule_events(:event_2).id,
+					_destroy: true
+			}]}
+		}
 		assert_difference "schedules(:normal).schedule_events.count", -1 do
-			post :destroy_event, {id: schedule_events(:event_1).id}, @adminsession
+			post :update, data, @adminsession
 		end
 		
 		assert_redirected_to schedule_path(assigns(:schedule))

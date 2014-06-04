@@ -41,57 +41,27 @@ class SchedulesController < ApplicationController
 	end
 	
 	def update
-		Schedule.transaction do
-			@schedule = Schedule.find(params[:id])
-			
-			if @schedule.update_attributes(schedule_params)
-				flash[:notice] = 'Schedule updated'
-				@schedule.delay.generate_slides
-				redirect_to :action => :show, :id => @schedule.id
-			else
-				flash[:error] = "Error updating schedule"
-				render :edit
-			end
-			
-		end
-	end
-	
-	#FIXME: Refactor this into update-action with nested parameters!
-	def add_event
 		@schedule = Schedule.find(params[:id])
-		event = @schedule.schedule_events.new 
-		event.update_attributes(schedule_event_params)
-		@schedule.delay.generate_slides
-		respond_to do |format|
-			format.html {
-				redirect_to :action => :show, :id => @schedule.id
-			}
-				
-			format.js {
-				@message = 'Event added'
-				render :update_form
-			}
-		end
-	end
-
-	#FIXME: Refactor this into update-action with nested parameters!	
-	def destroy_event
-		event = ScheduleEvent.find(params[:id])
-		@schedule = event.schedule
-		event.destroy
-			
-		respond_to do |format|
-			format.html {
-				redirect_to :action => :show, :id => @schedule.id
-			}
-				
-			format.js {
-				@message = "Event deleted"
-				render :update_form
-			}
-		end
-	end
 	
+		if @schedule.update_attributes(schedule_params)
+			flash[:notice] = 'Schedule updated'
+			@schedule.delay.generate_slides
+			respond_to do |format|
+				format.html {
+					redirect_to schedule_path(@schedule)
+				}
+				
+				format.js {
+					@message = 'Event added'
+					render :update_form
+				}
+			end
+		else
+			flash[:error] = "Error updating schedule"
+			render :edit
+		end
+	end
+		
 	private
 	
 	def schedule_event_params
@@ -100,7 +70,7 @@ class SchedulesController < ApplicationController
 	
 	def schedule_params
 		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
-			{schedule_events_attributes: [:id, :name, :major, {at: [] } ]}
+			{schedule_events_attributes: [:id, :name, :major, :at, :_destroy ]}
 			)
 	end
 	
