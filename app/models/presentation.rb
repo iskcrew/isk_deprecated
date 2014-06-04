@@ -11,7 +11,7 @@ class Presentation < ActiveRecord::Base
 	#of master groups, containing ordered lists of slides
 	
 
-	has_many :groups, :order => "position ASC"
+	has_many :groups, -> {order "position ASC"}
 	has_many :master_groups, through: :groups
 	belongs_to :effect
 	belongs_to :event
@@ -25,9 +25,6 @@ class Presentation < ActiveRecord::Base
 	validate :ensure_effect_exists
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
-
-	
-	attr_accessible :name, :effect_id, :delay
 	
 	before_create do |p|
 		p.event = Event.current
@@ -67,9 +64,8 @@ class Presentation < ActiveRecord::Base
 				master_groups.effect_id as group_effect_id,
 				presentations.delay as presentation_delay,
 				presentations.effect_id as presentation_effect_id,
-				master_groups.name as master_group_name')
+				master_groups.name as group_name')
 	end
-	
 	
 	#Creates a hash of the presentation data
 	#The has currently has two representations of the
@@ -97,7 +93,7 @@ class Presentation < ActiveRecord::Base
 		end
 		return hash
 	end
-	
+		
 	# Calculate the duration of this presentation and return it in seconds.
 	def duration
 		default_slides_time = self.delay * self.public_slides.where(slides: {duration: Slide::UsePresentationDelay}).count

@@ -8,8 +8,10 @@
 class Group < ActiveRecord::Base
   belongs_to :master_group
   belongs_to :presentation
-  sortable :scope => :presentation_id
   
+	include RankedModel
+	ranks :position, :with_same => :presentation_id 
+	
 	
 	# Touch associated displays
   after_save :update_timestamps

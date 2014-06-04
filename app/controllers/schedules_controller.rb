@@ -24,7 +24,7 @@ class SchedulesController < ApplicationController
 	
 	def create
 		Schedule.transaction do
-			@schedule = Schedule.new(params[:schedule])
+			@schedule = Schedule.new(schedule_params)
 			if @schedule.save
 				flash[:notice] = "Schedule created"
 				redirect_to :action => :show, :id => @schedule.id
@@ -41,30 +41,14 @@ class SchedulesController < ApplicationController
 	end
 	
 	def update
-		Schedule.transaction do
-			@schedule = Schedule.find(params[:id])
-			
-			if @schedule.update_attributes(params[:schedule])
-				flash[:notice] = 'Schedule updated'
-				@schedule.delay.generate_slides
-				redirect_to :action => :show, :id => @schedule.id
-			else
-				flash[:error] = "Error updating schedule"
-				render :edit
-			end
-			
-		end
-	end
+		@schedule = Schedule.find(params[:id])
 	
-	def add_event
-		Schedule.transaction do 
-			@schedule = Schedule.find(params[:id])
-			event = @schedule.schedule_events.new 
-			event.update_attributes(params[:schedule_event])
+		if @schedule.update_attributes(schedule_params)
+			flash[:notice] = 'Schedule updated'
 			@schedule.delay.generate_slides
 			respond_to do |format|
 				format.html {
-					redirect_to :action => :show, :id => @schedule.id
+					redirect_to schedule_path(@schedule)
 				}
 				
 				format.js {
@@ -72,27 +56,18 @@ class SchedulesController < ApplicationController
 					render :update_form
 				}
 			end
+		else
+			flash[:error] = "Error updating schedule"
+			render :edit
 		end
 	end
-	
-	def destroy_event
-		Schedule.transaction do
-			event = ScheduleEvent.find(params[:id])
-			@schedule = event.schedule
-			event.destroy
-			
-			respond_to do |format|
-				format.html {
-					redirect_to :action => :show, :id => @schedule.id
-				}
-				
-				format.js {
-					@message = "Event deleted"
-					render :update_form
-				}
-			end
-			
-		end
+		
+	private
+
+	def schedule_params
+		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
+			{schedule_events_attributes: [:id, :name, :major, :at, :_destroy ]}
+			)
 	end
 	
 end

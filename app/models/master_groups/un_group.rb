@@ -10,7 +10,7 @@
 class	UnGroup < MasterGroup
 	belongs_to :event
 	
-  has_many :slides, foreign_key: :master_group_id, order: 'id ASC'
+  has_many :slides, -> {order id: :asc}, foreign_key: :master_group_id
 	
 	after_initialize do |g|
 		g.internal = true

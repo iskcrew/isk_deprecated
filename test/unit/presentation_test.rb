@@ -37,7 +37,7 @@ class PresentationTest < ActiveSupport::TestCase
 	
 	test "slide order" do
 		p = presentations(:with_slides)
-		slides = p.public_slides.all
+		slides = p.public_slides.to_a
 		
 		assert_equal slides(:slide_1), slides[0]
 		assert_equal slides(:slide_11), slides[1]

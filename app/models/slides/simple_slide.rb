@@ -24,17 +24,11 @@ class SimpleSlide < SvgSlide
 		if @_slidedata.present?
 			self.svg_data = SimpleSlide.create_svg(self.slidedata)
 			self.ready = false
-			return true
 		end
+		true
 	end
 
-
-  after_create do |s|
-    s.send(:write_slidedata)
-  end
-
-
-  attr_accessible :name, :description, :show_clock, :slidedata, :svg_data
+	after_create :write_slidedata
 
   def self.copy!(s)
     Slide.transaction do 

@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 	before_filter :require_admin, :only => [:publish_all, :hide_all]
 	
 	def index
-		@groups = MasterGroup.current.defined_groups.all
+		@groups = MasterGroup.current.defined_groups
 		@new_group = MasterGroup.new
 	end
 	
@@ -55,7 +55,7 @@ class GroupsController < ApplicationController
 		end
 		
 		
-		if @group.update_attributes(params[:master_group])
+		if @group.update_attributes(master_group_params)
 			flash[:notice] = 'Group was successfully updated.'
 			redirect_to :action => 'show', :id => @group.id
 		else
@@ -80,25 +80,19 @@ class GroupsController < ApplicationController
 	
 	#Change the order of slides in the group, used with jquerry sortable widget.
 	def sort
-		MasterGroup.transaction do
-			group = MasterGroup.find(params[:id])
-			require_edit group
-			if params[:slide].count == group.slides.count
-				MasterGroup.transaction do
-					group.slides.each do |slide|
-						slide.position = params['slide'].index(slide.id.to_s) + 1
-						slide.save
-					end
-				end
-				group.reload
-				@group = group
-				respond_to do |format|
-					format.js {render :sortable_items}
-				end
-			else
-				render :text => "Invalid slide count, try refreshing", :status => 400
+		@group = MasterGroup.find(params[:id])
+		require_edit @group
+		
+		if s = @group.slides.find(params[:element_id])
+			s.position_position = params[:element_position]
+			s.save!
+			@group.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
 			end
-		end
+		else
+			render :text => "Invalid request data", :status => 400
+		end		
 	end
 
 	#Delete a group, all contained slides will become ungrouped
@@ -147,7 +141,7 @@ class GroupsController < ApplicationController
 	def create
 		if params[:prize]
 			#Create new prize ceremony group
-			@group = PrizeGroup.new(params[:master_group])
+			@group = PrizeGroup.new(master_group_params)
 			@group.event = current_event
 			data = Array.new
 			params[:data].each_key do |k|
@@ -161,7 +155,7 @@ class GroupsController < ApplicationController
 			
 			
 		else
-			@group = MasterGroup.new(params[:master_group])
+			@group = MasterGroup.new(master_group_params)
 			@group.event = current_event
 		end
 		if @group.save
@@ -208,6 +202,10 @@ class GroupsController < ApplicationController
 	end
 	
 	private
+	
+	def master_group_params
+		params.required(:master_group).permit(:name, :effect_id)
+	end
 	
 	def require_create
 		raise ApplicationController::PermissionDenied unless MasterGroup.can_create?(current_user)

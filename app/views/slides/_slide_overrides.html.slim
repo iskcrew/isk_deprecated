@@ -17,7 +17,7 @@
 					tr
 						td = f.label :display_id, 'On display:'
 						td = f.select :display_id, options_for_select(Display.can_override(current_user \
-								).order(:name).all.collect {|g| [ g.name, g.id ] })
+								).order(:name).collect {|g| [ g.name, g.id ] })
 					tr
 						td = f.label :duration, 'How many seconds should the slide be shown:'
 						td = f.text_field :duration, :value => 60, :size => 4, :class => 'duration_spinner'

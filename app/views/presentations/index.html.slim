@@ -1,0 +1,16 @@
+h1 Listing all presentations in current event
+
+table.presentationtable
+	tr
+		th Name
+		th Groups
+		th Public slides
+		th Total runtime
+		th -
+	- @presentations.each do |p|
+		tr
+			td = link_to p.name, presentation_path(p)
+			td = p.groups.count
+			td = p.total_slides
+			td = duration_to_text p.duration
+			td = link_to 'Preview', preview_presentation_path(p)

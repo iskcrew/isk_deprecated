@@ -12,7 +12,7 @@ class Display < ActiveRecord::Base
 		if self.manual
 			self.do_overrides = false
 		end
-		return true
+		true
 	end
 	
 	after_save do |display|
@@ -29,7 +29,7 @@ class Display < ActiveRecord::Base
 	has_one :display_state
 	has_one :current_group, through: :display_state
 	has_one :current_slide, through: :display_state
-	has_many :override_queues, order: :position, include: :slide
+	has_many :override_queues, -> { order(:position).includes(:slide) }
 	has_many :display_counts
 
 	has_many :permissions
@@ -44,8 +44,6 @@ class Display < ActiveRecord::Base
 
 	include ModelAuthorization
 	
-	attr_accessible :name, :presentation_id, :monitor, :manual, :do_overrides
-	
 	delegate :last_contact_at, :last_contact_at=,									to: :display_state, allow_nil: true
 	delegate :last_hello, :last_hello=,											to: :display_state, allow_nil: true
 	delegate :websocket_connection_id, :websocket_connection_id=, to: :display_state, allow_nil: true
@@ -55,6 +53,7 @@ class Display < ActiveRecord::Base
 	delegate :monitor,:monitor=,																	to: :display_state, allow_nil: true
 	delegate :updated_at, to: :display_state, prefix: :state
 	
+	alias_method :queue, :override_queues
 	alias_method :state, :display_state
 	
 	def websocket_channel

@@ -13,8 +13,9 @@ class OverrideQueue < ActiveRecord::Base
 	validates :duration, numericality: {:only_integer => true}
 	#TODO: varmista että presis ja slide on olemassa
 	
+	include RankedModel
+	ranks :position, :with_same => :display_id 
 	
-	sortable scope: :display_id
 	
 	def to_hash
 		h = self.slide.to_hash

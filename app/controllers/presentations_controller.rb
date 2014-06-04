@@ -11,7 +11,7 @@ class PresentationsController < ApplicationController
 	# List all presentations
 	#TODO: bind presentations to events and only list current ones
 	def index
-		@presentations = current_event.presentations.order(:name).all
+		@presentations = current_event.presentations.order(:name)
 	end
 	
 	# Show details of a presentation
@@ -29,18 +29,16 @@ class PresentationsController < ApplicationController
 	#Change the order of groups in a presentation
 	#Triggered from jquery.sortable widged via ajax
 	def sort
-		p = Presentation.find(params[:id])
-		require_edit p
+		@presentation = Presentation.includes(groups: :master_group).find(params[:id])
+		require_edit @presentation
 		
-		if params[:group].count == p.groups.count
-			Presentation.transaction do
-				p.groups.each do |g|
-					g.position = params[:group].index(g.id.to_s) + 1
-					g.save
-				end
+		if g = @presentation.groups.find(params[:element_id])
+			g.position_position = params[:element_position]
+			g.save!
+			@presentation.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
 			end
-			p.reload
-			render :partial => 'group_items', :locals => {:presentation => p}
 		else
 			render :text => "Invalid group count, try refreshing", :status => 400
 		end
@@ -103,7 +101,7 @@ class PresentationsController < ApplicationController
 	#Create a new presentation
 	#If the current user isn't admin add him to the ACL list for this presentation
 	def create
-		@presentation = Presentation.new(params[:presentation])
+		@presentation = Presentation.new(presentation_params)
 		if @presentation.save
 			@presentation.authorized_users << current_user unless Presentation.admin?(current_user)
 			flash[:notice] = 'Presentation was successfully created.'
@@ -119,7 +117,7 @@ class PresentationsController < ApplicationController
 		require_edit @presentation
 		
 		#Seeing what groups aren't already in the presentation is useful sometimes
-		@orphan_groups = current_event.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id	IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq.all
+		@orphan_groups = current_event.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id	IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq
 	end	 
 	
 	#Update a presentation
@@ -128,7 +126,7 @@ class PresentationsController < ApplicationController
 		@presentation =Presentation.find(params[:id])
 		require_edit @presentation
 		
-		if @presentation.update_attributes(params[:presentation])
+		if @presentation.update_attributes(presentation_params)
 			flash[:notice] = 'Presentation was successfully updated.'
 			redirect_to :action => 'show', :id => @presentation.id
 		else
@@ -154,6 +152,11 @@ class PresentationsController < ApplicationController
 	
 	
 	private
+	
+	def presentation_params
+		params.required(:presentation).permit(:name, :effect_id, :delay)
+		
+	end
 	
 	#Filter for actions requiring presentation_admin role
 	def require_admin

@@ -6,14 +6,12 @@
 
 
 class Schedule < ActiveRecord::Base
-	attr_accessible :name, :up_next, :max_slides, :min_events_on_next_day, :schedule_events_attributes
-  
-	has_many :schedule_events, :order => "at ASC"
+	has_many :schedule_events, -> {order at: :asc}
 	belongs_to :event
 	belongs_to :slidegroup, :class_name => 'MasterGroup'
 	belongs_to :up_next_group, :class_name => 'MasterGroup'
   
-	accepts_nested_attributes_for :schedule_events
+	accepts_nested_attributes_for :schedule_events, allow_destroy: true
   
 	validates :name, :presence => true
 	
@@ -23,17 +21,7 @@ class Schedule < ActiveRecord::Base
 	EventsPerSlide = 9
 	TimeTolerance = 15.minutes
 	
-	after_create do |schedule|
-		slidegroup = MasterGroup.create(:name => ("Schedule: " + schedule.name + ' slides'), :event_id => Event.current.id)
-		up_next_group = MasterGroup.create(:name => ('Schedule: ' + schedule.name + 'up next'), :event_id => Event.current.id)
-    
-		schedule.slidegroup = slidegroup
-		schedule.up_next_group = up_next_group
-		unless schedule.event_id
-			schedule.event_id = Event.current.id
-		end
-		schedule.save!
-	end
+	after_create :create_groups
 	
 	after_update do |schedule|
 		schedule.slidegroup.update_attributes(:name => ('Schedule: ' + schedule.name + ' slides'))
@@ -54,7 +42,7 @@ class Schedule < ActiveRecord::Base
 		
 			self.slidegroup.hide_slides
 			
-			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).all
+			schedule_slides = self.slidegroup.slides.where(:type => ScheduleSlide.sti_name).to_a
 		
 			slides = Array.new
 			slide_data.each_index do |i|
@@ -93,6 +81,18 @@ class Schedule < ActiveRecord::Base
 	
 	private
 	
+	# Create the associated groups when a new schedule is created
+	def create_groups
+		sg = MasterGroup.create(:name => ("Schedule: " + self.name + ' slides'), :event_id => Event.current.id)
+		ung = MasterGroup.create(:name => ('Schedule: ' + self.name + 'up next'), :event_id => Event.current.id)
+    
+		self.slidegroup = sg
+		self.up_next_group = ung
+		unless self.event_id
+			self.event_id = Event.current.id
+		end
+		self.save!
+	end
 	
 	def generate_up_next_slide
 		slide_template = ERB.new(File.read(TemplateFile))

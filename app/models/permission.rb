@@ -10,6 +10,5 @@ class Permission < ActiveRecord::Base
 	def cache_tag
 		'permission_' + self.id.to_s
 	end
-	
-	# attr_accessible :title, :body
+
 end

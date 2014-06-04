@@ -12,7 +12,7 @@ class DisplaysController < ApplicationController
   skip_before_filter :require_login, :only => [:show]
     
   def index
-    @displays = Display.order(:name).all
+    @displays = Display.order(:name)
     
     respond_to do |format|
       format.js
@@ -65,7 +65,7 @@ class DisplaysController < ApplicationController
     @display = Display.find(params[:id])
     require_edit @display
 
-    if @display.update_attributes(params[:display])
+    if @display.update_attributes(display_params)
       flash[:notice] = 'Display was successfully updated.'
     else
       flash[:error] = "Error updating display."
@@ -83,68 +83,22 @@ class DisplaysController < ApplicationController
   def dpy_control
     @display = Display.find(params[:id])
   end
-    
-  def presentation
-    @display = Display.find(params[:id])
-    redirect_to :controller => :presentations, :action => :show, :id => @display.presentation.id
-  end
-  
-	
-	# FIXME: is this even needed currently?
-  def add_slide
-    @display = Display.find(params[:id])
-    require_edit @display
-
-
-    @slides = Slide.current
-  end
-  
-	# FIXME: This logic needs to go to the model
-  def queue_slide
-    display = Display.find(params[:id])
-    require_override display
-
-    slide = Slide.current.find(params[:slide_id])
-
-    Display.transaction do 
-      oq = display.override_queues.new
-      oq.slide = slide
-      oq.duration = params[:duration] || 60
-      oq.save!
-    end
-		
-		unless display.do_overrides
-			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
-		end
-    
-		flash[:notice] = 'Added slide ' << slide.name << ' to the override queue'
-    redirect_to :action => :show, :id => display.id
-    
-  end
-  
-	
+        	
 	#FIXME: this logic needs to go to the model
   def sort_queue
-    Display.transaction do
-      d = Display.find(params[:id])
-      require_override d
-      
-      
-      if params[:override_queue].count == d.override_queues.count
-        d.override_queues.each do |oq|
-          oq.position = params['override_queue'].index(oq.id.to_s) + 1
-          oq.save
-        end
-        d.reload
-				@display = d
-				respond_to do |format|
-					format.js {render :sortable_items}
-				end
-      else
-        render :text => "Invalid slide count, try refreshing", :status => 400
-      end
-    end
-    
+		@display = Display.find(params[:id])
+		require_edit @display
+		
+		if oq = @display.queue.find(params[:element_id])
+			oq.position_position = params[:element_position]
+			oq.save!
+			@display.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
+			end
+		else
+			render :text => "Invalid request, try refreshing", :status => 400
+		end		    
   end
   
   def remove_override
@@ -171,6 +125,10 @@ class DisplaysController < ApplicationController
   
   
   private
+	
+	def display_params
+		params.required(:display).permit(:name, :presentation_id, :manual, :monitor)
+	end
   
   def require_admin
     raise ApplicationController::PermissionDenied unless Display.admin? current_user
