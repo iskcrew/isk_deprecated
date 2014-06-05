@@ -76,9 +76,7 @@ Isk::Application.routes.draw do
     member do
       get 'preview'
       get 'full'
-      get 'svg_edit'
       get 'svg_data'
-      get 'preview_ready'
       post "svg_data" => :svg_save, :as => 'svg_save'
       post 'ungroup'
       post 'undelete'
