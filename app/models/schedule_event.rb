@@ -8,6 +8,10 @@
 class ScheduleEvent < ActiveRecord::Base
 	belongs_to :schedule
 	
+	validates :at, :name, presence: true
+	validates :major, :rescheduled, :cancelled, inclusion: { in: [true, false] }	
+	validates :linecount, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1}
+	
 	before_save do |event|
 		if event.name.length > 35
 			new_name = String.new
