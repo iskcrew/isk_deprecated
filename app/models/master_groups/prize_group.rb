@@ -65,7 +65,7 @@ class	PrizeGroup < MasterGroup
 		
 		self.hide_slides
 		
-		result_slides = self.slides.where(:type => InkscapeSlide.sti_name)
+		result_slides = self.slides.where(:type => InkscapeSlide.sti_name).to_a
 		
 		@data.reverse!
 		

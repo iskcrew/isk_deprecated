@@ -60,11 +60,6 @@ class Presentation < ActiveRecord::Base
 		Slide.joins(:master_group => {:groups => :presentation})
 			.where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil})
 			.order('groups.position, slides.position')
-			.select('slides.*, groups.id AS presentation_group_id, 
-				master_groups.effect_id as group_effect_id,
-				presentations.delay as presentation_delay,
-				presentations.effect_id as presentation_effect_id,
-				master_groups.name as group_name')
 	end
 	
 	#Creates a hash of the presentation data
@@ -86,7 +81,7 @@ class Presentation < ActiveRecord::Base
 			hash[:slides] = Array.new
 		
 			#The new format for presentation slides, requires less sql-queries to build
-			self.public_slides.each do |slide|
+			slides_for_hash.each do |slide|
 				hash[:slides] << slide.to_hash
 			end
 			hash
@@ -113,6 +108,19 @@ class Presentation < ActiveRecord::Base
 	
 		
 	private
+	
+	# Augmented select for creating the hash serialization
+	def slides_for_hash
+		Slide.joins(:master_group => {:groups => :presentation})
+			.where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil})
+			.order('groups.position, slides.position')
+			.select('slides.*, groups.id AS presentation_group_id, 
+				master_groups.effect_id as group_effect_id,
+				presentations.delay as presentation_delay,
+				presentations.effect_id as presentation_effect_id,
+				master_groups.name as group_name')
+	end
+	
 			
 	#Validation method for making sure the asigned effect is a valid object.
 	def ensure_effect_exists

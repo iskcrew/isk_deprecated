@@ -15,14 +15,13 @@ class Display < ActiveRecord::Base
 		true
 	end
 	
-	after_save do |display|
-		display.display_state.save if display.display_state.changed?
+	after_save do
+		display_state.save if (display_state.changed? || display_state.new_record?)
 	end
 	
 	before_create do
 		ds = DisplayState.new
 		self.display_state = ds
-		ds.save!
 	end
 	
 	belongs_to :presentation
