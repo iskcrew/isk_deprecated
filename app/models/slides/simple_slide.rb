@@ -1,18 +1,17 @@
 # ISK - A web controllable slideshow system
 #
-# Author::    Vesa-Pekka Palmu
+# Author::		Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
-# License::   Licensed under GPL v3, see LICENSE.md
+# License::		Licensed under GPL v3, see LICENSE.md
 
 
 class SimpleSlide < SvgSlide
-  
-  TypeString = 'simple'
-  
-  @slidedata = nil
+	
+	TypeString = 'simple'
 
-  DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left').freeze
-  include HasSlidedata
+	# Slidedata functionality
+	DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left').freeze
+	include HasSlidedata
 
 	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
 	HeadingSelector = "//text[@id = 'header']"
@@ -20,6 +19,7 @@ class SimpleSlide < SvgSlide
 	MarginLeft = 30
 	MarginRight = 30
 
+	# If our slidedata chances mark the slide as not ready when saving it.
 	before_save do
 		if @_slidedata.present?
 			self.svg_data = SimpleSlide.create_svg(self.slidedata)
@@ -30,72 +30,72 @@ class SimpleSlide < SvgSlide
 
 	after_create :write_slidedata
 
-  def self.copy!(s)
-    Slide.transaction do 
-      orig_id = s.id
-      
-      simple = s.dup
-      simple.save!
-      simple.reload
-      
-      FileUtils.copy(s.svg_filename, simple.svg_filename)
-      
-      raise ApplicationController::ConvertError unless simple.to_simple_slide!
-      
-      simple = SimpleSlide.find(simple.id)
-      
-      s = Slide.find(orig_id)
-      s.replacement_id = simple.id
-      
-      return simple
-    end  
-  end
-  
+	def self.copy!(s)
+		Slide.transaction do 
+			orig_id = s.id
+			
+			simple = s.dup
+			simple.save!
+			simple.reload
+			
+			FileUtils.copy(s.svg_filename, simple.svg_filename)
+			
+			raise ApplicationController::ConvertError unless simple.to_simple_slide!
+			
+			simple = SimpleSlide.find(simple.id)
+			
+			s = Slide.find(orig_id)
+			s.replacement_id = simple.id
+			
+			return simple
+		end	 
+	end
+	
 	
 	def self.create_from_svg_slide(svg_slide)
-    raise ApplicationController::ConvertError unless svg_slide.is_a? SvgSlide
+		raise ApplicationController::ConvertError unless svg_slide.is_a? SvgSlide
 
 		simple = SimpleSlide.new
 		simple.name = svg_slide.name + " (converted)"
 		simple.ready = false
 		simple.show_clock = svg_slide.show_clock
 		
-    svg = REXML::Document.new(svg_slide.svg_data)
-    
+		svg = REXML::Document.new(svg_slide.svg_data)
+		
 
 		#IF slide has other images than the background we have a problem
 		unless svg.root.elements.to_a('//image').count == 1
-    	raise ApplicationController::ConvertError 
+			raise ApplicationController::ConvertError 
 		end
 
-    text_nodes = svg.root.elements.to_a('//text')
-    
-		#The slide needs to contain some text
-    raise ApplicationController::ConvertError unless text_nodes.count > 0 
+		text_nodes = svg.root.elements.to_a('//text')
 		
-    header = text_nodes[0].elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip
-      
-    text_nodes.delete_at(0)
-      
-    text = String.new
-    text_nodes.each do |n|
-      text << n.elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip << " "
-    end
-    text.strip!
-    
-    simple.slidedata = {:heading => header, :text => text}
-    simple.ready = false
-    simple.save!
-    
-    return simple
+		#The slide needs to contain some text
+		raise ApplicationController::ConvertError unless text_nodes.count > 0 
+		
+		header = text_nodes[0].elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip
+			
+		text_nodes.delete_at(0)
+			
+		text = String.new
+		text_nodes.each do |n|
+			text << n.elements.collect('tspan'){|e| e.texts.join(" ")}.join(" ").strip << " "
+		end
+		text.strip!
+		
+		simple.slidedata = {:heading => header, :text => text}
+		simple.ready = false
+		simple.save!
+		
+		return simple
 	end
 
-  
-  def clone!
-    new_slide = super
-    new_slide.slidedata = self.slidedata
-    return new_slide
-  end
+	
+	def clone!
+		new_slide = super
+		new_slide.slidedata = self.slidedata
+		return new_slide
+	end
 	
 	
 	# Take in the slide data and create a svg using them
@@ -209,7 +209,7 @@ class SimpleSlide < SvgSlide
 			end
 			
 			element.attributes['x'] = row_x align
-			element.attributes['text-anchor'] = text_anchor	
+			element.attributes['text-anchor'] = text_anchor 
 		end
 		return element
 	end
@@ -221,22 +221,22 @@ class SimpleSlide < SvgSlide
 	def self.margin_right
 		Slide::FullWidth - MarginRight
 	end
-   
+	 
 	protected
 	
-  def rsvg_command(type)
-    command = 'cd ' << FilePath.to_s << ' && inkscape'
-    
-    if type == :full
-      command << ' -w ' << Slide::FullWidth.to_s
-      command << ' -h ' << Slide::FullHeight.to_s
-      command << ' -e ' << self.full_filename.to_s
-      command << ' ' << self.svg_filename.to_s
+	def rsvg_command(type)
+		command = 'cd ' << FilePath.to_s << ' && inkscape'
+		
+		if type == :full
+			command << ' -w ' << Slide::FullWidth.to_s
+			command << ' -h ' << Slide::FullHeight.to_s
+			command << ' -e ' << self.full_filename.to_s
+			command << ' ' << self.svg_filename.to_s
 			command << ' >/dev/null'
-    end
-    
-    return command
-  end  
+		end
+		
+		return command
+	end	 
 	
 		
 		
