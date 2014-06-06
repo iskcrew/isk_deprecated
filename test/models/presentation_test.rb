@@ -58,8 +58,8 @@ class PresentationTest < ActiveSupport::TestCase
 		p = presentations(:with_slides)
 		h = p.to_hash
 		
-		assert_equal h[:name], p.name
-		assert_equal h[:slides].size, p.public_slides.count 
+		assert_equal h[:name], p.name, "Wrong presentation name"
+		assert_equal h[:slides].size, p.public_slides.count, "Wrong number of slides in hash: #{p.public_slides.count} slides in presentation, #{h[:slides].size} in hash" 
 	end
 	
 end
