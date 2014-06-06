@@ -48,7 +48,7 @@ class Slide < ActiveRecord::Base
 	
 	include HasSvgData
 	
-	Host = 'http://isk:Kissa@isk0.asm.fi'
+	Host = 'http://example.com'
 	
 	FullWidth = 1280
 	FullHeight = 720
