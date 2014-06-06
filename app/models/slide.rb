@@ -16,10 +16,7 @@ class Slide < ActiveRecord::Base
 	end
  
  	after_create do |s|
-		s.update_column :filename, "slide_" + s.id.to_s
-		if @_svg_data
-			s.send(:write_svg_data)
-		end		
+		s.update_column :filename, "slide_" + s.id.to_s		
 	end
 
 	# Touch associated displays
@@ -50,7 +47,7 @@ class Slide < ActiveRecord::Base
 	include RankedModel
 	ranks :position, :with_same => :master_group_id 
 	
-	
+	include HasSvgData
 	
 	Host = 'http://isk:Kissa@isk0.asm.fi'
 	
@@ -203,37 +200,7 @@ class Slide < ActiveRecord::Base
 	
 	def is_svg?
 		self.is_svg
-	end
-	
-	#Luetaan svg-data ja pistetään se muistiin kakkuun siltä varalta että tarvitaan uusiksi
-	def svg_data
-		return @_svg_data if (@_svg_data or self.new_record?)
-		
-		
-		@_svg_data = File.read(self.svg_filename) if File.exists?(self.svg_filename)
-		
-		return @_svg_data
-	end
-	
-	def needs_images?
-		return @_needs_images ||= false
-	end
-	
-	#Kirjoitetaan uusi svg-data tiedostoon ja merkitään kelmun kuva epäkelvoksi
-	#Ei tehdä mitään jos uusi svg on sama kuin vanha, tällä säästetään vähän kuvien
-	#paistamista uusiksi jos simple-slidessä muutetaan vain metatietoja
-	def svg_data=(svg)
-		#Simple-editin taustat on sidottu webbiserverin roottiin
-		if self.svg_data != svg
-			
-			@_svg_data = svg
-			write_svg_data
-		
-			self.ready = false
-			@_needs_images = true
-		end
-	end
-	
+	end	
 	
 	def replace!(slide)
 		Slide.transaction do
@@ -291,16 +258,10 @@ class Slide < ActiveRecord::Base
 		self.save!
 	end
 	
-	
-	def svg_filename
-		FilePath.join(self.filename + '.svg')
-	end
-
 	def thumb_filename
 		FilePath.join(self.filename + '_thumb.png')
 	end
 
-	
 	def preview_filename
 		FilePath.join(self.filename + '_preview.png')
 	end
@@ -391,17 +352,8 @@ class Slide < ActiveRecord::Base
 	def ro_cache_key
 		self.cache_tag + "_ro"
 	end
-	
-	protected
-	
-	def write_svg_data
-		unless self.new_record?
-			File.open(self.svg_filename, 'w') do |f|
-				f.write @_svg_data
-			end
-		end
-	end
-	
+		
+	protected	
 	
 	def ensure_master_group_exists
 		errors.add(:master_group_id, "^Group is invalid") if self.master_group.nil?
