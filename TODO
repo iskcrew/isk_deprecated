@@ -1,28 +1,33 @@
+- Rails 4.1 migration
+	- Rewrite the cache and websocket stuff as concerns and include where needed
+		- Remove the dependency on activerecord_observers gem
+	- Use http://edgeguides.rubyonrails.org/active_support_instrumentation.html
+		- Better websocket logging
+		- Performance metrics?
+		- Display action log and metrics
+
 - Cache
 	- Cashier seems to be working fine.. but tests would be nice
 
 - DelayedJob
-	- Investigate different backends, as we have redis as a dependency already...
 	- Investigate the way delayed jobs logs stuff, could use the same thing myself...
 
 - Inkscape plugins
 	- Better error handling
 	- Convert them to python for native inkscape support?
+		- Test the converted plugins
+		- Add json-responses to http calls for cleaner plugin code
 
 - Websockets
-	- A ruby script to monitor and log the WS trafic as needed
-	- Notify upstream about websocket-rails logging huge amount of newlines
 	- Chat / better notification system for web users
+	- Does newest websocket-rails still crash the server with rails 4.1?
 
 - MasterGroups
-	- Create STI classes for ungrouped, thrashed and schedule slides
-		- UnGroup and ThrashGroup have been created, need to update all view logic...
 	- Deep clone for mastergroups, cloning all slides inside them
 
 - Events
 	- Memoize Event.current like current_user
 	- Allow creating a new event by cloning a old one?
-	- Link presentations to events
 	- Link displays to events
 	- Store template config etc in the event data
 	- Allow choosing of the slide background from web
@@ -34,6 +39,12 @@
 	- Gridfs store for slide images?
 	- InkscapeSlide
 		- Allow converting inkscapeslides to simple slides?
+	- Simple Edit
+		- Configurable margins, base-svg generation with configurable slide size/aspect ratio
+	- Templates
+		- Allow users to upload a svg, parse <text> elements, allow user to select editable fields
+			from that list and then allow creating new slides based on the template similar to simple
+			slides.
 
 - Presentations
 	- Deep cloning of presentations. clone the presentation structure
@@ -57,9 +68,6 @@
 - Ticket system
 	- Create a simple way to request and track slide edit jobs
 
-- Simple editor
-	- A new and improved solution via websockets (ws_simple_edit branch)
-
 - Rake tasks
 	- Create a cleanup task to really delete the soft-deleted slides and their images
 
@@ -79,27 +87,3 @@ http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image
       -sodipodi:role="line" <tspan> elementteihin
     -svg:space='preserve' attribuutit vittuun
     -sodipodi xlmns -esittely
-
-- unit testit
-  - display: TEHTY
-  - presentation: TEHTY
-  - event: TEHTY
-  - master_group
-  - override_queue
-  - schedule: aloitettu
-  - slide
-  - user
-- functional testit
-  - gettaa kaikkia get-sivuja
-  - postaa ainankin yksi pyyntö posteihin
-    - presentations: aloitettu
- 	 - slides: aloitettu
-- testaa myös autentikaatio
-
-- svg-pohjakirjasto
-	- Previkkakuvat
-
-- Välkkybitti slideihin valittavaksi
-
-- näyttimien rekisteröinti ja hallinta
-	- Näyttimien luominen webistä käsin ja näytin-paketin kasaaminen
