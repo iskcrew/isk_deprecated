@@ -11,6 +11,7 @@ class LoginsControllerTest < ActionController::TestCase
 	test "login" do
   	post :create, @login_data
 		assert_redirected_to slides_path
+		assert_equal users(:admin).id, session[:user_id]
   end
 	
 	test "login with json" do
@@ -23,6 +24,7 @@ class LoginsControllerTest < ActionController::TestCase
 		json = JSON.parse @response.body
 		assert_equal 'Login successful', json['message']
 		assert_equal users(:admin).username, json['data']['username']
+		assert_equal users(:admin).id, session[:user_id]
 	end
 	
 	test "failed login" do
@@ -33,6 +35,18 @@ class LoginsControllerTest < ActionController::TestCase
 		
 		assert_template :show
 		assert_not flash[:error].empty?
+	end
+	
+	test "failed login with json" do
+		data = @login_data
+		data[:password] = 'wrong password'
+		data[:format] = :json
+		
+		post :create, data
+		
+		assert_response 403, "Response code wasn't 403 Forbidden"
+		json = JSON.parse @response.body
+		assert_equal json['message'], 'Login invalid'
 	end
 	
 end
