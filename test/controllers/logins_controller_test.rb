@@ -21,7 +21,7 @@ class LoginsControllerTest < ActionController::TestCase
 		
 		assert_response :success
 		json = JSON.parse @response.body
-		assert_equal 'Login successfull', json['message']
+		assert_equal 'Login successful', json['message']
 		assert_equal users(:admin).username, json['data']['username']
 	end
 	
