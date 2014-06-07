@@ -7,7 +7,7 @@
 
 class GroupsController < ApplicationController
 	before_filter :require_create, :only => [:new, :create]
-	before_filter :require_admin, :only => [:publish_all, :hide_all]
+	before_filter :require_admin, :only => [:publish_all, :hide_all, :grant, :deny]
 	
 	def index
 		@groups = MasterGroup.current.defined_groups
@@ -119,7 +119,7 @@ class GroupsController < ApplicationController
 		MasterGroup.transaction do
 			notice = String.new 
 			params[:slides].each_value do |s|
-				if s[:add] == "1"
+				if s[:add]
 					s = current_event.ungrouped.slides.find(s[:id])
 					flash[:notice]
 					notice << 'Adding slide ' << s.name << "\n"
@@ -195,7 +195,7 @@ class GroupsController < ApplicationController
 			end
 			flash[:notice] = "Added group " + group.name + " to override on display " + display.name
 		else
-			flash[:error] = "You can't add slides to the override queue on display " + display.name
+			raise ApplicationController::PermissionDenied
 		end
 		redirect_to :action => :show, :id => group.id
 		
