@@ -126,7 +126,7 @@ class SlidesController < ApplicationController
 	def edit
 		@slide = Slide.find(params[:id])
 	
-		require_slide_edit(@slide)
+		require_edit(@slide)
 		
 	end
 	
@@ -135,7 +135,7 @@ class SlidesController < ApplicationController
 		Slide.transaction do
 
 			@slide =Slide.find(params[:id])
-			require_slide_edit(@slide)
+			require_edit(@slide)
 	
 			if @slide.update_attributes(slide_params)
 				#Paistetaan uusi kuva simpleslidelle
@@ -167,7 +167,7 @@ class SlidesController < ApplicationController
 	# Mark a slide as deleted, we don't hard-delete slides ever
 	def destroy
 		@slide = Slide.find(params[:id])
-		require_slide_edit @slide
+		require_edit @slide
 		
 		@slide.destroy
 		@slide.save!
@@ -179,7 +179,7 @@ class SlidesController < ApplicationController
 	def undelete
 		@slide = Slide.find(params[:id])
 		
-		require_slide_edit(@slide)
+		require_edit(@slide)
 		
 		@slide.undelete
 		@slide.save!
@@ -403,13 +403,6 @@ class SlidesController < ApplicationController
 		params.required(:slide).permit(
 			:name, :description, :show_clock, :public, :duration, {slidedata: params[:slide][:slidedata].try(:keys)}
 		)
-	end
-		
-	def require_slide_edit(s)
-		#Varmistetaan oikeudet
-		unless s.can_edit? current_user
-			raise ApplicationController::PermissionDenied
-		end
 	end
 	
 	def require_create
