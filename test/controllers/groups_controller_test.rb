@@ -14,6 +14,36 @@ class GroupsControllerTest < ActionController::TestCase
 				name: "New test group"
 			}
 		}
+		
+		@forbidden_actions = {
+			get: [
+				[:add_slides, id: master_groups(:one_slide).id],
+				[:index, nil],
+				[:new, nil],
+				[:edit, id: master_groups(:one_slide).id],
+				[:show, id: master_groups(:one_slide).id]
+			],
+			post: [
+				[:sort, {id: master_groups(:ten_slides).id, element_id: 3, element_position: 1}],
+				[:adopt_slides, {id: master_groups(:one_slide).id, slides: {one: {id: slides(:simple).id, add: true}}}],
+				[:hide_all, id: master_groups(:ten_slides).id],
+				[:publish_all, id: master_groups(:ten_slides).id],
+				[:grant, {id: master_groups(:one_slide).id, grant: {user_id: users(:no_roles).id}}],
+				[:deny, {id: master_groups(:one_slide).id, user_id: users(:no_roles).id}],
+				[:add_to_override, {id: master_groups(:one_slide).id, override: {display_id: 1, duration: 20}}],
+				[:create, {name: 'Group'}]
+			],
+			put: [
+				[:update, {id: master_groups(:one_slide).id, master_group: {name: 'fooo'}}]
+			],
+			patch: [
+				[:update, {id: master_groups(:one_slide).id, master_group: {name: 'fooo'}}]
+			],
+			delete: [
+				[:destroy, id: master_groups(:one_slide).id]
+			]
+			
+		}
 		#We don't want to generate slides into the normal place
 		Slide.send(:remove_const, :FilePath)
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
@@ -102,6 +132,17 @@ class GroupsControllerTest < ActionController::TestCase
 		
 		assert_redirected_to group_path(assigns(:group))
 		assert assigns(:group).slides.where(public: false).count == 0
+	end
+	
+	test "acl without user" do
+		assert_actions_denied(@forbidden_actions)
+	end
+	
+	test "acl without roles" do
+		actions = @forbidden_actions
+		actions.delete(:get)
+		session = {user_id: users(:no_roles).id, username: users(:no_roles).username}
+		assert_actions_denied(actions, session, false)
 	end
 	
 end
