@@ -16,7 +16,7 @@ case "$1" in
   start)
        echo "Starting ISK-server..."
        RAILS_ENV=production script/delayed_job start > /dev/null
-       RAILS_ENV=production rails runner script/background_jobs.rb > /dev/null
+       RAILS_ENV=production script/background_jobs.rb > /dev/null
        rails s thin -d -p 12765 -e production > /dev/null
        ;;
   stop)
@@ -35,7 +35,7 @@ case "$1" in
        echo "Restarting ISK-server..."
        RAILS_ENV=production script/delayed_job restart > /dev/null
        kill $(cat tmp/pids/background_jobs.pid)
-       RAILS_ENV=production rails runner script/background_jobs.rb
+       RAILS_ENV=production script/background_jobs.rb
        kill $(cat tmp/pids/server.pid)
        rails s thin -d -p 12765 -e production > /dev/null
        ;;
