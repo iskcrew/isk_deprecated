@@ -6,8 +6,8 @@
 
 
 class SlidesController < ApplicationController		
-	before_filter :require_create, :only => [:new, :create]
-	before_filter :require_admin, :only => [:deny, :grant, :to_inkscape]
+	before_filter :require_create, :only => [:new, :create, :clone]
+	before_filter :require_admin, :only => [:deny, :grant, :to_inkscape, :to_simple]
 	
 	# Do not require login for getting the slide pictures
 	skip_before_filter :require_login, :only => [:preview, :full]
@@ -86,7 +86,7 @@ class SlidesController < ApplicationController
 					end
 				end
 				
-				@slide.reload(lock: true)
+				@slide.reload
 				
 				
 				case params[:create_type]
@@ -166,7 +166,7 @@ class SlidesController < ApplicationController
 	
 	# Mark a slide as deleted, we don't hard-delete slides ever
 	def destroy
-		@slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id])
 		require_slide_edit @slide
 		
 		@slide.destroy
@@ -177,7 +177,7 @@ class SlidesController < ApplicationController
 	
 	# Remove the deleted flag and move the slide from thrash to ungrouped.
 	def undelete
-		@slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id])
 		
 		require_slide_edit(@slide)
 		
@@ -213,16 +213,16 @@ class SlidesController < ApplicationController
 	
 	# FIXME: The deny/grant ACL actions should go to a mixin
 	def deny
-		slide = Slide.find(params[:id], lock: true)
-		user = User.find(params[:user_id], lock: true)
+		slide = Slide.find(params[:id])
+		user = User.find(params[:user_id])
 		slide.authorized_users.delete(user)
 		
 		redirect_to :back
 	end
 	
 	def grant
-		slide = Slide.find(params[:id], lock: true)
-		user = User.find(params[:grant][:user_id], lock: true)
+		slide = Slide.find(params[:id])
+		user = User.find(params[:grant][:user_id])
 		slide.authorized_users << user
 		
 		redirect_to :back		 
@@ -275,11 +275,10 @@ class SlidesController < ApplicationController
 	# FIXME: Merge to update and check permissions as needed there
 	# We can even use params whitelisting to make this extra-easy!
 	def hide
-		@slide = Slide.find(params[:id], lock: true)
+		@slide = Slide.find(params[:id])
 		
 		unless @slide.can_hide? current_user
-			flash[:error] = "Not allowed"
-			redirect_to :back and return
+			raise ApplicationController::PermissionDenied
 		end
 		
 		@slide.public = false
