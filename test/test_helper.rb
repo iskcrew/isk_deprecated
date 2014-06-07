@@ -27,4 +27,17 @@ class ActiveSupport::TestCase
 		end
 	end
 	
+	def assert_actions_denied(actions, session = nil, to_login = true)
+		actions.each_key do |verb|
+			actions[verb].each do |action|
+				send verb, action.first, action.last, session
+				if to_login
+					assert_redirected_to login_path, "#{verb}: #{action.first} didn't redirect to login page"
+				else
+					assert_response 403, "#{verb}: #{action.first} didn't return 403 Forbidden"
+				end
+			end
+		end
+	end
+	
 end

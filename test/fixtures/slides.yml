@@ -10,6 +10,7 @@ slide_1:
     is_svg: true
     deleted: false
     master_group_id: 1
+    images_updated_at: <%=Time.now%>
 
 <%2.upto(10) do |i|%>
 
@@ -96,6 +97,36 @@ simple:
     filename: slide_16
     master_group_id: 8
     type: <%=SimpleSlide.sti_name%>
+    ready: true
+    public: true
+    is_svg: true
+    
+inkscape:
+    id: 17
+    name: Inkscape slide
+    filename: slide_17
+    master_group_id: 8
+    type: <%=InkscapeSlide.sti_name%>
+    ready: true
+    public: true
+    is_svg: true
+    
+deleted:
+    id: 18
+    name: Deleted slide
+    filename: slide_16
+    master_group_id: 9
+    ready: true
+    public: true
+    is_svg: true
+    deleted: true
+
+svg:
+    id: 19
+    name: svg slide
+    filename: slide_19
+    master_group_id: 8
+    type: <%=SvgSlide.sti_name%>
     ready: true
     public: true
     is_svg: true

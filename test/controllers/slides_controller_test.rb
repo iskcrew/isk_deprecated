@@ -17,9 +17,36 @@ class SlidesControllerTest < ActionController::TestCase
 			create_type: 'simple'
 		}
 		
+		@forbidden_actions = {
+			get: [
+				[:index, nil],
+				[:show, id: 1],
+				[:new, nil],
+				[:edit, id: 1],
+				[:svg_data, id: slides(:inkscape).id]
+			],
+			post: [
+				[:svg_save, id: slides(:inkscape)],
+				[:ungroup, id: 1],
+				[:undelete, id: slides(:deleted).id],
+				[:hide, id: 1],
+				[:deny, id: 1],
+				[:grant, id: 1],
+				[:to_inkscape, id: slides(:simple)],
+				[:to_simple, id: slides(:svg)],
+				[:add_to_group, id: slides(:ungrouped)],
+				[:add_to_override, {id: 1, add_to_override: {display_id: 1}}],
+				[:clone, id: 1],
+				[:create, slide: {name: 'foo'}]
+			],
+			put: [[:update, id: 1]],
+			patch: [[:update, id: 1]],
+			delete: [[:destroy, id: 1]]
+		}
+		
 		Slide.send(:remove_const, :FilePath)
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
-				
+		
 	end
 	
 	def teardown
@@ -124,6 +151,19 @@ class SlidesControllerTest < ActionController::TestCase
 		end
 		
 		assert_redirected_to root_path
+	end
+	
+	# Try to get all actions of this controller without a user
+	test "acl without user" do
+		assert_actions_denied(@forbidden_actions)
+	end
+	
+	test "acl without roles" do
+		# All get actions should be ok even without any roles
+		actions = @forbidden_actions
+		actions.delete(:get)
+		session = {user_id: users(:no_roles).id, username: users(:no_roles).username}
+		assert_actions_denied(actions, session, false)
 	end
 	
 end
