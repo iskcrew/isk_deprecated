@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 20140608182943) do
   create_table "slide_templates", force: true do |t|
     t.string   "name"
     t.integer  "event_id"
-    t.text     "settings"
+    t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,12 +1,32 @@
 class SlideTemplate < ActiveRecord::Base
 	belongs_to :event
 	
-	serialize :settings, Hash
+	serialize :data, HashWithIndifferentAccess
 	
 	after_create :write_template
 	
 	FilePath = Rails.root.join('data','templates')
 	
+	def settings
+		self[:data]
+	end
+	
+	# Need to migrate from Parameters object to hash...
+	def settings=(s)
+		h = HashWithIndifferentAccess.new
+		s.each_key do |key|
+			h[key] = HashWithIndifferentAccess.new
+			s[key].each_pair do |k, v|
+				if [:edit,:multiline].include?(k.to_sym) && v.is_a?(String)
+					h[key][k] = v.to_i == 1 ? true : false
+				else
+					h[key][k] = v
+				end
+			end
+		end
+		Rails.logger.debug h
+		self[:data] = h
+	end
 	
 	# Load the svg in
 	def template
@@ -48,8 +68,18 @@ class SlideTemplate < ActiveRecord::Base
 	
 	private
 	
+	def data
+		self[:data]
+	end
+	
+	def data=(val)
+		self[:data] = val
+	end
+	
+	# Extract all text fields from the svg template and
+	# generate a settings hash based on that
 	def generate_settings
-		s = {}
+		s = HashWithIndifferentAccess.new
 		svg = REXML::Document.new(@_template)
 		svg.root.elements.each('//text') do |e|
 			s[e.attributes['id'].to_sym] = {
@@ -59,7 +89,7 @@ class SlideTemplate < ActiveRecord::Base
 				default: REXML::XPath.match(e,'.//text()').join.strip
 			}
 		end
-		self.settings = s
+		self[:data] = s
 	end
 	
 	def write_template
