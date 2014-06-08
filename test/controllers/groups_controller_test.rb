@@ -145,4 +145,9 @@ class GroupsControllerTest < ActionController::TestCase
 		assert_actions_denied(actions, session, false)
 	end
 	
+	test "acl action coverage" do
+		assert_acl_coverage(:groups, @forbidden_actions)
+	end
+	
+	
 end

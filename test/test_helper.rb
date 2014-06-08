@@ -40,4 +40,43 @@ class ActiveSupport::TestCase
 		end
 	end
 	
+	def assert_acl_coverage(c, tested_actions, allowed = {})
+		actions = get_controller_routes(c.to_s)
+		count = 0
+		actions.each_value {|v| count =+ v.size}
+		
+		assert count > 0, "No actions were found for controller #{c.to_s}, typo?"
+		
+		missed = []
+		actions.each_key do |verb|
+			tested = tested_actions[verb].collect {|x| x.first}
+			actions[verb].each do |a|
+				unless tested.include?(a.to_sym) || (allowed[verb] && allowed[verb].include?(a.to_sym))
+					missed << "#{verb.upcase} :#{a}"
+				end
+			end
+		end
+		
+		assert missed.empty?, "Following actions were missed in ACL tests: \n#{missed.join "\n"}"
+	end
+	
+	def get_controller_routes(c)
+		routes = {
+			get: [],
+			post: [],
+			put: [],
+			patch: [],
+			delete: []
+		}
+		
+		Rails.application.routes.routes.each do |r|
+			req = r.requirements
+			if req[:controller] == c
+				verb = %W{ GET POST PUT PATCH DELETE }.grep(r.verb).first.downcase.to_sym
+				routes[verb] << req[:action]
+			end
+		end
+		return routes
+	end
+	
 end

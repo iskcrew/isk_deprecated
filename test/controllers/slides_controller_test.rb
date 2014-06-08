@@ -166,4 +166,12 @@ class SlidesControllerTest < ActionController::TestCase
 		assert_actions_denied(actions, session, false)
 	end
 	
+	test "acl action coverage" do
+		allowed = {
+			get: [:thumb, :preview, :full]
+		}
+		
+		assert_acl_coverage(:slides, @forbidden_actions, allowed)
+	end
+	
 end
