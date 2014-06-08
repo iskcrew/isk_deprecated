@@ -56,8 +56,7 @@ class SlideTemplate < ActiveRecord::Base
 				edit: false, 
 				multiline: false,
 				color: 'Gold', 
-				#FIXME: defaultit ei aina tuu multilinelle....
-				default: e.elements.collect('tspan') {|t| t.texts.join(' ')}.join(" ").strip
+				default: REXML::XPath.match(e,'.//text()').join.strip
 			}
 		end
 		self.settings = s
