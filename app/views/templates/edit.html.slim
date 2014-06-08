@@ -1,0 +1,25 @@
+h1 Editing slide template #{@template.name}
+
+h2 Fields in this template
+
+= form_for @template, url: template_path(@template) do |f|
+	= f.fields_for :settings do |ff|
+		table
+			tr
+				th ID
+				th Editable
+				th Multiline
+				th Highlight color
+				th Default value
+				- @template.settings.each_key do |k|
+					= ff.fields_for k do |fff|
+						tr
+							td 
+								= k.to_s
+								td	= fff.check_box :edit, checked: @template.settings[k][:edit]
+								td = fff.check_box :multiline, checked: @template.settings[k][:multiline]
+								td = fff.color_field :color, value: @template.settings[k][:color]
+								td = fff.text_field :default, value: @template.settings[k][:default]
+	= f.submit 'Update'
+			
+	

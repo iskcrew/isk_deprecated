@@ -140,6 +140,14 @@ Isk::Application.routes.draw do
       
     end
   end
+	
+	resources :templates do
+		member do
+		end
+		
+		collection do
+		end
+	end
     
   resources :displays do
     member do

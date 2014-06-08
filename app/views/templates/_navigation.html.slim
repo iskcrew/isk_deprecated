@@ -1,0 +1,5 @@
+div.navigation
+	| &nbsp;
+	= link_to 'List', templates_path
+	= link_to "New", new_template_path
+	= yield :navigation
