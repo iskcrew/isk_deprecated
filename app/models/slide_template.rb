@@ -16,6 +16,11 @@ class SlideTemplate < ActiveRecord::Base
 		return @_svg_data	
 	end
 	
+	# Handle a uploaded file
+	def upload=(upload)
+		self.template = upload.read
+	end
+	
 	
 	def template=(svg)
 		@_template = svg
@@ -45,12 +50,13 @@ class SlideTemplate < ActiveRecord::Base
 	
 	def generate_settings
 		s = {}
-		svg = REXML::Document.new(self.template)
+		svg = REXML::Document.new(@_template)
 		svg.root.elements.each('//text') do |e|
 			s[e.attributes['id'].to_sym] = {
 				edit: false, 
 				multiline: false,
 				color: 'Gold', 
+				#FIXME: defaultit ei aina tuu multilinelle....
 				default: e.elements.collect('tspan') {|t| t.texts.join(' ')}.join(" ").strip
 			}
 		end
