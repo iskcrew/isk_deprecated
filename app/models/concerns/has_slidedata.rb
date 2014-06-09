@@ -35,15 +35,11 @@ module  HasSlidedata
     if !self.new_record? && File.exists?(self.data_filename.to_s)
       @_slidedata = YAML.load(File.read(self.data_filename))
 		end
-		return @_slidedata.blank? ? default_slidedata : @_slidedata
+		return @_slidedata.blank? ? default_slidedata() : @_slidedata
   end
   
 	# Write new slidedata and sanitize the keys in it.
   def slidedata=(d)
-    if d.nil?
-			d = default_slidedata
-		end
-	
 	
 		# Merge the new data with the old slidedata, if a key is in both the new contents is kept.
 		d = slidedata.merge(d)
@@ -62,14 +58,21 @@ module  HasSlidedata
     
     write_slidedata
   end
+	
+	def generate_svg
+		self.template.generate_svg(self.slidedata)
+	end
   
   private
 	
 	# Sanitalize the data hash, only keep keys that exist in the default hash
 	def sanitalize_slidedata(d)
-		default = default_slidedata
+		if d.nil?
+			d = default_slidedata
+		end
+		
 		d.keep_if do |k, v|
-      default.key? k
+      default_slidedata.key? k
     end
 		return d
 	end
