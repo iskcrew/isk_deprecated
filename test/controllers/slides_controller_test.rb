@@ -12,7 +12,9 @@ class SlidesControllerTest < ActionController::TestCase
 				name: "New test slide",
 				public: "false",
 				show_clock: "false",
-				svg_data: File.read(Rails.root.join('data', 'templates', 'simple.svg'))
+				slidedata: {
+					header: {text: 'fooobar'}
+				}
 			},
 			create_type: 'simple'
 		}
