@@ -1,7 +1,7 @@
 class TemplateSlide < SvgSlide
 	TypeString = 'template'
 
-	belongs_to :template, foreign_key: :foreign_object_id
+	belongs_to :template, foreign_key: :foreign_object_id, class: 'SlideTemplate'
 	
 	#TODO: validations, template must exist
 	

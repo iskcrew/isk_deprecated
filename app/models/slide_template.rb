@@ -1,11 +1,8 @@
-class Template < ActiveRecord::Base
+class SlideTemplate < ActiveRecord::Base
 	belongs_to :event
 	
 	has_many :fields, -> {order(field_order: :asc)}, class_name: 'TemplateField'
-	
-	
-	serialize :data, HashWithIndifferentAccess
-	
+		
 	after_create :write_template
 	
 	accepts_nested_attributes_for :fields, reject_if: :reject_new_fields
