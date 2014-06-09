@@ -3,16 +3,18 @@ class TemplateSlide < SvgSlide
 
 	belongs_to :template, foreign_key: :foreign_object_id
 	
+	#TODO: validations, template must exist
+	
 	include HasSlidedata
 	
 	private
-	
-	def sanitize_slidedata(d)
-		return d
-	end
-	
-	def default_slidedata
 		
+	def default_slidedata
+		default = {}
+		self.template.fields.editable.each do |f|
+			default[f.element_id] = f.default_value
+		end
+		return default
 	end
 
 end
