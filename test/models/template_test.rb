@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SlideTemplateTest < ActiveSupport::TestCase
+class TemplateTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

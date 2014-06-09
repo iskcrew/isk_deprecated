@@ -1,39 +1,23 @@
-class SlideTemplate < ActiveRecord::Base
+class Template < ActiveRecord::Base
 	belongs_to :event
+	
+	has_many :fields, -> {order(field_order: :asc)}, class_name: 'TemplateField'
+	
 	
 	serialize :data, HashWithIndifferentAccess
 	
 	after_create :write_template
 	
+	accepts_nested_attributes_for :fields, reject_if: :reject_new_fields
+	
 	FilePath = Rails.root.join('data','templates')
-	
-	def settings
-		self[:data]
-	end
-	
-	# Need to migrate from Parameters object to hash...
-	def settings=(s)
-		h = HashWithIndifferentAccess.new
-		s.each_key do |key|
-			h[key] = HashWithIndifferentAccess.new
-			s[key].each_pair do |k, v|
-				if [:edit,:multiline].include?(k.to_sym) && v.is_a?(String)
-					h[key][k] = v.to_i == 1 ? true : false
-				else
-					h[key][k] = v
-				end
-			end
-		end
-		Rails.logger.debug h
-		self[:data] = h
-	end
-	
+		
 	# Load the svg in
 	def template
 		return @_template if (@_template or self.new_record?)
-		@_template = File.read(self.svg_filename) if File.exists?(self.svg_filename)
+		@_template = File.read(self.filename) if File.exists?(self.filename)
 		
-		return @_svg_data	
+		return @_template
 	end
 	
 	# Handle a uploaded file
@@ -52,9 +36,9 @@ class SlideTemplate < ActiveRecord::Base
 	def generate_svg(data)
 		svg = REXML::Document.new(self.template)
 		
-		data.each_key do |k|
-			svg.root.elements.each("//text[@id='#{k.to_s}']") do |e|
-				set_text(e, data[k][:text], data[k][:color])
+		self.fields.each do |f|
+			svg.root.elements.each("//text[@id='#{f.element_id}']") do |e|
+				set_text(e, data[f.element_id], f.color)
 			end
 		end
 		
@@ -68,12 +52,9 @@ class SlideTemplate < ActiveRecord::Base
 	
 	private
 	
-	def data
-		self[:data]
-	end
-	
-	def data=(val)
-		self[:data] = val
+	# Filter for nested parameters preventing creation of new fields
+	def reject_new_fields(a)
+		a[:id].blank?
 	end
 	
 	# Extract all text fields from the svg template and
@@ -82,14 +63,11 @@ class SlideTemplate < ActiveRecord::Base
 		s = HashWithIndifferentAccess.new
 		svg = REXML::Document.new(@_template)
 		svg.root.elements.each('//text') do |e|
-			s[e.attributes['id'].to_sym] = {
-				edit: false, 
-				multiline: false,
-				color: 'Gold', 
-				default: REXML::XPath.match(e,'.//text()').join.strip
-			}
+			f = self.fields.new
+			f.element_id = e.attributes['id']
+			f.default_value = REXML::XPath.match(e,'.//text()').join.strip
+			f.save!
 		end
-		self[:data] = s
 	end
 	
 	def write_template

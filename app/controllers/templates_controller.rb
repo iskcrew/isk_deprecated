@@ -3,19 +3,19 @@ class TemplatesController < ApplicationController
 	before_filter :require_global_admin
 	
 	def index
-		@templates = SlideTemplate.all
+		@templates = Template.all
 	end
 	
 	def show
-		@template = SlideTemplate.find(params[:id])
+		@template = Template.find(params[:id])
 	end
 	
 	def new
-		@template = SlideTemplate.new
+		@template = Template.new
 	end
 	
 	def create
-		@template = SlideTemplate.new(template_params)
+		@template = Template.new(template_params)
 		@template.event = current_event
 		
 		if @template.save
@@ -27,12 +27,29 @@ class TemplatesController < ApplicationController
 		end
 	end
 	
+	#Change the order of slides in the group, used with jquerry sortable widget.
+	def sort
+		@template = Template.find(params[:id])
+		
+		if f = @template.fields.find(params[:element_id])
+			f.field_order_position = params[:element_position]
+			f.save!
+			@template.reload
+			respond_to do |format|
+				format.js {render :sortable_items}
+			end
+		else
+			render :text => "Invalid request data", :status => 400
+		end		
+	end
+	
+	
 	def edit
-		@template = SlideTemplate.find(params[:id])
+		@template = Template.find(params[:id])
 	end
 	
 	def update
-		@template = SlideTemplate.find(params[:id])
+		@template = Template.find(params[:id])
 
 		if @template.update_attributes(update_params)
 			flash[:notice] = 'Template was successfully updated.'
@@ -50,15 +67,15 @@ class TemplatesController < ApplicationController
 	private
 	
 	def update_params
-		s = {}
-		@template.settings.each_key do |k|
-			s[k] = [:edit, :multiline, :color, :default]
-		end
-		params.required(:slide_template).permit(:name, :upload, settings: s)
+		params.required(:template).permit(
+			:name, 
+			:upload, 
+			fields_attributes: [:id, :editable, :multiline, :color, :default_value]
+		)
 	end
 
 	def template_params
-		params.required(:slide_template).permit(:name, :upload)
+		params.required(:template).permit(:name, :upload)
 	end
 	
 end

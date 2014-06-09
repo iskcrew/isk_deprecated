@@ -1,0 +1,20 @@
+= fields_for @template do |f|
+	= f.fields_for :fields do |ff|
+		li id="template_field_#{ff.object.id.to_s}"
+			div.handle ⇕
+			div.field_attributes
+				table
+					tr
+						th Name
+						th Editable
+						th Multiline
+						th Highlight color
+						th Default value
+					tr
+						td 
+							= ff.object.element_id
+							= ff.hidden_field :id
+						td = ff.check_box :editable
+						td = ff.check_box :multiline
+						td = ff.color_field :color
+						td = ff.text_field :default_value
