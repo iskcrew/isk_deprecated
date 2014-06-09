@@ -9,7 +9,7 @@ module ApplicationHelper
   
   def navigation_links
     controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
-    admin_controllers = ['Users', 'Events']
+    admin_controllers = ['Templates', 'Users', 'Events']
     ret = String.new
     base_html_options = {class: 'ui-state-default ui-corner-top'}
 		tabs = controllers
