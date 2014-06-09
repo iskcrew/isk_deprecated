@@ -146,8 +146,11 @@ class SlidesController < ApplicationController
 			require_edit(@slide)
 	
 			if @slide.update_attributes(slide_params)
-				#Paistetaan uusi kuva simpleslidelle
+
+				# Generate images as needed
+				# FIXME: This needs to be more universal...
 				@slide.delay.generate_images if @slide.is_a?(SimpleSlide) && !@slide.ready
+				@slide.delay.generate_images if @slide.is_a?(TemplateSlide) && !@slide.ready
 				
 				#Haetaan uusi kuva http-slidelle jos on tarvis
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
