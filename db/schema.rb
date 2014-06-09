@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140608182943) do
+ActiveRecord::Schema.define(version: 20140609110451) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -181,16 +181,6 @@ ActiveRecord::Schema.define(version: 20140608182943) do
     t.datetime "updated_at",                            null: false
   end
 
-  create_table "slide_templates", force: true do |t|
-    t.string   "name"
-    t.integer  "event_id"
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "slide_templates", ["event_id"], name: "index_slide_templates_on_event_id", using: :btree
-
   create_table "slides", force: true do |t|
     t.string   "name",              limit: 100
     t.string   "filename",          limit: 50
@@ -208,12 +198,36 @@ ActiveRecord::Schema.define(version: 20140608182943) do
     t.text     "description"
     t.datetime "images_updated_at"
     t.integer  "duration",                      default: -1
+    t.integer  "object_id"
   end
 
   add_index "slides", ["id", "public"], name: "index_slides_on_id_and_public", using: :btree
   add_index "slides", ["id", "type"], name: "index_slides_on_id_and_type", using: :btree
   add_index "slides", ["master_group_id"], name: "index_slides_on_master_group_id", using: :btree
   add_index "slides", ["replacement_id"], name: "index_slides_on_replacement_id", using: :btree
+
+  create_table "template_fields", force: true do |t|
+    t.integer  "template_id"
+    t.boolean  "editable",      default: false
+    t.boolean  "multiline",     default: false
+    t.string   "color",         default: "#00ff00"
+    t.text     "default_value"
+    t.string   "element_id"
+    t.integer  "field_order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "template_fields", ["template_id"], name: "index_template_fields_on_template_id", using: :btree
+
+  create_table "templates", force: true do |t|
+    t.string   "name"
+    t.integer  "event_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "templates", ["event_id"], name: "index_templates_on_event_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username",   limit: 50
