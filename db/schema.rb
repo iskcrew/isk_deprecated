@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 20140609110451) do
     t.text     "description"
     t.datetime "images_updated_at"
     t.integer  "duration",                      default: -1
-    t.integer  "object_id"
+    t.integer  "foreign_object_id"
   end
 
   add_index "slides", ["id", "public"], name: "index_slides_on_id_and_public", using: :btree
