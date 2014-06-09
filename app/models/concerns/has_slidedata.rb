@@ -55,7 +55,9 @@ module  HasSlidedata
     end
     
     @_slidedata=d
-    
+		
+		# Mark the slide as not ready as its data has changed
+    self.ready = false
     write_slidedata
   end
 	

@@ -46,3 +46,26 @@ jQuery(function($) {
  $(function() {
 $( "#accordion" ).accordion();
 });
+
+function update_template_slide_fields(){
+	var data = {
+		slide_template_id: $("select#slide_foreign_object_id").val()
+	};
+	$.ajax({
+		type: 'GET',
+		url: '/slides/new',
+		dataType: 'script',
+		data: data
+	});
+}
+
+//Template form stuff
+$().ready(function() {
+	if( $("select#slide_foreign_object_id").length )
+	{
+		update_template_slide_fields();
+		$("select#slide_foreign_object_id").change(update_template_slide_fields);
+	};
+});
+
+

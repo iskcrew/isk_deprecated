@@ -53,6 +53,14 @@ class SlidesController < ApplicationController
 			return
 		end
 		
+		
+		respond_to do |format|
+			format.html
+			format.js {
+				@slide = TemplateSlide.new(foreign_object_id: params[:slide_template_id])
+			}
+		end
+		
 	end
 	
 	# Create a new slide
@@ -74,6 +82,8 @@ class SlidesController < ApplicationController
 					@slide = HttpSlide.new(slide_params)
 				when 'empty_file', 'inkscape'
 					@slide = InkscapeSlide.new(slide_params)
+				when 'template'
+					@slide = TemplateSlide.new(slide_params)
 				else
 					@slide = Slide.new(slide_params)
 				end
@@ -125,9 +135,7 @@ class SlidesController < ApplicationController
 	# Edit a slide
 	def edit
 		@slide = Slide.find(params[:id])
-	
 		require_edit(@slide)
-		
 	end
 	
 	# Update a slide
@@ -401,7 +409,8 @@ class SlidesController < ApplicationController
 	# Whitelist the accepted slide parameters for update and create
 	def slide_params
 		params.required(:slide).permit(
-			:name, :description, :show_clock, :public, :duration, {slidedata: params[:slide][:slidedata].try(:keys)}
+			:name, :description, :show_clock, :public, :duration, :foreign_object_id,
+			{slidedata: params[:slide][:slidedata].try(:keys)}
 		)
 	end
 	

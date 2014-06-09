@@ -3,10 +3,21 @@ h1 Create a new slide
 p Choose the slide type to create.
 div#tabs
 	ul
+		li: a href="#template" Slide from template
 		li: a href="#simple" Simple editor
 		li: a href="#inkscape" Inkscape
 		li: a href="#httpslide" Http fecher
 		li: a href="#image" Upload image
+		
+	div#template
+		h2 New slide from template
+		= form_for @slide, html: {id: 'new_template_slide'} do |f|
+			= f.error_messages
+			= hidden_field_tag :create_type, 'template'
+			= render partial: 'form'
+			= f.collection_select(:foreign_object_id, SlideTemplate.all, :id, :name)
+			div#template_slide_form
+			p = f.submit
 	
 	div#simple
 		h2 New simple editor slide

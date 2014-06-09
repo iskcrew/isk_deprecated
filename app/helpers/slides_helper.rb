@@ -7,6 +7,15 @@
 
 module SlidesHelper
 	
+	# Extract value for a input for a template slide
+	def template_slide_value(slide, field)
+		if slide.respond_to? :slidedata
+			return slide.slidedata[field.element_id]
+		else
+			return field.default_value
+		end
+	end
+	
 	#Cache key for user-dependant slide info block
 	def slide_key(slide)
 		slide.cache_key + current_user.cache_key

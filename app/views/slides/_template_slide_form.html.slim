@@ -1,0 +1,9 @@
+= fields_for @slide do |f|
+	= f.fields_for :slidedata do |ff|
+		- @slide.template.fields.editable.each do |field|
+			p = field.element_id.gsub('_', ' ').capitalize
+			- if field.multiline
+				= ff.text_area field.element_id, value: template_slide_value(@slide, field)
+			- else
+				= ff.text_field field.element_id, value: template_slide_value(@slide, field)
+			

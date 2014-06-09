@@ -28,8 +28,6 @@ class SimpleSlide < SvgSlide
 		true
 	end
 
-	after_create :write_slidedata
-
 	def self.copy!(s)
 		Slide.transaction do 
 			orig_id = s.id
