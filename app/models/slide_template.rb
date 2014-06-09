@@ -33,9 +33,9 @@ class SlideTemplate < ActiveRecord::Base
 	def generate_svg(data)
 		svg = REXML::Document.new(self.template)
 		
-		self.fields.each do |f|
+		self.fields.editable.each do |f|
 			svg.root.elements.each("//text[@id='#{f.element_id}']") do |e|
-				set_text(e, data[f.element_id], f.color)
+				set_text(e, data[f.element_id.to_sym], f.color)
 			end
 		end
 		
