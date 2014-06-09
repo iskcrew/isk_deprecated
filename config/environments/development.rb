@@ -21,6 +21,9 @@ Isk::Application.configure do
 	config.cache_store = :mem_cache_store, 'localhost',
 	  { :namespace => "ISK", :expires_in => 5.minutes, :compress => true }
 
+	# Don't log served assets
+	config.assets.logger = false
+
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 
