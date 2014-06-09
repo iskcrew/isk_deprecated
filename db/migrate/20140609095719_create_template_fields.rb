@@ -1,7 +1,7 @@
 class CreateTemplateFields < ActiveRecord::Migration
   def change
     create_table :template_fields do |t|
-			t.references :template, index: true
+			t.references :slide_template, index: true
 			t.boolean :editable, default: false
 			t.boolean :multiline, default: false
 			t.string :color, default: '#00ff00'

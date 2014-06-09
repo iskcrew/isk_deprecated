@@ -181,6 +181,15 @@ ActiveRecord::Schema.define(version: 20140609110451) do
     t.datetime "updated_at",                            null: false
   end
 
+  create_table "slide_templates", force: true do |t|
+    t.string   "name"
+    t.integer  "event_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "slide_templates", ["event_id"], name: "index_slide_templates_on_event_id", using: :btree
+
   create_table "slides", force: true do |t|
     t.string   "name",              limit: 100
     t.string   "filename",          limit: 50
@@ -207,10 +216,10 @@ ActiveRecord::Schema.define(version: 20140609110451) do
   add_index "slides", ["replacement_id"], name: "index_slides_on_replacement_id", using: :btree
 
   create_table "template_fields", force: true do |t|
-    t.integer  "template_id"
-    t.boolean  "editable",      default: false
-    t.boolean  "multiline",     default: false
-    t.string   "color",         default: "#00ff00"
+    t.integer  "slide_template_id"
+    t.boolean  "editable",          default: false
+    t.boolean  "multiline",         default: false
+    t.string   "color",             default: "#00ff00"
     t.text     "default_value"
     t.string   "element_id"
     t.integer  "field_order"
@@ -218,16 +227,7 @@ ActiveRecord::Schema.define(version: 20140609110451) do
     t.datetime "updated_at"
   end
 
-  add_index "template_fields", ["template_id"], name: "index_template_fields_on_template_id", using: :btree
-
-  create_table "templates", force: true do |t|
-    t.string   "name"
-    t.integer  "event_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "templates", ["event_id"], name: "index_templates_on_event_id", using: :btree
+  add_index "template_fields", ["slide_template_id"], name: "index_template_fields_on_slide_template_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username",   limit: 50
