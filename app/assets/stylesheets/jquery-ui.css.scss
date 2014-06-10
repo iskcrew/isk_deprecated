@@ -1,3 +1,12 @@
+//
+// jquery-ui.css.scss
+// isk
+// 
+// Stylesheet based on jquery-ui theme Dark Hive
+//
+
+@import 'variables';
+
 /*! jQuery UI - v1.10.1 - 2013-02-23
 * http://jqueryui.com
 * Includes: 
@@ -45,7 +54,7 @@
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
 	border: 1px solid #444444;
-	background: #222222 url(/images/ui-bg_highlight-soft_35_222222_1x100.png) 50% 50% repeat-x;
+	background: $ui-state-default_bg;
 	font-weight: normal;
 	color: #eeeeee;
 }
@@ -61,8 +70,8 @@
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	border: 1px solid #0b93d5;
-	background: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
+	border: $tab_hover_border;
+	background: $tab_hover_bg;
 	font-weight: normal;
 	color: #ffffff;
 }
@@ -77,7 +86,7 @@
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
 	border: 1px solid #26b3f7;
-	background: #0972a5 url(/images/ui-bg_highlight-hard_20_0972a5_1x100.png) 50% 50% repeat-x;
+	background: $ui-state-active_bg;
 	font-weight: normal;
 	color: #ffffff;
 }
