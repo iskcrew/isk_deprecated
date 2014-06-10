@@ -1,10 +1,15 @@
-/*
- * Variables used by various stylesheets
-*/
+//
+// variables.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+// Variables used by various stylesheets
 
 $background_color: #333;
 $font_color: #eee;
-$font_size: 0.7em;
+$font_size: 8pt;
 $font_family: verdana,helvetica,arial,sans-serif;
 
 $error_bg_color: #900;
@@ -17,3 +22,6 @@ $nav_bar_bg: #055;
 $nav_bar_border: #5DD;
 $nav_bar_button_bg: #077;
 $nav_current_color: #7A7;
+
+// Tables and table likes
+$even_row_bg: #444;
