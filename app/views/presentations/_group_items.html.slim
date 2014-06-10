@@ -4,4 +4,4 @@
 		div.group_name
 			= link_to group.master_group.name, group_path(group.master_group_id)
 		div.remove_group
-			=< button_to 'remove', :action => :remove_group, :id => group.id
+			=< button_to 'remove', remove_group_presentation_path(group.id), class: 'redbutton'
