@@ -14,14 +14,36 @@ $font_family: verdana,helvetica,arial,sans-serif;
 
 $error_bg_color: #900;
 $link_hover_color: #fff;
-$button_warning_color: #900;
+
+$warning_text_color: #eee;
+$warning_bg: #900;
+$warning_border: #A33;
+$warning_hover_bg: #A00;
+$warning_hover_border: #900;
+
+// Buttons
+
+$button_bg: #222222 url(/images/ui-bg_highlight-soft_35_222222_1x100.png) 50% 50% repeat-x;
+$button_border: 1px solid #999;
+$button_hover_bg: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
 
 // Navigation bars
 
-$nav_bar_bg: #055;
+$nav_bar_bg: #0972a5 url(/images/ui-bg_highlight-hard_20_0972a5_1x100.png) 50% 50% repeat-x;
 $nav_bar_border: #5DD;
 $nav_bar_button_bg: #077;
 $nav_current_color: #7A7;
+
+// States
+
+$slide_public_bg: #666;
+$slide_hidden_bg: #444;
+$slide_border: 2px solid #777;
+$slide_hidden_border: 2px solid #555;
+
+// jquery-ui theme stuffs
+$tab_hover_bg: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
+$tab_hover_border: 1px solid #0b93d5;
 
 // Tables and table likes
 $even_row_bg: #444;

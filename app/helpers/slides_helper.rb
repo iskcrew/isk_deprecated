@@ -165,7 +165,7 @@ module SlidesHelper
 	def slide_delete_button(slide)
 		link_to 'Delete', slide_path(slide),
 						 	data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: 'button'
+							method: :delete, class: 'button warning'
 	end
 	
 	def slide_ungroup_button(slide)

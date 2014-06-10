@@ -1,7 +1,12 @@
-// Place all the styles related to the slides controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// slides.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
 
+@import 'variables';
 
 @font-face{
 font-family: 'Franklin Gothic Heavy';
@@ -53,14 +58,24 @@ table.compact_slidelist {
 	min-width: 430px;
 }
 
-
+// app/views/slides/_slide.html.slim
 div.slide {
 	margin: 2px;
 	padding: 5px;
-	border: 2px solid #d0d0d0;
+	border: $slide_border;
 	border-radius: 10px;
-	background-color: #666;
+	background: $slide_public_bg;
 	display: inline-block;
+	
+	&.hidden {
+		background: $slide_hidden_bg;
+		border: $slide_hidden_border;
+
+		img {
+				opacity: 0.6;
+		}
+	}
+	
 	
 	div.slide_header {
 		width: 400px;
@@ -73,33 +88,36 @@ div.slide {
 			padding: 5px 5px;
 			font-size: 0.7em;
 			border-radius: 10px;
-			border: 1px solid white;
+			border: 1px solid #333;
 			display: inline-block;
-		}
+			
+			&.image {
+				background: #339;
+			}
 	
+			&.svg-edit {
+				background: #737;
+			}
 	
-		div.image {
-			background-color: #339;
-		}
+			&.simple {
+				background: #393;
+			}
 	
-		div.svg-edit {
-			background-color: #737;
-		}
+			&.inkscape {
+				background: #933;
+			}
+			
+			&.template {
+				background: #711;
+			}
 	
-		div.simple {
-			background-color: #393;
-		}
+			&.http {
+				background: #399;
+			}
 	
-		div.inkscape {
-			background-color: #933;
-		}
-	
-		div.http {
-			background-color: #399;
-		}
-	
-		div.video {
-			background-color: #883;
+			&.video {
+				background: #883;
+			}
 		}
 	}
 	
@@ -115,21 +133,9 @@ div.slide {
 		margin-top: 5px;
 		text-align: center;
 		min-height: 22px;
-		width: 400px;
-	
-		a.button {
-			font-size: 12px;
-		}
-	
+		width: 400px;	
 	}
 	
-}
-
-div.slide.hidden {
-	background-color: #222;
-	img {
-			opacity: 0.6;
-	}
 }
 
 div.slide_filter {
@@ -282,10 +288,8 @@ div.simple_editor_container {
 				width: 400px;
 				height: 225px;
 			}
-		}	
-		
-	}
-	
+		}		
+	}	
 }
 
 

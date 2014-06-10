@@ -6,7 +6,6 @@
 
 div.top_navigation {
 	padding: 0px;
-	border-bottom: 2px solid $nav_bar_border;
 		
 	div#current_event {
 		float: right;
@@ -16,8 +15,8 @@ div.top_navigation {
 	ul.tabs {
 		
 		li:hover {
-			background: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
-			border: 1px solid #0b93d5;
+			background: $tab_hover_bg;
+			border: $tab_hover_border;
 			border-bottom: none;
 			font-weight: normal;
 			color: #ffffff;
@@ -33,22 +32,21 @@ div.top_navigation {
 		li#logout {
 			float: right;
 				background-image: none;
-				border-color: #300;
+				border-color: $warning_border;
 				border-bottom: none;
-				background-color: $button_warning_color;
+				background-color: $warning_bg;
 		}	
 	
 		li#logout:hover {
-				border-color: #900;
-				background-color: #A00;
+				border-color: $warning_hover_border;
+				background-color: $warning_hover_bg;
 		}
 	}	 	
 }	
 
 
 div.navigation {
-	border-bottom: 2px solid $nav_bar_border;
-	background-color: $nav_bar_bg;
+	background: $nav_bar_bg;
 	width: 100%;
 	height: 36px;
 	font-size: 120%;
@@ -57,13 +55,16 @@ div.navigation {
 		display: inline-block;
 		padding: 2px 0.3em;
 		margin: 5px;
-		border: 1px solid $nav_bar_border;
-		background-color: $nav_bar_button_bg;
+		border: $button_border;
+		background: $button_bg;
 		border-radius: 6px;
 		text-decoration: none;
 		float: left;
-	}
-			
-}
+		
+		&:hover{
+			background: $button_hover_bg;
+		};
+	};			
+};
 
 
