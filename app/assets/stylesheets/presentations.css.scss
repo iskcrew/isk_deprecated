@@ -1,8 +1,26 @@
-// Place all the styles related to the presentations controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// presentations.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
 
 col.preview-data {
 	width: 300px;
 }
 
+ul#groups_sortable {
+	display: inline-block;
+	min-width: 200px;
+	overflow: auto;
+	
+	div.group_name {
+		float: left;
+		margin-right: 10px;
+	}
+	
+	div.remove_group {
+		float: right;
+	}
+}
