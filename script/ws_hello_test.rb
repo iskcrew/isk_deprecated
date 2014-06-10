@@ -112,6 +112,7 @@ EM.run {
 				say "Current group id: #{data['current_group_id']}"
 				say "Current slide id: #{data['current_slide_id']}"
 				say "Slides in override queue: #{data['override_queue'].size}"
+				say "Username: #{data['username']} (has key: #{data.key? 'username'})"
 				
 			else
 				say 'iskdpy.hello unsuccesful, got reply:'
