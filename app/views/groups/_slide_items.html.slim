@@ -1,0 +1,5 @@
+- group.slides.each do |slide|
+	li.sortable id="slide_#{slide.id.to_s}" class=(slide.public ? 'published' : 'hidden')
+		div.handle ⇕
+		div.slide_image = slide_preview_to_show_tag slide
+		div.slide_name = link_to slide.name, slide_path(slide.id)
