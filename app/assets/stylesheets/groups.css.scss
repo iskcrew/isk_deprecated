@@ -2,33 +2,44 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#slides img {
-	width: 160px;
-	height: 90px;
-}
-
-#slides li {
-	height: 92px;
-}
-
-#slides .slideimage {
-	float:left;
-}
-
-#slides .handle {
-	float: left;
-}
-
-#slides li.published:nth-child(odd) {
-	color:white;
-	background-color:#575;
-}
-
-
-#slides li.published:nth-child(even) {
-	color:white;
-	background-color:#7A7;
-}
+ul#slides {
+	display: inline-block;
+	
+	div.slide_image {
+		float: left;
+		padding-right: 20px;
+		
+		table {
+			border: none;
+			border-collapse: collapse;
+			
+			td, th {
+				border: none;
+				border-collapse: collapse;
+				background-color: inherit;
+			}
+			
+			th {
+				font-size: 1em;
+			}
+		}
+		
+		img {
+			width: 160px;
+			height: 90px;
+		}
+	}
+	
+	li.published:nth-child(odd) {
+		color:white;
+		background-color:#575;
+	}
+	
+	li.published:nth-child(even) {
+		color:white;
+		background-color:#7A7;
+	}
+} 
 
 
 div.groupitem {
