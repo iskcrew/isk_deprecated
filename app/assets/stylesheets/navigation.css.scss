@@ -6,6 +6,7 @@
 
 div.top_navigation {
 	padding: 0px;
+	height: 29px;
 		
 	div#current_event {
 		float: right;
@@ -47,6 +48,7 @@ div.top_navigation {
 
 div.navigation {
 	background: $nav_bar_bg;
+	padding-top: 5px;
 	width: 100%;
 	height: 36px;
 	font-size: 120%;
