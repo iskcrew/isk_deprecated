@@ -213,8 +213,11 @@ class SlidesController < ApplicationController
 	def ungroup
 		slide = Slide.find(params[:id])
 		require_edit(slide)
+		
 		slide.master_group = current_event.ungrouped
 		slide.save!
+	
+		flash[:notice] = "Ungrouped slide: #{slide.name}"
 	
 		respond_to do |format|
 			format.html {redirect_to :back}
