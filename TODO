@@ -5,6 +5,8 @@
 		- Better websocket logging
 		- Performance metrics?
 		- Display action log and metrics
+	
+- Create nested controllers for Group and OverrideQueue to clean up display and presentation controllers?
 
 - Cache
 	- Cashier seems to be working fine.. but tests would be nice
