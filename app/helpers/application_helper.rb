@@ -19,7 +19,7 @@ module ApplicationHelper
 			if controller.class.name.include?(c)
       	html_options[:class] <<  ' ui-tabs-active ui-state-active'
 			end
-      ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
+      ret << content_tag('li', link_to(c, {:controller => c.downcase},class: 'ui-tabs-anchor'), html_options)
     end
     return ret.html_safe 
   end
@@ -44,13 +44,6 @@ module ApplicationHelper
   def authorized_users(obj)
     render :partial => 'shared/authorized_users', :locals => {:obj => obj}
   end
-    
-  
-  def late_display_warning(d)
-    link_text = (d.name || String.new) << " (" << d.ip << ") is more than " << Display::Timeout.to_s << " minutes late!"
-    link_to link_text, :controller => :displays, :action => :show, :id => d.id
-  end
-
 
   def select_options_tag(name='',select_options={},options={})
     #set selected from value

@@ -11,7 +11,11 @@
 div.error_notification {
 	font-size: 1.4em;
 	background-color: $error_bg_color;
-	padding: 10px 20px;
+	
+	a {
+		padding: 10px 20px;
+		display: inline-block;
+	}
 }
 
 

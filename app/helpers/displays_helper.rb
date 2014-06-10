@@ -7,6 +7,12 @@
 
 module DisplaysHelper
     
+		
+  def late_display_warning(d)
+    link_text = (d.name || String.new) << " (" << d.ip << ") is more than " << Display::Timeout.to_s << " minutes late!"
+    link_to link_text, :controller => :displays, :action => :show, :id => d.id
+  end
+	
   def display_ping(d)
     if d.late?
       html_class = 'late'

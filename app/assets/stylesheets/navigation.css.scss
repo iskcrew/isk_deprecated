@@ -5,49 +5,44 @@
 @import 'variables';
 
 div.top_navigation {
-	font-size: 120%;
 	padding: 0px;
-	height: 36px;
-	border-bottom: 2px solid $nav_bar_border;		
+	border-bottom: 2px solid $nav_bar_border;
 		
 	div#current_event {
 		float: right;
-		padding: 0px;
-		margin: 0px 2em;
 		font-weight: normal;
 	}
 		
 	ul.tabs {
-		display: inline-block;
 		
 		li:hover {
-			border-color: #FFF;
+			background: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
+			border: 1px solid #0b93d5;
+			border-bottom: none;
+			font-weight: normal;
+			color: #ffffff;
 		}
 		
-		li.ui-tabs-active {
-			background-image: none;
-			background-color: $nav_bar_bg;
-			border-color: $nav_bar_border;
-			border-bottom: 2px solid $nav_bar_bg;
-			font-weight: bold;
-		}
-	}
-		
-	ul#logout {
-		float: right;
-		
-		li{
-			background-image: none;
-			border-color: #300;
-			background-color: $button_warning_color;
+		li#current_event {
+			background: none;
+			padding: 6px;
+			border: none;
+			font-weight: normal;
 		}
 		
-		li:hover {
-			border-color: #900;
-			background-color: #A00;
+		li#logout {
+			float: right;
+				background-image: none;
+				border-color: #300;
+				border-bottom: none;
+				background-color: $button_warning_color;
+		}	
+	
+		li#logout:hover {
+				border-color: #900;
+				background-color: #A00;
 		}
-	} 
-		
+	}	 	
 }	
 
 
