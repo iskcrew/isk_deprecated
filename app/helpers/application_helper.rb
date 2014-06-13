@@ -17,7 +17,7 @@ module ApplicationHelper
     tabs.each do |c|
 			html_options = {class: 'ui-state-default ui-corner-top'}
 			if controller.class.name.include?(c)
-      	html_options[:class] <<  ' ui-tabs-active ui-state-active'
+      	html_options[:class] =  'ui-tabs-active ui-state-active ui-corner-top'
 			end
       ret << content_tag('li', link_to(c, {:controller => c.downcase},class: 'ui-tabs-anchor'), html_options)
     end
