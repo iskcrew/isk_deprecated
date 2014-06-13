@@ -41,13 +41,15 @@ $tab_hover_border: 1px solid #0b93d5;
 $ui-state-active_bg: $primary;
 $ui-state-active_border: 1px solid $primary_dark;
 $ui-state-default_bg: #222222 url(/images/ui-bg_highlight-soft_35_222222_1x100.png) 50% 50% repeat-x;
+$ui-widget-content_bg: $primary_darker;
 
 // ISK stuff
 
-$background_color: #333;
+$background_color: $primary_dark;
 $font_color: #eee;
 $font_size: 8pt;
 $font_family: verdana,helvetica,arial,sans-serif;
+$font: $font_size $font_family;
 
 $error_bg_color: #900;
 $link_hover_color: #fff;
@@ -63,6 +65,7 @@ $warning_hover_border: $red_light;
 
 // Buttons
 
+$button_font_color: #eee;
 $button_bg: $ui-state-default_bg;
 $button_border: 1px solid #999;
 $button_hover_bg: $tab_hover_bg;
@@ -79,7 +82,12 @@ $nav_current_color: $primary;
 $slide_public_bg: $primary;
 $slide_hidden_bg: $primary_dark;
 $slide_border: 2px solid $primary_dark;
-$slide_hidden_border: 2px solid $primary_darker;
+$slide_hidden_border: 2px solid $primary;
 
 // Tables and table likes
-$even_row_bg: #444;
+$table_head_bg: $secondary;
+$table_head_border: 2px solid $secondary_dark;
+$table_head_font_color: #eee;
+$table_row_bg: $primary_darker;
+$table_row_odd_bg: $primary_dark;
+$table_row_border: 1px solid $primary;

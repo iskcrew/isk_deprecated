@@ -16,6 +16,7 @@
 div.error_notification {
 	font-size: 1.4em;
 	background-color: $warning_bg;
+	color: $warning_text_color;
 	
 	a {
 		padding: 10px 20px;
@@ -26,9 +27,9 @@ div.error_notification {
 
 
 body {
-	color: $font_color;
 	background-color: $background_color;
-	font-size: $font_size;
+	font: $font;
+	color: $font_color;
 	margin:0px;
 	min-width: 600px;
 	width: 100%;
@@ -61,7 +62,7 @@ table {
 	}
 	
 	td {
-		border: 1px solid $primary;
+		border: $table_row_border;
 		vertical-align: top;
 	}
 	
@@ -71,17 +72,17 @@ table {
 		font-weight: bold;
 		padding-top: 5px;
 		padding-bottom: 4px;
-		border: 1px solid $secondary;
-		background-color: $secondary_dark;
-		color: white;
+		border: $table_head_border;
+		background-color: $table_head_bg;
+		color: $table_head_font_color;
 	}
 	
 	tr td{
-		background-color: $primary_darker;
+		background-color: $table_row_bg;
 	}
 
 	tr:nth-child(odd) td {
-		background-color: $primary_dark;
+		background-color: $table_row_odd_bg;
 	}
 	
 
