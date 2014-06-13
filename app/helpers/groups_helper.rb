@@ -11,9 +11,9 @@ module GroupsHelper
 	end
 	
   def group_link_tag(g)
-    html = 'Group:' 
-    html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, {:name => 'group_' + g.id.to_s} )
-    html << " Slides:" << g.slides.published.count.to_s << '/' << g.slides.count.to_s
+    html = 'Group: ' 
+    html << link_to(g.name, group_path(g), {:name => 'group_' + g.id.to_s} )
+    html << " Slides: #{g.slides.published.count}/#{g.slides.count}" 
     return html.html_safe
   end
 	
