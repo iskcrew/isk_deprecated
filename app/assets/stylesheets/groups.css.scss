@@ -52,69 +52,37 @@ ul#slides {
 } 
 
 
-div.groupitem {
-	border: $table_border;
-    border-radius: 10px;
-	margin: 10px;    
-
-    div.groupheader {
-    	margin-bottom: 5px;
-		font-size: 1.5em;
-    	border-bottom: $table_head_border;
-		background: $table_head_bg;	
-        padding: 5px;
-        text-align: center;
-		overflow: auto;
-
-        div.groupname {
-        	max-width: 500px;
-        	overflow: hidden;
-        	display: inline;
-			float:left;
-			margin-left: 5px;
-        }
-        
-        div.groupbuttons {
-        	height: 22px;
-        	display: inline;
-        	a.button {
-        		font-size: 12px;
-        	}
-			float: right;
-			margin-right: 5px;
-		
-        }
-        
-    }
+table.group_item {
+	width: 100%;
+	margin: 10px 0px;
+	
+	td.buttons {
+		margin-right: 5px;
+		text-align: right;
+	}
     
-    div.slides_in_group {
-    	display: inline-block;
-    	min-height: 80px;
-    	padding: 5px;
-		
-        img {
-    		width: 128px;
-    		height: 72px;
-    		border: 2px solid $primary_highlight;
-    		float: left;
-    		display: inline-block;
-    		margin: 2px;
-    	}
+	img {
+		width: 128px;
+		height: 72px;
+		border: 2px solid $primary_highlight;
+		margin: 2px;
+	}
 
-    	img.slide-hidden {
-    		opacity: 0.6;
-    		border: 2px solid #666666;
-    	}
+	img.slide-hidden {
+		opacity: 0.6;
+	}
 
-    	div.no_slides {
-    		font-size: 18px;
-    		color: #DD6666;
-    	}
-    }   
-        
+	div.no_slides {
+		font-size: 18px;
+		color: $red_highlight;
+		text-align: center;
+		width: 100%;
+	}   
+
 }
 
 
 div.group_list {
     margin-right: 175px;
+	margin-left: 0px;
 }
