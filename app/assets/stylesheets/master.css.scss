@@ -69,7 +69,8 @@ table {
 		};
 		
 		&:nth-child(odd) td {
-			background-color: $table_row_odd_bg;
+			background: $table_row_odd_bg;
+			border-color: $secondary_darker;
 		};
 		
 		th:first-child, td:first-child{
