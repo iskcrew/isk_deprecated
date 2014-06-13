@@ -52,17 +52,19 @@ a.button, input[type=submit].button {
 			color: $link_hover_color;
 		};
 	};
+	
+	&.inactive {
+		background: $button_inactive_bg;
+		color: $button_inactive_font_color;
+		cursor: default;
+		
+		&:hover {
+				cursor: default;
+			}
+	}
+	
 };
 
-a.inactive {
-	background-color: #444;
-	color: #DDD;
-	cursor: default;
-}
-
-a.inactive:hover {
-	cursor: default;
-}
 
 a.delete {
 	background-color: $warning_bg;

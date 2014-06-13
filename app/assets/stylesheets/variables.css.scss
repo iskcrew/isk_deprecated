@@ -68,10 +68,15 @@ $warning_hover_border: $red_light;
 // Buttons
 
 $button_font_color: #eee;
+
 $button_bg: $ui-state-default_bg;
 $button_border: 1px solid $primary_dark;
+
 $button_hover_bg: $ui-state-hover_bg;
 $button_hover_font_color: $ui-state-hover_font_color;
+
+$button_inactive_bg: #444;
+$button_inactive_font_color: $font_color;
 
 // Navigation bars
 
