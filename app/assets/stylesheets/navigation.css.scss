@@ -16,11 +16,14 @@ div.top_navigation {
 	ul.tabs {
 		
 		li.ui-state-default:hover {
-			background: $tab_hover_bg;
-			border: $tab_hover_border;
+			background: $ui-state-hover_bg;
+			border: $ui-state-hover_border;
 			border-bottom: none;
 			font-weight: normal;
-			color: #ffffff;
+			
+			a {
+				color: $ui-state-hover_font_color;
+			}
 		}
 		
 		li#current_event {
@@ -28,6 +31,7 @@ div.top_navigation {
 			padding: 6px;
 			border: none;
 			font-weight: normal;
+			color: $primary_dark;
 		}
 		
 		li#logout {
@@ -35,12 +39,12 @@ div.top_navigation {
 				background-image: none;
 				border-color: $warning_border;
 				border-bottom: none;
-				background-color: $warning_bg;
+				background: $warning_bg;
 		}	
 	
 		li#logout:hover {
 				border-color: $warning_hover_border;
-				background-color: $warning_hover_bg;
+				background: $warning_hover_bg;
 		}
 	}	 	
 }	
@@ -67,6 +71,7 @@ div.navigation {
 		
 		&:hover{
 			background: $button_hover_bg;
+			color: $button_hover_font_color;
 		};
 	};			
 };

@@ -36,11 +36,13 @@ $green_light: #a2d89f;
 
 // jquery-ui theme stuffs
 // We use them later so they need to be on top
-$tab_hover_bg: #003147 url(/images/ui-bg_highlight-soft_33_003147_1x100.png) 50% 50% repeat-x;
-$tab_hover_border: 1px solid #0b93d5;
-$ui-state-active_bg: $primary;
+$ui-state-hover_bg: #DC9B66 image-url("ui-bg_highlight-soft_30_DC9B66_1x100.png") 50% 50% repeat-x;
+$ui-state-hover_border: 1px solid #65340C;
+$ui-state-hover_font_color: $secondary_dark;
+$ui-state-active_bg: #65340C image-url("ui-bg_highlight-hard_20_65340C_1x100.png") 50% 50% repeat-x;
 $ui-state-active_border: 1px solid $primary_dark;
-$ui-state-default_bg: #222222 url(/images/ui-bg_highlight-soft_35_222222_1x100.png) 50% 50% repeat-x;
+$ui-state-default_bg: #083D3B image-url("ui-bg_highlight-soft_50_083D3B_1x100.png") 50% 50% repeat-x;
+$ui-state-error_bg: #640c0f image-url("ui-bg_glass_40_640c0f_1x400.png") 50% 50% repeat-x;
 $ui-widget-content_bg: $primary_darker;
 
 // ISK stuff
@@ -67,8 +69,9 @@ $warning_hover_border: $red_light;
 
 $button_font_color: #eee;
 $button_bg: $ui-state-default_bg;
-$button_border: 1px solid #999;
-$button_hover_bg: $tab_hover_bg;
+$button_border: 1px solid $primary_dark;
+$button_hover_bg: $ui-state-hover_bg;
+$button_hover_font_color: $ui-state-hover_font_color;
 
 // Navigation bars
 
@@ -85,10 +88,10 @@ $slide_border: 2px solid $primary_dark;
 $slide_hidden_border: 2px solid $primary;
 
 // Tables and table likes
-$table_border: 2px solid $primary;
-$table_head_bg: $secondary;
+$table_border: 2px solid $secondary_dark;
+$table_head_bg: $ui-state-active_bg;
 $table_head_border: 2px solid $secondary_dark;
 $table_head_font_color: #eee;
-$table_row_bg: $primary_darker;
-$table_row_odd_bg: $primary_dark;
+$table_row_bg: $secondary_darker;
+$table_row_odd_bg: $secondary_dark;
 $table_row_border: 1px solid $primary;

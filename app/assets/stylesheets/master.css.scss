@@ -15,7 +15,7 @@
 
 div.error_notification {
 	font-size: 1.4em;
-	background-color: $warning_bg;
+	background: $warning_bg;
 	color: $warning_text_color;
 	
 	a {
@@ -27,10 +27,10 @@ div.error_notification {
 
 
 body {
-	background-color: $background_color;
+	background: $background_color;
 	font: $font;
 	color: $font_color;
-	margin:0px;
+	margin: 10px 5px;
 	min-width: 600px;
 	width: 100%;
 }
@@ -74,7 +74,7 @@ table {
 		padding-top: 5px;
 		padding-bottom: 4px;
 		border: $table_head_border;
-		background-color: $table_head_bg;
+		background: $table_head_bg;
 		color: $table_head_font_color;
 	}
 	

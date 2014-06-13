@@ -38,6 +38,7 @@ a.button, input[type=submit].button {
 	
 	&:hover {
 		background: $button_hover_bg;
+		color: $button_hover_font_color;
 	};
 	
 	&.warning {

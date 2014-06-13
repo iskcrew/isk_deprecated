@@ -76,7 +76,7 @@ div.display_preview {
     }
 	
 	img {
-		border: 5px solid red;
+		border: 5px solid $red_highlight;
 	}
     
     div.control_buttons {
@@ -95,6 +95,7 @@ div.display_preview.stuck {
 	box-shadow:0 2px 4px rgba(0, 0, 0, .3);
 }
 
+// views/displays/_display.html.slim
 div.display_info {
     margin: 5px;
     float: left;
