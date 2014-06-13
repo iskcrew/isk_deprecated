@@ -78,7 +78,7 @@ class HttpSlide < Slide
 			self.save!
 			self.delay.generate_images
 		else
-			logger.error "Erro fetching slide data, http request didn't return OK status"
+			logger.error "Error fetching slide data, http request didn't return OK status"
 			logger.error resp
 			logger.error uri
 		end
