@@ -1,5 +1,5 @@
 /* ISK stylesheet for the navigation bars at the top of the page
- * 
+ *
 */
 
 @import 'variables';
@@ -7,26 +7,26 @@
 div.top_navigation {
 	padding: 0px;
 	height: 29px;
-		
+
 	div#current_event {
 		float: right;
 		font-weight: normal;
 	}
-		
+
 	ul.tabs {
 		border: none;
-		
+
 		li.ui-state-default:hover {
 			background: $ui-state-hover_bg;
 			border: $ui-state-hover_border;
 			border-bottom: none;
 			font-weight: normal;
-			
+
 			a {
 				color: $ui-state-hover_font_color;
 			}
 		}
-		
+
 		li#current_event {
 			background: none;
 			padding: 6px;
@@ -34,22 +34,21 @@ div.top_navigation {
 			font-weight: normal;
 			color: $primary_dark;
 		}
-		
+
 		li#logout {
 			float: right;
 				background-image: none;
 				border-color: $warning_border;
 				border-bottom: none;
 				background: $warning_bg;
-		}	
-	
+		}
+
 		li#logout:hover {
 				border-color: $warning_hover_border;
 				background: $warning_hover_bg;
 		}
-	}	 	
-}	
-
+	}
+}
 
 div.navigation {
 	background: $nav_bar_bg;
@@ -58,7 +57,7 @@ div.navigation {
 	height: 36px;
 	font-size: 120%;
 	border-bottom: $nav_bar_border;
-	
+
 	a {
 		display: inline-block;
 		padding: 2px 0.3em;
@@ -69,12 +68,10 @@ div.navigation {
 		border-radius: 6px;
 		text-decoration: none;
 		float: left;
-		
+
 		&:hover{
 			background: $button_hover_bg;
 			color: $button_hover_font_color;
 		};
-	};			
+	};
 };
-
-
