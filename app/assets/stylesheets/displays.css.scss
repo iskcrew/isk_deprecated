@@ -1,6 +1,12 @@
-// Place all the styles related to the displays controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// displays.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-13.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
 
 ul#override_queues {
 	display: inline-block;
@@ -90,11 +96,16 @@ div.display_preview.stuck {
 }
 
 div.display_info {
-    border: 2px solid red;
     margin: 5px;
     float: left;
-    border: 2px solid #d0d0d0;
+    border: $slide_border;
     border-radius: 10px;
+	background: $slide_public_bg;
+	
+	&.display_info.late {
+	    background: $warning_bg;
+	}
+	
     
     div.display_header {
         padding: 5px;
@@ -129,10 +140,6 @@ div.display_info {
 			font-size: 1.1em;
 		}
     }
-}
-
-div.display_info.late {
-    background: #A55;
 }
 
 div.display_control {
