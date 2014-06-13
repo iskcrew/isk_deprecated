@@ -1,6 +1,12 @@
-// Place all the styles related to the groups controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// groups.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-13.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
 
 ul#slides {
 	display: inline-block;
@@ -32,12 +38,12 @@ ul#slides {
 	
 	li.published:nth-child(odd) {
 		color:white;
-		background-color:#575;
+		background-color: $green;
 	}
 	
 	li.published:nth-child(even) {
 		color:white;
-		background-color:#7A7;
+		background-color: $green_dark;
 	}
 	
 	div.ungroup_slide {

@@ -79,9 +79,9 @@ a.delete {
 		border-radius: 50%;
 	}
 	
-	&.red:after { background-color: #F00; }
-	&.green:after { background-color: #0F0; }
-	&.blue:after { background-color: #00F; }
+	&.red:after { background-color: $red_highlight; }
+	&.green:after { background-color: $green_highlight; }
+	&.blue:after { background-color: $primary_highlight; }
 }
 
 

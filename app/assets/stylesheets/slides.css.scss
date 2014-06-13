@@ -21,6 +21,13 @@ src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
 font-style: italic;
 }
 
+//slide preview image
+img.preview {
+	width: 400px;
+	height: auto;
+	border: 2px solid $primary_highlight;
+}
+
 
 div.scrolling_div-wrapper {
 	float: right;
@@ -92,31 +99,31 @@ div.slide {
 			display: inline-block;
 			
 			&.image {
-				background: #339;
+				background: $primary;
 			}
 	
 			&.svg-edit {
-				background: #737;
+				background: $green_dark;
 			}
 	
 			&.simple {
-				background: #393;
+				background: $green;
 			}
 	
 			&.inkscape {
-				background: #933;
+				background: $red;
 			}
 			
 			&.template {
-				background: #711;
+				background: $red_highlight;
 			}
 	
 			&.http {
-				background: #399;
+				background: $secondary;
 			}
 	
 			&.video {
-				background: #883;
+				background: $secondary_highlight;
 			}
 		}
 	}

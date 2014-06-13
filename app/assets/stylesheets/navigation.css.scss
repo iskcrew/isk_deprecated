@@ -15,7 +15,7 @@ div.top_navigation {
 		
 	ul.tabs {
 		
-		li:hover {
+		li.ui-state-default:hover {
 			background: $tab_hover_bg;
 			border: $tab_hover_border;
 			border-bottom: none;
@@ -52,6 +52,7 @@ div.navigation {
 	width: 100%;
 	height: 36px;
 	font-size: 120%;
+	border-bottom: $nav_bar_border;
 	
 	a {
 		display: inline-block;

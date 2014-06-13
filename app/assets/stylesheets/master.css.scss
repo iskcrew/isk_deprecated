@@ -31,6 +31,7 @@ body {
 	font-size: $font_size;
 	margin:0px;
 	min-width: 600px;
+	width: 100%;
 }
 
 body,p,h1,h2,h3,h4,table,td,th,ul,ol,textarea,input {
@@ -52,6 +53,44 @@ table,th,td,input,textarea {
 	font-size:100%;
 }
 
+table {
+	border-collapse:collapse;
+	
+	td, th {
+		padding: 3px 7px 2px 7px;
+	}
+	
+	td {
+		border: 1px solid $primary;
+		vertical-align: top;
+	}
+	
+	th {
+		font-size: 1.2em;
+		text-align: left;
+		font-weight: bold;
+		padding-top: 5px;
+		padding-bottom: 4px;
+		border: 1px solid $secondary;
+		background-color: $secondary_dark;
+		color: white;
+	}
+	
+	tr td{
+		background-color: $primary_darker;
+	}
+
+	tr:nth-child(odd) td {
+		background-color: $primary_dark;
+	}
+	
+
+	tr td.error {
+		background-color: $warning_bg;
+	}
+	
+}
+
 img {
 	border: none;
 }
@@ -68,12 +107,6 @@ ul {
 	
 }
 
-img.preview {
-	height: 225px;
-	width: 400px;
-	border: 2px solid #d0d0d0;
-}
-
 div.flash {
 	display: block;
 	font-size: 1.5em;
@@ -83,15 +116,15 @@ div.flash {
 	}
 	
 	div.notice {
-		background: green;
+		background: $green;
 	}
 
 	div.error {
-		background: red;
+		background: $warning_bg;
 	}
 	
 	div.warnng {
-		background: yellow;
+		background: $secondary;
 	}
 }
 div.content {
@@ -100,7 +133,7 @@ div.content {
 
 div.warning {
 	p {
-		background-color: #770;
+		background-color: $warning_bg;
 		font-weight: bold;
 		padding: 1em;
 		display: inline-block;
