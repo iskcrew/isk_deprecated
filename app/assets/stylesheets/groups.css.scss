@@ -53,14 +53,15 @@ ul#slides {
 
 
 div.groupitem {
-	border: 2px solid #666;
+	border: $table_border;
     border-radius: 10px;
 	margin: 10px;    
 
     div.groupheader {
     	margin-bottom: 5px;
 		font-size: 1.5em;
-    	border-bottom: 2px solid #666;	
+    	border-bottom: $table_head_border;
+		background: $table_head_bg;	
         padding: 5px;
         text-align: center;
 		overflow: auto;
@@ -90,11 +91,11 @@ div.groupitem {
     	display: inline-block;
     	min-height: 80px;
     	padding: 5px;
-        
+		
         img {
     		width: 128px;
     		height: 72px;
-    		border: 2px solid black;
+    		border: 2px solid $primary_highlight;
     		float: left;
     		display: inline-block;
     		margin: 2px;
