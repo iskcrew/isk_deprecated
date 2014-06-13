@@ -26,7 +26,7 @@ input[type=submit].green.button {
 	text-decoration:none;
 }
 
-a.button, input[type=submit].button {
+a.button, input[type=submit] {
     text-decoration: none; 
 	background: $button_bg;
 	border: $button_border;
