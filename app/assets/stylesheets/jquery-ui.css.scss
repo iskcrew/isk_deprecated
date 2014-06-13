@@ -81,21 +81,21 @@
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
 .ui-state-focus a:visited {
-	color: #ffffff;
+	color: $font_color;
 	text-decoration: none;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #3F2C1D;
-	background: #65340C image-url("ui-bg_highlight-hard_20_65340C_1x100.png") 50% 50% repeat-x;
+	border: $ui-state-active_border;
+	background: $ui-state-active_bg;
 	font-weight: normal;
-	color: #ffffff;
+	color: $font_color;
 }
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #ffffff;
+	color: $font_color;
 	text-decoration: none;
 }
 
