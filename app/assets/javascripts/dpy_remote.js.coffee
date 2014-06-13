@@ -13,36 +13,42 @@ $ ->
 
 	handle_display = (display) ->
 		console.log "received display"
-		slide = (group, slide) ->
-			gs_id="#{group.id}_#{slide.id}"
+		slide = (slide) ->
+			
+			group_finder = 'div#group_' + slide.group
+			if $(group_finder).length
+				g = $(group_finder).first()
+			else
+				g = $('<div/>')
+				g.attr {id: "group_" + slide.group}
+				g.addClass "group"
+				g.append $('<h1/>').text slide.group_name
+				root.append g
+			
+			gs_id="#{slide?.group}_#{slide?.id}"
 			s=$('<div><h2 class="slideheader">'+slide?.name+'</h2></div>')
-			s.attr {id: "slide"+gs_id}
+			s.attr {id: "slide_"+gs_id}
 			s.addClass 'slide'
-
+			
 			img=$('<img/>')
 			img.attr { 
-				id: "img"+gs_id,
+				id: "img_"+gs_id,
 				src: "/slides/#{slide?.id}/thumb?t=#{slide?.images_updated_at}"
-				}
-			delete group.slides
-			img.data 'group', group
-			img.data 'slide', slide
+			}
+			img.data('group', "#{slide?.group}")
+			img.data('slide', "#{slide?.id}")
 			img.bind 'click', send_goto_slide
 			s.append img
-			
-		group = (group) ->
-			g=$('<div/>')
-			g.attr {id: "group"+group.id}
-			g.addClass "group"
-			g.append $('<h1/>').text group.name
-			g.append slide group, s for s in group?.slides
-		
+			g.append s
+				
 		elems=$('<div><h1>Display: '+display.name+' Presentation: '+display.presentation.name+'</h1></div>')
-		elems.append group g for g in display?.presentation?.groups
+		root.html(elems)
+		
+		slide s for s in display?.presentation?.slides
 
 		id=root.find('.active')?.id
 		if id then elems.find('#'+id).addClass('active')
-		root.html(elems)
+		
 
 	handle_current_slide = (d) ->
 		gs_id="#{d?.group_id}_#{d?.slide_id}"
@@ -67,7 +73,7 @@ $ ->
 			}
 		dispatcher.trigger 'iskdpy.goto_slide', data
 		console.log 'Sending iskdpy.goto_slide slide=previous, display_id=' + data.display_id
-        
+		
 	send_next_slide = (event) ->
 		event.preventDefault()
 		d=$('#next').data()
@@ -80,17 +86,17 @@ $ ->
 	
 	handle_keydown = (event) ->
 		console.log "Got keydown: " + event.which
-		if (event.which == 37) then	send_previous_slide event
+		if (event.which == 37) then send_previous_slide event
 		
-		if (event.which == 39) then	send_next_slide event
+		if (event.which == 39) then send_next_slide event
 		
 	
 	send_goto_slide = (event) ->
 		d=$(event.target).data()
 		data = { 
 			display_id: display_id,
-			slide_id: d.slide.id,
-			group_id: d.group.id
+			slide_id: d.slide,
+			group_id: d.group
 			}
 		console.log data
 		dispatcher.trigger 'iskdpy.goto_slide', data
