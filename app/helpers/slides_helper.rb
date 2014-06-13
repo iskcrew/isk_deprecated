@@ -108,14 +108,7 @@ module SlidesHelper
     }
     return link_to slide_preview_image_tag(slide), url_options, html_options
   end
-    
-  def group_link_tag(g)
-    html = 'Group:' 
-    html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, {:name => 'group_' + g.id.to_s} )
-    html << " Slides:" << g.slides.published.count.to_s << '/' << g.slides.count.to_s
-    return html.html_safe
-  end
-  
+      
   def simple_color_select(f, color)
     f.select :color, options_for_select(simple_colors, color), {}, id: 'simple_color', data: {simple_Field: true}
   end
