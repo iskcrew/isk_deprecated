@@ -35,8 +35,8 @@ $ ->
 				id: "img_"+gs_id,
 				src: "/slides/#{slide?.id}/thumb?t=#{slide?.images_updated_at}"
 			}
-			img.data('group', "#{slide?.group}")
-			img.data('slide', "#{slide?.id}")
+			img.data 'group', slide?.group
+			img.data 'slide', slide?.id
 			img.bind 'click', send_goto_slide
 			s.append img
 			g.append s
