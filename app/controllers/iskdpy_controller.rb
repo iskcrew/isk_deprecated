@@ -7,19 +7,17 @@
 
 class IskdpyController < WebsocketRails::BaseController
 	
-	#näytin esittäytyy ja alustaa itsensä
+	around_filter :instrument_action
+	
+	# The display calls this when initializing to get the inital data
+	# and to add a new display to the db if need be
+	# message[:display_name] should contain the unique display name
 	def hello
-		if connection.request.headers['HTTP_X_FORWARDED_FOR']
-			ip = connection.request.headers['HTTP_X_FORWARDED_FOR']
-		else
-			ip = connection.request.ip
-		end
-		d = Display.hello(message[:display_name], ip, connection.id)
+		d = Display.hello(message[:display_name], origin_ip, connection.id)
 		trigger_success d.to_hash
 	end
 	
-	
-	#Näytin kertoo mitä kelmua se näyttää
+	# The display informs us about its current slide
 	def current_slide
 		d = Display.find(message[:display_id])
 		if message[:override_queue_id]
@@ -33,6 +31,7 @@ class IskdpyController < WebsocketRails::BaseController
 		trigger_success data
 	end
 	
+	# Send a message instructing a display to go to a specific slide
 	def goto_slide
 		d = Display.find(message[:display_id])
 		
@@ -66,4 +65,23 @@ class IskdpyController < WebsocketRails::BaseController
 		WebsocketRails[d.websocket_channel].trigger(:data, data)
 		trigger_success data
 	end
+	
+	private
+	
+	# Find out the origin ip for the request
+	def origin_ip
+		if connection.request.headers['HTTP_X_FORWARDED_FOR']
+			connection.request.headers['HTTP_X_FORWARDED_FOR']
+		else
+			connection.request.ip
+		end
+	end
+	
+	def instrument_action
+		ActiveSupport::Notifications.instrument('iskdpy', 
+			action: action_name, client: client_id, ip: origin_ip, message: message) do
+			yield
+		end
+	end
+	
 end
