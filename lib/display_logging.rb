@@ -38,12 +38,18 @@ class DisplayLogging
 		# Action specific logging, default logs the whole event message
 		case payload[:action]
 		when :hello
-			log_msg << "\tParameters: display_name: #{msg[:display_name]}"
+			log_msg << "Parameters: display_name: #{msg[:display_name]}"
 		else
-			log_msg << "\tParameters: #{msg.to_s}"
+			log_msg << "Parameters: #{msg.to_s}"
 		end
-		logger.info log_msg.join("\n")
 		
+		if payload[:exception].present?
+			log_msg << "EXCEPTION: #{payload[:exception].first}"
+			log_msg << payload[:exception].last
+			logger.error log_msg.join("\n\t")
+		else
+			logger.info log_msg.join("\n\t")
+		end
 	end
 
 	# Subscribe to the iskdpy notifications
