@@ -6,20 +6,26 @@
 
 
 class Event < ActiveRecord::Base
-	before_save :set_current_event
-	
+		
 	has_many :master_groups
 	has_many :presentations
 	has_many :schedules
 	has_many :slides, through: :master_groups
 	
+	belongs_to :thrashed, class_name: 'ThrashGroup', foreign_key: 'thrashed_id'
+	belongs_to :ungrouped, class_name: 'UnGroup', foreign_key: 'ungrouped_id'
 	
-	belongs_to :thrashed, :class_name => 'ThrashGroup', :foreign_key => 'thrashed_id'
-	belongs_to :ungrouped, :class_name => 'UnGroup', :foreign_key => 'ungrouped_id'
-	
-	validates :name, :uniqueness => true, :presence => true
-	validates :current, :inclusion => { :in => [true, false] }	
+	validates :name, uniqueness: true, presence: true
+	validates :current, inclusion: { in: [true, false] }	
+	validates :ungrouped, :thrashed, presence: true
 	validate :ensure_one_current_event
+	
+	# Make sure there is only one current event
+	before_save :set_current_event
+	
+	# Create the associated groups as needed and set their event_id
+	before_validation :create_groups, on: :create
+	after_create :set_group_event_ids
 	
 	FilePath = Rails.root.join 'data', 'events'
 	
@@ -72,21 +78,31 @@ class Event < ActiveRecord::Base
 			}
 		}
 	}
-	
-	#After creating a new event create the associated internal slidegroups.
-	after_create do |e|
-		e.ungrouped = UnGroup.create(name: ('Ungrouped slides for ' + e.name), event_id: e.id)
-		e.thrashed = ThrashGroup.create(name: ('Thrashed slides for ' + e.name), event_id: e.id)
-		e.save!
-	end
-	
-	
+		
 	#Finds the current event
 	def self.current
 		self.where(:current => true).first!
 	end
 	
 	private
+	
+	# Create the associated groups as needed
+	def create_groups
+		self.ungrouped = UnGroup.create(
+			name: ('Ungrouped slides for ' + self.name)
+		) if self.ungrouped.nil?
+		self.thrashed = ThrashGroup.create(
+			name: ('Thrashed slides for ' + self.name)
+		) if self.thrashed.nil?
+	end
+	
+	# Set the event associations on special groups
+	def set_group_event_ids
+		self.ungrouped.event_id = self.id
+		self.ungrouped.save!
+		self.thrashed.event_id = self.id
+		self.thrashed.save!
+	end
 	
 	#Callback that resets every other event to non-current when setting another as current one
 	def set_current_event
