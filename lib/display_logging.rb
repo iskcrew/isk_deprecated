@@ -33,7 +33,9 @@ class DisplayLogging
 		time = finish - start
 		msg = payload[:message]
 		log_msg = []
-		log_msg << "#{payload[:action]} from #{payload[:ip]} client #{payload[:client]} done in #{time}"
+		log_msg << "#{payload[:action]}"
+		log_msg << "From #{payload[:ip]} client #{payload[:client]}"
+		log_msg << "Time taken: #{(time*1000).round(2)}ms"
 		
 		# Action specific logging, default logs the whole event message
 		case payload[:action]

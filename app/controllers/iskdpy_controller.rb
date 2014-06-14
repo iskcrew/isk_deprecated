@@ -40,11 +40,10 @@ class IskdpyController < WebsocketRails::BaseController
 		trigger_success data
 	end
 			
-	# Resend the display data into channel and as a callback
+	# Send the serialization of a display
 	def display_data
-		d = Display.find(message)
+		d = Display.find(message[:display_id])
 		data = d.to_hash
-		WebsocketRails[d.websocket_channel].trigger(:data, data)
 		trigger_success data
 	end
 	

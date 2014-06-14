@@ -105,7 +105,7 @@ $ ->
 	connect = ->
 		dispatcher = new WebSocketRails(window.location.host  + '/websocket')
 		dispatcher.on_open = ->
-			dispatcher.trigger 'iskdpy.display_data', display_id
+			dispatcher.trigger 'iskdpy.display_data', {display_id: display_id}
 				, success = (d) -> handle_display d
 				, failure = (d) -> alert 'Websocket failed'
 			channel=dispatcher.subscribe 'display_'+display_id

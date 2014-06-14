@@ -34,7 +34,7 @@ WebsocketRails::EventMap.describe do
 	namespace :iskdpy do
 		# Display initializes itself calling this and receives its initial state
 		# data = {:display_name: string}
-		# returns success, data = {näyttimen serialisaatio}
+		# returns success, data = {displays serialization}
 		subscribe :hello,					to: IskdpyController, with_method: :hello
 		
 		# The display reports what slide it's currently showing
@@ -50,9 +50,9 @@ WebsocketRails::EventMap.describe do
 		subscribe :goto_slide,						to: IskdpyController, with_method: :goto_slide
 		
 		# Request the resending of the display data
+		# Used by the remote control interface to initialize itself
 		# data = {display_id: int}
-		# sends: to display_<id> channel: data message with data=[serialization of display]
-		# TODO: is this used?
+		# returns success, data = {displays serialization}
 		subscribe :display_data,					to: IskdpyController, with_method: :display_data
 		
 	end
