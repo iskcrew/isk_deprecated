@@ -39,26 +39,8 @@ class IskdpyController < WebsocketRails::BaseController
 		WebsocketRails[d.websocket_channel].trigger(:goto_slide, data)
 		trigger_success data
 	end
-	
-	# FIXME: This _should_ be dead code now... verify and delete
-	def override_shown
-		Display.transaction do
-			d = Display.find(message[:display_id])
-			d.override_shown(message[:override_queue_id])
-			d.save!
-		end
-		data = {:display_id => message[:display_id], :override_queue_id => message[:override_queue_id]}
-		WebsocketRails[d.websocket_channel].trigger(:override_shown, data)
-		trigger_success data
-	end
-	
-	
-	def presentation
-		d = Display.find(message)
-		trigger_success d.presentation.to_hash
-	end
-	
-	#Lähetetään näyttimen serialisaatio pyydettäessä.
+			
+	# Resend the display data into channel and as a callback
 	def display_data
 		d = Display.find(message)
 		data = d.to_hash
@@ -77,6 +59,8 @@ class IskdpyController < WebsocketRails::BaseController
 		end
 	end
 	
+	# Instrument all controller actions
+	# This is used by the lib/display_logging.rb to log stuff
 	def instrument_action
 		ActiveSupport::Notifications.instrument('iskdpy', 
 			action: action_name, client: client_id, ip: origin_ip, message: message) do
