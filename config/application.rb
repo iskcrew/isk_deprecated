@@ -69,5 +69,7 @@ module Isk
     require 'websocket_pong_updates_displays'
 		
 		require 'monitoring'
+		
+		require 'display_logging'
   end
 end
