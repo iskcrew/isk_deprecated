@@ -46,15 +46,15 @@ $ ->
 		
 		slide s for s in display?.presentation?.slides
 
-		id=root.find('.active')?.id
-		if id then elems.find('#'+id).addClass('active')
-		
+		current = $('img#img_' + display.current_group_id + "_" + display.current_slide_id)
+		if current.length
+			current.first().addClass('active')		
 
 	handle_current_slide = (d) ->
 		gs_id="#{d?.group_id}_#{d?.slide_id}"
 		console.log "received current_slide "+gs_id
 		root.find('.active').removeClass 'active'
-		active = root.find('#img'+gs_id)
+		active = root.find('#img_'+gs_id)
 		active.addClass 'active'
 		
 		img=$('<img/>')
