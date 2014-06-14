@@ -1,5 +1,4 @@
 $ -> 
-	preview=$('#display_preview')
 	root=$('#display_control').first()
 	if not root then return
 
@@ -56,13 +55,6 @@ $ ->
 		root.find('.active').removeClass 'active'
 		active = root.find('#img_'+gs_id)
 		active.addClass 'active'
-		
-		img=$('<img/>')
-		img.attr { 
-			id: "img"+gs_id,
-			src: "/slides/#{d?.slide_id}/preview"
-			}
-		preview.html img
 		
 	send_previous_slide = (event) ->
 		event.preventDefault()
