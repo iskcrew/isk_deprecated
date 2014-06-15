@@ -167,6 +167,7 @@ module SlidesHelper
 	end
       
   def slide_class(s)
+		return 'Template slide' if s.is_a? TemplateSlide
     return 'Inkscape slide' if s.is_a? InkscapeSlide
     return 'Online simple editor slide' if s.is_a? SimpleSlide
     return 'Online SVG-editor slide' if s.is_a? SvgSlide
