@@ -2,8 +2,7 @@ class TemplateSlide < InkscapeSlide
 	TypeString = 'template'
 
 	belongs_to :template, foreign_key: :foreign_object_id, class_name: 'SlideTemplate'
-	
-	#TODO: validations, template must exist
+	validates :template, presence: true
 	
 	include HasSlidedata
 	
