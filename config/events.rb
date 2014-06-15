@@ -16,6 +16,7 @@ WebsocketRails::EventMap.describe do
 	#		end
 	# The above will handle an event triggered on the client like `product.new`.
 
+	# Events for creating various svg previews for slide editors
 	namespace :svg do
 		# Create a new svg from suplied data using the SimpeSlide.create_svg method
 		# data = {
@@ -30,7 +31,8 @@ WebsocketRails::EventMap.describe do
 		subscribe :simple,				to: SvgController, with_method: :simple
 	end
 
-
+	
+	# Events for communication between the ISK server and iskdpy displays
 	namespace :iskdpy do
 		# Display initializes itself calling this and receives its initial state
 		# data = {:display_name: string}
