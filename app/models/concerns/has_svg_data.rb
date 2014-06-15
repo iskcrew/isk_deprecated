@@ -52,7 +52,7 @@ module HasSvgData
 	# before the record is saved.
 	def write_svg_data
 		unless self.new_record?
-			File.open(self.svg_filename, 'w') do |f|
+			File.open(self.svg_filename, 'wb') do |f|
 				f.write @_svg_data
 			end
 		end

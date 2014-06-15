@@ -1,9 +1,12 @@
 class SlideTemplate < ActiveRecord::Base
-	belongs_to :event
-	
+
+	belongs_to :event	
 	has_many :fields, -> {order(field_order: :asc)}, class_name: 'TemplateField'
+	
+	validates :name, :event, presence: true
 		
 	after_create :write_template
+	before_validation :assign_to_event, on: :create
 	
 	accepts_nested_attributes_for :fields, reject_if: :reject_new_fields
 	
@@ -49,6 +52,14 @@ class SlideTemplate < ActiveRecord::Base
 	
 	private
 	
+	# Associate a new SlideTemplate to Event when it's created
+	def assign_to_event
+		if self.event.nil?
+			self.event = Event.current
+		end
+		return true
+	end
+	
 	# Filter for nested parameters preventing creation of new fields
 	def reject_new_fields(a)
 		a[:id].blank?
@@ -67,9 +78,11 @@ class SlideTemplate < ActiveRecord::Base
 		end
 	end
 	
+	# Store the template in a file
+	# we use binary mode here to prevent ascii conversions..
 	def write_template
 		unless self.new_record?
-			File.open(self.filename, 'w') do |f|
+			File.open(self.filename, 'wb') do |f|
 				f.write @_template
 			end
 		end
