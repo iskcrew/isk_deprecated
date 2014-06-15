@@ -53,6 +53,7 @@ class SlidesController < ApplicationController
 			return
 		end
 		
+		@templates = SlideTemplate.all
 		
 		respond_to do |format|
 			format.html

@@ -240,8 +240,22 @@ div.slide_form {
 	}
 }
 
+// Template slide editor
+div#template_slide_form {
+	table.template_slide_fields {
+		input[type="text"], textarea {
+			width: 300px;
+		}
+		
+		textarea{
+			resize: none;
+			height: 100px;
+		}
+	}
+}
 
 
+// Simple editor view and preview
 div.simple_editor_container {
 	min-width: 830px;
 	display: block;
