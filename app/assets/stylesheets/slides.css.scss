@@ -279,40 +279,41 @@ div.simple_editor_container {
 	
 	}
 
-	div.simple_editor_preview {
-		border: 2px solid #555;
-		margin-left: 10px;
-		text-align: center;
-		float: right;
-				
-		div#updating_preview {
-			position: relative;
-			top: 5em;
-			height: 0px;
-			p {
-				border: 2px solid white;
-				border-radius: 10px;
-				background-color: black;
-				display: inline-block;
-				padding: 1em;
-				opacity: 0.5;
-							
-			}
-		}
-		
-		div.svg_container {
-			width: 400px;
-			height: 225px;
-			padding: 0px; 
-			border: 1px solid black;
-
-			svg {
-				width: 400px;
-				height: 225px;
-			}
-		}		
-	}	
 }
 
+// Previews of svg images
+div.svg_preview {
+	border: 2px solid #555;
+	margin-left: 10px;
+	text-align: center;
+	float: right;
+			
+	div.updating_preview {
+		position: relative;
+		top: 5em;
+		height: 0px;
+		p {
+			border: 2px solid white;
+			border-radius: 10px;
+			background-color: black;
+			display: inline-block;
+			padding: 1em;
+			opacity: 0.5;
+						
+		}
+	}
+	
+	div.svg_container {
+		width: 400px;
+		height: 225px;
+		padding: 0px; 
+		border: 1px solid black;
+
+		svg {
+			width: 400px;
+			height: 225px;
+		}
+	}		
+}	
 
 

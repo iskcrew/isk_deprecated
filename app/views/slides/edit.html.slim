@@ -9,5 +9,6 @@ h1 Editing slide: #{@slide.name}
 	- elsif @slide.is_a? SimpleSlide
 		= render partial: 'simple_edit'
 	- elsif @slide.is_a? TemplateSlide
-		= render partial: 'template_slide_form'
+		div#template_slide_form
+			= render partial: 'template_slide_form'
 	= f.submit

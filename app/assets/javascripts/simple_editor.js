@@ -3,7 +3,7 @@ var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 var got_svg = function(task) { 
 	console.log("Got new svg");
 	$('#svg_container').html(task);
-	$('#updating_preview').hide();
+	$('.updating_preview').hide();
 }
 
 var ws_error = function(task) {
@@ -36,12 +36,12 @@ var delayedUpdater = expire(updateSlide, 500);
  
 $(function() {
 	$("[data-simple-field]").on("input", function(){
-		$("#updating_preview").show();
+		$(".updating_preview").show();
 		delayedUpdater();
 	});
 	
 	$("[data-simple-field]").on("change", function(){
-		$("#updating_preview").show();
+		$(".updating_preview").show();
 		delayedUpdater();
 	});
 });

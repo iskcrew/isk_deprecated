@@ -29,6 +29,8 @@ WebsocketRails::EventMap.describe do
 		#		}
 		# }
 		subscribe :simple,				to: SvgController, with_method: :simple
+		
+		subscribe :template,			to: SvgController, with_method: :template
 	end
 
 	
