@@ -242,15 +242,16 @@ div.slide_form {
 
 // Template slide editor
 div#template_slide_form {
-	table.template_slide_fields {
-		input[type="text"], textarea {
-			width: 300px;
-		}
-		
-		textarea{
-			resize: none;
-			height: 100px;
-		}
+}
+
+table.template_slide_fields {
+	input[type="text"], textarea {
+		width: 300px;
+	}
+	
+	textarea{
+		resize: none;
+		height: 100px;
 	}
 }
 
