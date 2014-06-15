@@ -16,7 +16,7 @@ class SvgController < WebsocketRails::BaseController
 	end
 	
 	def template
-		svg = SlideTemplate.find(message[:template_id]).generate_svg(data)
+		svg = SlideTemplate.find(message[:template_id]).generate_svg(message)
 		trigger_success svg
 	end
 
