@@ -1,5 +1,3 @@
-var dispatcher = new WebSocketRails(window.location.host + '/websocket');
-
 var got_svg = function(task) { 
 	console.log("Got new svg");
 	$('#svg_container').html(task);
@@ -29,7 +27,7 @@ var updateSlide = function() {
 			color: $("#simple_color").val(),
 		}
 	};
-	dispatcher.trigger('svg.simple', msg, got_svg, ws_error);
+	window.dispatcher.trigger('svg.simple', msg, got_svg, ws_error);
 }
 
 var delayedUpdater = expire(updateSlide, 500);

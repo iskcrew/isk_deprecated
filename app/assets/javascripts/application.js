@@ -18,5 +18,6 @@
 //= require waypoints-sticky
 //= require jquery-noty.main
 //= require websocket_rails/main
+//= require init_dispatcher
 //= require_tree .
 

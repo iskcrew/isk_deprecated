@@ -8,8 +8,6 @@
 
 
 $ ->
-	dispatcher = new WebSocketRails(window.location.host  + '/websocket')
-	
 	update_template_slide_fields = ->
 		data = {
 			slide_template_id: $("select#slide_foreign_object_id").val()
@@ -44,7 +42,7 @@ $ ->
 			f = $(@)
 			msg[f.data('elementId')] = f.val()
 		console.log msg
-		dispatcher.trigger('svg.template', msg, got_template_svg, ws_error)
+		window.dispatcher.trigger('svg.template', msg, got_template_svg, ws_error)
 	
 	delayed_sender = expire(update_preview, 500)
 	
