@@ -20,7 +20,7 @@ div#tabs
 				p
 					| Template: 
 					= f.collection_select(:foreign_object_id, SlideTemplate.all, :id, :name)
-				div#template_slide_form
+				div#template_slide_form.svg_editor_container
 				p = f.submit
 	
 	div#simple
