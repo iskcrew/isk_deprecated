@@ -9,6 +9,18 @@
 
 $ ->
 	dispatcher = new WebSocketRails(window.location.host  + '/websocket')
+	
+	update_template_slide_fields = ->
+		data = {
+			slide_template_id: $("select#slide_foreign_object_id").val()
+		}
+		$.ajax({
+			type: 'GET',
+			url: '/slides/new',
+			dataType: 'script',
+			data: data,
+			success: delayed_sender
+		})
 			
 	expire = (callback, interval) ->
 		timer = null
@@ -40,6 +52,11 @@ $ ->
 		$(".updating_preview").show()
 		delayed_sender()
 	
+	if $("select#slide_foreign_object_id").length
+		update_template_slide_fields();
+		$("select#slide_foreign_object_id").change(update_template_slide_fields);
+	
 	$('div#template_slide_form').on "input", delayed_send_update
 	$('div#template_slide_form').on "change", delayed_send_update
-	update_preview()
+	if $('div#template_slide_form .template_field').length
+		update_preview()
