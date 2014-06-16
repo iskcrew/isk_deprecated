@@ -80,6 +80,7 @@ class SlideTemplate < ActiveRecord::Base
 	
 	# Store the template in a file
 	# we use binary mode here to prevent ascii conversions..
+	# FIXME: set viewBox on import, so web preview scales properly!
 	def write_template
 		unless self.new_record?
 			File.open(self.filename, 'wb') do |f|
