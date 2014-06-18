@@ -37,8 +37,8 @@
 	color: #ffffff;
 }
 .ui-widget-header {
-	border: 1px solid #333333;
-	background: #62D3CF image-url("ui-bg_highlight-soft_44_62D3CF_1x100.png") 50% 50% repeat-x;
+	border: $ui-widget-header_border;
+	background: $ui-widget-header_bg;
 	color: #ffffff;
 	font-weight: bold;
 }
@@ -51,7 +51,7 @@
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-	border: 1px solid #62D3CF;
+	border: $ui-state-default_border;
 	background: $ui-state-default_bg;
 	font-weight: normal;
 	color: #eeeeee;

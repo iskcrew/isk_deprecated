@@ -41,9 +41,12 @@ $ui-state-hover_border: 1px solid #65340C;
 $ui-state-hover_font_color: $secondary_dark;
 $ui-state-active_bg: #65340C image-url("ui-bg_highlight-hard_20_65340C_1x100.png") 50% 50% repeat-x;
 $ui-state-active_border: 1px solid $secondary_dark;
-$ui-state-default_bg: #083D3B image-url("ui-bg_highlight-soft_50_083D3B_1x100.png") 50% 50% repeat-x;
+$ui-state-default_bg: #3f2c1d image-url("ui-bg_highlight-soft_50_3f2c1d_1x100.png") 50% 50% repeat-x;
+$ui-state-default_border: 1px solid $primary;
 $ui-state-error_bg: #640c0f image-url("ui-bg_glass_40_640c0f_1x400.png") 50% 50% repeat-x;
 $ui-widget-content_bg: $primary_darker;
+$ui-widget-header_bg: #083d3b image-url("ui-bg_inset-soft_20_083d3b_1x100.png") 50% 50% repeat-x;
+$ui-widget-header_border: 1px solid $primary_dark;
 
 // ISK stuff
 
