@@ -3,14 +3,14 @@ h1 Create a new slide
 p Choose the slide type to create.
 div#tabs
 	ul
-		- if @templates.present? 
+		- if current_templates.present? 
 			li: a href="#template" Slide from template
 		li: a href="#simple" Simple editor
 		li: a href="#inkscape" Inkscape
 		li: a href="#httpslide" Http fecher
 		li: a href="#image" Upload image
 	
-	- if @templates.present?	
+	- if current_templates.present?	
 		div#template
 			h2 New slide from template
 			= form_for @slide, html: {id: 'new_template_slide'} do |f|

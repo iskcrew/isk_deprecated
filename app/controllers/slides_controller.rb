@@ -53,8 +53,6 @@ class SlidesController < ApplicationController
 			return
 		end
 		
-		@templates = SlideTemplate.all
-		
 		respond_to do |format|
 			format.html
 			format.js {
@@ -66,6 +64,8 @@ class SlidesController < ApplicationController
 	
 	# Create a new slide
 	# We support creating all the different types of slides.
+	# TODO: create inkscape-slides based on svg templates
+	# FIXME: TemplateSlide fields dont maintain their values!
 	def create
 		begin
 			# We need to use a transaction to catch potential errors on processing submitted image data
@@ -75,7 +75,7 @@ class SlidesController < ApplicationController
 					raise ApplicationController::PermissionDenied
 				end
 				
-				#Luodaan oikeanlainen slide
+				# Create the requested type of slide
 				case params[:create_type]
 				when 'simple'
 					@slide = SimpleSlide.new(slide_params)
@@ -91,6 +91,7 @@ class SlidesController < ApplicationController
 				
 				unless @slide.save
 					if Slide.admin? current_user
+						flash[:error] = "Error saving slide."
 						render :action => :new and return
 					else
 						render :new_simple and return
