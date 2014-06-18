@@ -114,7 +114,6 @@ class SlideTemplate < ActiveRecord::Base
 		end
 		
 		element.text = ""
-		element.attributes['sodipodi:linespacing'] = '125%'
 		
 		first_line = true
 		
