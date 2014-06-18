@@ -16,3 +16,6 @@ div.slide_group_info.info_block#group_info
 			= f.select :group_id, options_for_select( MasterGroup.can_edit( \
 				current_user).current.all.collect {|g| [ g.name, g.id ] })
 			=< f.submit "Add"
+	- else
+		p
+			| This slide doesn't belong to a group. As such this slide can't be in any presentations.

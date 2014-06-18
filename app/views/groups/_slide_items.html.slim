@@ -1,0 +1,10 @@
+- group.slides.each do |slide|
+	li.sortable id="slide_#{slide.id.to_s}" class=(slide.public ? 'published' : 'hidden')
+		div.handle ⇕
+		div.slide_image 
+			table
+				tr: th = link_to slide.name, slide_path(slide.id)
+				tr: td = slide_preview_to_show_tag slide
+		div.ungroup_slide
+			= button_to 'Ungroup', ungroup_slide_path(slide), class: 'button warning'
+		

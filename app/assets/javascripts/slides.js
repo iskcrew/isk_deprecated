@@ -36,13 +36,3 @@ jQuery(function($) {
 		scrollToAnchor(target);
 	});
 });
-	
-jQuery(function($) {
-	$( ".duration_spinner" ).spinner({ min: 30, incremental: false, step: 30 });
-	$(document).tooltip({show: {duration: 1000, easing: 'easeInExpo'}});
-	$( "#tabs" ).tabs({heightStyle: "auto"});
-});
-
- $(function() {
-$( "#accordion" ).accordion();
-});

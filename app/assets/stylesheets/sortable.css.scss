@@ -1,0 +1,40 @@
+//
+// sortable.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+// For drag-and-drop sortable lists
+
+@import 'variables';
+
+ul.sortable { 
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;	
+}
+
+.sortable {
+	li.sortable {
+		margin: none;
+		padding: 5px 5px;
+		font-size: 1.4em;
+		border: $table_row_border;
+		background-color: $table_row_bg;
+		overflow: auto;
+	}
+	
+	li.sortable:nth-child(even) {
+		background-color: $table_row_odd_bg;
+	}
+	
+	.handle {
+		font-size: 30pt;
+		cursor: move;
+		float: left;
+		height: 50px;
+		width: 50px;
+		margin-right: 10px;
+	}
+}

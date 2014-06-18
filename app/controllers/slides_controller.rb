@@ -53,10 +53,19 @@ class SlidesController < ApplicationController
 			return
 		end
 		
+		respond_to do |format|
+			format.html
+			format.js {
+				@slide = TemplateSlide.new(foreign_object_id: params[:slide_template_id])
+			}
+		end
+		
 	end
 	
 	# Create a new slide
 	# We support creating all the different types of slides.
+	# TODO: create inkscape-slides based on svg templates
+	# FIXME: TemplateSlide fields dont maintain their values!
 	def create
 		begin
 			# We need to use a transaction to catch potential errors on processing submitted image data
@@ -66,7 +75,7 @@ class SlidesController < ApplicationController
 					raise ApplicationController::PermissionDenied
 				end
 				
-				#Luodaan oikeanlainen slide
+				# Create the requested type of slide
 				case params[:create_type]
 				when 'simple'
 					@slide = SimpleSlide.new(slide_params)
@@ -74,12 +83,15 @@ class SlidesController < ApplicationController
 					@slide = HttpSlide.new(slide_params)
 				when 'empty_file', 'inkscape'
 					@slide = InkscapeSlide.new(slide_params)
+				when 'template'
+					@slide = TemplateSlide.new(slide_params)
 				else
 					@slide = Slide.new(slide_params)
 				end
 				
 				unless @slide.save
 					if Slide.admin? current_user
+						flash[:error] = "Error saving slide."
 						render :action => :new and return
 					else
 						render :new_simple and return
@@ -125,9 +137,7 @@ class SlidesController < ApplicationController
 	# Edit a slide
 	def edit
 		@slide = Slide.find(params[:id])
-	
 		require_edit(@slide)
-		
 	end
 	
 	# Update a slide
@@ -138,8 +148,11 @@ class SlidesController < ApplicationController
 			require_edit(@slide)
 	
 			if @slide.update_attributes(slide_params)
-				#Paistetaan uusi kuva simpleslidelle
+
+				# Generate images as needed
+				# FIXME: This needs to be more universal...
 				@slide.delay.generate_images if @slide.is_a?(SimpleSlide) && !@slide.ready
+				@slide.delay.generate_images if @slide.is_a?(TemplateSlide) && !@slide.ready
 				
 				#Haetaan uusi kuva http-slidelle jos on tarvis
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
@@ -202,8 +215,11 @@ class SlidesController < ApplicationController
 	def ungroup
 		slide = Slide.find(params[:id])
 		require_edit(slide)
+		
 		slide.master_group = current_event.ungrouped
 		slide.save!
+	
+		flash[:notice] = "Ungrouped slide: #{slide.name}"
 	
 		respond_to do |format|
 			format.html {redirect_to :back}
@@ -401,7 +417,8 @@ class SlidesController < ApplicationController
 	# Whitelist the accepted slide parameters for update and create
 	def slide_params
 		params.required(:slide).permit(
-			:name, :description, :show_clock, :public, :duration, {slidedata: params[:slide][:slidedata].try(:keys)}
+			:name, :description, :show_clock, :public, :duration, :foreign_object_id,
+			{slidedata: params[:slide][:slidedata].try(:keys)}
 		)
 	end
 	

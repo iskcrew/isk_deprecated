@@ -1,6 +1,4 @@
 $().ready(function() {
-		
-	var dispatcher = new WebSocketRails(window.location.host + '/websocket');
 
 	function replace_slideitem(slide) {
 		console.log('Updating slide data: ' + window.location.protocol + "/slides/" + slide.id);
@@ -50,13 +48,13 @@ $().ready(function() {
 		update_display(display);
 	}
 	
-	displays = dispatcher.subscribe('display');
+	displays = window.dispatcher.subscribe('display');
 	displays.bind('update', update_display);
 
-	display_states = dispatcher.subscribe('displaystate');
+	display_states = window.dispatcher.subscribe('displaystate');
 	display_states.bind('update', update_display_state);
 
-	slidelist = dispatcher.subscribe('slide');
+	slidelist = window.dispatcher.subscribe('slide');
 	slidelist.bind('update', replace_slideitem);
 	slidelist.bind('updated_image', replace_slide_image);
 	

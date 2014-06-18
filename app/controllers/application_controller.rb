@@ -6,8 +6,6 @@
 
 class ApplicationController < ActionController::Base
 	#protect_from_forgery
-	helper_method :home_domain
-
 	before_filter :require_login
 
 
@@ -17,12 +15,6 @@ class ApplicationController < ActionController::Base
 
 	class ConvertError < StandardError
 		# no further implementation necessary
-	end
-
-
-	#Minne websocketti ottaa yhteyttä?
-	def home_domain
-		Rails.env.production? ? 'isk0.asm.fi' : root_url.to_s.split("//")[1]
 	end
 
 	rescue_from ActionController::RedirectBackError, :with => :return_to_root

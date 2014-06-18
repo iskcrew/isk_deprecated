@@ -1,7 +1,12 @@
-// Place all the styles related to the slides controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// slides.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
 
+@import 'variables';
 
 @font-face{
 font-family: 'Franklin Gothic Heavy';
@@ -14,6 +19,13 @@ font-family: 'Franklin Gothic Heavy';
 src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
      url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
 font-style: italic;
+}
+
+//slide preview image
+img.preview {
+	width: 400px;
+	height: auto;
+	border: 2px solid $primary_highlight;
 }
 
 
@@ -53,14 +65,24 @@ table.compact_slidelist {
 	min-width: 430px;
 }
 
-
+// app/views/slides/_slide.html.slim
 div.slide {
 	margin: 2px;
 	padding: 5px;
-	border: 2px solid #d0d0d0;
+	border: $slide_border;
 	border-radius: 10px;
-	background-color: #666;
+	background: $slide_public_bg;
 	display: inline-block;
+	
+	&.hidden {
+		background: $slide_hidden_bg;
+		border: $slide_hidden_border;
+
+		img {
+				opacity: 0.6;
+		}
+	}
+	
 	
 	div.slide_header {
 		width: 400px;
@@ -73,33 +95,36 @@ div.slide {
 			padding: 5px 5px;
 			font-size: 0.7em;
 			border-radius: 10px;
-			border: 1px solid white;
+			border: 1px solid #333;
 			display: inline-block;
-		}
+			
+			&.image {
+				background: $primary;
+			}
 	
+			&.svg-edit {
+				background: $green_dark;
+			}
 	
-		div.image {
-			background-color: #339;
-		}
+			&.simple {
+				background: $green;
+			}
 	
-		div.svg-edit {
-			background-color: #737;
-		}
+			&.inkscape {
+				background: $red;
+			}
+			
+			&.template {
+				background: $red_highlight;
+			}
 	
-		div.simple {
-			background-color: #393;
-		}
+			&.http {
+				background: $secondary;
+			}
 	
-		div.inkscape {
-			background-color: #933;
-		}
-	
-		div.http {
-			background-color: #399;
-		}
-	
-		div.video {
-			background-color: #883;
+			&.video {
+				background: $secondary_highlight;
+			}
 		}
 	}
 	
@@ -115,21 +140,9 @@ div.slide {
 		margin-top: 5px;
 		text-align: center;
 		min-height: 22px;
-		width: 400px;
-	
-		a.button {
-			font-size: 12px;
-		}
-	
+		width: 400px;	
 	}
 	
-}
-
-div.slide.hidden {
-	background-color: #222;
-	img {
-			opacity: 0.6;
-	}
 }
 
 div.slide_filter {
@@ -227,16 +240,26 @@ div.slide_form {
 	}
 }
 
+// Template slide editor
+div#template_slide_form {
+}
+
+table.template_slide_fields {
+	input[type="text"], textarea {
+		width: 300px;
+	}
+	
+	textarea{
+		resize: none;
+		height: 100px;
+	}
+}
 
 
-div.simple_editor_container {
-	min-width: 830px;
-	display: block;
-	
-	div.simple_editor_controls {
-		max-width: 400px;
-		margin-right: 5px;
-	
+// Simple editor view and preview
+div#simple_editor {
+		
+	div.controls {
 		textarea#simple_head {
 		  font-family: 'Franklin Gothic Heavy';
 		  font-weight: normal;
@@ -251,13 +274,26 @@ div.simple_editor_container {
 	
 	}
 
-	div.simple_editor_preview {
+}
+
+// Previews of svg images
+div.svg_editor_container {
+	min-width: 850px;
+	display: block;
+	
+	div.controls {
+		max-width: 400px;
+		margin-right: 5px;
+		display: inline-block;
+	}
+	
+	div.svg_preview {
 		border: 2px solid #555;
 		margin-left: 10px;
 		text-align: center;
 		float: right;
-				
-		div#updating_preview {
+			
+		div.updating_preview {
 			position: relative;
 			top: 5em;
 			height: 0px;
@@ -268,10 +304,10 @@ div.simple_editor_container {
 				display: inline-block;
 				padding: 1em;
 				opacity: 0.5;
-							
+						
 			}
 		}
-		
+	
 		div.svg_container {
 			width: 400px;
 			height: 225px;
@@ -282,11 +318,8 @@ div.simple_editor_container {
 				width: 400px;
 				height: 225px;
 			}
-		}	
-		
-	}
+		}		
+	}	
 	
 }
-
-
 

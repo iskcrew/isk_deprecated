@@ -105,10 +105,7 @@ class Presentation < ActiveRecord::Base
 	def hash_cache_name
 		cache_key + "_hash"
 	end
-	
 		
-	private
-	
 	# Augmented select for creating the hash serialization
 	def slides_for_hash
 		Slide.joins(:master_group => {:groups => :presentation})
@@ -120,6 +117,8 @@ class Presentation < ActiveRecord::Base
 				presentations.effect_id as presentation_effect_id,
 				master_groups.name as group_name')
 	end
+	
+	private
 	
 			
 	#Validation method for making sure the asigned effect is a valid object.

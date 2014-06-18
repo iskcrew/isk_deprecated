@@ -9,7 +9,7 @@ module ApplicationHelper
   
   def navigation_links
     controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
-    admin_controllers = ['Users', 'Events']
+    admin_controllers = ['Templates', 'Users', 'Events']
     ret = String.new
     base_html_options = {class: 'ui-state-default ui-corner-top'}
 		tabs = controllers
@@ -17,9 +17,9 @@ module ApplicationHelper
     tabs.each do |c|
 			html_options = {class: 'ui-state-default ui-corner-top'}
 			if controller.class.name.include?(c)
-      	html_options[:class] <<  ' ui-tabs-active ui-state-active'
+      	html_options[:class] =  'ui-tabs-active ui-state-active ui-corner-top'
 			end
-      ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
+      ret << content_tag('li', link_to(c, {:controller => c.downcase},class: 'ui-tabs-anchor'), html_options)
     end
     return ret.html_safe 
   end
@@ -44,13 +44,6 @@ module ApplicationHelper
   def authorized_users(obj)
     render :partial => 'shared/authorized_users', :locals => {:obj => obj}
   end
-    
-  
-  def late_display_warning(d)
-    link_text = (d.name || String.new) << " (" << d.ip << ") is more than " << Display::Timeout.to_s << " minutes late!"
-    link_to link_text, :controller => :displays, :action => :show, :id => d.id
-  end
-
 
   def select_options_tag(name='',select_options={},options={})
     #set selected from value

@@ -35,23 +35,14 @@ module  HasSlidedata
     if !self.new_record? && File.exists?(self.data_filename.to_s)
       @_slidedata = YAML.load(File.read(self.data_filename))
 		end
-		return @_slidedata.blank? ? self.class::DefaultSlidedata : @_slidedata
+		return @_slidedata.blank? ? default_slidedata() : @_slidedata
   end
   
 	# Write new slidedata and sanitize the keys in it.
   def slidedata=(d)
-    if d.nil?
-			d = self.class::DefaultSlidedata
-		end
-	
 	
 		# Merge the new data with the old slidedata, if a key is in both the new contents is kept.
 		d = slidedata.merge(d)
-
-    # Sanitize the data hash, only keep keys that exist in the default hash
-		d.keep_if do |k, v|
-      self.class::DefaultSlidedata.key? k
-    end
   
     if d.key? :url
       # Validate that the url in the :url key is valid by trying to parse it.
@@ -64,16 +55,38 @@ module  HasSlidedata
     end
     
     @_slidedata=d
-    
+		
+		# Mark the slide as not ready as its data has changed
+    self.ready = false
     write_slidedata
   end
+	
+	def generate_svg
+		self.template.generate_svg(self.slidedata)
+	end
   
   private
+	
+	# Sanitalize the data hash, only keep keys that exist in the default hash
+	def sanitalize_slidedata(d)
+		if d.nil?
+			d = default_slidedata
+		end
+		
+		d.keep_if do |k, v|
+      default_slidedata.key? k
+    end
+		return d
+	end
+	
+	def default_slidedata
+		self.class::DefaultSlidedata
+	end
   
   def write_slidedata
     unless self.new_record?
       File.open(self.data_filename,  'w') do |f|
-        f.write @_slidedata.to_yaml
+        f.write sanitalize_slidedata(@_slidedata).to_yaml
       end
     end
   end

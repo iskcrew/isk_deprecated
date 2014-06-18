@@ -1,0 +1,23 @@
+= fields_for @slide do |f|
+	= f.hidden_field :foreign_object_id, id: "template_id"
+	= f.fields_for :slidedata do |ff|
+		div.controls
+			p = "You can use <text> syntax to highlight text with template specific color"
+			table.template_slide_fields
+				tr: th colspan="2" Fields in this template
+				- @slide.template.fields.editable.each do |field|
+					tr
+						td = field.element_id.gsub('_', ' ').capitalize
+						- if field.multiline
+							td = ff.text_area field.element_id, value: template_slide_value(@slide, field),
+								wrap: "off", rows: 10, class: "template_field", 
+								data: {element_id: field.element_id}
+						- else
+							td = ff.text_field field.element_id, value: template_slide_value(@slide, field), 							class: "template_field", 
+								data: {element_id: field.element_id}
+		div.svg_preview
+			h2 Preview
+			div.updating_preview
+				p Updating preview...
+			div#template_svg.svg_container
+				svg#svg

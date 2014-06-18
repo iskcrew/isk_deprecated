@@ -7,6 +7,15 @@
 
 module SlidesHelper
 	
+	# Extract value for a input for a template slide
+	def template_slide_value(slide, field)
+		if slide.respond_to? :slidedata
+			return slide.slidedata[field.element_id]
+		else
+			return field.default_value
+		end
+	end
+	
 	#Cache key for user-dependant slide info block
 	def slide_key(slide)
 		slide.cache_key + current_user.cache_key
@@ -99,14 +108,7 @@ module SlidesHelper
     }
     return link_to slide_preview_image_tag(slide), url_options, html_options
   end
-    
-  def group_link_tag(g)
-    html = 'Group:' 
-    html << link_to(g.name, {:controller => :groups, :action => :show, :id => g.id}, {:name => 'group_' + g.id.to_s} )
-    html << " Slides:" << g.slides.published.count.to_s << '/' << g.slides.count.to_s
-    return html.html_safe
-  end
-  
+      
   def simple_color_select(f, color)
     f.select :color, options_for_select(simple_colors, color), {}, id: 'simple_color', data: {simple_Field: true}
   end
@@ -156,7 +158,7 @@ module SlidesHelper
 	def slide_delete_button(slide)
 		link_to 'Delete', slide_path(slide),
 						 	data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: 'button'
+							method: :delete, class: 'button warning'
 	end
 	
 	def slide_ungroup_button(slide)
@@ -165,6 +167,7 @@ module SlidesHelper
 	end
       
   def slide_class(s)
+		return 'Template slide' if s.is_a? TemplateSlide
     return 'Inkscape slide' if s.is_a? InkscapeSlide
     return 'Online simple editor slide' if s.is_a? SimpleSlide
     return 'Online SVG-editor slide' if s.is_a? SvgSlide

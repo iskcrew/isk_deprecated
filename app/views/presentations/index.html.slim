@@ -13,4 +13,9 @@ table.presentationtable
 			td = p.groups.count
 			td = p.total_slides
 			td = duration_to_text p.duration
-			td = link_to 'Preview', preview_presentation_path(p)
+			td 
+				= link_to 'Details', presentation_path(p), class: 'button'
+				=< link_to 'Preview', preview_presentation_path(p), class: 'button'
+				- if p.can_edit? current_user
+					=< link_to 'Edit', edit_presentation_path(p), class: 'button'
+			

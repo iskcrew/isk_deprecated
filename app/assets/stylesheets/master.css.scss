@@ -1,27 +1,41 @@
-/*
- * Isk master stylesheet
-*/
+//
+// master.css.scss
+// isk
+//
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+// ISK master stylesheet
 
 @import 'variables';
 
 /*
- * TODO: Move to sensible files
+* TODO: Move to sensible files
 */
 
 div.error_notification {
 	font-size: 1.4em;
-	background-color: $error_bg_color;
-	padding: 10px 20px;
+	background: $warning_bg;
+	color: $warning_text_color;
+
+	a {
+		padding: 10px 20px;
+		display: inline-block;
+	}
 }
 
-
-
 body {
+	background: $background_color;
+	font: $font;
 	color: $font_color;
-	background-color: $background_color;
-	font-size: $font_size;
-	margin:0px;
 	min-width: 600px;
+	width: 100%;
+	margin: 0px;
+}
+
+div.content {
+	width: auto;
+	margin: 10px;
 }
 
 body,p,h1,h2,h3,h4,table,td,th,ul,ol,textarea,input {
@@ -43,46 +57,102 @@ table,th,td,input,textarea {
 	font-size:100%;
 }
 
+table {
+	border-collapse:separate;
+	border-spacing: 0;
+
+	tr {
+		td, th {
+			padding: 3px 7px 2px 7px;
+			border-right: $table_border;
+			border-bottom: $table_border;
+		};
+
+		&:nth-child(odd) td {
+			background: $table_row_odd_bg;
+			border-color: $secondary_darker;
+		};
+
+		th:first-child, td:first-child{
+			border-left: $table_border;
+		};
+
+		th {
+			font-size: 1.2em;
+			text-align: left;
+			font-weight: bold;
+			padding-top: 5px;
+			padding-bottom: 4px;
+			border-top: $table_head_border;
+			background: $table_head_bg;
+			color: $table_head_font_color;
+		}
+
+
+		td {
+			vertical-align: top;
+			background-color: $table_row_bg;
+
+		};
+
+		td.error {
+			background-color: $warning_bg;
+		}
+
+		&:first-child {
+			th:first-child, td:first-child {
+				border-top-left-radius: $table_border_radius;
+			};
+
+			th:last-child, td:first-child {
+				border-top-right-radius: $table_border_radius;
+			};
+		};
+
+		&:last-child {
+			th:first-child, td:first-child {
+				border-bottom-left-radius: $table_border_radius;
+			};
+
+			th:last-child, td:last-child {
+				border-bottom-right-radius: $table_border_radius;
+			};
+		};
+	}
+}
+
 img {
 	border: none;
 }
 
 ul {
-    margin-left: 5px;
-    margin-right: 0px;
-    padding-left: 10px;
-    padding-right: 0px;
+	margin-left: 5px;
+	margin-right: 0px;
+	padding-left: 10px;
+	padding-right: 0px;
 	list-style-type: circle;
-		
-	li {
-	}
-	
-}
 
-img.preview {
-	height: 225px;
-	width: 400px;
-	border: 2px solid #d0d0d0;
+	li {}
 }
 
 div.flash {
 	display: block;
 	font-size: 1.5em;
-	
+
 	div {
 		padding-left: 10px;
 	}
-	
+
 	div.notice {
-		background: green;
+		background: $green;
 	}
 
 	div.error {
-		background: red;
+		background: $warning_bg;
 	}
-	
+
 	div.warnng {
-		background: yellow;
+		background: $secondary;
 	}
 }
 div.content {
@@ -91,7 +161,7 @@ div.content {
 
 div.warning {
 	p {
-		background-color: #770;
+		background-color: $warning_bg;
 		font-weight: bold;
 		padding: 1em;
 		display: inline-block;

@@ -1,11 +1,11 @@
 = fields_for @slide do |f|
-	div.simple_editor_container
+	div.svg_editor_container#simple_editor
 		/ Since when creating a new slide we have instance of Slide instead of SimpleSlide we need
 		/ to make sure we have some defaults.
 		ruby:
 			slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
 		
-		div.simple_editor_controls
+		div.controls
 			h2 Slide contents
 			p 
 			 | Use &lt;foo&gt; to highlight text in the slide.
@@ -20,9 +20,9 @@
 				= simple_text_size_select(f, slidedata[:text_size])
 				= simple_color_select(f, slidedata[:color])
 		
-		div.simple_editor_preview
+		div.svg_preview
 			h2 Preview
-			div#updating_preview
+			div.updating_preview
 				p Updating preview...
 			div#svg_container.svg_container
 				svg#svg

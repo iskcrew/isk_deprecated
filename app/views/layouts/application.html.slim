@@ -11,14 +11,13 @@ html
 		link rel="icon" type="image/x-icon" href="/favicon.ico"
 	body
 		= render partial: "shared/display_warnings"
-		div.top_navigation.ui-tabs.ui-widget.ui-widget-content.ui-widget-header
-				ul.tabs.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix 
+		div.top_navigation class="ui-tabs ui-widget ui-widget-content ui-corner-all"
+				ul.tabs class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header" 
 					= navigation_links
-				ul.tabs.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix#logout
-					li.ui-state-default.ui-corner-top 
+					li#current_event Event: #{current_event.name}
+					li#logout.ui-state-default.ui-corner-top 
 						= link_to "Logout (#{current_user.username})", {controller: :logins, 
-							action: :destroy}, method: :delete
-				div#current_event: p Current event: #{current_event.name}
+							action: :destroy}, method: :delete, class: 'ui-tabs-anchor'
 		= render partial: 'navigation'
 		div.flash
 			div.error = flash[:error]

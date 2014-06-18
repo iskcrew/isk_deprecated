@@ -1,0 +1,6 @@
+h1 Create a template
+
+= form_for @template, url: templates_path(@template), multipart: true do |f|
+	= f.error_messages
+	= render partial: 'form', locals: {f: f}
+	= f.submit

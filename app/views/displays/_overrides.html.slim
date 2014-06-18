@@ -1,0 +1,15 @@
+- overrides.each do |o|
+	li.sortable id="override_queue_#{o.id}"
+		div.handle ⇕
+		div.slide_image = slide_preview_to_show_tag o.slide
+		div.slide_name
+			table
+				tr: th = link_to o.slide.name, slide_path( o.slide.id )
+				tr
+					td
+						= form_for o, url: update_override_display_path(o.id) do |f|
+							| Duration:
+							=< f.text_field :duration, size: 3, class: 'duration_spinner'
+							=< f.submit 'Change'
+		div.actions
+			= button_to 'Remove', remove_override_display_path(o.id), class: 'redbutton'

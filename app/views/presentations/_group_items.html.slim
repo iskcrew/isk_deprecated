@@ -1,8 +1,7 @@
-- Rails.logger.debug "Group items"
 - @presentation.groups.includes(:master_group).each do |group|
-	li id="group_#{group.id}"
+	li.sortable id="group_#{group.id}"
 		div.handle ⇕
-		div.groupname
+		div.group_name
 			= link_to group.master_group.name, group_path(group.master_group_id)
-		div.actions
-			= button_to 'remove', :action => :remove_group, :id => group.id
+		div.remove_group
+			=< button_to 'Remove', remove_group_presentation_path(group.id), class: 'button warning'

@@ -1,74 +1,77 @@
 /* ISK stylesheet for the navigation bars at the top of the page
- * 
+ *
 */
 
 @import 'variables';
 
 div.top_navigation {
-	font-size: 120%;
 	padding: 0px;
-	height: 36px;
-	border-bottom: 2px solid $nav_bar_border;		
-		
+	height: 29px;
+
 	div#current_event {
 		float: right;
-		padding: 0px;
-		margin: 0px 2em;
 		font-weight: normal;
 	}
-		
+
 	ul.tabs {
-		display: inline-block;
-		
-		li:hover {
-			border-color: #FFF;
+		border: none;
+
+		li.ui-state-default:hover {
+			background: $ui-state-hover_bg;
+			border: $ui-state-hover_border;
+			border-bottom: none;
+			font-weight: normal;
+
+			a {
+				color: $ui-state-hover_font_color;
+			}
 		}
-		
-		li.ui-tabs-active {
-			background-image: none;
-			background-color: $nav_bar_bg;
-			border-color: $nav_bar_border;
-			border-bottom: 2px solid $nav_bar_bg;
-			font-weight: bold;
+
+		li#current_event {
+			background: none;
+			padding: 6px;
+			border: none;
+			font-weight: normal;
+			color: $primary_dark;
+		}
+
+		li#logout {
+			float: right;
+				background-image: none;
+				border-color: $warning_border;
+				border-bottom: none;
+				background: $warning_bg;
+		}
+
+		li#logout:hover {
+				border-color: $warning_hover_border;
+				background: $warning_hover_bg;
 		}
 	}
-		
-	ul#logout {
-		float: right;
-		
-		li{
-			background-image: none;
-			border-color: #300;
-			background-color: $button_warning_color;
-		}
-		
-		li:hover {
-			border-color: #900;
-			background-color: #A00;
-		}
-	} 
-		
-}	
-
+}
 
 div.navigation {
-	border-bottom: 2px solid $nav_bar_border;
-	background-color: $nav_bar_bg;
+	background: $nav_bar_bg;
+	padding-top: 5px;
 	width: 100%;
 	height: 36px;
 	font-size: 120%;
-	
+	border-bottom: $nav_bar_border;
+
 	a {
 		display: inline-block;
 		padding: 2px 0.3em;
 		margin: 5px;
-		border: 1px solid $nav_bar_border;
-		background-color: $nav_bar_button_bg;
+		border: $button_border;
+		background: $button_bg;
+		color: $button_font_color;
 		border-radius: 6px;
 		text-decoration: none;
 		float: left;
-	}
-			
-}
 
-
+		&:hover{
+			background: $button_hover_bg;
+			color: $button_hover_font_color;
+		};
+	};
+};

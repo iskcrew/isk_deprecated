@@ -1,0 +1,39 @@
+h1 Edit presentations #{@presentation.name}
+
+= form_for @presentation do |f|
+	= f.error_messages
+	= render partial: 'form'
+	= f.submit
+
+h2 Component groups
+
+p Here you can add new groups to this presentation and change the order of the groups already in it.
+
+/ This should be refactored with accepts_nested_attributes_for and update...
+h3 Add a group
+p Add a group to the end of this presentation.
+
+ul
+	li 
+		| All groups
+	 	ul
+			li
+	 			= form_for :group, url: add_group_presentation_path(@presentation) do |f|
+					= f.select :id, MasterGroup.current.defined_groups.to_a.collect {|p| [ p.name, p.id ] }
+					=< f.submit 'Add group'
+	- if @orphan_groups.present?
+		li 
+			| Groups not already in this presentation
+			ul
+				li
+					= form_for :group, url: add_group_presentation_path(@presentation) do |f|
+						= f.select :id, @orphan_groups.collect {|p| [ p.name, p.id ] }
+						=< f.submit 'Add group'
+	
+ul#groups_sortable.sortable data-sortable=sort_presentation_url(@presentation)
+	= render partial: 'group_items'
+
+= content_for :navigation do
+	=link_to 'Details', :action => :show, :id => @presentation.id
+	=link_to 'Preview', :action => :preview, :id => @presentation.id
+	

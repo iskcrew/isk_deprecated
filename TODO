@@ -5,6 +5,8 @@
 		- Better websocket logging
 		- Performance metrics?
 		- Display action log and metrics
+	
+- Create nested controllers for Group and OverrideQueue to clean up display and presentation controllers?
 
 - Cache
 	- Cashier seems to be working fine.. but tests would be nice
@@ -42,9 +44,10 @@
 	- Simple Edit
 		- Configurable margins, base-svg generation with configurable slide size/aspect ratio
 	- Templates
-		- Allow users to upload a svg, parse <text> elements, allow user to select editable fields
-			from that list and then allow creating new slides based on the template similar to simple
-			slides.
+		- Set viewBox on upload for the svg or warn the user?
+		- TESTING, TESTING, TESTING
+		- CSS-styling
+		- ACLs
 
 - Presentations
 	- Deep cloning of presentations. clone the presentation structure
