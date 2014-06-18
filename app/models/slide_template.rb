@@ -28,7 +28,7 @@ class SlideTemplate < ActiveRecord::Base
 	
 	def template=(svg)
 		@_template = svg
-		generate_settings
+		process_svg
 		write_template
 	end
 	
@@ -65,11 +65,29 @@ class SlideTemplate < ActiveRecord::Base
 		a[:id].blank?
 	end
 	
+	# Process the uploaded svg template
+	# 1. We need to set the viewBox attribute for browser-scaling to work
+	# 2. Extract the <text> elements and generate the associated template_Fields from that list
+	def process_svg
+		svg = REXML::Document.new(@_template)
+		svg = set_viewbox(svg)
+		generate_settings(svg)
+		@_template = svg.to_s
+	end
+	
+	# Set the viewBox attribute on the base svg
+	# Inkscape doesn't set this and we need it for browser previews to work
+	def set_viewbox(svg)
+		width = svg.root.attributes['width']
+		height = svg.root.attributes['height']
+		svg.root.attributes['viewBox'] = "0 0 #{width} #{height}"
+		return svg
+	end
+	
 	# Extract all text fields from the svg template and
 	# generate a settings hash based on that
-	def generate_settings
+	def generate_settings(svg)
 		s = HashWithIndifferentAccess.new
-		svg = REXML::Document.new(@_template)
 		svg.root.elements.each('//text') do |e|
 			f = self.fields.new
 			f.element_id = e.attributes['id']
