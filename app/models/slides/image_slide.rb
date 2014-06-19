@@ -17,7 +17,7 @@ class	ImageSlide < Slide
 	
 	# Generate the slide images
 	def generate_images
-		generate_Full_image
+		generate_full_image
 		generate_previews
 			
 		self.ready = true
@@ -38,15 +38,21 @@ class	ImageSlide < Slide
 		# Build the ImageMagick geometry string
 		# The string is WIDTHxHEIGHT + scaling operator as follows
 		# > to scale the image down if its height or width exceed the target
-		# < will scale the image up or down if needed
+		# < will scale the image up if its height and width are smaller than the target
 		# ! will scale to fit breaking aspect ratio
 		geo_str = size.join('x')
 		case scale
 		when 'down'
+			# Scale the image down if needed
 			geo_str << '>'
 		when 'fit'
+			# Scale the image to fit maintaining aspect ratio
+			# Nothing to do
+		when 'up'
+			# Only scale the image up if needed
 			geo_str << '<'
 		when 'stretch'
+			# Stretch the image to fill the entire slide disregarding aspect ratio
 			geo_str << '!'
 		end
 		
