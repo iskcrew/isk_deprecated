@@ -10,7 +10,13 @@ class SimpleSlide < SvgSlide
 	TypeString = 'simple'
 
 	# Slidedata functionality
-	DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(:heading => 'Slide heading', :text => 'Slide contents with <highlight>', :color => 'Red', :text_size => 48, :text_align => 'Left').freeze
+	DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
+		:heading => 'Slide heading', 
+		:text => 'Slide contents with <highlight>', 
+		:color => 'Red', 
+		:text_size => 48, 
+		:text_align => 'Left'
+	)
 	include HasSlidedata
 
 	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
