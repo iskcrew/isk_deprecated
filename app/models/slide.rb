@@ -244,14 +244,8 @@ class Slide < ActiveRecord::Base
 			picture.write(self.full_filename)
 		end
 		
-		#Paistetaan ImageMagickillä previkat
-		picture = Magick::ImageList.new(self.full_filename).first
+		generate_previews
 		
-		preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
-		preview_picture.write(self.preview_filename)
-		
-		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
-		thumb_picture.write(self.thumb_filename)
 		self.ready = true
 		self.images_updated_at = Time.now
 		self.save!
@@ -375,6 +369,27 @@ class Slide < ActiveRecord::Base
 	end 
 	
 	private
+	
+	# The picture dimensions
+	# TODO: Read this from event config
+	def pictures
+		{
+			full: [Slide::FullWidth, Slide::FullHeight],
+			preview: [Slide::PreviewWidth, Slide::PreviewHeight],
+			thumb: [Slide::ThumbWidth, Slide::ThumbHeight]
+		}
+	end
+	
+	# Create the preview images from the full size slide image
+	def generate_previews
+		picture = Magick::ImageList.new(self.full_filename).first
+	
+		preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
+		preview_picture.write(self.preview_filename)
+	
+		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
+		thumb_picture.write(self.thumb_filename)
+	end
 	
 	def update_timestamps
 		touch_by_group(self.master_group_id)
