@@ -384,10 +384,10 @@ class Slide < ActiveRecord::Base
 	def generate_previews
 		picture = Magick::ImageList.new(self.full_filename).first
 	
-		preview_picture = picture.resize_to_fit(Slide::PreviewWidth, Slide::PreviewHeight)
+		preview_picture = picture.resize_to_fit( *pictures[:preview] )
 		preview_picture.write(self.preview_filename)
 	
-		thumb_picture = picture.resize_to_fit(Slide::ThumbWidth, Slide::ThumbHeight)
+		thumb_picture = picture.resize_to_fit( *pictures[:thumb] )
 		thumb_picture.write(self.thumb_filename)
 	end
 	
