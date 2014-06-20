@@ -9,11 +9,32 @@
 class	ImageSlide < Slide
 	TypeString = "image"
 	
+	ScalingOptions = [
+		['Fit', 'fit'],
+		['Down only', 'down'],
+		['Up only', 'up'],
+		['Stretch', 'stretch']
+	]
+	
 	DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
-		scale: 'down',
+		scale: 'fit',
 		background: '#000000'
 	)
 	include HasSlidedata
+	
+	# Validate and store a new image for the slide
+	# image should be a IO-object
+	def image=(image)
+		begin
+			picture = Magick::Image.from_blob(image.read).first
+			picture.write(self.original_filename)
+		rescue Magick::ImageMagickError
+			if File.exists self.original_filename
+				File::delete(@slide.original_filename)
+			end
+			raise
+		end
+	end
 	
 	# Generate the slide images
 	def generate_images

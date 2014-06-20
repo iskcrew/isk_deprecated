@@ -60,6 +60,7 @@ div#tabs
 			= f.error_messages
 			= hidden_field_tag :create_type, 'image'
 			= render partial: 'form'
+			= render partial: 'image_slide_form'
 			p: b Choose the image to upload:
-			= file_field_tag :upload
+			= file_field_tag :image
 			p = f.submit

@@ -85,6 +85,8 @@ class SlidesController < ApplicationController
 					@slide = InkscapeSlide.new(slide_params)
 				when 'template'
 					@slide = TemplateSlide.new(slide_params)
+				when 'image'
+					@slide = ImageSlide.new(slide_params)
 				else
 					@slide = Slide.new(slide_params)
 				end
@@ -100,14 +102,13 @@ class SlidesController < ApplicationController
 				
 				@slide.reload
 				
-				
+				# FIXME: The file operations could be prettier and in models
+				# They need to be done after we know the slide id....
 				case params[:create_type]
 				when 'empty_file', 'inkscape'
 					FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
 				when 'image'
-					File.open(@slide.original_filename, 'w+b') do |f|
-						f.puts params[:upload].read
-					end
+					@slide.image = params[:image]
 				end
 								
 				unless @slide.can_edit? current_user
@@ -126,8 +127,7 @@ class SlidesController < ApplicationController
 			redirect_to :action => :show, :id => @slide.id
 			
 		rescue Magick::ImageMagickError
-			#image invalid
-			File::delete(@slide.original_filename)
+			# image invalid
 			flash[:error] = "Error creating slide, invalid image file"
 			render :action => :new
 		end
@@ -151,8 +151,7 @@ class SlidesController < ApplicationController
 
 				# Generate images as needed
 				# FIXME: This needs to be more universal...
-				@slide.delay.generate_images if @slide.is_a?(SimpleSlide) && !@slide.ready
-				@slide.delay.generate_images if @slide.is_a?(TemplateSlide) && !@slide.ready
+				@slide.delay.generate_images if !@slide.is_a?(HttpSlide) && !@slide.ready
 				
 				#Haetaan uusi kuva http-slidelle jos on tarvis
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
