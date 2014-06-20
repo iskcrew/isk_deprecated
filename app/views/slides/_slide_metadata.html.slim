@@ -1,0 +1,32 @@
+div.info_block#metadata
+	h2 Slide metadata
+	/ Only render the slide description if it has been actually used
+	- unless @slide.description.blank?
+		table.slide_description
+			 tr: th Slide description
+			 tr: td == simple_format @slide.description
+	-if @slide.public
+		div.warning
+			p This slide is public, you should hide it before editing it.
+	-else
+		div
+			p This slide is hidden. It won't be shown on any presentations.
+				| You need to publish it before it can be shown.
+	-if @slide.replaced?
+		div.warning
+			p
+				| This slide has been replaced! The replacement slide is: 
+				= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
+	-elsif @slide.deleted
+		div.warning
+			p
+				| This slide has been deleted!
+				- if Slide.admin? current_user
+					= button_to 'Undelete', action: :undelete, id: @slide.id, 
+						class: 'button'
+	ul
+		li Slide class: #{slide_class @slide}
+		li Duration: #{slide_duration @slide}
+		li Last modified: #{l @slide.updated_at, format: :short}
+		li Images generated? #{@slide.ready ? 'Yes' : 'No'}
+		li Images updated at: #{l @slide.updated_at, format: :short}

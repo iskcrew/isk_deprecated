@@ -185,36 +185,20 @@ div.slide_info {
 	
 	div#tabs {
 		float: left;
+		width: 500px;
 	}
 	
-	div.info_block {
-		width: 525px;
-		
+	div.info_block {		
 		h2 {
 			margin-top: 0px;
 		}
 	}
 	
-	div.slide_metadata {
-		table.slide_description {
-			width: 100%;
-		}
-	}
-
-	div.left_column, div.right_column {
-		margin: 10px;
-	}
-
-	div.left_column {
-		float:left;
-		max-width: 440px;
-	}
-
-	div.right_column {
-		max-width: 440px;
+	div#metadata {
+		width: 500px;
 		float: left;
 	}
-	
+		
 	table.add_override {
 		border: none;
 		
