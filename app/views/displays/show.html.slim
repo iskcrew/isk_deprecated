@@ -1,0 +1,37 @@
+h1 Information for display: #{@display.name} (#{@display.ip})
+
+div.display_properties
+	= render @display
+	
+	div.extra_information
+		ul
+			li IP: #{@display.ip}
+			- if @display.last_contact_at
+				li Last contact at: #{l @display.last_contact_at, :format => :short}
+			- else
+				li Last contact at: UNKNOWN
+			
+			- if @display.last_hello
+				li Last initialization at: #{l @display.last_hello, format: :short}
+			- else
+				li Last initialization at: UNKNOWN
+			
+			li State updated at: #{l @display.state_updated_at, :format => :short}
+			li Metadata updated at: #{l @display.updated_at, :format => :short}
+			li Created at: #{l @display.created_at, :format => :short}
+		= authorized_users @display
+
+- if @display.override_queues.present?
+	div.override_queue
+		h2 Slides in override queue
+		p 
+			| The slides in override queue will be displayed as soon as possible interrupting the normal
+			|  presentation flow.
+		- @display.override_queues.each do |oq|
+			= render oq.slide
+
+= content_for :navigation do
+	- if @display.can_edit? current_user
+		= link_to 'Edit', edit_display_path(@display)
+	= link_to 'Remote control', action: :dpy_control, id: @display.id
+	= link_to 'Slide stats', action: :slide_stats, id: @display.id
