@@ -148,15 +148,13 @@ class SlidesController < ApplicationController
 			require_edit(@slide)
 	
 			if @slide.update_attributes(slide_params)
-
+				
 				# Generate images as needed
 				# FIXME: This needs to be more universal...
 				@slide.delay.generate_images if !@slide.is_a?(HttpSlide) && !@slide.ready
 				
-				#Haetaan uusi kuva http-slidelle jos on tarvis
+				# Fetch the http slide image if needed
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
-
-
 				respond_to do |format|
 					format.html {
 						flash[:notice] = 'Slide was successfully updated.'
@@ -210,7 +208,7 @@ class SlidesController < ApplicationController
 	end
 
 	
-	#TODO: move ungroup -action into slide model
+	# TODO: move ungroup -action into slide model
 	def ungroup
 		slide = Slide.find(params[:id])
 		require_edit(slide)
@@ -360,42 +358,15 @@ class SlidesController < ApplicationController
 	end
 	
 	# Send the slide preview image, we set the cache headers to avoid unecessary reloading
-	# TODO: move most of this to a private function shared by all picture sizes: thumb, preview and
-	# full
 	def preview
 		@slide = Slide.find(params[:id])
-		if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
-
-			respond_to do |format|
-				format.html {
-					if @slide.ready
-						send_file(@slide.preview_filename, {:disposition => 'inline'})
-					else
-						send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
-					end
-				}
-				format.js {render :show}
-			end
-		end
+		send_slide_image(:preview)
 	end
 
 	def thumb
 		@slide = Slide.find(params[:id])
-		if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
-
-			respond_to do |format|
-				format.html {
-					if @slide.ready
-						send_file(@slide.thumb_filename, {:disposition => 'inline'})
-					else
-						send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
-					end
-				}
-				format.js {render :show}
-			end
-		end
+		send_slide_image(:thumb)
 	end
-
 	
 	def full
 		begin
@@ -412,6 +383,30 @@ class SlidesController < ApplicationController
 	
 
 	private
+	
+	def send_slide_image(size)
+		case size
+		when :full
+			filename = @slide.full_filename
+		when :thumb
+			filename = @slide.thumb_filename
+		else
+			filename = @slide.preview_filename	
+		end
+		
+		if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
+			respond_to do |format|
+				format.html {
+					if @slide.ready
+						send_file(filename, {:disposition => 'inline'})
+					else
+						send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
+					end
+				}
+				format.js {render :show}
+			end
+		end
+	end
 	
 	# Whitelist the accepted slide parameters for update and create
 	def slide_params
