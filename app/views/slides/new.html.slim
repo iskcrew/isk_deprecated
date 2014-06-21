@@ -19,7 +19,7 @@ div#tabs
 				= render partial: 'form'
 				p
 					| Template: 
-					= f.collection_select(:foreign_object_id, SlideTemplate.all, :id, :name)
+					= f.collection_select(:foreign_object_id, current_templates, :id, :name)
 				div#template_slide_form.svg_editor_container
 				p = f.submit
 	
