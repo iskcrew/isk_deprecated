@@ -20,7 +20,7 @@ class TemplatesController < ApplicationController
 		
 		if @template.save
 			flash[:notice] = 'Template created'
-			redirect_to template_path(@template)
+			redirect_to edit_template_path(@template)
 		else
 			flash[:error] = "Error saving template"
 			render :new
