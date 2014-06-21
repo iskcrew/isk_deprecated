@@ -94,7 +94,7 @@ class SlidesController < ApplicationController
 				unless @slide.save
 					if Slide.admin? current_user
 						flash[:error] = "Error saving slide."
-						render :action => :new and return
+						render :new and return
 					else
 						render :new_simple and return
 					end
