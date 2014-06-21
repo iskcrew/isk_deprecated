@@ -23,5 +23,6 @@ html
 			div.error = flash[:error]
 			div.notice = flash[:notice]
 			div.warning = flash[:warning]
+			- flash.clear
 		div.content
 			== yield
