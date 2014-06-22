@@ -127,7 +127,7 @@ class DisplaysController < ApplicationController
   private
 	
 	def display_params
-		params.required(:display).permit(:name, :presentation_id, :manual, :monitor)
+		params.required(:display).permit(:name, :presentation_id, :manual, :monitor, :do_overrides)
 	end
   
   def require_admin
