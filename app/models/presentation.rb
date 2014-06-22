@@ -6,9 +6,9 @@
 
 
 class Presentation < ActiveRecord::Base
-	#This class contains the logic for presentations
-	#Presentations are made up from ordered lists
-	#of master groups, containing ordered lists of slides
+	# This class contains the logic for presentations
+	# Presentations are made up from ordered lists
+	# of master groups, containing ordered lists of slides
 	
 
 	has_many :groups, -> {order "position ASC"}
@@ -19,9 +19,9 @@ class Presentation < ActiveRecord::Base
 	
 	has_many :permissions
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
-	#TODO: Bind presentations to events also
+	# TODO: Bind presentations to events also
 	
-	#Validation to ensure the asigned effect actually exists in db
+	# Validation to ensure the asigned effect actually exists in db
 	validate :ensure_effect_exists
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
@@ -37,35 +37,31 @@ class Presentation < ActiveRecord::Base
 		end
 	end
 	
-	
-	
-	#Module that contains our ACL logic.
+	# Module that contains our ACL logic.
 	include ModelAuthorization
 	
-	#Shorthand for returning the count of public slides
-	#in the presentation
+	# Shorthand for returning the count of public slides
+	# in the presentation
 	def total_slides
 		self.public_slides.count
 	end
 	
-	#Returns a Relation that selects all slides in this presentation in order (public or not)
+	# Returns a Relation that selects all slides in this presentation in order (public or not)
 	def slides
 		Slide.joins(master_group: {groups: :presentation}).where(presentations: {id: self.id}).order('groups.position, slides.position')
 	end
 	
-	#Returns a Relation with all public slides in this presentation
-	#The slides are in presentation order and have the group.id selected
-	#as presentation_group_id so that it is accessible in the slide objects returned.
+	# Returns a Relation with all public slides in this presentation
+	# The slides are in presentation order and have the group.id selected
+	# as presentation_group_id so that it is accessible in the slide objects returned.
 	def public_slides
 		self.slides
 			.where(slides: {public: true, deleted: false, replacement_id: nil})
 	end
 	
-	#Creates a hash of the presentation data
-	#The has currently has two representations of the
-	#slides in the presentation due to legacy
-	#TODO: cache to_hash fragments
-	#Rails.cache.fetch("cache_key", run_if_not_found())
+	# Creates a hash of the presentation data
+	# The has currently has two representations of the
+	# slides in the presentation due to legacy
 	def to_hash
 		hash = Rails.cache.fetch hash_cache_name, :tag => "presentation_" + self.id.to_s do
 			hash = Hash.new
@@ -78,8 +74,6 @@ class Presentation < ActiveRecord::Base
 			hash[:total_slides] = self.total_slides
 			
 			hash[:slides] = Array.new
-		
-			#The new format for presentation slides, requires less sql-queries to build
 			slides_for_hash.each do |slide|
 				hash[:slides] << slide_hash( slide )
 			end
@@ -95,12 +89,12 @@ class Presentation < ActiveRecord::Base
 		return default_slides_time + special_slides_time
 	end
 	
-	#Cache tag for all fragments depending on this presentation 
+	# Cache tag for all fragments depending on this presentation 
 	def cache_tag
 		"presentation_" + self.id.to_s
 	end
 	
-	#What name to use as key for to_hash caching
+	# What name to use as key for to_hash caching
 	def hash_cache_name
 		cache_key + "_hash"
 	end
@@ -117,6 +111,7 @@ class Presentation < ActiveRecord::Base
 	
 	private
 	
+	# Insert proper effect id and duration into each slides serialization.
 	def slide_hash(slide)
 		h = slide.to_hash
 		h[:effect_id] = self.effect_id if h[:effect_id].nil?
@@ -124,10 +119,9 @@ class Presentation < ActiveRecord::Base
 		return h
 	end
 			
-	#Validation method for making sure the asigned effect is a valid object.
+	# Validation method for making sure the asigned effect is a valid object.
 	def ensure_effect_exists
 		errors.add(:effect_id, "^Transition effect is invalid") if self.effect.nil?
 	end
-	
-	
+		
 end
