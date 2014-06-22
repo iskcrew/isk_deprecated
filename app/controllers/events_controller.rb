@@ -25,7 +25,7 @@ class EventsController < ApplicationController
   
   def create
     Event.transaction do 
-      @event = Event.new(params[:event])
+      @event = Event.new(event_params)
     
       if @event.save
         flash[:notice] = "Event created."
@@ -45,7 +45,7 @@ class EventsController < ApplicationController
   
   def update
     @event = Event.find(params[:id])
-    if @event.update_attributes(params[:event])
+    if @event.update_attributes(event_params)
       flash[:notice] = 'Event was successfully updated.'
       redirect_to :action => :index
     else
@@ -54,5 +54,10 @@ class EventsController < ApplicationController
     
   end
   
+	private
+	
+	def event_params
+		params.required(:event).permit(:name, :current)
+	end
   
 end
