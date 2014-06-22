@@ -19,10 +19,8 @@ class Presentation < ActiveRecord::Base
 	
 	has_many :permissions
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
-	# TODO: Bind presentations to events also
 	
-	# Validation to ensure the asigned effect actually exists in db
-	validate :ensure_effect_exists
+	validates :effect, presence: true
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
 	
@@ -81,7 +79,7 @@ class Presentation < ActiveRecord::Base
 		end
 		return hash
 	end
-		
+	
 	# Calculate the duration of this presentation and return it in seconds.
 	def duration
 		default_slides_time = self.delay * self.public_slides.where(slides: {duration: Slide::UsePresentationDelay}).count
@@ -98,7 +96,7 @@ class Presentation < ActiveRecord::Base
 	def hash_cache_name
 		cache_key + "_hash"
 	end
-		
+	
 	# Augmented select for creating the hash serialization
 	def slides_for_hash
 		public_slides.select([
@@ -118,10 +116,5 @@ class Presentation < ActiveRecord::Base
 		h[:duration] = self.delay if h[:duration] == Slide::UsePresentationDelay
 		return h
 	end
-			
-	# Validation method for making sure the asigned effect is a valid object.
-	def ensure_effect_exists
-		errors.add(:effect_id, "^Transition effect is invalid") if self.effect.nil?
-	end
-		
+	
 end
