@@ -45,21 +45,20 @@ class Presentation < ActiveRecord::Base
 	#Shorthand for returning the count of public slides
 	#in the presentation
 	def total_slides
-		self.groups.joins(:master_group => :slides).where(:slides => {:public => true, :deleted => false, :replacement_id => nil}).count
+		self.public_slides.count
 	end
 	
 	#Returns a Relation that selects all slides in this presentation in order (public or not)
 	def slides
-		Slide.joins(:master_group => {:groups => :presentation}).where(:presentations => {:id => self.id}).order('groups.position, slides.position')
+		Slide.joins(master_group: {groups: :presentation}).where(presentations: {id: self.id}).order('groups.position, slides.position')
 	end
 	
 	#Returns a Relation with all public slides in this presentation
 	#The slides are in presentation order and have the group.id selected
 	#as presentation_group_id so that it is accessible in the slide objects returned.
 	def public_slides
-		Slide.joins(:master_group => {:groups => :presentation})
-			.where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil})
-			.order('groups.position, slides.position')
+		self.slides
+			.where(slides: {public: true, deleted: false, replacement_id: nil})
 	end
 	
 	#Creates a hash of the presentation data
@@ -82,7 +81,7 @@ class Presentation < ActiveRecord::Base
 		
 			#The new format for presentation slides, requires less sql-queries to build
 			slides_for_hash.each do |slide|
-				hash[:slides] << slide.to_hash
+				hash[:slides] << slide_hash( slide )
 			end
 			hash
 		end
@@ -108,18 +107,22 @@ class Presentation < ActiveRecord::Base
 		
 	# Augmented select for creating the hash serialization
 	def slides_for_hash
-		Slide.joins(:master_group => {:groups => :presentation})
-			.where(:presentations => {:id => self.id}, :slides => {:public => true, :deleted => false, :replacement_id => nil})
-			.order('groups.position, slides.position')
-			.select('slides.*, groups.id AS presentation_group_id, 
-				master_groups.effect_id as group_effect_id,
-				presentations.delay as presentation_delay,
-				presentations.effect_id as presentation_effect_id,
-				master_groups.name as group_name')
+		public_slides.select([
+				'slides.*',
+				'groups.id as presentation_group_id',
+				'master_groups.name as group_name',
+				'master_groups.effect_id as effect_id'
+			])
 	end
 	
 	private
 	
+	def slide_hash(slide)
+		h = slide.to_hash
+		h[:effect_id] = self.effect_id if h[:effect_id].nil?
+		h[:duration] = self.delay if h[:duration] == Slide::UsePresentationDelay
+		return h
+	end
 			
 	#Validation method for making sure the asigned effect is a valid object.
 	def ensure_effect_exists

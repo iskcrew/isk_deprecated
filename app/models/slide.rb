@@ -150,34 +150,29 @@ class Slide < ActiveRecord::Base
 		hash = Hash.new
 		hash[:id] = self.id
 		hash[:name] = self.name
-		hash[:master_group] = self.master_group_id
-		hash[:group] = self.presentation_group_id if attribute_present? :presentation_group_id
-		hash[:group_name] = self.group_name if attribute_present? :group_name
 		hash[:ready] = self.ready
 		hash[:deleted] = self.deleted
 		hash[:created_at] = self.created_at.to_i
 		hash[:updated_at] = self.updated_at.to_i
-		if self.duration == -1
-			#Use presentation duration
-			if attribute_present? :presentation_delay
-				hash[:duration] = self.presentation_delay
-			else
-				hash[:duration] = -1
-			end
-		else
-			#Special duration defined for this slide
-			hash[:duration] = self.duration
-		end
-		#Effect id selection, id specified at group level overrides presentation default
-		if attribute_present?(:group_effect_id) && self.group_effect_id
-			hash[:effect_id] = self.group_effect_id
-		elsif attribute_present?(:presentation_effect_id)
-			hash[:effect_id] = self.presentation_effect_id
-		end
-			
+		hash[:duration] = self.duration
 		hash[:images_updated_at] = self.images_updated_at.to_i
 		hash[:show_clock] = self.show_clock
 		hash[:type] = self.is_a?(VideoSlide) ? 'video' : 'image'
+		
+		hash[:master_group] = self.master_group_id
+		if has_attribute? :group_name
+			hash[:group_name] = self.group_name
+		else
+			hash[:group_name] = self.master_group.name
+		end		
+		if has_attribute? :effect_id
+			ef = self.effect_id
+		else
+			ef = self.master_group.effect_id
+		end
+		hash[:effect_id] = ef
+		hash[:group] = self.presentation_group_id if has_attribute? :presentation_group_id
+		
 		return hash
 	end
 	alias_method :to_h, :to_hash
