@@ -145,7 +145,12 @@ class Slide < ActiveRecord::Base
 		Display.joins(:override_queues => :slide).where(:slides => {:id => self.id}).uniq
 	end
 	
-	#TODO durationille jotain
+	# Create a hash with the slide metadata
+	# This is used for serializing the presentations mostly
+	# We check if we have extra selected attributes as follows:
+	# group_name - for master_group.name
+	# effect_id - for master_group.effect_id
+	# presentation_group_id - for the id of the Group belonging to the presentation being serialized
 	def to_hash
 		hash = Hash.new
 		hash[:id] = self.id
@@ -177,25 +182,26 @@ class Slide < ActiveRecord::Base
 	end
 	alias_method :to_h, :to_hash
 	
-	
-	
-	#Tätä käytetään html:ssa luomaan ikonit eri slidetyypeille
+	# Used in various views
 	def type_str
 		self.class::TypeString
 	end
-			
+	
+	# Is this slide in a real group?
 	def grouped?
 		self[:master_group_id] != Event.current.ungrouped.id
 	end
 	
+	# Has this slide been replaced by another slide?
 	def replaced?
 		!self.replacement.nil?
 	end
 	
 	def is_svg?
 		self.is_svg
-	end	
+	end
 	
+	# Replace this slide with another slide
 	def replace!(slide)
 		Slide.transaction do
 			self.replacement = slide
@@ -206,32 +212,31 @@ class Slide < ActiveRecord::Base
 		end
 	end
 	
-	#Paistetaan kelmusta kuvat ja pingataan websockettia niistä.
+	# Generate the various different sized images from the slide master image
+	# TODO: Rely more on subclasses
 	def generate_images 
 		if self.is_svg?
-			#Generoidaan svg:stä png:t rsvg:llä
 			if system rsvg_command(:full)
 			end
 			
-			
 		else
-			#Kelmu on kuvatiedosto, joten paistellaan vaan sopivan kokoiset kuvat	 
+			# FIXME: once legacy slides get migrated to ImageSlide this is no longer needed
 			picture = Magick::ImageList.new(self.original_filename).first
 			
 			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
-				#if the cols or rows are smaller then our predefined sizes
-				#build a black background and center the image in it
+				# if the cols or rows are smaller then our predefined sizes
+				# build a black background and center the image in it
 				if cols < Slide::FullWidth || rows < Slide::FullHeight
-					#resize our image
+					# resize our image
 					img.resize!(cols, rows)
-					#build the black background
+					# build the black background
 					bg = Magick::Image.new(Slide::FullWidth,Slide::FullHeight){self.background_color = "black"}
-					#center the image on our new white background
+					# center the image on our new white background
 					bg.composite(img, Magick::CenterGravity, Magick::OverCompositeOp)
  
 				else
-					#in the unlikely event that the new geometry cols and rows match our predefined size
-					#we will not set a bg
+					# in the unlikely event that the new geometry cols and rows match our predefined size
+					# we will not set a bg
 					img.resize!(cols, rows)
 				end
 			}
@@ -273,9 +278,8 @@ class Slide < ActiveRecord::Base
 		self.save!
 	end
 	
-	
-	#Konvertoidaan svg-kalvo (svg-editin tuottamassa muodossa) muotoon jota inkscape tykkää syödä
-	#Ilman näitä muutoksia mm. rivitys kusee inkscapessa.
+	# Convert a old legacy svg-editor slide to inkscape slide
+	# FIXME: remove this and do a migration for all possibly remaining legacy slides
 	def svg_edit_to_inscape!
 		
 		return unless self.is_svg?
@@ -317,26 +321,27 @@ class Slide < ActiveRecord::Base
 		
 	end
 
+	# Send websocket-messages when a slides images have been updated
 	def updated_image_notifications
 		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
 	end	 
 
-	#Cache tag for all fragments depending on this slide
+	# Cache tag for all fragments depending on this slide
 	def cache_tag
 		"slide_" + self.id.to_s
 	end
 	
-	#Cache key for info fragment with full edit priviledges
+	# Cache key for info fragment with full edit priviledges
 	def rw_cache_key
 		self.cache_tag + "_edit"
 	end
 	
-	#Cache key for info fragment with hide priviledge
+	# Cache key for info fragment with hide priviledge
 	def hide_cache_key
 		self.cache_tag + "_hide"
 	end
 	
-	#Cache key for info fragment with no edit priviledges
+	# Cache key for info fragment with no edit priviledges
 	def ro_cache_key
 		self.cache_tag + "_ro"
 	end
