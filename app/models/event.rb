@@ -32,12 +32,12 @@ class Event < ActiveRecord::Base
 	#Default config for events
 	DefaultConfig = {
 		full: { # Full slide image size
-			width:1280,
+			width: 1280,
 			height: 720
 		},
 		preview: { # Preview image size
-			width: 225,
-			height: 400
+			width:  400,
+			height: 225
 		},
 		thumb: { # Small thumbnail size
 			width: 128,
