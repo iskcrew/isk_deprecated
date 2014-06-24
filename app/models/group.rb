@@ -37,6 +37,13 @@ class Group < ActiveRecord::Base
 		return hash
 
 	end
+	
+	# The position of this group in a presentation
+	# RankedModel uses sparse indexes in the postion column, so se need to do sql magic.
+	def presentation_position
+		Group.where(presentation_id: self.presentation_id).where("position < ?", self.position).count
+	end
+	
 
 	def public_slides
 		self.slides.where(:public => true)
