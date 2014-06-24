@@ -347,12 +347,7 @@ class Slide < ActiveRecord::Base
 	end
 		
 	protected	
-	
-	def ensure_master_group_exists
-		errors.add(:master_group_id, "^Group is invalid") if self.master_group.nil?
-	end
-	
-	
+		
 	def rsvg_command(type)
 		command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
 		
