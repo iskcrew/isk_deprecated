@@ -2,7 +2,7 @@ h1	Information for slide: #{@slide.name}
 
 div.slide_info
 	/ Normal slide-block
-	= render @slide, locals: {to_full: true}
+	= render partial: @slide
 	= render partial: 'slide_metadata'
 	div#tabs
 		ul
