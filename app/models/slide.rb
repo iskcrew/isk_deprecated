@@ -347,14 +347,15 @@ class Slide < ActiveRecord::Base
 	end
 		
 	protected	
-		
-	def rsvg_command(type)
+	
+	# FIXME: Migrate old legacy stuff to new ones and kill this in favor of inkscape
+	def rsvg_command(type = :full)
+		size = picture_sizes[:full]
 		command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
 		
 		if type == :full
-			command << ' -w ' << Slide::FullWidth.to_s
-			command << ' -h ' << Slide::FullHeight.to_s
-			command << ' --base-uri ' << Slide::FilePath.to_s << '/'
+			command << " -w #{size.first} -h #{size.last}"
+			command << " --base-uri #{Slide::FilePath}/"
 			command << ' -f png'
 			command << ' -o ' << self.full_filename.to_s
 			command << ' ' << self.svg_filename.to_s
@@ -375,6 +376,14 @@ class Slide < ActiveRecord::Base
 		}
 	end
 	
+	def self.picture_sizes
+		{
+			full: [Slide::FullWidth, Slide::FullHeight],
+			preview: [Slide::PreviewWidth, Slide::PreviewHeight],
+			thumb: [Slide::ThumbWidth, Slide::ThumbHeight]
+		}		
+	end
+	
 	# Create the preview images from the full size slide image
 	def generate_previews
 		picture = Magick::ImageList.new(self.full_filename).first
@@ -391,6 +400,22 @@ class Slide < ActiveRecord::Base
 		if changed.include? 'master_group_id'
 			touch_by_group(self.master_group_id_was)
 		end
+	end
+	
+	# Generate the full size slideimage from svg with inkscape
+	def inkscape_command_line
+		size = picture_sizes[:full]
+		command = 'cd '' && inkscape'
+		command = "cd #{Slide::FilePath} && inkscape"
+		
+		# Export size
+		command << " -w #{size.first} -h #{size.last}"
+		# Export to file
+		command << " -e #{self.full_filename} #{self.svg_filename}"
+		# Supress std-out reporting
+		command << ' >/dev/null'
+		
+		return command 
 	end
 	
 	# We need to proganate timestamps down the presentation chain for

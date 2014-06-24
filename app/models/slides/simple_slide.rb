@@ -116,7 +116,7 @@ class SimpleSlide < SvgSlide
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
 		# FIXME: Read up on viewboxes and see how this relates to supporting different slide sizes
-		svg.root.attributes['viewBox'] = "0 0 " + Slide::FullWidth.to_s + " " + Slide::FullHeight.to_s
+		svg.root.attributes['viewBox'] = "0 0 #{picture_sizes[:full].join(' ')}"
 		
 		head = svg.elements[HeadingSelector]
 		head.delete_element('*')
@@ -223,23 +223,13 @@ class SimpleSlide < SvgSlide
 	end
 	
 	def self.margin_right
-		Slide::FullWidth - MarginRight
+		picture_sizes[:full].first - MarginRight
 	end
 	 
 	protected
 	
-	def rsvg_command(type)
-		command = 'cd ' << FilePath.to_s << ' && inkscape'
-		
-		if type == :full
-			command << ' -w ' << Slide::FullWidth.to_s
-			command << ' -h ' << Slide::FullHeight.to_s
-			command << ' -e ' << self.full_filename.to_s
-			command << ' ' << self.svg_filename.to_s
-			command << ' >/dev/null'
-		end
-		
-		return command
+	def rsvg_command(type = :full)
+		return inkscape_command_line
 	end	 
 	
 		
