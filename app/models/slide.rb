@@ -26,6 +26,7 @@ class Slide < ActiveRecord::Base
 	belongs_to :master_group
 	has_many :display_counts
 	has_one :event, through: :master_group
+	has_many :presentations, -> { uniq }, through: :master_group
 	
 	has_many :permissions
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
@@ -131,11 +132,7 @@ class Slide < ActiveRecord::Base
 		end
 		return new_slide
 	end
-	
-	def presentations
-		Presentation.includes(:displays).joins(:groups => {:master_group => :slides}).where(:slides => {:id => self.id}).uniq
-	end
-	
+		
 	def displays
 		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
 		return displays_via_presentation.to_a | override.to_a

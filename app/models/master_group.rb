@@ -9,6 +9,7 @@ class MasterGroup < ActiveRecord::Base
 	
 	has_many :slides, -> {order('position ASC').where('deleted != 1') }
 	has_many :groups, :dependent => :destroy
+	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
 	belongs_to :event
 
@@ -42,11 +43,7 @@ class MasterGroup < ActiveRecord::Base
 	def self.current
 		self.where(:event_id => Event.current.id).where(:internal => false)
 	end
-	
-	def presentations
-		Presentation.joins(:groups => :master_group).where('master_groups.id = ?', self.id).uniq.to_a
-	end
-	
+		
 	def displays
 		Display.joins(:presentation => {:groups => :master_group}).where(:master_groups => {:id => self.id}).uniq
 	end
