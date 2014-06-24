@@ -2,7 +2,7 @@ div.slide class=(slide.public ? 'public' : 'hidden') id="slide_#{slide.id}"
 	div.slide_header
 		div.slide_name = link_to slide.name, :controller => :slides, :action => :show, :id => slide.id
 		div.slide_type class=(slide.type_str) = slide.type_str
-	- if defined?(to_full)
+	- if defined?(to_full) || (controller.controller_name == 'slides' && controller.action_name == 'show')
 		= slide_preview_to_full_tag(slide)
 	- else
 		= slide_preview_to_show_tag(slide)
