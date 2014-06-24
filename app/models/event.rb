@@ -32,7 +32,7 @@ class Event < ActiveRecord::Base
 	#Default config for events
 	DefaultConfig = {
 		full: { # Full slide image size
-			width: 1280,
+			width:1280,
 			height: 720
 		},
 		preview: { # Preview image size
@@ -82,6 +82,17 @@ class Event < ActiveRecord::Base
 	#Finds the current event
 	def self.current
 		self.where(:current => true).first!
+	end
+	
+	#### Per event configuration
+	# TODO: Dynamic configuration instead of constant
+	
+	def picture_sizes
+		h = Hash.new
+		[:full, :preview, :thumb].each do |key|
+			h[key] = [DefaultConfig[key][:width], DefaultConfig[key][:height]]
+		end
+		return h
 	end
 	
 	private

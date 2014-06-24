@@ -367,21 +367,12 @@ class Slide < ActiveRecord::Base
 	private
 	
 	# The picture dimensions
-	# TODO: Read this from event config
 	def picture_sizes
-		{
-			full: [Slide::FullWidth, Slide::FullHeight],
-			preview: [Slide::PreviewWidth, Slide::PreviewHeight],
-			thumb: [Slide::ThumbWidth, Slide::ThumbHeight]
-		}
+		@_picture_sizes || Event.current.picture_sizes
 	end
 	
 	def self.picture_sizes
-		{
-			full: [Slide::FullWidth, Slide::FullHeight],
-			preview: [Slide::PreviewWidth, Slide::PreviewHeight],
-			thumb: [Slide::ThumbWidth, Slide::ThumbHeight]
-		}		
+		@_picture_sizes || Event.current.picture_sizes
 	end
 	
 	# Create the preview images from the full size slide image
