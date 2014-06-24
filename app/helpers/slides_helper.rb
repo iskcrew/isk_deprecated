@@ -64,7 +64,8 @@ module SlidesHelper
 
   
   def slide_full_image_tag(slide)
-    image_tag url_for(:controller => :slides, :action => :full, :id => slide.id, :t => slide.images_updated_at.to_i), {:class => 'fullSlide', :id => 'slide_full_' + slide.id.to_s}
+    image_tag url_for(controller: :slides, action: :full, id: slide.id, t: slide.images_updated_at.to_i),
+		 {class: 'full_slide', id: 'slide_full_' + slide.id.to_s}
   end
   
   
@@ -98,13 +99,13 @@ module SlidesHelper
   
   def slide_preview_to_full_tag(slide)
     html_options = {
-      :title => 'Click to show full size slide image',
-      :class => 'slide-preview-to-full'
+      title: 'Click to show full size slide image',
+      class: 'slide-preview-to-full'
     }
     url_options = {
-      :controller => :slides,
-      :action => :full,
-      :id => slide.id
+      controller: :slides,
+      action: :full,
+      id: slide.id
     }
     return link_to slide_preview_image_tag(slide), url_options, html_options
   end
