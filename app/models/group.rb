@@ -10,8 +10,9 @@ class Group < ActiveRecord::Base
 	belongs_to :presentation
 
 	include RankedModel
-	ranks :position, :with_same => :presentation_id
+	ranks :position, with_same: :presentation_id
 
+	delegate :name, to: :master_group
 
 	# Touch associated displays
 	after_save :update_timestamps
@@ -43,13 +44,8 @@ class Group < ActiveRecord::Base
 		Display.joins(:presentation => :groups).where(:groups => {:id => self.id}).uniq
 	end
 
-
 	def public_slides
 		self.master_group.slides.where(:public => true)
-	end
-
-	def name
-		self.master_group.name
 	end
 
 	def cache_tag
