@@ -212,6 +212,11 @@ class Slide < ActiveRecord::Base
 		end
 	end
 	
+	# The position of this slide inside a group
+	def group_position
+		Slide.where(master_group_id: self.master_group_id).where("position < ?", self.position).count
+	end
+	
 	# Generate the various different sized images from the slide master image
 	# TODO: Rely more on subclasses
 	def generate_images 
