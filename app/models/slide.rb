@@ -51,15 +51,6 @@ class Slide < ActiveRecord::Base
 	
 	Host = 'http://example.com'
 	
-	FullWidth = 1280
-	FullHeight = 720
-	
-	PreviewWidth = 400
-	PreviewHeight = 225
-	
-	ThumbWidth = 128
-	ThumbHeight = 72
-
 	TypeString = 'image'
 
 	FilePath = Rails.root.join('data','slides')
