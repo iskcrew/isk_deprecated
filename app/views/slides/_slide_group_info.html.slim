@@ -6,7 +6,6 @@ div.slide_group_info.info_block#group_info
 			li
 				| This slide is in group:
 				=< link_to @slide.master_group_name, group_path(@slide.master_group)
-			li Position inside group: #{@slide.position}
 	- elsif @slide.can_edit? current_user
 		p 
 			| This slide doesn't belong to a group. As such this slide can't be a part of a 
