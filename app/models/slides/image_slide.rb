@@ -54,7 +54,7 @@ class	ImageSlide < Slide
 		
 		bg_color = self.slidedata[:background]
 		scale = self.slidedata[:scale]
-		size = pictures[:full]
+		size = picture_sizes[:full]
 		
 		# Build the ImageMagick geometry string
 		# The string is WIDTHxHEIGHT + scaling operator as follows
