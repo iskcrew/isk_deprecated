@@ -16,10 +16,10 @@ class ScheduleSlide < Slide
 
 	private
 
-	# FIXME: proper inheritance...
-	def rsvg_command(type)
-		return inkscape_command_line
+	# Override the default image generator
+	# FIXME: make inkscape the default for everyone and remove this
+	def generate_full_image
+		system inkscape_command_line
 	end
-
 
 end

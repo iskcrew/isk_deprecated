@@ -35,19 +35,10 @@ class	ImageSlide < Slide
 			raise
 		end
 	end
-	
-	# Generate the slide images
-	def generate_images
-		generate_full_image
-		generate_previews
-			
-		self.ready = true
-		self.images_updated_at = Time.now
-		self.save!
-	end
-	
+		
 	private
 	
+	# Generate the full size slide preview
 	def generate_full_image
 		# Read the uploaded original image
 		picture = Magick::ImageList.new(self.original_filename).first

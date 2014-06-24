@@ -226,12 +226,12 @@ class SimpleSlide < SvgSlide
 		picture_sizes[:full].first - MarginRight
 	end
 	 
-	protected
+	private
 	
-	def rsvg_command(type = :full)
-		return inkscape_command_line
-	end	 
-	
-		
-		
+	# Override the default image generator
+	# FIXME: make inkscape the default for everyone and remove this
+	def generate_full_image
+		system inkscape_command_line
+	end
+ 
 end

@@ -80,13 +80,6 @@ class InkscapeSlide < Slide
 
 	protected
 
-	# FIXME: proper inheritance
-	def rsvg_command(type)
-		return inkscape_command_line
-	end
-
-
-
 	def metadata_contents(svg = self.svg_data)
 		svg.elements.delete_all('//metadata')
 		metadata = svg.root.add_element('metadata')
@@ -128,5 +121,11 @@ class InkscapeSlide < Slide
 		self.svg_data = svg_data
 	end
 
-
+	private
+	
+	# Override the default image generator
+	# FIXME: make inkscape the default for everyone and remove this
+	def generate_full_image
+		system inkscape_command_line
+	end
 end
