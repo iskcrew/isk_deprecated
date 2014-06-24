@@ -8,6 +8,8 @@
 class Group < ActiveRecord::Base
 	belongs_to :master_group
 	belongs_to :presentation
+	has_many :slides, through: :master_group
+	has_many :displays, through: :presentation
 
 	include RankedModel
 	ranks :position, with_same: :presentation_id
@@ -36,16 +38,8 @@ class Group < ActiveRecord::Base
 
 	end
 
-	def slides
-		self.master_group.slides
-	end
-
-	def displays
-		Display.joins(:presentation => :groups).where(:groups => {:id => self.id}).uniq
-	end
-
 	def public_slides
-		self.master_group.slides.where(:public => true)
+		self.slides.where(:public => true)
 	end
 
 	def cache_tag
