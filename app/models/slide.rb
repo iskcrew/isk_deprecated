@@ -44,7 +44,7 @@ class Slide < ActiveRecord::Base
 
 
 	include RankedModel
-	ranks :position, :with_same => :master_group_id 
+	ranks :position, with_same: :master_group_id, class_name: 'Slide' 
 	
 	include HasSvgData
 	
