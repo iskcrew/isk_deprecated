@@ -11,13 +11,6 @@ var refreshTimer = $.timer(function() {
 	if ($('[data-refresh-url]').length == 0) refreshTimer.stop();
 }, 300000, true);
 
-$().ready(function() {
-	$('#scrolling_div').waypoint('sticky', {
-	  wrapper: '<div class="scrolling_div-wrapper" />',
-	  stuckClass: 'stuck'
-	});	
-});
-	
 function scrollToAnchor(aid){
     var aTag = $("a[name='"+ aid +"']");
     $('html,body').animate({scrollTop: aTag.offset().top},200);

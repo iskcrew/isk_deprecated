@@ -14,8 +14,6 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery.timer
-//= require waypoints
-//= require waypoints-sticky
 //= require jquery-noty.main
 //= require websocket_rails/main
 //= require init_dispatcher

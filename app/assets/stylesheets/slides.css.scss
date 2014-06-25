@@ -37,20 +37,16 @@ div.scrolling_div-wrapper {
 
 div.group_links {
 	display: block;
+	position: fixed;
 	max-width: 150px;
-	margin: 0px 15px 0px 0px;
+	margin: 75px 15px 0px 0px;
 	top: 0px;
 	right: 6px; // WTF is this requirement?
 	
 	a {
 		text-decoration: none;
-	}	
+	}
 }
-
-div.stuck {
-	position:fixed;
-}
-
 
 div.slide_list {
 	min-width: 600px;
