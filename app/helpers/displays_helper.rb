@@ -31,7 +31,7 @@ module DisplaysHelper
 			ping_seconds = "UNKNOWN"
 		end
 		
-		return content_tag(:span, 'Ping: ' + ping_seconds.to_s + " s.", :class => html_class)
+		return content_tag(:span, "Ping: #{ping_seconds} s.", class: html_class)
 	end
 	
 	# Render the img element for the current slide image
