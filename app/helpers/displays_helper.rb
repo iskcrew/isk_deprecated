@@ -9,7 +9,7 @@ module DisplaysHelper
 		
 	# Links to the details for all late displays
 	def late_display_warning(d)
-		link_text = (d.name || String.new) << " (" << d.ip << ") is more than " << Display::Timeout.to_s << " minutes late!"
+		link_text = "#{d.name} (#{d.ip}) is more than #{Display::Timeout} minutes late!"
 		link_to link_text, display_path(d)
 	end
 	
