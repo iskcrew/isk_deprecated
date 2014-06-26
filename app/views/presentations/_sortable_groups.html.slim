@@ -1,6 +1,6 @@
 - @presentation.groups.includes(:master_group).each do |group|
 	li.sortable id="group_#{group.id}"
-		div.handle ⇕
+		span.handle.fa.fa-arrows-v.fa-lg
 		div.group_name
 			= link_to group.master_group.name, group_path(group.master_group_id)
 		div.remove_group
