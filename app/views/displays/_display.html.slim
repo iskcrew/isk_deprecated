@@ -1,6 +1,8 @@
 div.display_info class=(display.late? ? 'late' : '') id="display_#{display.id}"
 	div.display_header
-		= link_to display.name, display_path(display)
+		- if display.late?
+			span.fa.fa-warning title="This display isn't responding!"
+		=< link_to display.name, display_path(display)
 	div.display_current_slide
 		= display_current_slide(display)
 	div.display_metadata
