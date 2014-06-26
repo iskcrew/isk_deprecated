@@ -1,1 +1,1 @@
-$('[data-sortable]').html('<%=j render :partial => 'overrides', :locals => {:overrides => @display.override_queues}%>');
+$('[data-sortable]').html('<%=j render partial: 'sortable_overrides', locals: {overrides: @display.override_queues}%>');

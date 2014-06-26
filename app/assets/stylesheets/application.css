@@ -11,6 +11,7 @@
  *= require reset
  *= require jquery.ui.all
  *= require jquery-ui
+ *= require font-awesome
  *= require master
  *= require_self
  *= require_tree .
