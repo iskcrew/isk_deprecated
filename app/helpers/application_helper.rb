@@ -16,7 +16,10 @@ module ApplicationHelper
 		tabs = controllers
 		tabs += admin_controllers if current_user.admin?
 		tabs.each do |c|
-			html_options = {class: 'ui-state-default ui-corner-top'}
+			html_options = {
+				class: 'ui-state-default ui-corner-top',
+				id: "#{c.downcase}_tab"
+			}
 			if controller.class.name.include?(c)
 				html_options[:class] =	'ui-tabs-active ui-state-active ui-corner-top'
 			end
