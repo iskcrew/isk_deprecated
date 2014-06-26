@@ -8,12 +8,18 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ * reset.css with few modifications for better cross-browser compatibility
  *= require reset
+ *
+ * jquery-ui-rails and jquery-themeroller theme with some sass magic on top
  *= require jquery.ui.all
  *= require jquery-ui
+ *
+ * Font awesome for icons
  *= require font-awesome
+ *
+ * ISK stylesheets starting from the master one
  *= require master
  *= require_self
  *= require_tree .
 */
-
