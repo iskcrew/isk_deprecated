@@ -26,7 +26,23 @@ div.top_navigation {
 				color: $ui-state-hover_font_color;
 			}
 		}
-
+		
+		li.warning {
+			background: $warning_bg;
+			border-color: $warning_border;
+			
+			a:before {
+				content: "";
+				-moz-osx-font-smoothing: grayscale;
+				display: inline-block;
+				font-family: FontAwesome;
+				font-style: normal;
+				font-weight: normal;
+				line-height: 1;
+				margin-right: 5px;
+			}
+		}
+		
 		li#current_event {
 			background: none;
 			padding: 6px;
@@ -37,10 +53,10 @@ div.top_navigation {
 
 		li#logout {
 			float: right;
-				background-image: none;
-				border-color: $warning_border;
-				border-bottom: none;
-				background: $warning_bg;
+			background-image: none;
+			border-color: $warning_border;
+			border-bottom: none;
+			background: $warning_bg;
 		}
 
 		li#logout:hover {
