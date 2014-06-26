@@ -12,7 +12,7 @@ h2 Group metadata
 h2 Reorder slides in this group
 p Drag slides to reorder them.
 ul#slides.sortable data-sortable=url_for(controller: :groups, action: :sort, id: @group.id)
-	= render partial: 'slide_items', locals: {group: @group}
+	= render partial: 'sortable_slides', locals: {group: @group}
 	
 = content_for :navigation do
 	= link_to 'Details', group_path(@group)
