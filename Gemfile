@@ -48,6 +48,9 @@ gem 'bcrypt', '~> 3.1.7'
 
 #### END OF RAILS DEFAULT GEMFILE
 
+# font-awesome-sass for icons
+gem 'font-awesome-sass'
+
 # We use observers
 gem 'rails-observers'
 
