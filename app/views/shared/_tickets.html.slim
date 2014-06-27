@@ -1,4 +1,13 @@
-div#tickets
+div#tickets.info_block
+	- if obj.tickets.present?
+		h2 Open tickets referencing this #{ticket_object_type(obj)}
+		
+		ul
+			- obj.tickets.open.each do |t|
+				li 
+					= "(#{t.status_text})"
+					=< link_to t.name, ticket_path(t)
+	
 	h2 Open new ticket
 	p Create a new ticket about this #{ ticket_object_type(obj) }.
 	= form_for (@ticket = Ticket.new) do |f|
