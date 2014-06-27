@@ -59,6 +59,13 @@ Isk::Application.routes.draw do
   resource :login do
   end
   
+	resources :tickets do
+		member do
+		end
+		
+		collection do
+		end
+	end
 
   resources :users do
     member do

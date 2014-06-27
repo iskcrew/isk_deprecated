@@ -1,0 +1,17 @@
+h1 Tickets for event: #{current_event.name}
+p
+	| Tickets represent requests to do something about different slideshow components.
+
+table.tickets
+	tr
+		th Status
+		th Name
+		th Last updated
+		th Actions
+	- @tickets.each do |ticket|
+		tr class=ticket.status_text
+			td #{ticket.status_text}
+			td #{ticket.name}
+			td #{l ticket.updated_at, format: :short}
+			td
+				= link_to 'Show', ticket_path(ticket), class: 'button'

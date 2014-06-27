@@ -9,7 +9,7 @@ module ApplicationHelper
 	
 	# Generate the top navigation tabs and set a special style for the tab of the current controller
 	def navigation_links
-		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
+		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules', 'Tickets']
 		admin_controllers = ['Templates', 'Users', 'Events']
 		ret = String.new
 		base_html_options = {class: 'ui-state-default ui-corner-top'}
