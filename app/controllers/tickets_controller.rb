@@ -11,6 +11,16 @@ class TicketsController < ApplicationController
 	def create
 		@ticket = Ticket.new(ticket_params)
 		
+		# Associate to object if needed
+		case params[:ticket][:object_type]
+		when 'slide'
+			@ticket.about = Slide.find(params[:ticket][:object_id])
+		when 'presentation'
+			@ticket.about = Presentation.find(params[:ticket][:object_id])
+		when 'group'
+			@ticket.about = MasterGroup.find(params[:ticket][:object_id])
+		end
+		
 		if @ticket.save
 			flash[:notice] = "Ticket created."
 			redirect_to ticket_path(@ticket)
