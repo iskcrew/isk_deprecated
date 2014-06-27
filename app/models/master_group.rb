@@ -12,6 +12,9 @@ class MasterGroup < ActiveRecord::Base
 	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
 	belongs_to :event
+	
+	# Ticket system
+	has_many :tickets, as: :about
 
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :internal, :inclusion => { :in => [true, false] }

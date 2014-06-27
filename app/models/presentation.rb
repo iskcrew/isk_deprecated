@@ -20,6 +20,9 @@ class Presentation < ActiveRecord::Base
 	has_many :permissions
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	
+	# Ticket system
+	has_many :tickets, as: :about
+	
 	validates :effect, presence: true
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
