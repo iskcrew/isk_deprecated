@@ -2,7 +2,10 @@ class Ticket < ActiveRecord::Base
 	belongs_to :event
 	belongs_to :about, polymorphic: true
 	
-	StatusCodes = {1 => 'new', 2 => 'open', 3 => 'closed'}
+	StatusNew = 1
+	StatusOpen = 2
+	StatusClosed = 3
+	StatusCodes = {StatusNew => 'new', StatusOpen => 'open', StatusClosed => 'closed'}
 	ValidModels = [Slide, MasterGroup, Presentation]
 	
 	validates :name, presence: true
@@ -12,6 +15,7 @@ class Ticket < ActiveRecord::Base
 	validate :check_valid_models
 	
 	before_validation :assign_to_current_event, on: :create
+	before_update :set_as_open
 	
 	scope :current, -> { where(event_id: Event.current.id).order(status: :asc, updated_at: :asc) }
 	scope :open, -> { where.not status: StatusCodes[:closed] }
@@ -22,6 +26,13 @@ class Ticket < ActiveRecord::Base
 	end
 	
 	private
+	
+	# Unless the ticket status has been set specificly we will set edited tickets as 'open'
+	def set_as_open
+		unless self.changes.include? :status
+			self.status = StatusOpen
+		end
+	end
 	
 	# Validation to check that our polymorphic association is of a valid type
 	def check_valid_models
