@@ -9,6 +9,7 @@ div.slide_info
 			li: a href="#group_info" Group
 			li: a href="#presentations" Presentations
 			li: a href="#overrides" Overrides
+			li: a href="#tickets" Tickets
 			li: a href="#authorized_users" Authorized users
 		
 		/ List of presentations this slide belongs to
@@ -17,6 +18,7 @@ div.slide_info
 		= render :partial => 'slide_overrides'
 		= render partial: "slide_group_info"
 		= render partial: "shared/authorized_users", locals: {obj: @slide}
+		= render partial: "shared/tickets", locals: {obj: @slide}
 
 /If current user can edit this slide add the appropriate links to navigation bar
 -if @slide.can_edit? current_user
