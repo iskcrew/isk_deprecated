@@ -5,7 +5,11 @@ class Ticket < ActiveRecord::Base
 	StatusNew = 1
 	StatusOpen = 2
 	StatusClosed = 3
-	StatusCodes = {StatusNew => 'new', StatusOpen => 'open', StatusClosed => 'closed'}
+	StatusCodes = {
+		StatusNew => 'new', 
+		StatusOpen => 'open', 
+		StatusClosed => 'closed'
+	}
 	ValidModels = [Slide, MasterGroup, Presentation]
 	
 	validates :name, presence: true
@@ -18,8 +22,8 @@ class Ticket < ActiveRecord::Base
 	before_update :set_as_open
 	
 	scope :current, -> { where(event_id: Event.current.id).order(status: :asc, updated_at: :asc) }
-	scope :open, -> { where.not status: StatusCodes[:closed] }
-	scope :closed, -> { where status: StatusCodes[:closed]}
+	scope :open, -> { where.not(status: StatusClosed) }
+	scope :closed, -> { where status: StatusClosed}
 	
 	def status_text
 		StatusCodes[self.status]
