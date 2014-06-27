@@ -22,6 +22,13 @@ class Ticket < ActiveRecord::Base
 	# Validation to check that our polymorphic association is of a valid type
 	def check_valid_models
 		pass = false
+		
+		# Having no assigned object is fine
+		if self.about.blank?
+			return
+		end
+		
+		# Check that the assigned object is in the ValidModels list
 		ValidModels.each do |m|
 			pass = pass ? true : self.about.is_a?(m)
 		end
