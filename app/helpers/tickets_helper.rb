@@ -19,4 +19,9 @@ module TicketsHelper
 		end
 	end
 	
+	def ticket_close_link(ticket)
+		link_to 'Close', ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
+			class: 'button warning', method: :put
+	end
+	
 end
