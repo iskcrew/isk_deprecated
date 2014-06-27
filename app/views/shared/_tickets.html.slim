@@ -1,5 +1,5 @@
 div#tickets.info_block
-	- if obj.tickets.present?
+	- if obj.tickets.open.present?
 		h2 Open tickets referencing this #{ticket_object_type(obj)}
 		
 		ul
