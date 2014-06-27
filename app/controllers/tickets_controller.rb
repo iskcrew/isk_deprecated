@@ -1,7 +1,12 @@
 class TicketsController < ApplicationController
 	
 	def index
-		@tickets = Ticket.current
+		respond_to do |format|
+			format.html {@tickets = Ticket.current}
+			format.js {
+				@open_tickets = Ticket.current.open.count
+			}
+		end
 	end
 	
 	def new

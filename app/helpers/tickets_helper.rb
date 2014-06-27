@@ -24,4 +24,21 @@ module TicketsHelper
 			class: 'button warning', method: :put
 	end
 	
+	def ticket_tab_link
+		link_name = "Tickets #{ticket_open_count}"
+		return link_to link_name.html_safe, tickets_path, class: 'ui-tabs-anchor'
+	end
+	
+	private
+	
+	def ticket_open_count
+		if Ticket.open.count > 0
+			html = icon 'ticket'
+			html << Ticket.open.count.to_s
+			return html
+		else
+			return ""
+		end
+	end
+	
 end
