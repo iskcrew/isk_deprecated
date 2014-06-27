@@ -13,7 +13,7 @@ class Ticket < ActiveRecord::Base
 	
 	before_validation :assign_to_current_event, on: :create
 	
-	scope :current, -> { where event_id: Event.current.id }
+	scope :current, -> { where(event_id: Event.current.id).order(status: :asc) }
 	scope :open, -> { where.not status: StatusCodes[:closed] }
 	scope :closed, -> { where status: StatusCodes[:closed]}
 	
