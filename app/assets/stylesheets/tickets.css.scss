@@ -18,17 +18,22 @@ table.tickets {
 		font-weight: bold;
 	}
 	
-	tr.new td:first-child {
-		background: $red-light;
-		color: black;
+	tr.new {
+		td:first-child {
+			background: $red-highlight;
+		}
 	}
 	
-	tr.open td:first-child {
-		background: $red;
+	tr.open {
+		td:first-child {
+			background: $red;
+		}
 	}
 	
-	tr.closed td:first-child {
-		background: $green;
+	tr.closed {
+		td:first-child {
+			background: $green;
+		}
 	}
 		
 }
