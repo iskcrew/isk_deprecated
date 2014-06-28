@@ -1,0 +1,9 @@
+table.presentation
+	tr: th = link_to presentation.name, presentation_path(presentation)
+	tr: td
+		ul
+			li Total slides: #{presentation.total_slides}
+			li Run time: #{presentation.duration}
+			li Slide duration: #{presentation.delay}
+			li Transition effect: #{presentation.effect.name}
+			li Last modified: #{l presentation.updated_at, format: :short}
