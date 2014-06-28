@@ -12,6 +12,8 @@ h1 Information for group: #{@group.name}
 				b Points:
 				= d[:pts]
 
+= tickets_partial(@group)
+
 - unless @group.presentations.empty?
 	h2 Presentations
 	p This group is part of the following presentations:

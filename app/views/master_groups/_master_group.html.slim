@@ -1,0 +1,19 @@
+table.group_item id=master_group.id
+	tr: th = group_link_tag(master_group)
+	tr: td.buttons
+		= link_to 'Details', group_path(master_group), class: 'button'
+		- if master_group.can_edit?(current_user)
+			=< link_to 'Add slides', {controller: :groups, action: :add_slides, id: master_group.id}, 
+				class: 'button', title: "Add ungrouped slides to this group."
+			=< link_to 'Edit', edit_group_path(master_group), class: 'button', 
+				title: 'Edit slide order and group metadata.'
+			=< link_to 'Delete', group_path(master_group), method: :delete, 
+				data: {confirm: "Are you sure you want to delete this group? \
+					All slides in this group will become ungrouped."}, class: "button warning"
+	tr: td.slides_in_group
+		- if master_group.slides.empty?
+			div.no_slides
+				p This group doesn't contain any slides
+		- else
+			- master_group.slides.each do |s|
+				= slide_thumb_to_show_tag(s)

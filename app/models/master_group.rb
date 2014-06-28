@@ -34,6 +34,22 @@ class MasterGroup < ActiveRecord::Base
   after_save :update_timestamps
 	after_destroy :update_timestamps
 	
+	# Deal with STI and partial selection etc
+	def self.inherited(child)
+		child.instance_eval do
+			def model_name
+				self.base_class.model_name
+			end
+		end
+		
+		child.class_eval do
+			def to_partial_path
+				'master_groups/master_group'
+			end 
+		end
+		super
+	end
+	
 	
 	def self.ungrouped
 		Event.current.ungrouped
@@ -84,7 +100,7 @@ class MasterGroup < ActiveRecord::Base
 	def cache_tag
 		"master_group_" + self.id.to_s
 	end
-	
+		
 	private
 	
 	def update_timestamps

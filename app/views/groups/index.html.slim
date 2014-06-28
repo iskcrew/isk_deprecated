@@ -3,4 +3,4 @@ h1 All groups in current event (#{current_event.name})
 = render partial: 'shared/group_links'
 
 div.group_list
-	= render partial: 'group', collection: @groups
+	= render @groups
