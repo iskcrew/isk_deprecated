@@ -4,8 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+
+slide_ticket:
+    name: "I'm about a slide!"
+    description: "Test ticket, please ignore"
+    about_id: 1
+    about_type: Slide
