@@ -1,3 +1,34 @@
-// Place all the styles related to the tickets controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// tickets.css.scss
+// isk
+//
+// Created by Vesa-Pekka Palmu on 2014-06-28.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
+
+table.tickets {
+	td {
+		vertical-align: middle;
+	}
+	
+	tr td:first-child {
+		text-align: center;
+		font-weight: bold;
+	}
+	
+	tr.new td:first-child {
+		background: $red-light;
+		color: black;
+	}
+	
+	tr.open td:first-child {
+		background: $red;
+	}
+	
+	tr.closed td:first-child {
+		background: $green;
+	}
+		
+}
