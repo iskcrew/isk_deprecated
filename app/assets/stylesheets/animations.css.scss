@@ -1,0 +1,74 @@
+//
+// animations.css.scss
+// isk
+//
+// Created by Vesa-Pekka Palmu on 2014-06-28.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
+
+// Functions to make generating animation and keyframe directives easier
+
+@mixin transform($transform) {
+	-webkit-transform: $transform;
+	-moz-transform: $transform;
+	-ms-transform: $transform;
+	-o-transform: $transform;
+	transform: $transform;
+	
+}
+
+@mixin animation($animate...) {
+	$max: length($animate);
+	$animations: '';
+
+	@for $i from 1 through $max {
+		$animations: #{$animations + nth($animate, $i)};
+
+		@if $i < $max {
+			$animations: #{$animations + ", "};
+		}
+	}
+	-webkit-animation: $animations;
+	-moz-animation:    $animations;
+	-o-animation:      $animations;
+	animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+	@-webkit-keyframes #{$animationName} {
+		@content;
+	}
+	@-moz-keyframes #{$animationName} {
+		@content;
+	}
+	@-o-keyframes #{$animationName} {
+		@content;
+	}
+	@keyframes #{$animationName} {
+		@content;
+	}
+}
+
+// Animation keyframes
+
+@include keyframes(scale-90-to-110) {
+	0%	{	@include transform( scale3d(0.9, 0.9, 1) ); }
+	100% {	@include transform( scale3d(1.1, 1.1, 1) ); }
+}
+
+@include keyframes(scale-100-to-150) {
+	0%		{ @include transform( scale3d(1, 1, 1) ); }
+	100%	{ @include transform( scale3d(1.5, 1.5, 1) ); }
+}
+
+// Animated elements
+
+div#top_fixed {
+	ul.tabs {		
+		li.warning a:before {
+			@include animation('scale-100-to-150 1s infinite alternate');
+		}
+	}
+}
