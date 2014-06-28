@@ -50,6 +50,11 @@ module ApplicationHelper
 	def authorized_users(obj)
 		render :partial => 'shared/authorized_users', :locals => {:obj => obj}
 	end
+	
+	# Render the tickets partial with the given object
+	def tickets_partial(obj)
+		render partial: 'shared/tickets', locals: {obj: obj}
+	end
 
 	# FIXME: Use rails4 stuff instead of this and kill this off
 	def select_options_tag(name='',select_options={},options={})
