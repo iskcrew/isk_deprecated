@@ -11,7 +11,7 @@ table.tickets
 	- @tickets.each do |ticket|
 		tr class=ticket.status_text
 			td #{ticket.status_text}
-			td #{ticket.name}
+			td #{link_to ticket.name, ticket_path(ticket)}
 			td #{l ticket.updated_at, format: :short}
 			td
 				= link_to 'Show', ticket_path(ticket), class: 'button'
