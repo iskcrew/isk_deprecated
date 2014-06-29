@@ -25,6 +25,9 @@ class Ticket < ActiveRecord::Base
 	scope :open, -> { where.not(status: StatusClosed) }
 	scope :closed, -> { where status: StatusClosed}
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
+	
 	def status_text
 		StatusCodes[self.status]
 	end
