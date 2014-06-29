@@ -20,6 +20,8 @@ class Group < ActiveRecord::Base
 	after_save :update_timestamps
 	after_destroy :update_timestamps
 
+	# Send websocket messages on create and update
+	include WebsocketMessages
 
 	def to_hash
 		hash = Hash.new

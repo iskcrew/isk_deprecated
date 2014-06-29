@@ -29,6 +29,9 @@ class Display < ActiveRecord::Base
 
 	include ModelAuthorization
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
+	
 	# Delegations to the display state object, mostly for legacy reasons
 	delegate :last_contact_at, :last_contact_at=,									to: :display_state, allow_nil: true
 	delegate :last_hello, :last_hello=,														to: :display_state, allow_nil: true

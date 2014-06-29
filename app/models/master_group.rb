@@ -23,6 +23,9 @@ class MasterGroup < ActiveRecord::Base
 	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	
 	include ModelAuthorization
+
+	# Send websocket messages on create and update
+	include WebsocketMessages
 	
 	scope :defined_groups, -> {where(:internal => false).order('name')}
 	

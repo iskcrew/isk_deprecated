@@ -52,6 +52,9 @@ class Slide < ActiveRecord::Base
 	
 	include HasSvgData
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
+	
 	Host = 'http://example.com'
 	
 	TypeString = 'image'

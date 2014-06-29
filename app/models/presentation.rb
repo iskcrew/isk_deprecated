@@ -41,6 +41,9 @@ class Presentation < ActiveRecord::Base
 	# Module that contains our ACL logic.
 	include ModelAuthorization
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
+	
 	# Shorthand for returning the count of public slides
 	# in the presentation
 	def total_slides
