@@ -34,6 +34,11 @@ class Ticket < ActiveRecord::Base
 		StatusCodes[self.status]
 	end
 	
+	# Used to determinate if a user can close this ticket
+	def can_close?(user)
+		(self.status != StatusClosed) && self.admin?(user)
+	end
+	
 	private
 	
 	# Unless the ticket status has been set specificly we will set edited tickets as 'open'

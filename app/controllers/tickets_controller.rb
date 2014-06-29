@@ -26,8 +26,14 @@ class TicketsController < ApplicationController
 			@ticket.about = MasterGroup.find(params[:ticket][:object_id])
 		end
 		
+		
 		if @ticket.save
 			flash[:notice] = "Ticket created."
+			
+			# Allow the user creating the ticket edit priviledges if needed
+			unless @ticket.can_edit? current_user
+				@ticket.authorized_users << current_user
+			end
 			redirect_to ticket_path(@ticket)
 		else
 			flash[:error] = "Error saving ticket."
@@ -41,10 +47,13 @@ class TicketsController < ApplicationController
 	
 	def edit
 		@ticket = Ticket.current.find(params[:id])
+		require_edit @ticket
 	end
 	
 	def update
 		@ticket = Ticket.current.find(params[:id])
+		require_edit @ticket
+		
 		if @ticket.update_attributes(ticket_params)
 			flash[:notice] = "Ticket was succesfully updated."
 			redirect_to ticket_path(@ticket)
@@ -56,8 +65,19 @@ class TicketsController < ApplicationController
 	
 	private
 	
+	# Whitelist mass assignment parameters, only some users can close the tickets
 	def ticket_params
-		params.required(:ticket).permit(:name, :description, :status)
+		if Ticket.admin? current_user
+			params.required(:ticket).permit(:name, :description, :status)
+		else
+			params.required(:ticket).permit(:name, :description)
+		end
+	end
+	
+	def require_admin
+		unless Ticket.admin? current_user
+			raise ApplicationController::PermissionDenied
+		end
 	end
 	
 end

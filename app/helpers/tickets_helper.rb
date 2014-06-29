@@ -41,8 +41,10 @@ module TicketsHelper
 	end
 	
 	def ticket_close_link(ticket)
-		link_to 'Close', ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
-			class: 'button warning', method: :put
+		if ticket.can_close? current_user
+			link_to 'Close', ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
+				class: 'button warning', method: :put
+		end
 	end
 	
 	def ticket_tab_link
