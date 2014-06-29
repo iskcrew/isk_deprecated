@@ -28,6 +28,8 @@ class Ticket < ActiveRecord::Base
 	# Send websocket messages on create and update
 	include WebsocketMessages
 	
+	include ModelAuthorization
+	
 	def status_text
 		StatusCodes[self.status]
 	end
