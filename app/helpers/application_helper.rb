@@ -55,17 +55,6 @@ module ApplicationHelper
 	def tickets_partial(obj)
 		render partial: 'shared/tickets', locals: {obj: obj}
 	end
-
-	# FIXME: Use rails4 stuff instead of this and kill this off
-	def select_options_tag(name='',select_options={},options={})
-		# set selected from value
-		selected = ''
-		unless options[:value].blank?
-			selected = options[:value]
-			options.delete(:value)
-		end
-		select_tag(name,options_for_select(select_options,selected),options)
-	end
 	
 	# Memoize the current user
 	def current_user
