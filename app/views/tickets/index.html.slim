@@ -17,4 +17,5 @@ table.tickets
 			td #{l ticket.updated_at, format: :short}
 			td
 				= link_to 'Show', ticket_path(ticket), class: 'button'
+				=< ticket_edit_link(ticket)
 				=< ticket_close_link(ticket)

@@ -40,6 +40,12 @@ module TicketsHelper
 		end
 	end
 	
+	def ticket_edit_link(ticket)
+		if ticket.can_edit? current_user
+			link_to 'Edit', edit_ticket_path(ticket), class: 'button'
+		end
+	end
+	
 	def ticket_close_link(ticket)
 		if ticket.can_close? current_user
 			link_to 'Close', ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
