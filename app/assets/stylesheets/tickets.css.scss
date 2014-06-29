@@ -1,0 +1,49 @@
+//
+// tickets.css.scss
+// isk
+//
+// Created by Vesa-Pekka Palmu on 2014-06-28.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
+
+table.tickets {
+	td {
+		vertical-align: middle;
+	}
+	
+	tr td:first-child {
+		text-align: center;
+		font-weight: bold;
+	}
+	
+	tr.new {
+		td:first-child {
+			background: $red-highlight;
+		}
+	}
+	
+	tr.open {
+		td:first-child {
+			background: $red;
+		}
+	}
+	
+	tr.closed {
+		td:first-child {
+			background: $green;
+		}
+	}
+		
+}
+
+div#tickets, form.tickets {
+	input[type=text], textarea {
+		width: 400px;
+	}
+	
+	textarea {
+		height: 100px;
+	}
+}

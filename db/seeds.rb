@@ -34,7 +34,8 @@ models = [
 	MasterGroup,
 	Presentation,
 	Display,
-	User
+	User,
+	Ticket
 ].each do |m|
 	roles << [
 		"#{m.base_class.name.downcase}-admin",

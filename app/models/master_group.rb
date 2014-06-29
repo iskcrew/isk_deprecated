@@ -12,14 +12,17 @@ class MasterGroup < ActiveRecord::Base
 	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
 	belongs_to :event
+	
+	# Ticket system
+	has_many :tickets, as: :about
 
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :internal, :inclusion => { :in => [true, false] }
-
-	has_many :permissions
-	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	
 	include ModelAuthorization
+
+	# Send websocket messages on create and update
+	include WebsocketMessages
 	
 	scope :defined_groups, -> {where(:internal => false).order('name')}
 	
@@ -30,6 +33,22 @@ class MasterGroup < ActiveRecord::Base
 	# Touch associated displays
   after_save :update_timestamps
 	after_destroy :update_timestamps
+	
+	# Deal with STI and partial selection etc
+	def self.inherited(child)
+		child.instance_eval do
+			def model_name
+				self.base_class.model_name
+			end
+		end
+		
+		child.class_eval do
+			def to_partial_path
+				'master_groups/master_group'
+			end 
+		end
+		super
+	end
 	
 	
 	def self.ungrouped
@@ -81,7 +100,7 @@ class MasterGroup < ActiveRecord::Base
 	def cache_tag
 		"master_group_" + self.id.to_s
 	end
-	
+		
 	private
 	
 	def update_timestamps

@@ -13,6 +13,7 @@ ul
 		- @presentation.displays.each do |d|
 			li = link_to d.name, display_path(d)
 
+= tickets_partial(@presentation)
 = authorized_users(@presentation)
 
 - if Display.can_override(current_user).present?

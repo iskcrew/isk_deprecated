@@ -7,6 +7,9 @@ class DisplayState < ActiveRecord::Base
 	validates :monitor, inclusion: { in: [true, false] }
 	validates :current_slide_id, :current_group_id, numericality: {only_integer: true}, allow_nil: true
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
+	
 	before_validation do
 		self.ip = 'UNKNOWN' if self.ip.blank?
 	end

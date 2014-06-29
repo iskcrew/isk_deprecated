@@ -28,8 +28,8 @@ class Slide < ActiveRecord::Base
 	has_one :event, through: :master_group
 	has_many :presentations, -> { uniq }, through: :master_group
 	
-	has_many :permissions
-	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
+	# Ticket system
+	has_many :tickets, as: :about
 
 	validates :name, presence: true, length: { maximum: 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
@@ -48,6 +48,9 @@ class Slide < ActiveRecord::Base
 	ranks :position, with_same: :master_group_id, class_name: 'Slide' 
 	
 	include HasSvgData
+	
+	# Send websocket messages on create and update
+	include WebsocketMessages
 	
 	Host = 'http://example.com'
 	

@@ -27,6 +27,10 @@ div.top_navigation {
 			}
 		}
 		
+		li.notice {
+			border-color: $primary_light;
+		}
+		
 		li.warning {
 			background: $warning_bg;
 			border-color: $warning_border;

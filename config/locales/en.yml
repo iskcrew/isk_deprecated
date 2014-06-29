@@ -31,3 +31,6 @@ en:
                 major: "Major event"
                 cancelled: "Event cancelled"
                 rescheduled: "Event resheduled"
+            ticket:
+                name: "Name for the ticket:"
+                description: "Describe what should be done:"

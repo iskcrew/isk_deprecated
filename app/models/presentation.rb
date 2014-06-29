@@ -16,9 +16,9 @@ class Presentation < ActiveRecord::Base
 	belongs_to :effect
 	belongs_to :event
 	has_many :displays
-	
-	has_many :permissions
-	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
+		
+	# Ticket system
+	has_many :tickets, as: :about
 	
 	validates :effect, presence: true
 	validates :name, presence: true, length: { :maximum => 100 }
@@ -37,6 +37,9 @@ class Presentation < ActiveRecord::Base
 	
 	# Module that contains our ACL logic.
 	include ModelAuthorization
+	
+	# Send websocket messages on create and update
+	include WebsocketMessages
 	
 	# Shorthand for returning the count of public slides
 	# in the presentation

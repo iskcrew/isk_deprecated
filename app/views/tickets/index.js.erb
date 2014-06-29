@@ -1,0 +1,9 @@
+$('#tickets_tab').html(
+	'<%=j ticket_tab_link %>'
+);
+
+<% if @open_tickets == 0 %>
+	$('#tickets_tab').removeClass('notice');
+<% else %>
+	$('#tickets_tab').addClass('notice');
+<% end %>

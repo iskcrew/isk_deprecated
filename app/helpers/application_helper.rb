@@ -9,7 +9,7 @@ module ApplicationHelper
 	
 	# Generate the top navigation tabs and set a special style for the tab of the current controller
 	def navigation_links
-		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules']
+		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules', 'Tickets']
 		admin_controllers = ['Templates', 'Users', 'Events']
 		ret = String.new
 		base_html_options = {class: 'ui-state-default ui-corner-top'}
@@ -49,6 +49,11 @@ module ApplicationHelper
 	# Render the authorized users partial with given object
 	def authorized_users(obj)
 		render :partial => 'shared/authorized_users', :locals => {:obj => obj}
+	end
+	
+	# Render the tickets partial with the given object
+	def tickets_partial(obj)
+		render partial: 'shared/tickets', locals: {obj: obj}
 	end
 
 	# FIXME: Use rails4 stuff instead of this and kill this off

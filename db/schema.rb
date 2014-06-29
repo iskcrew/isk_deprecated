@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140609110451) do
+ActiveRecord::Schema.define(version: 20140629153945) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -132,9 +132,12 @@ ActiveRecord::Schema.define(version: 20140609110451) do
     t.integer  "display_id"
     t.integer  "presentation_id"
     t.integer  "slide_id"
+    t.integer  "target_id"
+    t.string   "target_type"
   end
 
   add_index "permissions", ["role_id"], name: "index_roles_users_on_role_id", using: :btree
+  add_index "permissions", ["target_id", "target_type"], name: "index_permissions_on_target_id_and_target_type", using: :btree
   add_index "permissions", ["user_id"], name: "index_roles_users_on_user_id", using: :btree
 
   create_table "presentations", force: true do |t|
@@ -228,6 +231,22 @@ ActiveRecord::Schema.define(version: 20140609110451) do
   end
 
   add_index "template_fields", ["slide_template_id"], name: "index_template_fields_on_slide_template_id", using: :btree
+
+  create_table "tickets", force: true do |t|
+    t.string   "name",                    null: false
+    t.integer  "status",      default: 1, null: false
+    t.text     "description",             null: false
+    t.integer  "event_id"
+    t.integer  "about_id"
+    t.string   "about_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tickets", ["about_id", "about_type"], name: "index_tickets_on_about_id_and_about_type", using: :btree
+  add_index "tickets", ["event_id", "status"], name: "index_tickets_on_event_id_and_status", using: :btree
+  add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
+  add_index "tickets", ["status"], name: "index_tickets_on_status", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username",   limit: 50

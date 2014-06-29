@@ -16,6 +16,8 @@ class OverrideQueue < ActiveRecord::Base
 	include RankedModel
 	ranks :position, :with_same => :display_id 
 	
+	# Send websocket messages on create and update
+	include WebsocketMessages
 	
 	def to_hash
 		h = self.slide.to_hash
