@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
 
 	has_many :permissions
 
-	has_many :roles, -> {order 'roles.role'},										through: :permissions
-	has_many :slides, -> {order 'slides.name'},									through: :permissions
-	has_many :master_groups, -> {order 'master_groups.name'},		through: :permissions
-	has_many :presentations, -> {order 'presentations.name'},		through: :permissions
-	has_many :displays, -> {order 'displays.name'},							through: :permissions
+	has_many :roles, -> {order 'roles.role'},										through: :permissions, source: :target, source_type: 'Role'
+	has_many :slides, -> {order 'slides.name'},									through: :permissions, source: :target, source_type: 'Slide'
+	has_many :master_groups, -> {order 'master_groups.name'},		through: :permissions, source: :target, source_type: 'MasterGroup'
+	has_many :presentations, -> {order 'presentations.name'},		through: :permissions, source: :target, source_type: 'Presentation'
+	has_many :displays, -> {order 'displays.name'},							through: :permissions, source: :target, source_type: 'Display'
 
 	include ModelAuthorization
 

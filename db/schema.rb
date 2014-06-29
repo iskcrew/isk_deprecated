@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627162014) do
+ActiveRecord::Schema.define(version: 20140629153945) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -132,9 +132,12 @@ ActiveRecord::Schema.define(version: 20140627162014) do
     t.integer  "display_id"
     t.integer  "presentation_id"
     t.integer  "slide_id"
+    t.integer  "target_id"
+    t.string   "target_type"
   end
 
   add_index "permissions", ["role_id"], name: "index_roles_users_on_role_id", using: :btree
+  add_index "permissions", ["target_id", "target_type"], name: "index_permissions_on_target_id_and_target_type", using: :btree
   add_index "permissions", ["user_id"], name: "index_roles_users_on_user_id", using: :btree
 
   create_table "presentations", force: true do |t|

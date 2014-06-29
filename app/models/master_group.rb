@@ -18,9 +18,6 @@ class MasterGroup < ActiveRecord::Base
 
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :internal, :inclusion => { :in => [true, false] }
-
-	has_many :permissions
-	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	
 	include ModelAuthorization
 

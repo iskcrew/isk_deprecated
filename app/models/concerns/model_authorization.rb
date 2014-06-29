@@ -15,7 +15,8 @@ module	ModelAuthorization
 	extend ActiveSupport::Concern
 	
 	included do
-		
+		has_many :permissions, as: :target
+		has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
 	end
 	
 	# Can a given user edit this instance of a model?	 

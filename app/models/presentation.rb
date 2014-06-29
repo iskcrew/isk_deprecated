@@ -16,10 +16,7 @@ class Presentation < ActiveRecord::Base
 	belongs_to :effect
 	belongs_to :event
 	has_many :displays
-	
-	has_many :permissions
-	has_many :authorized_users, through: :permissions, source: :user, class_name: 'User'
-	
+		
 	# Ticket system
 	has_many :tickets, as: :about
 	
