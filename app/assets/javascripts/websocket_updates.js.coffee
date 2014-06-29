@@ -50,6 +50,15 @@ $ ->
 			display = {id: display_state.display_id}
 			update_display(display)
 	
+	update_tickets = (ticket) ->
+		console.log 'Updating ticket counts'
+		$.ajax({
+			type: "GET",
+			url: "/tickets",
+			dataType: 'script'
+		})
+	
+	
 	# Bind to websocket events
 	displays = window.dispatcher.subscribe('display');
 	displays.bind('update', update_display);
@@ -61,3 +70,9 @@ $ ->
 	slidelist.bind('update', replace_slideitem);
 	slidelist.bind('updated_image', replace_slide_image);
 	
+	tickets = window.dispatcher.subscribe('ticket');
+	tickets.bind('update', update_tickets)
+	tickets.bind('create', update_tickets)
+	
+	# Get the initial ticket states
+	update_tickets()
