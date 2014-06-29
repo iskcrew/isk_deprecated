@@ -37,3 +37,13 @@ table.tickets {
 	}
 		
 }
+
+div#tickets, form.tickets {
+	input[type=text], textarea {
+		width: 400px;
+	}
+	
+	textarea {
+		height: 100px;
+	}
+}
