@@ -13,8 +13,8 @@ roles_users_admin_<%=i%>:
 <%[2,3,5,7,9,10].each do |i|%>
 
 roles_users_limited_<%=i%>:
-    role_id: <%=i%>
-    target_id: 3
+    target_id: <%=i%>
+    user_id: 3
     target_type: 'Role'
 
 <% end %>
