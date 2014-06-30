@@ -9,20 +9,23 @@ class GroupsController < ApplicationController
 	before_filter :require_create, :only => [:new, :create]
 	before_filter :require_admin, :only => [:publish_all, :hide_all, :grant, :deny]
 	
+	# Get list of all groups in the current event
 	def index
 		@groups = MasterGroup.current.defined_groups
 		@new_group = MasterGroup.new
 	end
 	
+	# Show detailed information about a group
 	def show
 		@group = MasterGroup.find(params[:id])
 	end
 	
+	# Edit a group, we need to check edit priviledges and dissallow editing of internal groups
 	def edit
 		@group = MasterGroup.find(params[:id])
 		
 		if @group.internal
-			#Do not allow editing of internal groups
+			# Do not allow editing of internal groups
 			flash[:error] = "Can't edit internal groups"
 			redirect_to group_path(@group) and return
 		end
@@ -32,16 +35,16 @@ class GroupsController < ApplicationController
 	
 	def update
 		@group =MasterGroup.find(params[:id])
-
+		
 		if @group.internal
-			#Do not allow editing of internal groups
+			# Do not allow editing of internal groups
 			flash[:error] = "Can't edit internal groups"
 			redirect_to group_path(@group) and return
 		end
-
-
+		
 		require_edit @group
 		
+		# Handle prizegroup data
 		if @group.is_a? PrizeGroup
 			data = Array.new
 			params[:data].each_key do |k|
@@ -54,7 +57,6 @@ class GroupsController < ApplicationController
 			@group.data = data
 		end
 		
-		
 		if @group.update_attributes(master_group_params)
 			flash[:notice] = 'Group was successfully updated.'
 			redirect_to :action => 'show', :id => @group.id
@@ -64,21 +66,21 @@ class GroupsController < ApplicationController
 		
 	end
 	
-	#Set all slides in the groups to public
+	# Set all slides in the groups to public
 	def publish_all
 		@group = MasterGroup.find(params[:id])
 		@group.publish_slides
 		redirect_to :action => :show, :id => @group.id
 	end
 	
-	#Hide all slides in the group
+	# Hide all slides in the group
 	def hide_all
 		@group = MasterGroup.find(params[:id])
 		@group.hide_slides
 		redirect_to :action => :show, :id => @group.id
 	end
 	
-	#Change the order of slides in the group, used with jquerry sortable widget.
+	# Change the order of slides in the group, used with jquerry sortable widget.
 	def sort
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
@@ -95,7 +97,7 @@ class GroupsController < ApplicationController
 		end		
 	end
 
-	#Delete a group, all contained slides will become ungrouped
+	# Delete a group, all contained slides will become ungrouped
 	def destroy
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
@@ -104,7 +106,7 @@ class GroupsController < ApplicationController
 		redirect_to :action => :index
 	end
 	
-	#Add multiple slides to group, render the selection form for all ungrouped slides
+	# Add multiple slides to group, render the selection form for all ungrouped slides
 	def add_slides
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
@@ -112,7 +114,7 @@ class GroupsController < ApplicationController
 		@slides = current_event.ungrouped.slides.current.all
 	end
 	
-	#Add multiple slides to group
+	# Add multiple slides to group
 	def adopt_slides
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
@@ -140,7 +142,7 @@ class GroupsController < ApplicationController
 	# FIXME: move creation logic to models
 	def create
 		if params[:prize]
-			#Create new prize ceremony group
+			# Create new prize ceremony group
 			@group = PrizeGroup.new(master_group_params)
 			@group.event = current_event
 			data = Array.new
@@ -152,12 +154,12 @@ class GroupsController < ApplicationController
 				}
 			end
 			@group.data = data
-			
-			
 		else
+			# Create normal group
 			@group = MasterGroup.new(master_group_params)
 			@group.event = current_event
 		end
+		
 		if @group.save
 			flash[:notice] = "Group created."
 			@group.authorized_users << current_user unless MasterGroup.admin? current_user
@@ -183,7 +185,7 @@ class GroupsController < ApplicationController
 		redirect_to :back		 
 	end
 	
-	#Add all slides on this group to override on a display
+	# Add all slides on this group to override on a display
 	def add_to_override
 		group = MasterGroup.find(params[:id])
 		display = Display.find(params[:override][:display_id])
@@ -203,6 +205,7 @@ class GroupsController < ApplicationController
 	
 	private
 	
+	# Whitelist the parameters for creating and editing groups
 	def master_group_params
 		params.required(:master_group).permit(:name, :effect_id)
 	end
