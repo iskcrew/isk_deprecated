@@ -22,8 +22,8 @@ div.info_block#metadata
 			p
 				| This slide has been deleted!
 				- if Slide.admin? current_user
-					= button_to 'Undelete', action: :undelete, id: @slide.id, 
-						class: 'button'
+					=< link_to 'Undelete', undelete_slide_path(@slide), 
+						class: 'button', method: :post
 	ul
 		li Slide class: #{slide_class @slide}
 		li Duration: #{slide_duration @slide}
