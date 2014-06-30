@@ -12,7 +12,6 @@ class GroupsController < ApplicationController
 	# Get list of all groups in the current event
 	def index
 		@groups = MasterGroup.current.defined_groups
-		@new_group = MasterGroup.new
 	end
 	
 	# Show detailed information about a group
