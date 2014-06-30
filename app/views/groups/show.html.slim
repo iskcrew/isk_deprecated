@@ -41,8 +41,10 @@ table.compact_slidelist
 		td
 			= render partial: 'slides/slide', collection: @group.slides
 
-- if @group.can_edit? current_user
-	= content_for :navigation do
+
+= content_for :navigation do
+	= link_to 'Download slides', download_slides_group_path(@group)
+	- if @group.can_edit? current_user
 		=link_to 'Hide all slides', {action: :hide_all, id: @group.id}, method: :post
 		=link_to 'Publish all slides', {action: :publish_all, id: @group.id}, method: :post
 		=link_to 'Edit', action: :edit, id: @group.id

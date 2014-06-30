@@ -41,6 +41,9 @@ class Presentation < ActiveRecord::Base
 	# Send websocket messages on create and update
 	include WebsocketMessages
 	
+	# Allow zipping all associated slide images
+	include ZipSlides
+	
 	# Shorthand for returning the count of public slides
 	# in the presentation
 	def total_slides

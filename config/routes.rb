@@ -121,6 +121,7 @@ Isk::Application.routes.draw do
       post 'grant'
       post 'deny'
       post 'add_to_override'
+			get 'download_slides'
     end
   end
   

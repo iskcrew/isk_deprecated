@@ -87,6 +87,9 @@ gem 'rrd-ffi', :require => 'rrd'
 # Better caching
 gem 'cashier'
 
+# for zipping all slides in a group or presentation
+gem 'rubyzip', require: 'zip'
+
 # For simple-edit previews to work in development
 gem 'rack-rewrite', '~> 1.2.1'
 
