@@ -24,6 +24,9 @@ class MasterGroup < ActiveRecord::Base
 	# Send websocket messages on create and update
 	include WebsocketMessages
 	
+	# Allow zipping all associated slide images
+	include ZipSlides
+	
 	scope :defined_groups, -> {where(:internal => false).order('name')}
 	
 	before_create do |g|
