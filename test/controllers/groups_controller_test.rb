@@ -21,7 +21,8 @@ class GroupsControllerTest < ActionController::TestCase
 				[:index, nil],
 				[:new, nil],
 				[:edit, id: master_groups(:one_slide).id],
-				[:show, id: master_groups(:one_slide).id]
+				[:show, id: master_groups(:one_slide).id],
+				[:download_slides, id: master_groups(:one_slide).id]
 			],
 			post: [
 				[:sort, {id: master_groups(:ten_slides).id, element_id: 3, element_position: 1}],
