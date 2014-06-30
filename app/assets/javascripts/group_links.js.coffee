@@ -9,7 +9,9 @@
 $ ->
 	scrollToAnchor = (aid) ->
 		aTag = $("a[name='#{aid}']")
-		$('html,body').animate({scrollTop: aTag.offset().top},200)
+		# The top navigation bars take up 75px of space, so scroll -85px to leave little
+		# room between the navigation bars and the anchor
+		$('html,body').animate({scrollTop: aTag.offset().top - 85},200)
 	
 	handle_group_click = (e) ->
 		e.preventDefault()
