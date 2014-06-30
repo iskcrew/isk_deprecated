@@ -2,6 +2,7 @@ table.group_item id=master_group.id
 	tr: th = group_link_tag(master_group)
 	tr: td.buttons
 		= link_to 'Details', group_path(master_group), class: 'button'
+		= link_to 'Download slides', download_slides_group_path(master_group), class: 'button'
 		- if master_group.can_edit?(current_user)
 			=< link_to 'Add slides', {controller: :groups, action: :add_slides, id: master_group.id}, 
 				class: 'button', title: "Add ungrouped slides to this group."

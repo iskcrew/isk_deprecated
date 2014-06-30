@@ -170,6 +170,12 @@ class GroupsController < ApplicationController
 			
 	end
 	
+	# Download the slides as a zip archive
+	def download_slides
+		group = MasterGroup.find(params[:id])
+		send_data group.zip_slides, filename: "group_#{group.id}_#{group.name}.zip"
+	end
+	
 	def deny
 		group = MasterGroup.find(params[:id])
 		user = User.find(params[:user_id])
