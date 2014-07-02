@@ -70,7 +70,10 @@ div.display_preview_wrapper {
 
 div.display_preview {
 	display: block;
-	float: right;
+	position:fixed;
+	top: 120px;
+	right: 15px;
+	box-shadow:0 2px 4px rgba(0, 0, 0, .3);	
 	
 	div.display_info {
 		float: none;
@@ -87,13 +90,6 @@ div.display_preview {
 		display: block;
 		margin: 5px;
 		padding: 5px;
-	}
-	
-	&.stuck {
-		position:fixed;
-		top:0;
-		right: 16px;
-		box-shadow:0 2px 4px rgba(0, 0, 0, .3);
 	}
 }
 
