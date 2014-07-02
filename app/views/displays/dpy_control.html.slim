@@ -3,8 +3,8 @@ h1 Iskdpy remote control interface for display: #{@display.name}
 div.display_preview
 	= render @display
 	div.control_buttons
-		a.button#previous data-id=@display.id href='#top' Previous slide
-		a.button#next data-id=@display.id href='#top' Next slide
+		a.button#previous data-id=@display.id href='#top' #{icon 'backward'} Previous
+		a.button#next data-id=@display.id href='#top' Next #{icon 'forward'}
 	
 div.display_control#display_control data-id=@display.id
 
