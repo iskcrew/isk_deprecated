@@ -1,4 +1,10 @@
-h1 Iskdpy remote control interface for display: #{@display.name}
+div.display_control_header
+	h1 Iskdpy remote control interface for display: #{@display.name}
+	p.help
+		=> help_icon
+		| This is the remote control interface for a iskdpy display. You can click on any slide image
+		   to instruct the display to go to that slide. You can also use the next and previous buttons
+			or left and right buttons.
 
 div.display_preview
 	= render @display

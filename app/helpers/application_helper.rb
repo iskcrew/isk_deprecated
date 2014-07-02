@@ -56,6 +56,11 @@ module ApplicationHelper
 		render partial: 'shared/tickets', locals: {obj: obj}
 	end
 	
+	# Icon for help boxes
+	def help_icon
+		icon 'exclamation-circle', '', class: 'fa-2x fa-pull-left'
+	end
+	
 	# Memoize the current user
 	def current_user
 			@_current_user ||= session[:user_id] &&
