@@ -177,3 +177,14 @@ a:hover {
 form {
 	display: inline-block;
 }
+
+p.help {
+	border: 2px solid $primary_highlight;
+	border-radius: $table_border_radius;
+	padding: 10px;
+	max-width: 450px;
+	
+	i.fa {
+		color: $primary_highlight;
+	}
+}
