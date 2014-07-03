@@ -44,6 +44,10 @@ module WebsocketMessages
 			data[:display_id] = self.display_id
 		end
 		
+		if self.respond_to? :name
+			data[:name] = self.name
+		end
+		
 		trigger event, data
 		
 		# If we have associated displays resend their data
