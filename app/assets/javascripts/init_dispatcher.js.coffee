@@ -1,10 +1,8 @@
-# 
-#  websocket_connection.js.coffee
-#  isk
-#  
-#  Created by Vesa-Pekka Palmu on 2014-06-16.
-#  Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
-# 
-# Initialize one ws connection for use on all our scripts
-
+popup_connection_lost = ->
+	alert_connection_lost = ->
+		alert 'Websocket connection lost, reload page to reconnect'
+	timer = setTimeout( alert_connection_lost, 1000 )
+	
 window.dispatcher = new WebSocketRails(window.location.host + '/websocket')
+window.dispatcher._conn._conn.onclose = popup_connection_lost
+window.dispatcher._conn._conn.onerror = popup_connection_lost
