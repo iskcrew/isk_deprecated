@@ -58,6 +58,8 @@ Isk::Application.routes.draw do
 
 	root :to => 'slides#index'
 
+	get 'monitor', to: 'monitor#index'
+
 	resources :displays do
 		member do
 			get 'presentation'

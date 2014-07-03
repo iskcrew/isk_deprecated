@@ -1,0 +1,15 @@
+h1 ISK monitoring interface
+
+p.warning#ttp_compatibility
+	| This mechanism relies on html5 text-to-speech api. This api is currently only supported in
+	   chrome and safari.
+		
+div#monitor_settings
+	h2 Displays to monitor
+	ul
+	- Display.all.each do |d|
+		li  #{monitor_check_box d} #{d.name}
+	h2 Tickets
+	ul
+		li #{check_box_tag 'tickets_create', '1', true} New tickets
+		li #{check_box_tag 'tickets_update', '1', true} Updated tickets 
