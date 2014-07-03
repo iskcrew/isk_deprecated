@@ -1,3 +1,37 @@
-// Place all the styles related to the monitor controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+//
+// monitor.css.scss
+// isk
+//
+// Created by Vesa-Pekka Palmu on 2014-07-03.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+@import 'variables';
+
+div#monitor_settings {
+	float: left;
+	width: 300px;
+	border: $table_border;
+	border-radius: $table_border_radius;
+}
+
+div#monitor_messages {
+	display: inline-block;
+	width: 300px;
+	padding: 10px;
+	border: $table_border;
+	border-radius: $table_border_radius;
+	
+	a {
+		padding: 5px;
+		border: $table_border;
+		border-radius: $table_border_radius;
+		background: $table_row_bg;
+		display: block;
+	}
+	
+	a:nth-child(odd) {
+		background: $table_row_odd_bg;
+		border-color: $secondary_darker;	
+	}
+}

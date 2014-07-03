@@ -9,23 +9,42 @@
 $ ->
 	if !$("div#monitor_settings").length then return
 	
+	date_string = ->
+		d = new Date();
+		return "#{d.getHours()}:#{d.getMinutes()}"
+	
 	speak_message = (message) ->
 		msg = new SpeechSynthesisUtterance()
 		msg.lang = 'en-US'
 		msg.text = message
 		speechSynthesis.speak(msg)
 	
+	insert_message = (msg, href) ->
+		html = $('<a />')
+		html.attr {
+			href: href
+			target: '_blank'
+		}
+		html.append "#{date_string()} #{msg}"
+		$('#monitor_messages').prepend(html)
+	
 	notify_display = (display) ->
+		msg = "Display with name #{display.name} updated"
 		if $('#monitor_display_' + display.id).prop('checked')
-			speak_message("Display with name #{display.name} updated")
+			speak_message(msg)
+		insert_message msg, "/displays/#{display.id}"
 	
 	notify_ticket_update = (ticket) ->
+		msg = "Ticket with name #{ticket.name} updated"
 		if $('#tickets_update').prop('checked')
-			speak_message("Ticket with name #{ticket.name} updated")
+			speak_message(msg)
+		insert_message msg, "/tickets/#{ticket.id}"
 	
 	notify_ticket_create = (ticket) ->
+		msg = "Ticket with name #{ticket.name} created"
 		if $('#tickets_create').prop('checked')
-			speak_message("Ticket with name #{ticket.name} created")
+			speak_message(msg)
+		insert_message msg, "/tickets/#{ticket.id}"
 	
 	tickets = window.dispatcher.subscribe 'ticket'
 	tickets.bind 'update', notify_ticket_update
