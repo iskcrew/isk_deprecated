@@ -39,6 +39,9 @@ WebsocketRails::EventMap.describe do
 		subscribe :template,			to: SvgController, with_method: :template
 	end
 	
+	# TODO: Handle disconnecting displays and send a notification
+	#subscribe :client_disconnected, to: IskdpyController, :with_method => :client_disconnect
+	
 	# Events for communication between the ISK server and iskdpy displays
 	namespace :iskdpy do
 		# Display initializes itself calling this and receives its initial state
