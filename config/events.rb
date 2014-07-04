@@ -5,10 +5,8 @@ WebsocketRails::EventMap.describe do
 	#
 	# Uncomment and edit the next line to handle the client connected event:
 
-
 	#subscribe :client_connected, :to => Sockets::, :with_method => :method_name
-
-
+	
 	#
 	# Here is an example of mapping namespaced events:
 	#		namespace :product do
@@ -40,7 +38,6 @@ WebsocketRails::EventMap.describe do
 		# return the created svg as the data payload on success message
 		subscribe :template,			to: SvgController, with_method: :template
 	end
-
 	
 	# Events for communication between the ISK server and iskdpy displays
 	namespace :iskdpy do
@@ -68,6 +65,5 @@ WebsocketRails::EventMap.describe do
 		subscribe :display_data,					to: IskdpyController, with_method: :display_data
 		
 	end
-
 
 end
