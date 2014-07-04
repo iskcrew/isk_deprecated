@@ -30,6 +30,14 @@ WebsocketRails::EventMap.describe do
 		# }
 		subscribe :simple,				to: SvgController, with_method: :simple
 		
+		# Create a svg based on a SlideTemplate
+		# data = {
+		# 	template_id: id of the SlideTemplate to use
+		#   field_id: 'text to insert'
+		#   field_id2: 'text to insert'
+		#   .... for all editable fields in the template
+		# }
+		# return the created svg as the data payload on success message
 		subscribe :template,			to: SvgController, with_method: :template
 	end
 
