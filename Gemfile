@@ -75,8 +75,9 @@ gem 'time_diff', '~> 0.2.2'
 # Slim template engine
 gem 'slim'
 
-# Currently, websocket-rails 0.7.0 breaks sync between the threads horribly
-gem 'websocket-rails', '~> 0.6.2'
+git 'https://github.com/depili/websocket-rails.git', branch: 'channel_token_fix' do
+	gem 'websocket-rails'
+end
 
 # For background stuff
 gem 'delayed_job_active_record'
