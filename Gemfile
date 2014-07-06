@@ -74,6 +74,8 @@ gem 'time_diff', '~> 0.2.2'
 
 # Slim template engine
 gem 'slim'
+# Generators for slim templates instead of erb
+gem 'slim-rails'
 
 git 'https://github.com/depili/websocket-rails.git', branch: 'channel_token_fix' do
 	gem 'websocket-rails'
