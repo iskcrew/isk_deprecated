@@ -9,6 +9,9 @@ class IskdpyController < WebsocketRails::BaseController
 	
 	around_filter :instrument_action
 	
+	# Work-around for websocket-rails issue #228
+	include ClearQueryCache
+	
 	# The display calls this when initializing to get the inital data
 	# and to add a new display to the db if need be
 	# message[:display_name] should contain the unique display name
