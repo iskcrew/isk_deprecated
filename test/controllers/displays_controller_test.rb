@@ -46,7 +46,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	end
 	
 	test "update display" do
-		post :update, @update_data, @adminsession
+		patch :update, @update_data, @adminsession
 		
 		assert_redirected_to display_path(assigns(:display))
 	end
@@ -71,7 +71,7 @@ class DisplaysControllerTest < ActionController::TestCase
 			id: displays(:normal), 
 			display: {presentation_id: presentations(:with_hidden_slides).id}
 		}
-		post :update, data, @adminsession
+		patch :update, data, @adminsession
 		assert_redirected_to display_path(assigns(:display)), "Didn't redirect to show page"
 		assert assigns(:display).presentation_id == presentations(:with_hidden_slides).id, "Display presentation didn't change"
 	end
