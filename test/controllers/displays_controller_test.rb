@@ -65,4 +65,15 @@ class DisplaysControllerTest < ActionController::TestCase
 		assert_response :redirect
 	end
 	
+	test "change presentation" do
+		assert_not displays(:normal).presentation_id == presentations(:with_hidden_slides), "Fixture has the presentation already"
+		data = {
+			id: displays(:normal), 
+			display: {presentation_id: presentations(:with_hidden_slides).id}
+		}
+		post :update, data, @adminsession
+		assert_redirected_to display_path(assigns(:display)), "Didn't redirect to show page"
+		assert assigns(:display).presentation_id == presentations(:with_hidden_slides).id, "Display presentation didn't change"
+	end
+	
 end
