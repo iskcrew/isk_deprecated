@@ -82,7 +82,7 @@ $ ->
 			slide: 'previous',
 			display_id: d.id
 			}
-		dispatcher.trigger 'iskdpy.goto_slide', data
+		window.dispatcher.trigger 'iskdpy.goto_slide', data
 		console.log 'Sending iskdpy.goto_slide slide=previous, display_id=' + data.display_id
 	
 	# Send a websocket message instructing the display to go to next slide
@@ -94,7 +94,7 @@ $ ->
 			display_id: d.id
 			}
 		console.log 'Sending iskdpy.goto_slide slide=next, display_id=' + data.display_id
-		dispatcher.trigger 'iskdpy.goto_slide', data
+		window.dispatcher.trigger 'iskdpy.goto_slide', data
 	
 	# Key listener, we bind the left curson key to previous slide and right cursor to next slide
 	handle_keydown = (event) ->
@@ -111,28 +111,18 @@ $ ->
 			slide_id: d.slide,
 			group_id: d.group
 			}
-		console.log data
-		dispatcher.trigger 'iskdpy.goto_slide', data
-		
-	dispatcher=null
+		console.log "sending goto_slide display_id:#{data.display_id}, slide_id:#{data.slide_id}, group_id:#{data.group_id}"
+		window.dispatcher.trigger 'iskdpy.goto_slide', data
 	
-	# Initialize a websocket-rails javascript client.
-	connect = ->
-		dispatcher = new WebSocketRails(window.location.host  + '/websocket')
-		dispatcher.on_open = ->
-			dispatcher.trigger 'iskdpy.display_data', {display_id: display_id}
-				, success = (d) -> handle_display d
-				, failure = (d) -> alert 'Websocket failed'
-			channel=dispatcher.subscribe 'display_'+display_id
-			channel.bind 'data', callback=handle_display
-			channel.bind 'current_slide', callback=handle_current_slide
-		dispatcher.on_close = ->
-			if confirm("Connection lost. Reconnect?")
-			then connect()
-		dispatcher.on_error = ->
-			if confirm("Connection lost. Reconnect?")
-			then connect()
-	connect()
+	# Get initial state
+	window.dispatcher.trigger 'iskdpy.display_data', {display_id: display_id}
+		, success = (d) -> handle_display d
+		, failure = (d) -> alert 'Websocket failed'
+	
+	# Subscribe to this displays broadcast channel
+	channel=window.dispatcher.subscribe 'display_'+display_id
+	channel.bind 'data', handle_display
+	channel.bind 'current_slide', handle_current_slide
 	
 	# Bind the clicks on buttons to our functions
 	$('#previous').bind 'click', send_previous_slide
