@@ -11,7 +11,16 @@ $ ->
 	
 	date_string = ->
 		d = new Date();
-		return "#{d.getHours()}:#{d.getMinutes()}"
+		hours = d.getHours() + ''
+		minutes = d.getMinutes() + ''
+		
+		if hours.length == 1
+			hours = "0" + hours
+		
+		if minutes.length == 1
+			minutes = '0' + minutes
+		
+		return "#{hours}:#{minutes}"
 	
 	speak_message = (message) ->
 		msg = new SpeechSynthesisUtterance()
