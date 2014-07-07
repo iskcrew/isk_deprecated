@@ -61,8 +61,8 @@ module WebsocketMessages
 			display_datas
 		end
 		
-		if self.changed.include?('images_updated_at') && event == :update
-			Rails.logger.debug "-> Slide image has been updated, sendin notifications"
+		if self.previous_changes.include?('images_updated_at') && event == :update
+			Rails.logger.debug "-> Slide image has been updated, sending notifications"
 			self.updated_image_notifications
 		end
 	end
