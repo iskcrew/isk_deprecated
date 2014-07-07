@@ -48,6 +48,8 @@ module WebsocketMessages
 			data[:name] = self.name
 		end
 		
+		data[:changed] = self.changed
+		
 		trigger event, data
 		
 		# If we have associated displays resend their data
