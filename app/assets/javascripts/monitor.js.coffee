@@ -17,7 +17,13 @@ $ ->
 		msg = new SpeechSynthesisUtterance()
 		msg.lang = 'en-US'
 		msg.text = message
-		speechSynthesis.speak(msg)
+		
+		# Bling sound before the message is spoken
+		bling = new Audio('/bling.wav')
+		bling.volume = 0.6
+		bling.addEventListener 'ended', ->
+			speechSynthesis.speak(msg)
+		bling.play()
 	
 	insert_message = (msg, href) ->
 		html = $('<a />')
@@ -45,7 +51,7 @@ $ ->
 		if $('#tickets_create').prop('checked')
 			speak_message(msg)
 		insert_message msg, "/tickets/#{ticket.id}"
-	
+		
 	tickets = window.dispatcher.subscribe 'ticket'
 	tickets.bind 'update', notify_ticket_update
 	tickets.bind 'create', notify_ticket_create
