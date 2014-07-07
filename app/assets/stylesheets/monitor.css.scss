@@ -22,15 +22,19 @@ div#monitor_messages {
 	border: $table_border;
 	border-radius: $table_border_radius;
 	
-	a {
+	div {
 		padding: 5px;
 		border: $table_border;
 		border-radius: $table_border_radius;
 		background: $table_row_bg;
 		display: block;
+		
+		a {
+			display: block;
+		}
 	}
 	
-	a:nth-child(odd) {
+	div:nth-child(odd) {
 		background: $table_row_odd_bg;
 		border-color: $secondary_darker;	
 	}

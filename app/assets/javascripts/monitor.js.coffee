@@ -25,32 +25,44 @@ $ ->
 			speechSynthesis.speak(msg)
 		bling.play()
 	
-	insert_message = (msg, href) ->
-		html = $('<a />')
-		html.attr {
+	insert_message = (object, msg, href) ->
+		link = $('<a />')
+		link.attr {
 			href: href
 			target: '_blank'
 		}
-		html.append "#{date_string()} #{msg}"
+		link.append "#{date_string()} #{msg}"
+		html = $('<div />')
+		html.append link
+		# Add a list of changes done
+		if object.changes?
+			html.append "<ul>"
+			$.each object.changes, (k, v) ->
+				# Do not print the timestamps
+				unless (k == 'updated_at') or (k == 'created_at')
+					html.append "<li>#{k} has been changed to #{v}."
+			console.log object.changes
+			html.append "</ul>"
 		$('#monitor_messages').prepend(html)
 	
 	notify_display = (display) ->
 		msg = "Display with name #{display.name} updated"
 		if $('#monitor_display_' + display.id).prop('checked')
 			speak_message(msg)
-		insert_message msg, "/displays/#{display.id}"
+		insert_message display, msg, "/displays/#{display.id}"
 	
 	notify_ticket_update = (ticket) ->
+		console.log ticket
 		msg = "Ticket with name #{ticket.name} updated"
 		if $('#tickets_update').prop('checked')
 			speak_message(msg)
-		insert_message msg, "/tickets/#{ticket.id}"
+		insert_message ticket, msg, "/tickets/#{ticket.id}"
 	
 	notify_ticket_create = (ticket) ->
 		msg = "Ticket with name #{ticket.name} created"
 		if $('#tickets_create').prop('checked')
 			speak_message(msg)
-		insert_message msg, "/tickets/#{ticket.id}"
+		insert_message ticket, msg, "/tickets/#{ticket.id}"
 		
 	tickets = window.dispatcher.subscribe 'ticket'
 	tickets.bind 'update', notify_ticket_update
