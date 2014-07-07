@@ -48,8 +48,12 @@ module WebsocketMessages
 			data[:name] = self.name
 		end
 		
-		data[:changed] = self.changed
-		
+		# Add changed attibutes
+		data[:changes] = {}
+		self.previous_changes.each_pair do |k, v|
+			data[:changes][k] = v.last unless (k == 'password') || (k == 'salt')
+		end
+		Rails.logger.debug "Sending #{data.to_s}"
 		trigger event, data
 		
 		# If we have associated displays resend their data
