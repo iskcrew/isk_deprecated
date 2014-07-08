@@ -6,6 +6,7 @@ class DisplayState < ActiveRecord::Base
 	validates :ip, length: { maximum: 20 }, presence: true
 	validates :monitor, inclusion: { in: [true, false] }
 	validates :current_slide_id, :current_group_id, numericality: {only_integer: true}, allow_nil: true
+	validates :status, presence: true, inclusion: {in: ['disconnected', 'running', 'error']}
 	
 	# Send websocket messages on create and update
 	include WebsocketMessages

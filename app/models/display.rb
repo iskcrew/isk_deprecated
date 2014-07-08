@@ -17,7 +17,6 @@ class Display < ActiveRecord::Base
 	validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 50 }
 	validates :manual, :inclusion => { :in => [true, false] }
 	validates :display_state, presence: true
-	validates :status, presence: true, inclusion: {in: ['disconnected', 'running', 'error']}
 
 	before_save :manual_control_checks
 	before_validation :create_state, on: :create
@@ -38,6 +37,7 @@ class Display < ActiveRecord::Base
 	delegate :current_group_id, :current_group_id=,								to: :display_state, allow_nil: true
 	delegate :ip, :ip=,																						to: :display_state, allow_nil: true
 	delegate :monitor,:monitor=,																	to: :display_state, allow_nil: true
+	delegate :status, :status=,																		to: :display_state
 	delegate :updated_at, to: :display_state, prefix: :state
 	
 	alias_method :queue, :override_queues

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708145735) do
+ActiveRecord::Schema.define(version: 20140708152129) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -50,18 +50,18 @@ ActiveRecord::Schema.define(version: 20140708145735) do
     t.string   "websocket_connection_id"
     t.string   "ip"
     t.boolean  "monitor",                 default: true
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "status",                  default: "disconnected"
   end
 
   create_table "displays", force: true do |t|
     t.string   "name",            limit: 50
     t.integer  "presentation_id"
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.boolean  "manual",                     default: false
     t.boolean  "do_overrides",               default: true
-    t.string   "status",                     default: "disconnected"
   end
 
   add_index "displays", ["name"], name: "index_displays_on_name", unique: true, using: :btree
