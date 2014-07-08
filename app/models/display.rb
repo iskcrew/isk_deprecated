@@ -101,6 +101,16 @@ class Display < ActiveRecord::Base
 		s.shown_on(self.id)
 		self.state.save!
 	end
+	
+	# Mark display based on the connection id as disconnected
+	def self.disconnect(ws_id)
+		if d = Display.joins(:display_state).where(display_states: {websocket_connection_id: ws_id}).first
+			d.status = 'disconnected'
+			d.save!
+			return d
+		end
+		return nil
+	end
 
 	# Relation for all monitored displays that are more than Timeout minutes late
 	def self.late
