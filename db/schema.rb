@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140630201445) do
+ActiveRecord::Schema.define(version: 20140708152129) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -50,8 +50,9 @@ ActiveRecord::Schema.define(version: 20140630201445) do
     t.string   "websocket_connection_id"
     t.string   "ip"
     t.boolean  "monitor",                 default: true
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "status",                  default: "disconnected"
   end
 
   create_table "displays", force: true do |t|

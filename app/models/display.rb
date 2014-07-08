@@ -37,6 +37,7 @@ class Display < ActiveRecord::Base
 	delegate :current_group_id, :current_group_id=,								to: :display_state, allow_nil: true
 	delegate :ip, :ip=,																						to: :display_state, allow_nil: true
 	delegate :monitor,:monitor=,																	to: :display_state, allow_nil: true
+	delegate :status, :status=,																		to: :display_state
 	delegate :updated_at, to: :display_state, prefix: :state
 	
 	alias_method :queue, :override_queues
@@ -70,35 +71,61 @@ class Display < ActiveRecord::Base
 		display.last_contact_at = Time.now
 		display.last_hello = Time.now
 		display.save!
+		display.status = 'running'
 		display.state.save!
 		return display
 	end
 	
 	# Remove shown slide from override
 	def override_shown(override_id, connection_id = nil)
-		self.transaction do
-			oq = self.override_queues.find(override_id)
-			self.last_contact_at = Time.now
-			self.websocket_connection_id = connection_id
-			oq.slide.shown_on self.id
-			oq.destroy
-			self.state.save!
+		begin
+			self.transaction do
+				oq = self.override_queues.find(override_id)
+				self.last_contact_at = Time.now
+				self.websocket_connection_id = connection_id
+				oq.slide.shown_on self.id
+				oq.destroy
+				self.status = 'running'
+				self.state.save!
+			end
+		rescue ActiveRecord::RecordNotFound
+			# The override was not found
+			self.status = 'error'
+			self.save!
 		end
 	end
 	
 	# Set the current group and slide for the display and log the slide as shown
 	def set_current_slide(group_id, slide_id, connection_id = nil)
-		if group_id != -1
-			self.current_group = self.presentation.groups.find(group_id)
-		else
-			self.current_group_id = -1
+		begin
+			if group_id != -1
+				self.current_group = self.presentation.groups.find(group_id)
+			else
+				self.current_group_id = -1
+			end
+			s = self.current_group.slides.find(slide_id)
+			self.current_slide = s
+			self.last_contact_at = Time.now
+			self.websocket_connection_id = connection_id
+			self.status = 'running'
+			s.shown_on(self.id)
+			self.state.save!
+		rescue ActiveRecord::RecordNotFound
+			# The slide was not found in the presentation
+			self.status = 'error'
+			self.save!
 		end
-		s = Slide.find(slide_id)
-		self.current_slide = s
-		self.last_contact_at = Time.now
-		self.websocket_connection_id = connection_id
-		s.shown_on(self.id)
-		self.state.save!
+	end
+	
+	# Mark display based on the connection id as disconnected
+	def self.disconnect(ws_id)
+		if d = Display.joins(:display_state).where(display_states: {websocket_connection_id: ws_id}).first
+			d.status = 'disconnected'
+			d.websocket_connection_id = nil
+			d.save!
+			return d
+		end
+		return nil
 	end
 
 	# Relation for all monitored displays that are more than Timeout minutes late
