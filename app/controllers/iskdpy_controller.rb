@@ -24,14 +24,20 @@ class IskdpyController < WebsocketRails::BaseController
 	def current_slide
 		d = Display.find(message[:display_id])
 		if message[:override_queue_id]
-			d.override_shown(message[:override_queue_id], connection.id)
+			ret = d.override_shown(message[:override_queue_id], connection.id)
 		else
-			d.set_current_slide(message[:group_id], message[:slide_id], connection.id)
+			ret = d.set_current_slide(message[:group_id], message[:slide_id], connection.id)
 		end
-			
-		data = {:display_id => d.id, :group_id => d.current_group_id, :slide_id => d.current_slide_id}
-		WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
-		trigger_success data
+		
+		if ret == false
+			# Setting the current slide failed
+			data = {display_id: d.id, message: 'Invalid slide specified'}
+			trigger_failure data
+		else
+			data = {:display_id => d.id, :group_id => d.current_group_id, :slide_id => d.current_slide_id}
+			WebsocketRails[d.websocket_channel].trigger(:current_slide, data)
+			trigger_success data
+		end
 	end
 	
 	# Send a message instructing a display to go to a specific slide
