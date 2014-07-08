@@ -180,7 +180,7 @@ class Slide < ActiveRecord::Base
 	
 	# Is this slide in a real group?
 	def grouped?
-		self[:master_group_id] != Event.current.ungrouped.id
+		!self.master_group.is_a?(UnGroup)
 	end
 	
 	# Has this slide been replaced by another slide?
