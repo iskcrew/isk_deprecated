@@ -94,13 +94,25 @@ EM.run {
 		when 'websocket_rails.ping'
 			ws.send @pong.to_a.to_json
 		
+		when 'websocket_rails.channel_token'
+			say 'FIXME: channel tokens!'
+		
 		when 'update'
 			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
+		
+		when 'updated_image'
+			say "Update image notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
 			
 		when 'data'
 			d = msg_hash['data']
 			say "Display data for display id=#{d['id']}"
 		
+		when 'current_slide'
+			d = msg_hash['data']
+			say "Display current slide update, display: #{d['display_id']}, slide: #{d['slide_id']}, group: #{d['group_id']}"
+		when 'error'
+			d = msg_hash['data']
+			say "ERROR: Channel: \"#{msg_channel}\" Display: #{d['display_id']}, message #{d['message']}"
 		else
 			say 'Got unhandled message: '
 			if msg_channel
