@@ -148,8 +148,12 @@ div.display_info {
 	border-radius: $table_border_radius;
 	background: $slide_public_bg;
 	
-	&.display_info.late {
+	&.error {
 		background: $warning_bg;
+	}
+
+	&.disconnected {
+		opacity: 0.7;
 	}
 	
 	

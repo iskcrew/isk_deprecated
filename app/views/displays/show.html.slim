@@ -5,6 +5,7 @@ div.display_properties
 	
 	div.extra_information
 		ul
+			li Status: #{@display.status}
 			li IP: #{@display.ip}
 			- if @display.last_contact_at
 				li Last contact at: #{l @display.last_contact_at, :format => :short}

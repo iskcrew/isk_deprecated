@@ -1,4 +1,4 @@
-div.display_info class=(display.late? ? 'late' : '') id="display_#{display.id}"
+div.display_info class=display.status id="display_#{display.id}"
 	div.display_header
 		- if display.late?
 			span.fa.fa-warning title="This display isn't responding!"
@@ -13,6 +13,7 @@ div.display_info class=(display.late? ? 'late' : '') id="display_#{display.id}"
 					=< link_to display.presentation.name, presentations_path(display.presentation.id)
 				- else
 					| Presentation: Not defined
+			li Status: #{display.status}
 			li Uptime: #{display.uptime}
 			li Last contact: #{display_last_contact(display)}
 			li = display_ping display
