@@ -121,6 +121,7 @@ class Display < ActiveRecord::Base
 	def self.disconnect(ws_id)
 		if d = Display.joins(:display_state).where(display_states: {websocket_connection_id: ws_id}).first
 			d.status = 'disconnected'
+			d.websocket_connection_id = nil
 			d.save!
 			return d
 		end
