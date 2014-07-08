@@ -88,10 +88,12 @@ class Display < ActiveRecord::Base
 				self.status = 'running'
 				self.state.save!
 			end
+			return true
 		rescue ActiveRecord::RecordNotFound
 			# The override was not found
 			self.status = 'error'
 			self.state.save!
+			return false
 		end
 	end
 	
@@ -110,10 +112,12 @@ class Display < ActiveRecord::Base
 			self.status = 'running'
 			s.shown_on(self.id)
 			self.state.save!
+			return true
 		rescue ActiveRecord::RecordNotFound
 			# The slide was not found in the presentation
 			self.status = 'error'
 			self.state.save!
+			return false
 		end
 	end
 	
