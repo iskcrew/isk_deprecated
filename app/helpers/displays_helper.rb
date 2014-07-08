@@ -37,16 +37,21 @@ module DisplaysHelper
 	# Render the img element for the current slide image
 	# FIXME: handle unknown slide little better
 	def display_current_slide(d)
-		if d.current_slide
-			
+		if (d.status != 'error') && (d.current_slide.present?)
 			html_options = {
 				title: 'Click to show display details',
 				class: 'slide_preview'
 			}
-			return link_to slide_preview_image_tag(d.current_slide), display_path(d), html_options
+			image = slide_preview_image_tag( d.current_slide )
 		else
-			return 'UNKNOWN'
+			image = image_tag('display_error.png', class: 'preview')
 		end
+		html_options = {
+			title: 'Click to show display details',
+			class: 'slide_preview'
+		}
+		
+		return link_to image, display_path(d), html_options
 	end
 	
 	# Render the last_contact_at timestamp and the diff to current time
