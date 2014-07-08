@@ -17,6 +17,7 @@ class Display < ActiveRecord::Base
 	validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 50 }
 	validates :manual, :inclusion => { :in => [true, false] }
 	validates :display_state, presence: true
+	validates :status, presence: true, inclusion: {in: ['disconnected', 'running', 'error']}
 
 	before_save :manual_control_checks
 	before_validation :create_state, on: :create
