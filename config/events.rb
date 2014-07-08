@@ -67,6 +67,9 @@ WebsocketRails::EventMap.describe do
 		# returns success, data = {displays serialization}
 		subscribe :display_data,					to: IskdpyController, with_method: :display_data
 		
+		# Inform about a error that has occured
+		# data = {display_id: int, error: string}
+		subscribe :error,									to: IskdpyController, with_method: :display_error
 	end
 
 end

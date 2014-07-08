@@ -50,6 +50,13 @@ class IskdpyController < WebsocketRails::BaseController
 		trigger_success data
 	end
 	
+	# Handle a error report from the display
+	def display_error
+		d = Display.find(message[:display_id])
+		d.status = 'error'
+		d.save!
+	end
+	
 	# A websocket-client disconnects, we need to check if it was a display and update its state if so.
 	def client_disconnect
 		Display.disconnect(connection.id)
