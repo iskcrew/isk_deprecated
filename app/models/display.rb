@@ -91,7 +91,7 @@ class Display < ActiveRecord::Base
 		rescue ActiveRecord::RecordNotFound
 			# The override was not found
 			self.status = 'error'
-			self.save!
+			self.state.save!
 		end
 	end
 	
@@ -113,7 +113,7 @@ class Display < ActiveRecord::Base
 		rescue ActiveRecord::RecordNotFound
 			# The slide was not found in the presentation
 			self.status = 'error'
-			self.save!
+			self.state.save!
 		end
 	end
 	
