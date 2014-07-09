@@ -20,7 +20,9 @@ WebsocketRails.setup do |config|
   # Change to true to enable channel synchronization between
   # multiple server instances.
   # * Requires Redis.
-  config.synchronize = true
+	#
+	# We sync in all environments except testing.
+  config.synchronize = !Rails.env.test?
 
   # Uncomment and edit to point to a different redis instance.
   # Will not be used unless standalone or synchronization mode
