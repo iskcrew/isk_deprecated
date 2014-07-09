@@ -58,6 +58,14 @@ class EventsController < ApplicationController
 		end
 	end
 	
+	# (re)generate all slide images for this event
+	def generate_images
+		@event = Event.find(params[:id])
+		@event.delay.generate_images!
+		flash[:notice] = "Regenerating slide images, this will take a while.."
+		redirect_to event_path(@event)
+	end
+	
 	private
 	
 	# Whitelist parameters for mass-assignment. We also deal with the resolution parameter.

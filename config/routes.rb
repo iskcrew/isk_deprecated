@@ -80,6 +80,7 @@ Isk::Application.routes.draw do
 
 	resources :events do
 		member do
+			post 'generate_images'
 		end
 
 		collection do
