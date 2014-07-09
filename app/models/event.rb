@@ -44,6 +44,13 @@ class Event < ActiveRecord::Base
 			height: 72
 		}
 	}
+	
+	# Resolutions that are currently supported.
+	# Note that the display (eg. iskdpy) also needs to support them.
+	SupportedResolutions = [
+		[1280, 720],
+		[1920, 1080]
+	]
 		
 	# Finds the current event
 	def self.current
@@ -58,7 +65,9 @@ class Event < ActiveRecord::Base
 		end
 	end
 	
-	#### Per event configuration	
+	#### Per event configuration
+	
+	# Read the stored configuration. Use default if blank.
 	def config
 		if self[:config].blank?
 			self[:config] = DefaultConfig
@@ -68,6 +77,19 @@ class Event < ActiveRecord::Base
 		end
 	end
 	
+	# Set the size for full slide pictures. Checks that the resolution is supported.
+	def picture_size=(size)
+		if SupportedResolutions.include? size
+			cnf = config
+			cnf[:full][:width] = size.first
+			cnf[:full][:height] = size.last
+			config = cnf
+		else
+			raise ArgumentError, 'Resolution not supported'
+		end
+	end
+	
+	# Returns a hash containing the set picture sizes.
 	def picture_sizes
 		h = Hash.new
 		[:full, :preview, :thumb].each do |key|
@@ -77,6 +99,11 @@ class Event < ActiveRecord::Base
 	end
 	
 	private
+	
+	# Update the config
+	def config=(cnf)
+		self[:config] = cnf
+	end
 	
 	# Create the associated groups as needed
 	def create_groups
