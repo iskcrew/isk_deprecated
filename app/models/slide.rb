@@ -320,7 +320,7 @@ class Slide < ActiveRecord::Base
 	
 	# The picture dimensions
 	def picture_sizes
-		@_picture_sizes ||= Event.current.picture_sizes
+		@_picture_sizes ||= self.event.picture_sizes
 	end
 	
 	def self.picture_sizes
