@@ -29,7 +29,7 @@ class Event < ActiveRecord::Base
 	before_validation :create_groups, on: :create
 	after_create :set_group_event_ids
 		
-	#Default config for events
+	# Default config for events
 	DefaultConfig = {
 		full: { # Full slide image size
 			width: 1280,
@@ -45,7 +45,7 @@ class Event < ActiveRecord::Base
 		}
 	}
 		
-	#Finds the current event
+	# Finds the current event
 	def self.current
 		self.where(:current => true).first!
 	end
@@ -58,9 +58,7 @@ class Event < ActiveRecord::Base
 		end
 	end
 	
-	#### Per event configuration
-	# TODO: Dynamic configuration instead of constant
-	
+	#### Per event configuration	
 	def config
 		if self[:config].blank?
 			self[:config] = DefaultConfig
@@ -98,14 +96,14 @@ class Event < ActiveRecord::Base
 		self.thrashed.save!
 	end
 	
-	#Callback that resets every other event to non-current when setting another as current one
+	# Callback that resets every other event to non-current when setting another as current one
 	def set_current_event
 		if self.current && self.changed.include?('current')
 			Event.update_all :current => false
 		end
 	end
 	
-	#Validation that prevents clearing the current event -bit
+	# Validation that prevents clearing the current event -bit
 	def ensure_one_current_event
 		if !self.current && self.changed.include?('current')
 			errors.add(:current, "^Must have one current event")
