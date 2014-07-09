@@ -84,6 +84,14 @@ class Event < ActiveRecord::Base
 		self.where(:current => true).first!
 	end
 	
+	# Regenerate slide images for all slides in this event.
+	# Used after changing the slide image size.
+	def generate_images!
+		self.slides.each do |s|
+			s.generate_images
+		end
+	end
+	
 	#### Per event configuration
 	# TODO: Dynamic configuration instead of constant
 	
