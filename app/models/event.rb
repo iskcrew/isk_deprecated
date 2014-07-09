@@ -12,6 +12,8 @@ class Event < ActiveRecord::Base
 	has_many :schedules
 	has_many :slides, through: :master_groups
 	
+	serialize :config, Hash
+	
 	belongs_to :thrashed, class_name: 'ThrashGroup', foreign_key: 'thrashed_id'
 	belongs_to :ungrouped, class_name: 'UnGroup', foreign_key: 'ungrouped_id'
 	
@@ -59,10 +61,19 @@ class Event < ActiveRecord::Base
 	#### Per event configuration
 	# TODO: Dynamic configuration instead of constant
 	
+	def config
+		if self[:config].blank?
+			self[:config] = DefaultConfig
+			return self[:config]
+		else
+			return self[:config]
+		end
+	end
+	
 	def picture_sizes
 		h = Hash.new
 		[:full, :preview, :thumb].each do |key|
-			h[key] = [DefaultConfig[key][:width], DefaultConfig[key][:height]]
+			h[key] = [self.config[key][:width], self.config[key][:height]]
 		end
 		return h
 	end

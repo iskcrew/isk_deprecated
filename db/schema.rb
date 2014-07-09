@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708152129) do
+ActiveRecord::Schema.define(version: 20140709154739) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20140708152129) do
     t.datetime "updated_at",                   null: false
     t.integer  "ungrouped_id"
     t.integer  "thrashed_id"
+    t.text     "config"
   end
 
   add_index "events", ["current"], name: "index_events_on_current", using: :btree
