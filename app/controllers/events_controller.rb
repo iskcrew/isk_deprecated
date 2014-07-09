@@ -57,7 +57,11 @@ class EventsController < ApplicationController
 	private
 	
 	def event_params
-		params.required(:event).permit(:name, :current)
+		p = params.required(:event).permit(:name, :current)
+		if params[:resolution]
+			p[:picture_size] = Event::SupportedResolutions[params[:resolution].to_i]
+		end
+		return p
 	end
   
 end

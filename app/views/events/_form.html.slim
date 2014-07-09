@@ -1,0 +1,10 @@
+= fields_for :event do |f|
+	p 
+		= f.label :name
+		=< f.text_field :name
+	p
+		= f.label :current
+		=< f.check_box :current
+	p
+		| Slide resolution
+		=< event_slide_resolution_select(@event)

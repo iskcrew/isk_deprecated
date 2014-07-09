@@ -9,6 +9,9 @@ en:
             iso: "%Y-%m-%dT%H:%M:%S"            
     activerecord:
         attributes:
+            event:
+                name: 'Event name:'
+                current: 'Current event:'
             presentation:
                 delay: "Slide duration (seconds)"
                 effect_id: "Slide transition effect"
