@@ -115,8 +115,9 @@ class SimpleSlide < SvgSlide
 
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
-		# FIXME: Read up on viewboxes and see how this relates to supporting different slide sizes
-		svg.root.attributes['viewBox'] = "0 0 #{picture_sizes[:full].join(' ')}"
+		width = svg.root.attributes['width']
+		height = svg.root.attributes['height']
+		svg.root.attributes['viewBox'] = "0 0 #{width} #{height}"
 		
 		head = svg.elements[HeadingSelector]
 		head.delete_element('*')
