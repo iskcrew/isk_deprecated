@@ -73,7 +73,7 @@ class Event < ActiveRecord::Base
 			self[:config] = DefaultConfig
 			return self[:config]
 		else
-			return self[:config]
+			return DefaultConfig.merge self[:config]
 		end
 	end
 	
