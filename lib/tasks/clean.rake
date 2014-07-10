@@ -5,6 +5,45 @@ namespace :clean do
 	
 	desc "Permanently delete all deleted slides"
 	task deleted_slides: :environment do
+		# Find all soft-deleted slides
+		deleted_slides = Slide.where(deleted: true).to_a
+		ThrashGroup.all.each do |g|
+			deleted_slides.concat(g.slides.to_a - deleted_slides)
+		end
+		
+		puts "Found #{deleted_slides.size} slides to delete"
+		
+		if ENV['delete'].to_i == 1
+			deleted_slides.each do |s|
+				files = Array.new
+				files << s.full_filename
+				files << s.preview_filename
+				files << s.thumb_filename
+				
+				if s.respond_to? :svg_filename
+					files << s.svg_filename
+				end
+				
+				if s.respond_to? :data_filename
+					files << s.data_filename
+				end
+				
+				files.each do |f|
+					if File.exists? f
+						File.delete f
+					end
+				end
+				
+				s.delete
+			end
+		else
+			puts "Would delete slides: "
+			deleted_slides.each do |s|
+				puts "id: #{s.id} '#{s.name}' in group: #{s.master_group.name} deleted: #{s.deleted ? 'yes' : 'no'}"
+			end
+			puts 'Run with delete=1 to really do this.'
+		end
+		
 	end
 	
 	desc "Delete orphan slide images"
