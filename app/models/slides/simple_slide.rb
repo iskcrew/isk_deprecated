@@ -115,7 +115,7 @@ class SimpleSlide < SvgSlide
 
 		svg = REXML::Document.new(File.open(BaseTemplate))
 		
-		width = svg.root.attributes['width']
+		width = svg.root.attributes['width'].to_i
 		height = svg.root.attributes['height']
 		svg.root.attributes['viewBox'] = "0 0 #{width} #{height}"
 		
@@ -128,7 +128,7 @@ class SimpleSlide < SvgSlide
 		
 		
 		body = svg.elements[BodySelector]
-		body = set_text(body, text, color, text_size, text_align)
+		body = set_text(width, body, text, color, text_size, text_align)
 		
 		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
 		
@@ -137,13 +137,12 @@ class SimpleSlide < SvgSlide
 	
 	private
 	
-	def self.set_text(element, text, color = nil,size = nil, align = nil)
+	def self.set_text(width, element, text, color = nil,size = nil, align = nil)
 		element.elements.each do 
 			element.delete_element('*')
 		end
 		element.text = ""
 		element.attributes['sodipodi:linespacing'] = '125%'
-		
 		
 		if size
 			element.attributes['font-size'] = size
@@ -155,7 +154,7 @@ class SimpleSlide < SvgSlide
 		
 		text.each_line do |l|
 			row = element.add_element 'tspan'
-			row.attributes['x'] = row_x align
+			row.attributes['x'] = row_x width, align
 			row.attributes['sodipodi:role'] = "line"
 			row.attributes["xml:space"] = "preserve"
 			
@@ -183,13 +182,13 @@ class SimpleSlide < SvgSlide
 		return set_align(element, align)
 	end
 	
-	def self.row_x(align)
+	def self.row_x(width, align)
 		if align
 			case align.strip.downcase
 			when 'right'
-				return margin_right
+				return margin_right width
 			when 'centered'
-				return (margin_right - margin_left) / 2 + margin_left
+				return (margin_right(width) - margin_left) / 2 + margin_left
 			else
 				return margin_left
 			end
@@ -213,7 +212,7 @@ class SimpleSlide < SvgSlide
 				text_anchor = 'start'
 			end
 			
-			element.attributes['x'] = row_x align
+			element.attributes['x'] = row_x element.root.attributes['width'].to_i, align
 			element.attributes['text-anchor'] = text_anchor 
 		end
 		return element
@@ -223,8 +222,8 @@ class SimpleSlide < SvgSlide
 		MarginLeft
 	end
 	
-	def self.margin_right
-		picture_sizes[:full].first - MarginRight
+	def self.margin_right(width)
+		width - MarginRight
 	end
 	 
 	private
