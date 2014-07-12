@@ -92,12 +92,8 @@ class SlidesController < ApplicationController
 				end
 				
 				unless @slide.save
-					if Slide.admin? current_user
-						flash[:error] = "Error saving slide."
-						render :new and return
-					else
-						render :new_simple and return
-					end
+					flash[:error] = "Error saving slide."
+					render :new_after_error and return
 				end
 				
 				@slide.reload
@@ -129,7 +125,7 @@ class SlidesController < ApplicationController
 		rescue Magick::ImageMagickError
 			# image invalid
 			flash[:error] = "Error creating slide, invalid image file"
-			render :action => :new
+			render :action => :new_after_error
 		end
 		
 	end
