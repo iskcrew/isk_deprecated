@@ -91,7 +91,7 @@ class MasterGroup < ActiveRecord::Base
 	def destroy
 		MasterGroup.transaction do
 			self.slides.each do |s|
-				s.master_group_id = MasterGroup::Ungrouped_id
+				s.master_group_id = self.event.ungrouped.id
 				s.save!
 			end
 

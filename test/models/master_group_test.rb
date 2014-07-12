@@ -23,6 +23,14 @@ class MasterGroupTest < ActiveSupport::TestCase
 			clear_slide_files(s)
 		end
 	end
+	
+	test "destroy a group" do
+		assert_difference 'MasterGroup.count', -1 do
+			assert_difference 'MasterGroup.find(8).slides.count', master_groups(:ten_slides).slides.count do
+				master_groups(:ten_slides).destroy
+			end
+		end
+	end
 
 
 end
