@@ -21,7 +21,7 @@ div.slide class=(slide.public ? 'public' : 'hidden') id="slide_#{slide.id}"
 				=< slide_toggle_button 'Clock', slide, :show_clock
 				=< slide_edit_link(slide)
 				=< slide_svg_link(slide)
-				- if slide.master_group_id == current_event.ungrouped_id
+				- if slide.master_group_id != current_event.ungrouped_id
 					=< slide_ungroup_button(slide)
 				=< slide_clone_button(slide)
 				=< slide_delete_button(slide)
