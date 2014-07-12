@@ -150,5 +150,20 @@ class GroupsControllerTest < ActionController::TestCase
 		assert_acl_coverage(:groups, @forbidden_actions)
 	end
 	
+	test "add slides to group" do
+		data = {
+			id: master_groups(:one_slide).id,
+			add_slides: [
+				slides(:ungrouped).id,
+				slides(:simple).id
+			]
+		}
+		
+		assert_difference "master_groups(:one_slide).reload.slides.count", 2 do
+			post :adopt_slides, data, @adminsession
+		end
+		
+		assert_redirected_to group_path(assigns(:group))
+	end
 	
 end

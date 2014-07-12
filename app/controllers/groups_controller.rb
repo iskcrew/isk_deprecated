@@ -110,25 +110,23 @@ class GroupsController < ApplicationController
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
 		
-		@slides = current_event.ungrouped.slides.current.all
+		@slides = current_event.ungrouped.slides.current.to_a
 	end
 	
 	# Add multiple slides to group
 	def adopt_slides
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
-		MasterGroup.transaction do
-			notice = String.new 
-			params[:slides].each_value do |s|
-				if s[:add]
-					s = current_event.ungrouped.slides.find(s[:id])
-					flash[:notice]
-					notice << 'Adding slide ' << s.name << "\n"
-					s.master_group_id = @group.id
-					s.save!
-				end
-			end
-			flash[:notice] = notice
+		added = Array.new
+		params[:add_slides].each do |id|
+			s = current_event.ungrouped.slides.find(id)
+			added << s.name
+			s.master_group_id = @group.id
+			s.save!
+		end
+		
+		if added.present?
+			flash[:notice] = "Added #{added.size} #{'slide'.pluralize(added.size)} to group #{@group.name}."
 		end
 		
 		redirect_to :action => :show, :id => @group.id

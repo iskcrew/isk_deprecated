@@ -1,0 +1,18 @@
+h1 Add slides to group: #{@group.name}
+p 
+	| Here you can add ungrouped slides to this group. 
+	   All selected slides will be added to the end of this group.
+
+= form_for @group, url: adopt_slides_group_path(@group.id), method: :post do |f|
+	= f.submit 'Add slides to group'
+	table#slide_selection
+		tr
+			th Slide name
+			th Slide preview
+			th Add this slide?
+		- @slides.each do |s|
+			tr
+				td = s.name
+				td = slide_preview_image_tag s
+				td = check_box_tag 'add_slides[]', s.id
+	= f.submit 'Add slides to group'
