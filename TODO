@@ -1,18 +1,20 @@
+BUGS / INCONSISTENCIES:
+	- Shoud showing a override change the slide image in _display.html.slim partial?
+
+
 - Rails 4.1 migration
 	- Rewrite the cache and websocket stuff as concerns and include where needed
 		- Remove the dependency on activerecord_observers gem
+		- Only cache observer left!
 	- Use http://edgeguides.rubyonrails.org/active_support_instrumentation.html
 		- Better websocket logging
 		- Performance metrics?
 		- Display action log and metrics
 	
-- Create nested controllers for Group and OverrideQueue to clean up display and presentation controllers?
-
-- Cache
-	- Cashier seems to be working fine.. but tests would be nice
-
-- DelayedJob
-	- Investigate the way delayed jobs logs stuff, could use the same thing myself...
+- Create nested controllers to split code from other massive controllers:
+	- SvgController for slide svg, singular resource
+	- OverrideController for displays
+	- Group controller for presentations
 
 - Inkscape plugins
 	- Better error handling
@@ -22,40 +24,46 @@
 
 - Websockets
 	- Chat / better notification system for web users
-	- Does newest websocket-rails still crash the server with rails 4.1?
+		- We have the new html5 speaker monitor!
+	- websocket-rails 0.7.0 bugs:
+		- We are using our own custom fix currently, change to mainline when this is fixed
+		- We have a custom fix in place for the query cache bug also
 
 - MasterGroups
 	- Deep clone for mastergroups, cloning all slides inside them
 
 - Events
-	- Memoize Event.current like current_user
 	- Allow creating a new event by cloning a old one?
 	- Link displays to events
-	- Store template config etc in the event data
 	- Allow choosing of the slide background from web
 
 - Slides
 	- Timed slide actions, like "this slide is public between 15:00 and 02:00"
+	- Slide status field
+		- pending -> image generation pending
+		- ok -> images up to date
+		- error -> image generation failed, do not retry until user intervention
+			- Also notify users about the error
+				- Needs the general Message model and global error list?
+				- Or use tickets?
 	- HttpSlide
 		- Mark slides as invalid if the fetch fails?
-	- Gridfs store for slide images?
 	- InkscapeSlide
 		- Allow converting inkscapeslides to simple slides?
-	- Simple Edit
-		- Configurable margins, base-svg generation with configurable slide size/aspect ratio
+		- Allow creation from SlideTemplate
+		- Refactor the conversion code
 	- Templates
 		- Set viewBox on upload for the svg or warn the user?
 		- TESTING, TESTING, TESTING
-		- CSS-styling
-		- ACLs
+		- Proper ACL, we currently require global_admin.
+	- SvgSlide
+		- Create migration to inkscape slides and prepare to kill this class
 
 - Presentations
 	- Deep cloning of presentations. clone the presentation structure
 
 - Displays
 	- Link displays to events
-	- Log all display boots (hello event) somewhere
-	- Slides from override queues don't show in the _display partial
 
 - rdoc!
 
