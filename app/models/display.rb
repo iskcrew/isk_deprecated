@@ -91,8 +91,7 @@ class Display < ActiveRecord::Base
 			return true
 		rescue ActiveRecord::RecordNotFound
 			# The override was not found
-			self.status = 'error'
-			self.state.save!
+			self.add_error 'Invalid slide in override_shown!'
 			return false
 		end
 	end
@@ -115,8 +114,7 @@ class Display < ActiveRecord::Base
 			return true
 		rescue ActiveRecord::RecordNotFound
 			# The slide was not found in the presentation
-			self.status = 'error'
-			self.state.save!
+			self.add_error 'Invalid slide in set_current slide'
 			return false
 		end
 	end
@@ -144,6 +142,13 @@ class Display < ActiveRecord::Base
 		else
 			return false
 		end
+	end
+	
+	# Add a error message on this display and set the error state
+	# TODO: handle error messages as new error tickets
+	def add_error(message = nil)
+		self.state.status = 'error'
+		self.state.save!
 	end
 	
 	# Returns the time between the last hello and last contact

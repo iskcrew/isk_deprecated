@@ -59,13 +59,23 @@ class IskdpyController < WebsocketRails::BaseController
 	# Handle a error report from the display
 	def display_error
 		d = Display.find(message[:display_id])
-		d.status = 'error'
+		d.add_error message[:error]
 		d.save!
+	end
+	
+	# A display is shutting down due to user request.
+	# The following disconnect won't be because of error
+	def shutdown
+		Display.disconnect(connection.id)
 	end
 	
 	# A websocket-client disconnects, we need to check if it was a display and update its state if so.
 	def client_disconnect
-		Display.disconnect(connection.id)
+		d = Display.joins(:display_state).where(display_states: {websocket_connection_id: connection.id}).first
+		if d.present?
+			d.add_error 'Connection lost!'
+			d.save!
+		end
 	end
 	
 	private

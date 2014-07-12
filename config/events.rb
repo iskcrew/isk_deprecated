@@ -70,6 +70,10 @@ WebsocketRails::EventMap.describe do
 		# Inform about a error that has occured
 		# data = {display_id: int, error: string}
 		subscribe :error,									to: IskdpyController, with_method: :display_error
+		
+		# Inform the isk server that the display is shutting down due to user request
+		# data = {display_id: int}
+		subscribe :shutdown,							to: IskdpyController, with_method: :shutdown
 	end
 
 end
