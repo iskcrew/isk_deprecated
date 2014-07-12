@@ -156,9 +156,11 @@ module SlidesHelper
 	
 	# Generate the download svg link for the slide with consistent confirm message
 	def slide_svg_link(slide)
-		link_to 'Download', {controller: :slides, action: :svg_data, id: slide.id},
-						 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
-						 slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
+		if [InkscapeSlide].include? slide.class
+			link_to 'Download SVG', {controller: :slides, action: :svg_data, id: slide.id},
+							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
+						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
+		end
 	end
 	
 	# Generate the slide clone button with tooltip
