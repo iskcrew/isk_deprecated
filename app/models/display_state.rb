@@ -26,10 +26,16 @@ class DisplayState < ActiveRecord::Base
 	# Send error notifications if we are in error state 
 	def send_error_notifications
 		if self.status == 'error'
+			if self.display.error_tickets.open.present?
+				msg = self.display.error_tickets.open.last!.description.lines.last
+			else
+				msg = 'Error has occured!'
+			end
 			data = {
 				id: self.display_id,
-				message: 'Error has occured!'
+				message: msg
 			}
+			Rails.logger.error "Error has occured on display #{self.display_id} with message: '#{msg}'"
 			WebsocketRails[self.display.websocket_channel].trigger('error', data)
 			WebsocketRails['display'].trigger('error', data)
 		end
