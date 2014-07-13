@@ -17,6 +17,25 @@ module	HasTickets
 	# Define class methods for the model including this
 	module ClassMethods
 		
+		# Return all records with error tickets
+		def with_error_tickets
+			self.joins(:tickets)
+			.where(tickets: {kind: 'error'})
+			.where.not(tickets: {status: Ticket::StatusClosed})
+		end
+	end
+	
+	# Add a new error ticket on this object with given message
+	def add_error_ticket(message)
+		t = Ticket.new(kind: 'error')
+		t.about = self
+		t.name = "Error in #{self.class.name}: #{self.name}"
+		t.description = message
+		t.save!
+	end
+	
+	def error_tickets
+		self.tickets.where(kind: 'error')
 	end
 	
 end
