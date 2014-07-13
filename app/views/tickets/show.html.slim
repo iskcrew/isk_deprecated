@@ -5,7 +5,7 @@ h2 Description
 
 - if @ticket.about
 	h3 Associated object
-	p This ticket concerns this #{ticket_object_type(@ticket.about)}:
+	p This ticket concerns this #{@ticket.about_type.downcase}:
 	= render @ticket.about
 	
 = content_for :navigation do
