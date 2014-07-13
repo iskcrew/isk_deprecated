@@ -157,6 +157,13 @@ class SlidesController < ApplicationController
 						redirect_to :action => 'show', :id => @slide.id and return
 					}
 					format.js {render :show}
+					format.json {
+						render json: {
+							id: @slide.id,
+							message: 'Slide was succesfully updated.',
+							changes: @slide.previous_changes
+						}
+					}
 				end
 			else
 				flash[:error] = "Error updating slide"
