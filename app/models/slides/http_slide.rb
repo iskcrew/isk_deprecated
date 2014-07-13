@@ -24,16 +24,17 @@ class HttpSlide < Slide
 		s.delay.fetch!
 	end
 	
+	after_initialize do 
+		self.is_svg = false
+		true
+	end
+	
+	validate :validate_url
+	
 	def clone!
 		new_slide = super
 		new_slide.slidedata = self.slidedata
 		return new_slide
-	end
-
-	def initialize(data)
-		super(data)
-		self.is_svg = false
-		self.ready = false
 	end
 		
 	def needs_fetch?
@@ -82,6 +83,23 @@ class HttpSlide < Slide
 			logger.error resp
 			logger.error uri
 		end
+	end
+	
+	private
+	
+	# Validates the url
+	def validate_url
+		url = URI::parse slidedata[:url].strip
+		unless ['http', 'https'].include? url.scheme
+			errors.add(:slidedata, "^URL scheme is invalid, must be http or https.")
+		end
+		
+		if url.host.blank?
+			errors.add(:slidedata, "^URL is invalid, missing host.")
+		end
+		
+	rescue URI::InvalidURIError
+		errors.add(:slidedata, "^URL is invalid.")
 	end
 
 end

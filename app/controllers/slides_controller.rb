@@ -139,7 +139,7 @@ class SlidesController < ApplicationController
 	# Update a slide
 	def update
 		Slide.transaction do
-
+		
 			@slide =Slide.find(params[:id])
 			require_edit(@slide)
 	
@@ -170,10 +170,6 @@ class SlidesController < ApplicationController
 				render :action => 'edit' and return
 			end
 		end
-		
-	rescue URI::InvalidURIError
-		flash[:error] = "Error parsing the slide http url!"
-		render :http_edit and return
 	end
 	
 	
