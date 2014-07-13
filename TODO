@@ -48,6 +48,7 @@ BUGS / INCONSISTENCIES:
 				- Or use tickets?
 	- HttpSlide
 		- Mark slides as invalid if the fetch fails?
+		- Inherit from ImageSlide so we get the scaling options
 	- InkscapeSlide
 		- Allow converting inkscapeslides to simple slides?
 		- Allow creation from SlideTemplate
