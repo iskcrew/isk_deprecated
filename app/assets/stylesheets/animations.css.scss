@@ -53,6 +53,11 @@
 
 // Animation keyframes
 
+@include keyframes(blink-red-border) {
+	0% { border-color: $red;}
+	100% { border-color: $red_light;}
+}
+
 @include keyframes(scale-90-to-110) {
 	0%	{	@include transform( scale3d(0.9, 0.9, 1) ); }
 	100% {	@include transform( scale3d(1.1, 1.1, 1) ); }
@@ -68,7 +73,11 @@
 div#top_fixed {
 	ul.tabs {		
 		li.warning a:before {
-			@include animation('scale-100-to-150 1s infinite alternate');
+			
+		}
+		
+		li.warning {
+			@include animation('blink-red-border 2s steps(2) infinite');
 		}
 	}
 }
