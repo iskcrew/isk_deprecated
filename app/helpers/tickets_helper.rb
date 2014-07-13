@@ -11,7 +11,7 @@ module TicketsHelper
 	# Link to the object associated to this ticket
 	def ticket_concerning(ticket)
 		if ticket.about.present?
-			return "#{ticket_object_type(ticket.about).capitalize}: #{ticket_object_link(ticket)}".html_safe
+			return "#{ticket.about_type.capitalize}: #{ticket_object_link(ticket)}".html_safe
 		else
 			return "None"
 		end
@@ -25,6 +25,8 @@ module TicketsHelper
 			url = presentation_path(ticket.about)
 		elsif ticket.about.is_a? MasterGroup
 			url = group_path(ticket.about)
+		elsif ticket.about.is_a? Display
+			url = display_path(ticket.about)
 		end
 		return link_to ticket.about.name, url
 	end

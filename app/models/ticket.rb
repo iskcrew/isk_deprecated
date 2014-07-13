@@ -10,7 +10,7 @@ class Ticket < ActiveRecord::Base
 		StatusOpen => 'open', 
 		StatusClosed => 'closed'
 	}
-	ValidModels = [Slide, MasterGroup, Presentation]
+	ValidModels = [Slide, MasterGroup, Presentation, Display]
 	Kinds = %w(request error notice)
 	
 	validates :name, presence: true
