@@ -28,9 +28,6 @@ class Slide < ActiveRecord::Base
 	has_one :event, through: :master_group
 	has_many :presentations, -> { uniq }, through: :master_group
 	
-	# Ticket system
-	has_many :tickets, as: :about
-
 	validates :name, presence: true, length: { maximum: 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
 	validates :master_group, presence: true
@@ -43,7 +40,6 @@ class Slide < ActiveRecord::Base
 	
 	delegate :name, to: :master_group, prefix: :master_group 
 
-
 	include RankedModel
 	ranks :position, with_same: :master_group_id, class_name: 'Slide' 
 	
@@ -52,15 +48,14 @@ class Slide < ActiveRecord::Base
 	# Send websocket messages on create and update
 	include WebsocketMessages
 	
-	Host = 'http://example.com'
+	# Ticket system
+	include HasTickets
 	
+	Host = 'http://example.com'
 	TypeString = 'image'
-
 	FilePath = Rails.root.join('data','slides')
-
 	UsePresentationDelay = -1 #Set duration to this to use presentation setting
 	
-
 	include ModelAuthorization
 	
 	

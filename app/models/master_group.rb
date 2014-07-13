@@ -13,9 +13,6 @@ class MasterGroup < ActiveRecord::Base
 	belongs_to :effect
 	belongs_to :event
 	
-	# Ticket system
-	has_many :tickets, as: :about
-
 	validates :name, :presence => true, :length => { :maximum => 100 }
 	validates :internal, :inclusion => { :in => [true, false] }
 	
@@ -26,6 +23,9 @@ class MasterGroup < ActiveRecord::Base
 	
 	# Allow zipping all associated slide images
 	include ZipSlides
+
+	# Ticket system
+	include HasTickets
 	
 	scope :defined_groups, -> {where(:internal => false).order('name')}
 	

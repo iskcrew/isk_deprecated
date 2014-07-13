@@ -17,9 +17,6 @@ class Presentation < ActiveRecord::Base
 	belongs_to :event
 	has_many :displays
 		
-	# Ticket system
-	has_many :tickets, as: :about
-	
 	validates :effect, presence: true
 	validates :name, presence: true, length: { :maximum => 100 }
 	validates :duration, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: -1}
@@ -43,6 +40,9 @@ class Presentation < ActiveRecord::Base
 	
 	# Allow zipping all associated slide images
 	include ZipSlides
+
+	# Ticket system
+	include HasTickets
 	
 	# Shorthand for returning the count of public slides
 	# in the presentation
