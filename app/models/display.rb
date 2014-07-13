@@ -149,9 +149,16 @@ class Display < ActiveRecord::Base
 	
 	# Add a error message on this display and set the error state
 	# TODO: handle error messages as new error tickets
-	def add_error(message = nil)
+	def add_error(message)
 		self.state.status = 'error'
 		self.state.save!
+		if self.error_tickets.open.present?
+			t = self.error_tickets.open.last!
+			t.description = "#{t.description}\n#{message}"
+			t.save!
+		else
+			self.add_error_ticket message
+		end
 	end
 	
 	# Returns the time between the last hello and last contact
