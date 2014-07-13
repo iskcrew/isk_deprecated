@@ -21,6 +21,7 @@ div.display_properties
 			li Metadata updated at: #{l @display.updated_at, :format => :short}
 			li Created at: #{l @display.created_at, :format => :short}
 		= authorized_users @display
+		= tickets_partial @display
 
 - if @display.override_queues.present?
 	div.override_queue
