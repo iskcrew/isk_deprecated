@@ -11,9 +11,11 @@ class Ticket < ActiveRecord::Base
 		StatusClosed => 'closed'
 	}
 	ValidModels = [Slide, MasterGroup, Presentation]
+	Kinds = %w(request error notice)
 	
 	validates :name, presence: true
 	validates :status, inclusion: { in: Ticket::StatusCodes }
+	validates :kind, inclusion: {in: Ticket::Kinds}
 	validates :description, presence: true
 	validates :event, presence: true
 	validate :check_valid_models

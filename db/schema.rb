@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140709154739) do
+ActiveRecord::Schema.define(version: 20140713170440) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -229,14 +229,15 @@ ActiveRecord::Schema.define(version: 20140709154739) do
   add_index "template_fields", ["slide_template_id"], name: "index_template_fields_on_slide_template_id", using: :btree
 
   create_table "tickets", force: true do |t|
-    t.string   "name",                    null: false
-    t.integer  "status",      default: 1, null: false
-    t.text     "description",             null: false
+    t.string   "name",                            null: false
+    t.integer  "status",      default: 1,         null: false
+    t.text     "description",                     null: false
     t.integer  "event_id"
     t.integer  "about_id"
     t.string   "about_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "kind",        default: "request", null: false
   end
 
   add_index "tickets", ["about_id", "about_type"], name: "index_tickets_on_about_id_and_about_type", using: :btree
