@@ -84,10 +84,6 @@ class MasterGroup < ActiveRecord::Base
 		end
 	end
 	
-	def public_slides
-		
-	end
-
 	def destroy
 		MasterGroup.transaction do
 			self.slides.each do |s|
