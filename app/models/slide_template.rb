@@ -78,8 +78,8 @@ class SlideTemplate < ActiveRecord::Base
 	# Set the viewBox attribute on the base svg
 	# Inkscape doesn't set this and we need it for browser previews to work
 	def set_viewbox(svg)
-		width = svg.root.attributes['width']
-		height = svg.root.attributes['height']
+		width = svg.root.attributes['width'].to_i
+		height = svg.root.attributes['height'].to_i
 		svg.root.attributes['viewBox'] = "0 0 #{width} #{height}"
 		return svg
 	end
