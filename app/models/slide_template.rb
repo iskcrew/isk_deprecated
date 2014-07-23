@@ -2,6 +2,7 @@ class SlideTemplate < ActiveRecord::Base
 
 	belongs_to :event	
 	has_many :fields, -> {order(field_order: :asc)}, class_name: 'TemplateField'
+	has_many :slides, foreign_key: :foreign_object_id
 	
 	validates :name, :event, presence: true
 		
