@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140713170440) do
+ActiveRecord::Schema.define(version: 20140723150750) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -185,8 +185,10 @@ ActiveRecord::Schema.define(version: 20140713170440) do
     t.integer  "event_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "deleted",    default: false
   end
 
+  add_index "slide_templates", ["deleted"], name: "index_slide_templates_on_deleted", using: :btree
   add_index "slide_templates", ["event_id"], name: "index_slide_templates_on_event_id", using: :btree
 
   create_table "slides", force: true do |t|

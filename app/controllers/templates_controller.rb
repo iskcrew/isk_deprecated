@@ -3,7 +3,7 @@ class TemplatesController < ApplicationController
 	before_filter :require_global_admin
 	
 	def index
-		@templates = SlideTemplate.all
+		@templates = SlideTemplate.current.all
 	end
 	
 	def show
@@ -61,7 +61,10 @@ class TemplatesController < ApplicationController
 	end
 	
 	def destroy
-		
+		template = SlideTemplate.find(params[:id])
+		template.destroy
+		flash[:notice] = "Template has been deleted"
+		redirect_to templates_path
 	end
 	
 	private

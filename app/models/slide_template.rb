@@ -11,6 +11,8 @@ class SlideTemplate < ActiveRecord::Base
 	accepts_nested_attributes_for :fields, reject_if: :reject_new_fields
 	
 	FilePath = Rails.root.join('data','templates')
+	
+	scope :current, -> {where deleted: false}
 		
 	# Load the svg in
 	def template
@@ -48,6 +50,12 @@ class SlideTemplate < ActiveRecord::Base
 	# Filename to store the svg template file in
 	def filename
 		FilePath.join "slide_template_#{self.id}.svg"
+	end
+	
+	# We use soft-delete for templates, because hard-deleting the template will break all slides using it.
+	def destroy
+		self.deleted = true
+		self.save!
 	end
 	
 	private
