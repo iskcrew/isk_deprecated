@@ -9,7 +9,7 @@ h1 Editing slide: #{@slide.name}
 	- elsif @slide.is_a? SimpleSlide
 		= render partial: 'simple_edit'
 	- elsif @slide.is_a? TemplateSlide
-		div#template_slide_form
+		div#template_slide_form.svg_editor_container
 			= render partial: 'template_slide_form'
 	- elsif @slide.is_a? ImageSlide
 		= render partial: 'image_slide_form'
