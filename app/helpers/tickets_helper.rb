@@ -55,6 +55,12 @@ module TicketsHelper
 		end
 	end
 	
+	def ticket_destroy_link(ticket)
+		if ticket.admin? current_user
+			link_to 'Delete', ticket_path(ticket), class: 'button warning', method: :delete
+		end
+	end
+	
 	def ticket_tab_link
 		link_name = "Tickets #{ticket_open_count}"
 		return link_to link_name.html_safe, tickets_path, class: 'ui-tabs-anchor'

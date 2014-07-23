@@ -52,6 +52,17 @@ class TicketsController < ApplicationController
 		end
 	end
 	
+	# Delete a ticket
+	def destroy
+		# Require that the user has admin powers for tickets.
+		require_admin
+		
+		ticket = Ticket.find(params[:id])
+		ticket.destroy
+		flash[:notice] = "Ticket has been deleted."
+		redirect_to tickets_path
+	end
+	
 	private
 	
 	# Whitelist mass assignment parameters, only some users can close the tickets
