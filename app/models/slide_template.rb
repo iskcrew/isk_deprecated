@@ -23,18 +23,19 @@ class SlideTemplate < ActiveRecord::Base
 		return @_template
 	end
 	
-	# Handle a uploaded file
-	def upload=(upload)
-		self.template = upload.read
-	end
-	
-	
+	# Set the template svg and process it
+	# FIXME: Validate that new template has the same editable fields present!
 	def template=(svg)
 		@_template = svg
 		process_svg
 		write_template
 	end
 	
+	# Handle a uploaded file
+	def upload=(upload)
+		self.template = upload.read
+	end
+		
 	# TODO: input validation
 	def generate_svg(data)
 		svg = REXML::Document.new(self.template)
