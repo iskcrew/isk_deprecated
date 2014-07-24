@@ -98,6 +98,28 @@ class Event < ActiveRecord::Base
 		return h
 	end
 	
+	# The filename for the background image
+	# FIXME: True dynamic setting!
+	def background_image
+		return 'backgrounds/empty.png'
+	end
+	
+	# The configuration options for the simple editor
+	# FIXME: True dynamic settings!
+	def simple_editor_settings
+		return {
+			heading: {
+				font_size: 120,
+				coordinates: [500, 130]
+			},
+			body: {
+				margins: [550, picture_sizes[:full].first - 30],
+				y_coordinate: 280
+			},
+			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
+		}
+	end
+	
 	private
 	
 	# Update the config

@@ -22,8 +22,7 @@ class SimpleSlide < SvgSlide
 	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
 	HeadingSelector = "//text[@id = 'header']"
 	BodySelector = "//text[@id = 'slide_content']"
-	MarginLeft = 30
-	MarginRight = 30
+	BackgroundSelector = "//image[@id = 'background_picture']"
 
 	# If our slidedata chances mark the slide as not ready when saving it.
 	before_save do
@@ -112,37 +111,72 @@ class SimpleSlide < SvgSlide
 		color = options[:color] || DefaultSlidedata[:color]
 		heading = options[:heading] || ''
 		text = options[:text] || ''
-
-		svg = REXML::Document.new(File.open(BaseTemplate))
 		
-		width = svg.root.attributes['width'].to_i
-		height = svg.root.attributes['height']
-		svg.root.attributes['viewBox'] = "0 0 #{width} #{height}"
+		current_event = Event.current
+		settings = current_event.simple_editor_settings
+		size = current_event.picture_sizes[:full]
+		
+		svg = prepare_template(settings, size, current_event.background_image)
 		
 		head = svg.elements[HeadingSelector]
-		head.delete_element('*')
-		head_tspan = head.add_element 'tspan'
-		head_tspan.attributes['sodipodi:role'] = "line"
-		head_tspan.attributes["xml:space"] = "preserve"
-		head_tspan.text = heading
+		head = set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
 		
-		
+		# Find out the text x coordinate
+		text_x = row_x(text_align, settings[:body][:margins])		
 		body = svg.elements[BodySelector]
-		body = set_text(width, body, text, color, text_size, text_align)
-		
-		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
-		
+		body = set_text(body, text, text_x, color, text_size, text_align)
+				
 		return svg.to_s
 	end
 	
 	private
 	
-	def self.set_text(width, element, text, color = nil,size = nil, align = nil)
-		element.elements.each do 
-			element.delete_element('*')
-		end
-		element.text = ""
+	# Prepare the base template based on event config
+	def self.prepare_template(settings, size, background_image)
+		svg = REXML::Document.new(File.open(BaseTemplate))
+		
+		# Add sodipodi namespace
+		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
+				
+		# Set dimensions
+		svg.root.attributes['width'] = size.first
+		svg.root.attributes['height'] = size.last
+		
+		# Set viewbox
+		svg.root.attributes['viewBox'] = "0 0 #{size.first} #{size.last}"
+		
+		# Set background
+		bg = svg.elements[BackgroundSelector]
+		bg.attributes['xlink:href'] = background_image
+		bg.attributes['x'] = 0
+		bg.attributes['y'] = 0
+		bg.attributes['width'] = size.first
+		bg.attributes['height'] = size.last
+		
+		# Position header
+		header = svg.elements[HeadingSelector]
+		header.attributes['x'] = settings[:heading][:coordinates].first
+		header.attributes['y'] = settings[:heading][:coordinates].last
+		
+		# Header font size
+		header.attributes['font-size'] = settings[:heading][:font_size]
+				
+		# Position body
+		body = svg.elements[BodySelector]
+		body.attributes['y'] = settings[:body][:y_coordinate]
+		
+		# Clear child elements from header and body
+		clear_childs(header)
+		clear_childs(body)
+		
+		return svg
+	end
+	
+	def self.set_text(element, text, text_x, color = nil,size = nil, align = nil)
+		
+		# Set default attributes
 		element.attributes['sodipodi:linespacing'] = '125%'
+		element.attributes['x'] = text_x
 		
 		if size
 			element.attributes['font-size'] = size
@@ -154,7 +188,7 @@ class SimpleSlide < SvgSlide
 		
 		text.each_line do |l|
 			row = element.add_element 'tspan'
-			row.attributes['x'] = row_x width, align
+			row.attributes['x'] = text_x
 			row.attributes['sodipodi:role'] = "line"
 			row.attributes["xml:space"] = "preserve"
 			
@@ -178,31 +212,37 @@ class SimpleSlide < SvgSlide
 			end
 		end
 		
-		
-		return set_align(element, align)
+		return set_text_anchor(element, align)
 	end
 	
-	def self.row_x(width, align)
+	def self.row_x(align, margins)
 		if align
 			case align.strip.downcase
 			when 'right'
-				return margin_right width
+				return margins.last
 			when 'centered'
-				return (margin_right(width) - margin_left) / 2 + margin_left
+				return (margins.first + margins.last) / 2
 			else
-				return margin_left
+				return margins.first
 			end
 		else
-			return margin_left
+			return margins.first
 		end
 	end
+	
+	# Clear child elements
+	def self.clear_childs(e)
+		# Clear child elements (delete_element deletes only one element)
+		e.elements.each do
+			e.delete_element('*')
+		end
+		e.text = ''
+		
+		return e
+	end
 
-
-	#TODO: left centered / right centered???
-	def self.set_align(element, align)
+	def self.set_text_anchor(element, align)
 		if align
-			#TODO: move the coordinates to configuration			
-			
 			case align.strip.downcase
 			when 'right'
 				text_anchor = 'end'
@@ -211,22 +251,10 @@ class SimpleSlide < SvgSlide
 			else
 				text_anchor = 'start'
 			end
-			
-			element.attributes['x'] = row_x element.root.attributes['width'].to_i, align
 			element.attributes['text-anchor'] = text_anchor 
 		end
 		return element
 	end
-	
-	def self.margin_left
-		MarginLeft
-	end
-	
-	def self.margin_right(width)
-		width - MarginRight
-	end
-	 
-	private
 	
 	# Override the default image generator
 	# FIXME: make inkscape the default for everyone and remove this
