@@ -217,7 +217,7 @@ module SlidesHelper
 	
 	# Text size options for the simple editor
 	def simple_text_sizes
-		double_array [48,50,60,70,80,90,100,120,160,200,300,400]
+		double_array current_event.simple_editor_settings[:font_sizes]
 	end
 	
 	# To generate the selects for simple editor in a sane way we want to turn

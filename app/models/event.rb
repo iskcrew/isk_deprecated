@@ -107,7 +107,7 @@ class Event < ActiveRecord::Base
 	# The configuration options for the simple editor
 	# FIXME: True dynamic settings!
 	def simple_editor_settings
-		return {
+		settings = {
 			heading: {
 				font_size: 120,
 				coordinates: [500, 130]
@@ -118,6 +118,10 @@ class Event < ActiveRecord::Base
 			},
 			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
 		}
+		if self.picture_sizes[:full] == SupportedResolutions[1]
+			settings[:font_sizes] = [80,90,100,120,160,200,300,400]
+		end
+		return settings
 	end
 	
 	private
