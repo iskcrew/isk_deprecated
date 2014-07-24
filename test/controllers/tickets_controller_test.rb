@@ -7,8 +7,8 @@ class TicketsControllerTest < ActionController::TestCase
 			ticket: {
 				name: 'New test ticket',
 				description: "Ticket test\ndescription\nhere",
-				object_type: 'slide',
-				object_id: slides(:no_clock).id
+				about_type: 'Slide',
+				about_id: slides(:no_clock).id
 			}
 		}
 	end
@@ -39,7 +39,7 @@ class TicketsControllerTest < ActionController::TestCase
 		assert_equal @new_ticket_data[:ticket][:name], assigns(:ticket).name, "Ticket didn't have correct name"
 		assert assigns(:ticket).about.present?
 		assert assigns(:ticket).about.is_a? Slide
-		assert assigns(:ticket).about_id == @new_ticket_data[:ticket][:object_id]
+		assert assigns(:ticket).about_id == @new_ticket_data[:ticket][:about_id]
 	end
 	
 	test "try to create invalid ticket" do
