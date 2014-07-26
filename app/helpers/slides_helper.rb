@@ -149,7 +149,8 @@ module SlidesHelper
 	
 	# Generate the edit link with consistent confirm message
 	def slide_edit_link(slide)
-		link_to 'Edit', edit_slide_path(slide), 
+		link_text = "#{icon 'edit'} Edit".html_safe
+		link_to link_text, edit_slide_path(slide), 
 			:class => 'button', title: 'Edit slide metadata', data: {confirm: (
 			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
@@ -157,7 +158,8 @@ module SlidesHelper
 	# Generate the download svg link for the slide with consistent confirm message
 	def slide_svg_link(slide)
 		if [InkscapeSlide].include? slide.class
-			link_to 'Download SVG', {controller: :slides, action: :svg_data, id: slide.id},
+			link_text = "#{icon 'download'} SVG".html_safe
+			link_to link_text, {controller: :slides, action: :svg_data, id: slide.id},
 							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 		end
