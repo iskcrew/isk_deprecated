@@ -169,7 +169,38 @@ class SimpleSlide < SvgSlide
 		clear_childs(header)
 		clear_childs(body)
 		
+		# Set guides
+		named_view = svg.elements['//sodipodi:namedview']
+		named_view.elements.each('sodipodi:guide') do |e|
+			named_view.delete_element(e)
+		end
+		
+		# Vertical guides
+		[
+			"#{settings[:body][:margins].first},0",
+			"#{settings[:body][:margins].last},0",
+			"#{settings[:heading][:coordinates].first},0"
+		].each do |coord|
+			named_view.add_element( create_guide(coord, '-200,0'))
+		end
+		
+		# Horizontal guides
+		[
+			"0,#{size.last - settings[:body][:y_coordinate]}",
+			"0,#{size.last - settings[:heading][:coordinates].last}"
+		].each do |coord|
+			named_view.add_element( create_guide(coord, '0,-200'))
+		end
+		
 		return svg
+	end
+	
+	# Create a new sodipodi:guide element
+	def self.create_guide(position, orientation)
+		guide = REXML::Element.new('sodipodi:guide')
+		guide.attributes['position'] = position
+		guide.attributes['orientation'] = orientation
+		return guide
 	end
 	
 	def self.set_text(element, text, text_x, color = nil,size = nil, align = nil)
