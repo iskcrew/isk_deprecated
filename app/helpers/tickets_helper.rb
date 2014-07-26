@@ -44,7 +44,7 @@ module TicketsHelper
 	
 	def ticket_edit_link(ticket)
 		if ticket.can_edit? current_user
-			link_to 'Edit', edit_ticket_path(ticket), class: 'button'
+			link_to (icon('edit') + ' Edit'), edit_ticket_path(ticket), class: 'button'
 		end
 	end
 	
