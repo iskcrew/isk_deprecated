@@ -66,6 +66,15 @@ module TicketsHelper
 		return link_to link_name.html_safe, tickets_path, class: 'ui-tabs-anchor'
 	end
 	
+	def ticket_kind(ticket)
+		case ticket.kind
+		when 'error'
+			(icon('warning') + ' ' + ticket.kind.capitalize)
+		else
+			ticket.kind.capitalize
+		end
+	end
+	
 	private
 	
 	def ticket_open_count

@@ -35,6 +35,10 @@ table.tickets {
 			background: $green;
 		}
 	}
+	
+	td.error {
+		background: $red_highlight;
+	}
 		
 }
 

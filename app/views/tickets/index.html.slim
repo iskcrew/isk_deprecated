@@ -13,7 +13,7 @@ table.tickets
 	- @tickets.each do |ticket|
 		tr class=ticket.status_text
 			td #{ticket.status_text}
-			td #{ticket.kind.capitalize}
+			td class=ticket.kind #{ticket_kind ticket}
 			td #{link_to ticket.name, ticket_path(ticket)}
 			td = ticket_concerning(ticket)
 			td #{l ticket.updated_at, format: :short}
