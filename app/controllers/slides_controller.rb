@@ -102,7 +102,7 @@ class SlidesController < ApplicationController
 				# They need to be done after we know the slide id....
 				case params[:create_type]
 				when 'empty_file', 'inkscape'
-					FileUtils.copy(InkscapeSlide::EmptySVG, @slide.svg_filename)
+					@slide.svg_data = SimpleSlide.create_svg(SimpleSlide::DefaultSlidedata)
 				when 'image'
 					@slide.image = params[:image]
 				end
