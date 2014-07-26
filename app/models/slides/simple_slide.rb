@@ -204,7 +204,6 @@ class SimpleSlide < SvgSlide
 	end
 	
 	def self.set_text(element, text, text_x, color = nil,size = nil, align = nil)
-		
 		# Set default attributes
 		element.attributes['sodipodi:linespacing'] = '125%'
 		element.attributes['x'] = text_x
@@ -229,7 +228,10 @@ class SimpleSlide < SvgSlide
 			elsif l.strip.empty?
 				row.attributes['font-size'] = (size.to_i * 0.4).to_i
 				row.attributes['dy'] = '1em'
-				l = ' '
+				row.attributes['fill-opacity'] = 0
+				row.attributes['stroke-opacity'] = 0
+				row.text = 'a'
+				next
 			else
 				row.attributes['dy'] = '1em'
 			end
