@@ -152,10 +152,10 @@ class Display < ActiveRecord::Base
 	def add_error(message)
 		if self.error_tickets.open.present?
 			t = self.error_tickets.open.last!
-			t.description = "#{t.description}\n#{message}"
+			t.description = "#{t.description}\n#{I18n.l(Time.now, format: :iso)} #{message}"
 			t.save!
 		else
-			self.add_error_ticket message
+			self.add_error_ticket "#{I18n.l(Time.now, format: :iso)} #{message}"
 		end
 		
 		self.state.status = 'error'
