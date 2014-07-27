@@ -6,7 +6,7 @@ div.slide_group_info.info_block#group_info
 			li
 				| This slide is in group:
 				=< link_to @slide.master_group_name, group_path(@slide.master_group)
-			li Position inside group: #{@slide.group_position}
+			li Position inside group: #{@slide.group_position + 1}
 			li 
 				| Slides in this group:
 				ul
