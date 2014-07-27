@@ -11,7 +11,7 @@ div.authorized_users.info_block#authorized_users
 					= u.username
 					- if obj.admin? current_user
 						=< link_to '', {action: :deny, id: obj.id, user_id: u.id}, method: :post, 
-							class: 'button warning fa fa-minus',
+							class: 'button warning fa fa-times-circle',
 							title: 'Remove user permissions'
 	- if obj.admin? current_user
 		= form_for :grant, url: {action: :grant, id: obj.id} do |f|
