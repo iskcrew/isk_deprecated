@@ -1,7 +1,7 @@
 table.group_item id=master_group.id
 	tr: th = group_link_tag(master_group)
 	tr: td.buttons
-		= link_to 'Details', group_path(master_group), class: 'button'
+		= link_to icon('info-circle', 'Details'), group_path(master_group), class: 'button'
 		= group_download_slides_link master_group
 		- if master_group.can_edit?(current_user)
 			=< link_to icon('plus', 'Add slides'), add_slides_group_path(master_group), 
