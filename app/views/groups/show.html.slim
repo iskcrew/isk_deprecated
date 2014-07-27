@@ -63,7 +63,7 @@ table.compact_slidelist
 		=link_to 'Hide all slides', {action: :hide_all, id: @group.id}, method: :post
 		=link_to 'Publish all slides', {action: :publish_all, id: @group.id}, method: :post
 		= group_edit_link @group
-		=link_to 'Add slides', action: :add_slides, id: @group.id
-		=link_to 'Delete',{action: :destroy, id: @group.id}, method: :delete, 
+		=link_to icon('plus', 'Add slides'), action: :add_slides, id: @group.id
+		=link_to icon('times-circle', 'Delete'),{action: :destroy, id: @group.id}, method: :delete, 
 			data: {confirm: "Are you sure you want to delete this group? \
 			All slides in this group will become ungrouped."}
