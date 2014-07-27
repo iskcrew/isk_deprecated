@@ -14,7 +14,7 @@ div.slide_group_info.info_block#group_info
 				| Slides in this group:
 				ul
 					- @slide.master_group.slides.each_with_index do |s, i|
-						li #{i + 1}: #{link_to s.name, slide_path(s)}
+						li class=(s == @slide ? 'current' : nil) #{i + 1}: #{link_to s.name, slide_path(s)}
 	- elsif @slide.can_edit? current_user
 		p 
 			| This slide doesn't belong to a group. As such this slide can't be a part of a 

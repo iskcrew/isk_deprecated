@@ -190,6 +190,15 @@ div.slide_info {
 		}
 	}
 	
+	div#group_info {
+		li.current {
+			font-weight: bolder;
+			a {
+				text-decoration: none;
+			}
+		}
+	}
+	
 	div#metadata {
 		width: 500px;
 		float: left;
