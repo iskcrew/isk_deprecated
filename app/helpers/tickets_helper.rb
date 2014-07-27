@@ -44,20 +44,23 @@ module TicketsHelper
 	
 	def ticket_edit_link(ticket)
 		if ticket.can_edit? current_user
-			link_to (icon('edit') + ' Edit'), edit_ticket_path(ticket), class: 'button'
+			link_to icon('edit', 'Edit'), edit_ticket_path(ticket), class: 'button'
 		end
 	end
 	
 	def ticket_close_link(ticket)
 		if ticket.can_close? current_user
-			link_to 'Close', ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
+			link_to icon('check-square-o', 'Close'), 
+				ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
 				class: 'button warning', method: :put
 		end
 	end
 	
 	def ticket_destroy_link(ticket)
 		if ticket.admin? current_user
-			link_to 'Delete', ticket_path(ticket), class: 'button warning', method: :delete
+			link_to icon('times-circle', 'Delete'), 
+				ticket_path(ticket), class: 'button warning', method: :delete,
+				data: {confirm: 'Are you sure you want to permanently delete this ticket?'}
 		end
 	end
 	
