@@ -1,0 +1,19 @@
+h1 Schedule information for: #{@schedule.name}
+
+= render @schedule
+
+div.schedule_events
+	- if @schedule.schedule_events.present?
+		h2 Scheduled events
+		table.schedule_events
+			tr
+				th Time
+				th Name
+				th Major?
+			- @schedule.schedule_events.each do |event|
+				= render partial: 'schedule_event', object: event
+	- else
+		p.warning This schedule doesn't contain any events!
+
+= content_for :navigation do
+	= link_to icon('edit', 'Edit'), edit_schedule_path(@schedule)
