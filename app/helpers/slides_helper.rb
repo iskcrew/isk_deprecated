@@ -167,13 +167,13 @@ module SlidesHelper
 	
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
-		link_to 'Clone', {:controller => :slides, :action => :clone, :id => slide.id},
+		link_to "#{icon 'copy'} Clone".html_safe, {:controller => :slides, :action => :clone, :id => slide.id},
 							:method => :post, :title => 'Create clone of this slide', :class => 'button'
 	end
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
-		link_to 'Delete', slide_path(slide),
+		link_to "#{icon 'times-circle'} Delete".html_safe, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
 							method: :delete, class: 'button warning'
 	end
