@@ -15,5 +15,5 @@ div.schedule_info id="schedule_#{schedule.id}"
 				| Group for "next up" -slides: 
 				=< link_to schedule.up_next_group.name, group_path(schedule.up_next_group)
 	div.schedule_actions
-		= link_to 'Details', schedule_path(schedule), class: 'button'
-		= link_to 'Edit', edit_schedule_path(schedule), class: 'button'
+		= link_to icon('info-circle', 'Details'), schedule_path(schedule), class: 'button'
+		= link_to icon('edit', 'Edit'), edit_schedule_path(schedule), class: 'button'
