@@ -184,6 +184,21 @@ module SlidesHelper
 							 :method => :post, :class => 'button ungroup'
 	end
 	
+	# Link to next slide in the same group as this slide
+	def slide_next_in_group_link(slide)
+		if s = slide.master_group.slides.where("position > #{slide.position}").first
+			link_to ("Next slide #{icon('forward')}").html_safe, slide_path(s), class: 'button'
+		end
+	end
+
+	# Link to previous slide in the same group as this slide
+	def slide_previous_in_group_link(slide)
+		if s = slide.master_group.slides.where("position < #{slide.position}").first
+			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'button'
+		end
+	end
+
+	
 	# Turn the slide class into human readable slide type
 	def slide_class(s)
 		return 'Template slide' if s.is_a? TemplateSlide
