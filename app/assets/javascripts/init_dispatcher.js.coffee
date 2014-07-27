@@ -12,7 +12,7 @@
 popup_connection_lost = ->
 	confirm_reconnect = ->
 		if confirm("Websocket connection lost. Try to reconnect?") then window.dispatcher.reconnect()
-	timer = setTimeout( confirm_reconnect, 1000 )
+	timer = setTimeout( confirm_reconnect, 5000 )
 
 # Create one global WebSocketRails javascript client that we can use when needed.
 # This avoids having multiple redundant connections open from different js-scripts.
