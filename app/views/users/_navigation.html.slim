@@ -1,0 +1,4 @@
+div.navigation
+	= link_to (icon('list') + ' List users'), users_path
+	=< link_to (icon('plus') + ' New user'), new_user_path
+	= yield :navigation

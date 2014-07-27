@@ -1,5 +1,5 @@
 div.navigation
 	| &nbsp;
-	= link_to 'List', tickets_path
-	= link_to 'New', new_ticket_path
+	= link_to (icon('list') + ' List tickets'), tickets_path
+	= link_to (icon('plus') + " New ticket"), new_ticket_path
 	= yield :navigation

@@ -1,0 +1,5 @@
+div.navigation
+	= link_to (icon('list') + " List presentations"), presentations_path
+	- if Presentation.can_create?(current_user)
+		=< link_to (icon('plus') + " New presentation"), new_presentation_path
+	= yield :navigation

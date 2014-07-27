@@ -1,0 +1,4 @@
+div.navigation
+	= link_to (icon('list') + ' List schedules'), schedules_path
+	=< link_to (icon('plus') + ' New schedule'), new_schedule_path
+	= yield :navigation

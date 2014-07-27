@@ -1,7 +1,7 @@
 div.navigation
 	| &nbsp;
-	= link_to 'List', slides_path
+	= link_to (icon('list') + ' List slides'), slides_path
 	- if Slide.can_create? current_user
-		= link_to "New", new_slide_path
+		= link_to (icon('plus') + " New slide"), new_slide_path
 	= yield :navigation
 		
