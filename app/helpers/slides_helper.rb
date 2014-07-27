@@ -43,7 +43,7 @@ module SlidesHelper
 		if slide.ready
 			url = url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i)
 		else
-			url = '/wait.gif'
+			url = 'wait.gif'
 		end
 		
 		return image_tag url, html_options
@@ -60,7 +60,7 @@ module SlidesHelper
 		if slide.ready
 			url = url_for(:controller => :slides, :action => :thumb, :id => slide.id, :t => slide.images_updated_at.to_i)
 		else
-			url ='/wait.gif'
+			url ='wait.gif'
 		end
 		return image_tag url, html_options
 	end
