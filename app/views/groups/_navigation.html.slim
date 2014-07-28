@@ -1,4 +1,4 @@
 div.navigation
-	= link_to (icon('list') + " List groups")
-	=< link_to (icon('plus') + " New group")
+	= link_to (icon('list') + " List groups"), groups_path
+	=< link_to (icon('plus') + " New group"), new_group_path
 	= yield :navigation
