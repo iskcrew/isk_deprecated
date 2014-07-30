@@ -193,7 +193,7 @@ module SlidesHelper
 
 	# Link to previous slide in the same group as this slide
 	def slide_previous_in_group_link(slide)
-		if s = slide.master_group.slides.where("position < #{slide.position}").first
+		if s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
 			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'button'
 		end
 	end
