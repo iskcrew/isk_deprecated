@@ -135,7 +135,7 @@ class Display < ActiveRecord::Base
 
 	# Relation for all monitored displays that are more than Timeout minutes late
 	def self.late
-		Display.joins(:display_state).where('display_states.monitor = ? AND last_contact_at < ?', true, Timeout.minutes.ago)
+		Display.joins(:display_state).where('display_states.monitor = ? AND display_states.last_contact_at < ?', true, Timeout.minutes.ago)
 	end
 	
 	# Is this display more than Timeout minutes late?
