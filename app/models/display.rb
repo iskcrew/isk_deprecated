@@ -8,7 +8,7 @@
 class Display < ActiveRecord::Base
 	
 	belongs_to :presentation
-	has_one :display_state, autosave: true
+	has_one :display_state, autosave: true, dependent: :delete
 	has_one :current_group, through: :display_state
 	has_one :current_slide, through: :display_state
 	has_many :override_queues, -> { order(:position).includes(:slide) }
