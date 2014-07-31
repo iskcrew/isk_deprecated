@@ -85,7 +85,7 @@ class IskdpyController < WebsocketRails::BaseController
 		if connection.request.headers['HTTP_X_FORWARDED_FOR']
 			connection.request.headers['HTTP_X_FORWARDED_FOR']
 		else
-			connection.request.ip
+			connection.request.remote_ip
 		end
 	end
 	
