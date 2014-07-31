@@ -92,8 +92,6 @@ $ ->
 	speak_message 'ISK Monitoring active'
 	
 	window.dispatcher._conn.on_close = reconnect_ws
-	window.dispatcher._conn.on_error = reconnect_ws
-	
 	
 	# Hide the compatibility warning
 	$('#ttp_compatibility').hide()
