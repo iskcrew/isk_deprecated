@@ -111,7 +111,7 @@ class Slide < ActiveRecord::Base
 		end
 		Slide.transaction do
 			new_slide.save!
-			
+			FileUtils.copy(self.data_filename, new_slide.data_filename) if self.respond_to? :data_filename
 			FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
 			FileUtils.copy(self.original_filename, new_slide.original_filename) unless self.is_svg?
 			if self.ready
