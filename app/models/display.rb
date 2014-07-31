@@ -82,15 +82,13 @@ class Display < ActiveRecord::Base
 	# Remove shown slide from override
 	def override_shown(override_id, connection_id = nil)
 		begin
-			self.transaction do
-				oq = self.override_queues.find(override_id)
-				self.last_contact_at = Time.now
-				self.websocket_connection_id = connection_id
-				oq.slide.shown_on self.id
-				oq.destroy
-				self.status = 'running'
-				self.state.save!
-			end
+			oq = self.override_queues.find(override_id)
+			self.last_contact_at = Time.now
+			self.websocket_connection_id = connection_id
+			oq.slide.shown_on self.id
+			oq.destroy
+			self.status = 'running'
+			self.state.save!
 			return true
 		rescue ActiveRecord::RecordNotFound
 			# The override was not found

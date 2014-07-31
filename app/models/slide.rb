@@ -189,13 +189,11 @@ class Slide < ActiveRecord::Base
 	
 	# Replace this slide with another slide
 	def replace!(slide)
-		Slide.transaction do
-			self.replacement = slide
-			slide.position = self.position
-			slide.master_group = self.master_group
-			slide.save!
-			self.destroy
-		end
+		self.replacement = slide
+		slide.position = self.position
+		slide.master_group = self.master_group
+		slide.save!
+		self.destroy
 	end
 	
 	# The position of this slide inside a group
