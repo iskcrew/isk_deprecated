@@ -73,6 +73,15 @@ $ ->
 			speak_message(msg)
 		insert_message ticket, msg, "/tickets/#{ticket.id}"
 		
+	reconnect_ws = ->
+		reconnect_now = ->
+			window.dispatcher.reconnect()
+			tickets = window.dispatcher.subscribe 'ticket'
+			tickets.bind 'update', notify_ticket_update
+			tickets.bind 'create', notify_ticket_create
+		
+		timer = setTimeout( reconnect_now, 5000 )
+		
 	tickets = window.dispatcher.subscribe 'ticket'
 	tickets.bind 'update', notify_ticket_update
 	tickets.bind 'create', notify_ticket_create
@@ -81,6 +90,10 @@ $ ->
 	displays.bind 'update', notify_display
 	
 	speak_message 'ISK Monitoring active'
+	
+	window.dispatcher._conn.on_close = reconnect_ws
+	window.dispatcher._conn.on_error = reconnect_ws
+	
 	
 	# Hide the compatibility warning
 	$('#ttp_compatibility').hide()
