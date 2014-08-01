@@ -15,7 +15,7 @@ class Slide < ActiveRecord::Base
 		true		
 	end
  
- 	after_create do |s|
+	after_create do |s|
 		s.update_column :filename, "slide_" + s.id.to_s		
 	end
 
@@ -109,15 +109,13 @@ class Slide < ActiveRecord::Base
 		elsif new_slide.name.include?('(mushroom) (mushroom)')
 			new_slide.name = new_slide.name.gsub('(clone)', '')
 		end
-		Slide.transaction do
-			new_slide.save!
-			FileUtils.copy(self.data_filename, new_slide.data_filename) if self.respond_to? :data_filename
-			FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
-			FileUtils.copy(self.original_filename, new_slide.original_filename) unless self.is_svg?
-			if self.ready
-				FileUtils.copy(self.preview_filename, new_slide.preview_filename)
-				FileUtils.copy(self.full_filename, new_slide.full_filename)
-			end
+		new_slide.save!
+		FileUtils.copy(self.data_filename, new_slide.data_filename) if self.respond_to? :data_filename
+		FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
+		FileUtils.copy(self.original_filename, new_slide.original_filename) unless self.is_svg?
+		if self.ready
+			FileUtils.copy(self.preview_filename, new_slide.preview_filename)
+			FileUtils.copy(self.full_filename, new_slide.full_filename)
 		end
 		return new_slide
 	end
