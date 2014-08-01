@@ -76,6 +76,7 @@ EM.run {
 		msg_channel = msg_hash['channel']
 		case msg_name
 		when 'client_connected'
+			@connection_opened = Time.now
 			@connection_id = msg_hash['data']['connection_id']
 			say "Connection set: #{msg_hash['data']['connection_id']}"
 			
@@ -125,6 +126,8 @@ EM.run {
   end
 
   ws.on :close do |event|
+		say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
+		say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
     abort "Connection closed!".red
   end
 }
