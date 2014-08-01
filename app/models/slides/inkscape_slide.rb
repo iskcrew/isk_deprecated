@@ -19,25 +19,22 @@ class InkscapeSlide < Slide
 	end
 
 	def self.copy!(s)
-		Slide.transaction do
-			orig_id = s.id
+		orig_id = s.id
 
-			ink = s.dup
-			ink.save!
-			ink.reload
+		ink = s.dup
+		ink.save!
+		ink.reload
 
-			FileUtils.copy(s.svg_filename, ink.svg_filename)
+		FileUtils.copy(s.svg_filename, ink.svg_filename)
 
-			ink.to_inkscape_slide!
+		ink.to_inkscape_slide!
 
-			ink = InkscapeSlide.find(ink.id)
+		ink = InkscapeSlide.find(ink.id)
 
-			s = Slide.find(orig_id)
-			s.replacement_id = ink.id
+		s = Slide.find(orig_id)
+		s.replacement_id = ink.id
 
-			return ink
-
-		end
+		return ink
 	end
 
 	def self.create_from_simple(simple_slide)
