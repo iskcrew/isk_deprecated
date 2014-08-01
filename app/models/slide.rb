@@ -116,6 +116,7 @@ class Slide < ActiveRecord::Base
 		if self.ready
 			FileUtils.copy(self.preview_filename, new_slide.preview_filename)
 			FileUtils.copy(self.full_filename, new_slide.full_filename)
+			FileUtils.copy(self.thumb_filename, new_slide.thumb_filename)
 		end
 		return new_slide
 	end
