@@ -11,11 +11,11 @@ class SimpleSlide < SvgSlide
 
 	# Slidedata functionality
 	DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
-		:heading => 'Slide heading', 
-		:text => 'Slide contents with <highlight>', 
-		:color => 'Red', 
-		:text_size => 48, 
-		:text_align => 'Left'
+	:heading => 'Slide heading', 
+	:text => 'Slide contents with <highlight>', 
+	:color => 'Red', 
+	:text_size => 48, 
+	:text_align => 'Left'
 	)
 	include HasSlidedata
 
@@ -34,24 +34,22 @@ class SimpleSlide < SvgSlide
 	end
 
 	def self.copy!(s)
-		Slide.transaction do 
-			orig_id = s.id
+		orig_id = s.id
 			
-			simple = s.dup
-			simple.save!
-			simple.reload
+		simple = s.dup
+		simple.save!
+		simple.reload
 			
-			FileUtils.copy(s.svg_filename, simple.svg_filename)
+		FileUtils.copy(s.svg_filename, simple.svg_filename)
 			
-			raise ApplicationController::ConvertError unless simple.to_simple_slide!
+		raise ApplicationController::ConvertError unless simple.to_simple_slide!
 			
-			simple = SimpleSlide.find(simple.id)
+		simple = SimpleSlide.find(simple.id)
 			
-			s = Slide.find(orig_id)
-			s.replacement_id = simple.id
+		s = Slide.find(orig_id)
+		s.replacement_id = simple.id
 			
-			return simple
-		end	 
+		return simple
 	end
 	
 	
