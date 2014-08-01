@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723150750) do
+ActiveRecord::Schema.define(version: 20140801142425) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -54,6 +54,9 @@ ActiveRecord::Schema.define(version: 20140723150750) do
     t.datetime "updated_at",                                       null: false
     t.string   "status",                  default: "disconnected"
   end
+
+  add_index "display_states", ["display_id"], name: "index_display_states_on_display_id", using: :btree
+  add_index "display_states", ["last_contact_at"], name: "index_display_states_on_last_contact_at", using: :btree
 
   create_table "displays", force: true do |t|
     t.string   "name",            limit: 50
@@ -110,6 +113,7 @@ ActiveRecord::Schema.define(version: 20140723150750) do
 
   add_index "master_groups", ["effect_id"], name: "index_master_groups_on_effect_id", using: :btree
   add_index "master_groups", ["event_id"], name: "index_master_groups_on_event_id", using: :btree
+  add_index "master_groups", ["internal"], name: "index_master_groups_on_internal", using: :btree
 
   create_table "override_queues", force: true do |t|
     t.integer  "display_id"
@@ -123,6 +127,7 @@ ActiveRecord::Schema.define(version: 20140723150750) do
 
   add_index "override_queues", ["display_id", "position"], name: "index_override_queues_on_display_id_and_position", using: :btree
   add_index "override_queues", ["effect_id"], name: "index_override_queues_on_effect_id", using: :btree
+  add_index "override_queues", ["position"], name: "index_override_queues_on_position", using: :btree
   add_index "override_queues", ["slide_id"], name: "index_override_queues_on_slide_id", using: :btree
 
   create_table "permissions", force: true do |t|
@@ -144,6 +149,9 @@ ActiveRecord::Schema.define(version: 20140723150750) do
     t.integer  "effect_id",              default: 1
     t.integer  "event_id"
   end
+
+  add_index "presentations", ["effect_id"], name: "index_presentations_on_effect_id", using: :btree
+  add_index "presentations", ["event_id"], name: "index_presentations_on_event_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "role",        limit: 50,               null: false
@@ -180,6 +188,10 @@ ActiveRecord::Schema.define(version: 20140723150750) do
     t.datetime "updated_at",                            null: false
   end
 
+  add_index "schedules", ["event_id"], name: "index_schedules_on_event_id", using: :btree
+  add_index "schedules", ["slidegroup_id"], name: "index_schedules_on_slidegroup_id", using: :btree
+  add_index "schedules", ["up_next_group_id"], name: "index_schedules_on_up_next_group_id", using: :btree
+
   create_table "slide_templates", force: true do |t|
     t.string   "name"
     t.integer  "event_id"
@@ -211,6 +223,7 @@ ActiveRecord::Schema.define(version: 20140723150750) do
     t.integer  "foreign_object_id"
   end
 
+  add_index "slides", ["foreign_object_id"], name: "index_slides_on_foreign_object_id", using: :btree
   add_index "slides", ["id", "public"], name: "index_slides_on_id_and_public", using: :btree
   add_index "slides", ["id", "type"], name: "index_slides_on_id_and_type", using: :btree
   add_index "slides", ["master_group_id"], name: "index_slides_on_master_group_id", using: :btree
@@ -228,6 +241,7 @@ ActiveRecord::Schema.define(version: 20140723150750) do
     t.datetime "updated_at"
   end
 
+  add_index "template_fields", ["editable"], name: "index_template_fields_on_editable", using: :btree
   add_index "template_fields", ["slide_template_id"], name: "index_template_fields_on_slide_template_id", using: :btree
 
   create_table "tickets", force: true do |t|
