@@ -100,6 +100,9 @@ group :development do
   gem "rails-erd"
 end
 
+# Color output for our logs
+gem 'colorize'
+
 # Code coverage report generator
 gem 'simplecov', :require => false, :group => :test
 # We do loads in after_commit callbacks so need to include them in tests

@@ -95,7 +95,7 @@ EM.run {
 			ws.send @pong.to_a.to_json
 		
 		when 'websocket_rails.channel_token'
-			say 'FIXME: channel tokens!'
+			say 'FIXME: channel tokens!'.red
 		
 		when 'update'
 			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
@@ -112,20 +112,19 @@ EM.run {
 			say "Display current slide update, display: #{d['display_id']}, slide: #{d['slide_id']}, group: #{d['group_id']}"
 		when 'error'
 			d = msg_hash['data']
-			say "ERROR: Channel: \"#{msg_channel}\" Display: #{d['display_id']}, message #{d['message']}"
+			say "ERROR: Channel: \"#{msg_channel}\" Display: #{d['display_id']}, message #{d['message']}".red
 		else
 			say 'Got unhandled message: '
 			if msg_channel
-				say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
+				say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}".yellow
 			else
-				say " -> Message: #{msg_name} success: #{msg_hash['success']} data: #{msg_hash['data']}"
+				say " -> Message: #{msg_name} success: #{msg_hash['success']} data: #{msg_hash['data']}".yellow
 			end
 		end
 	
   end
 
   ws.on :close do |event|
-    say [:close, event.code, event.reason]
-    ws = nil
+    abort "Connection closed!".red
   end
 }

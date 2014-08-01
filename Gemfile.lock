@@ -55,6 +55,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    colorize (0.7.3)
     daemon (1.1.0)
     daemons (1.1.9)
     dalli (2.7.2)
@@ -205,6 +206,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   cashier
   coffee-rails (~> 4.0.0)
+  colorize
   daemon
   daemons
   dalli
