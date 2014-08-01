@@ -84,13 +84,10 @@ class MasterGroup < ActiveRecord::Base
 		end
 	end
 	
+	# Destroy this group and all slides in it
 	def destroy
-		MasterGroup.transaction do
-			self.slides.each do |s|
-				s.master_group_id = self.event.ungrouped.id
-				s.save!
-			end
-
+		self.slides.each do |s|
+			s.destroy
 			super
 		end
 	end
