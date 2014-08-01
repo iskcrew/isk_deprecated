@@ -33,7 +33,11 @@ class DisplayLogging
 		time = finish - start
 		msg = payload[:message]
 		log_msg = []
-		log_msg << "#{payload[:action]}"
+		if payload[:action] == :client_disconnect
+			log_msg << "Client disconnected!".red
+		else
+			log_msg << "#{payload[:action]}"
+		end
 		log_msg << "From #{payload[:ip]} client #{payload[:client]}"
 		log_msg << "Time taken: #{(time*1000).round(2)}ms"
 		
