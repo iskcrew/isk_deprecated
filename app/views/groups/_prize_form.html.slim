@@ -1,0 +1,17 @@
+h3 Prize awards
+
+- data = (@group.is_a?(PrizeGroup) ? @group.data : PrizeGroup::DefaultData)
+p Title for slides: #{text_field_tag('title', data[:title])}
+
+table.awards
+	tr
+		th Place
+		th Name
+		th By
+		th Points
+	- data[:awards].each_with_index do |a, i|
+		tr
+			td = "#{i + 1}#{(i+1).ordinal}"
+			td = text_field_tag 'data[][name]', a[:name]
+			td = text_field_tag 'data[][by]', a[:by]
+			td = text_field_tag 'data[][pts]', a[:pts]

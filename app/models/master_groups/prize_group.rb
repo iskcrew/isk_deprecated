@@ -9,78 +9,108 @@
 
 
 class	PrizeGroup < MasterGroup
-  DefaultData = [
-  	{:name => '1', :by => '', :pts => ''},
-		{:name => '2', :by => '', :pts => ''},
-		{:name => '3', :by => '', :pts => ''},
-		{:name => '4', :by => '', :pts => ''},
-		{:name => '5', :by => '', :pts => ''}
-  ]  
+	DefaultData = HashWithIndifferentAccess.new(
+		title: 'Competiton Compo',
+		awards: [
+			{:name => '1', :by => '', :pts => ''},
+			{:name => '2', :by => '', :pts => ''},
+			{:name => '3', :by => '', :pts => ''},
+			{:name => '4', :by => '', :pts => ''},
+			{:name => '5', :by => '', :pts => ''}
+		]
+	)
 	@_data = nil
-	
 	
 	after_save do
 		write_data
 		generate_slides
 	end
-	
-	
-  def data
-		return @_data if @_data.present?
-    if !self.new_record? && File.exists?(data_filename)
-      @_data = YAML.load(File.read(data_filename))
+			
+	def data
+		return @_data if (@_data.present? && @_data.is_a?(Hash))
+		if !self.new_record? && File.exists?(data_filename)
+			@_data = YAML.load(File.read(data_filename))
 		end
+		
+		# Deal with legacy data
+		if @_data.is_a? Array
+			d = DefaultData
+			d[:awards] = @_data
+			@_data = d
+		end
+		
 		return @_data.blank? ? self.class::DefaultData : @_data
-  end
+	end
   
-  def data=(d)
-    if d.nil?
-			d = self.class::DefaultData
+	def data=(d)
+		if d.nil?
+			d = DefaultData
 		end
-	
-	  @_data=d
-  end
+		
+		Rails.logger.debug d.class
+		Rails.logger.debug d
+		
+		d[:title] = DefaultData[:title] unless d.key?(:title)
+		d[:awards] = DefaultData[:awards] unless d.key?(:awards)
+		
+		d.keep_if do |k, v|
+			DefaultData.key? k
+		end
+		
+		@_data = d
+		write_data
+	end
 	
 	def generate_slides
-		@header = self.name
-		@data = Array.new
-		
-		index = 1
-		data.each do |d|
-			if d[:name].present?
-				@data << {:place => index.ordinalize, :name => d[:name]}
-				@data << {:pts => d[:pts], :name => d[:by]}
-				index += 1
+		# Determinate how many places were awarded
+		awards = []
+		data[:awards].each do |a|
+			if a[:name].present?
+				awards << a
 			end
 		end
-		@entries = index - 1
-		
-		(index - self.slides.where(:type => InkscapeSlide.sti_name).count).times do
-			slide = InkscapeSlide.new
-			slide.name = self.name
-			self.slides << slide
-			slide.save!
+		# Find the PrizeSlides for this group
+		slides = self.slides.where(type: PrizeSlide.sti_name).to_a
+		# Destroy excess slides
+		while (slides.size > awards.size) do
+			s = slides.pop
+			s.destroy
+		end
+		# Create more slides if needed
+		# We need awards.size +1 slides, because first slide doesn't show any awards
+		((awards.size + 1) - slides.size).times do
+			s = PrizeSlide.new(name: "Prizes for: #{data[:title]}")
+			s.master_group = self
+			s.save!
+			slides << s
 		end
 		
+		s = slides.shift
+		s.slidedata = empty_template_data
 		
-		self.hide_slides
+		# Create the slides revealing the awards in ascending order
+		total_awards = awards.size
 		
-		result_slides = self.slides.where(:type => InkscapeSlide.sti_name).to_a
-		
-		@data.reverse!
-		
-		index.times do
-			slide = result_slides.last
-			slide.name = @header
-			self.slides << slide
-			slide.publish
-			slide.svg_data = template.result(binding)
-			slide.save!
-			slide.delay.generate_images
-			@data.pop
-			@data.pop
-			result_slides.pop
-		end	
+		total_awards.times do
+			d = empty_template_data
+			
+			# get the last ungenerated slide
+			s = slides.pop
+			
+			awards.reverse.each_with_index do |a, i|
+				field = total_awards - i
+				d["place_#{field}_number".to_sym] = "#{field}#{field.ordinal}"
+				d["place_#{field}_pts".to_sym] = a[:pts]
+				d["place_#{field}_entry".to_sym] = a[:name]
+				d["place_#{field}_by".to_sym] = a[:by]
+			end
+			s.slidedata = d
+			s.save!
+			s.delay.generate_images
+			
+			# remove the highest award place remaining
+			awards.shift
+		end
 		
 	end
 	
@@ -88,8 +118,20 @@ class	PrizeGroup < MasterGroup
 	
 	private
 	
-	def template
-		template = ERB.new(File.read(Rails.root.join('data', 'templates', 'prize.svg.erb')))
+	def empty_template_data
+		d = {
+			header: 'Results',
+			subheader: data[:title],
+		}
+		
+		(1...5).each do |i|
+			d["place_#{i}_number".to_sym] = ''
+			d["place_#{i}_pts".to_sym] = ''
+			d["place_#{i}_entry".to_sym] = ''
+			d["place_#{i}_by".to_sym] = ''
+		end
+		
+		return d
 	end
 	
 	def data_filename
@@ -101,11 +143,11 @@ class	PrizeGroup < MasterGroup
 	end
   
 	def write_data
-    unless self.new_record?
-      File.open(data_filename,  'w') do |f|
-        f.write self.data.to_yaml
-      end
-    end
-  end
+		unless self.new_record?
+			File.open(data_filename,  'w') do |f|
+				f.write self.data.to_yaml
+			end
+		end
+	end
 	
 end

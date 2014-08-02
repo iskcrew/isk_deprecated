@@ -15,8 +15,9 @@ div#tabs
 	- if @group.is_a? PrizeGroup
 		div#prize_group
 			h2 Prize group data
+			p Tittle: #{@group.data[:title]}
 			ol
-				- @group.data.each do |d|
+				- @group.data[:awards].each do |d|
 					li
 						b Name:
 						= d[:name]
