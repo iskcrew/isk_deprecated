@@ -12,11 +12,11 @@ class	PrizeGroup < MasterGroup
 	DefaultData = HashWithIndifferentAccess.new(
 		title: 'Competiton Compo',
 		awards: [
-			{:name => '1', :by => '', :pts => ''},
-			{:name => '2', :by => '', :pts => ''},
-			{:name => '3', :by => '', :pts => ''},
-			{:name => '4', :by => '', :pts => ''},
-			{:name => '5', :by => '', :pts => ''}
+			{:name => '', :by => '', :pts => ''},
+			{:name => '', :by => '', :pts => ''},
+			{:name => '', :by => '', :pts => ''},
+			{:name => '', :by => '', :pts => ''},
+			{:name => '', :by => '', :pts => ''}
 		]
 	)
 	@_data = nil
