@@ -87,6 +87,8 @@ class	PrizeGroup < MasterGroup
 		
 		s = slides.shift
 		s.slidedata = empty_template_data
+		s.save!
+		s.delay.generate_images
 		
 		# Create the slides revealing the awards in ascending order
 		total_awards = awards.size
