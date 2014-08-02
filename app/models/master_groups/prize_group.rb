@@ -124,7 +124,7 @@ class	PrizeGroup < MasterGroup
 			subheader: data[:title],
 		}
 		
-		(1...5).each do |i|
+		(1..5).each do |i|
 			d["place_#{i}_number".to_sym] = ''
 			d["place_#{i}_pts".to_sym] = ''
 			d["place_#{i}_entry".to_sym] = ''
