@@ -85,6 +85,9 @@ class	PrizeGroup < MasterGroup
 			slides << s
 		end
 		
+		self.reload
+		slides = self.slides.where(type: PrizeSlide.sti_name).to_a
+		
 		s = slides.shift
 		s.slidedata = empty_template_data
 		s.save!
