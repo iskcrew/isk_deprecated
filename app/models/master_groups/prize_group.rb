@@ -114,6 +114,12 @@ class	PrizeGroup < MasterGroup
 			awards.shift
 		end
 		
+		# Mark slides as public and hide the clock
+		self.slides.where(type: PrizeSlide.sti_name).each do |s|
+			s.public = true
+			s.show_clock = false
+			s.save!
+		end
 	end
 	
 	
