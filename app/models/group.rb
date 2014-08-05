@@ -68,7 +68,7 @@ class Group < ActiveRecord::Base
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_presentation(p_id)
 		d = Display.joins(:presentation).where(presentations: {id: p_id})
-		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		d.update_all(updated_at: Time.now.utc)
 
 		Presentation.where(id: p_id).update_all(updated_at: Time.now.utc)
 	end

@@ -124,6 +124,10 @@ class Event < ActiveRecord::Base
 		return settings
 	end
 	
+	def prize_template
+		SlideTemplate.find(self.config[:prize_template])
+	end
+	
 	private
 	
 	# Update the config

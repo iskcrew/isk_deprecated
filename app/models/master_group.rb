@@ -7,7 +7,7 @@
 
 class MasterGroup < ActiveRecord::Base
 	
-	has_many :slides, -> {order('position ASC').where('deleted != 1') }
+	has_many :slides, -> {order('position ASC').where(deleted: false) }
 	has_many :groups, :dependent => :destroy
 	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
@@ -107,10 +107,10 @@ class MasterGroup < ActiveRecord::Base
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
 		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
-		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		d.update_all(updated_at: Time.now.utc)
 		
 		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
-		p.update_all("presentations.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		p.update_all(updated_at: Time.now.utc)
 	end
 	
 	

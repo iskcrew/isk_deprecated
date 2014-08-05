@@ -402,10 +402,10 @@ class Slide < ActiveRecord::Base
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
 		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
-		d.update_all("displays.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		d.update_all(updated_at: Time.now.utc)
 		
 		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
-		p.update_all("presentations.updated_at = '#{Time.now.utc.to_s(:db)}'")
+		p.update_all(updated_at: Time.now.utc)
 		
 		MasterGroup.where(id: group_id).update_all(updated_at: Time.now.utc)
 	end

@@ -5,7 +5,7 @@ gem 'rails', '~> 4.1.1'
 
 # Database interfaces
 gem 'sqlite3'
-gem 'mysql2'
+gem 'pg', '~> 0.17.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
