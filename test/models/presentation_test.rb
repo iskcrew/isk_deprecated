@@ -62,4 +62,42 @@ class PresentationTest < ActiveSupport::TestCase
 		assert_equal h[:slides].size, p.public_slides.count, "Wrong number of slides in hash: #{p.public_slides.count} slides in presentation, #{h[:slides].size} in hash" 
 	end
 	
+	test "timestamps on group update" do
+		presentation = presentations(:with_slides)
+		assert_not_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp wasn't in the past at the start of test"
+		
+		# Move the last group to first
+		g = presentation.groups.last
+		g.position_position = 1
+		g.save!
+		presentation.reload
+		assert_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp didn't update"
+	end
+	
+	test "timestamp on master_group update" do
+		presentation = presentations(:with_slides)
+		assert_not_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp wasn't in the past at the start of test"
+		
+		# change the name of a master group
+		mg = presentation.master_groups.last
+		mg.name = "updating this group"
+		mg.save!
+
+		presentation.reload
+		assert_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp didn't update"		
+	end
+	
+	test "timestamp on slide update" do
+		presentation = presentations(:with_slides)
+		assert_not_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp wasn't in the past at the start of test"
+		
+		# hide the first slide
+		s = presentation.slides.first
+		s.public = false
+		s.save!
+		
+		presentation.reload
+		assert_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp didn't update"		
+	end
+	
 end

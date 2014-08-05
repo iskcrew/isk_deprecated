@@ -11,6 +11,7 @@ with_slides:
     delay: 20
     effect_id: 1
     event_id: 2
+    updated_at: <%=5.hours.ago%>
 
 with_empty_group:
     id: 3
