@@ -5,7 +5,6 @@ BUGS / INCONSISTENCIES:
 	- Cloning adds slides to the front of a group!
 	- The CSS fails with big number of groups
 	- The css fails on narrow windows
-	- deleting groups has problems
 	- last slide on prizegroups gets re-created on all edits
 	- need to do proper template selection for prizegroups
 	- fix template initialization and creating new prizegroups properly
