@@ -9,6 +9,7 @@ BUGS / INCONSISTENCIES:
 	- last slide on prizegroups gets re-created on all edits
 	- need to do proper template selection for prizegroups
 	- fix template initialization and creating new prizegroups properly
+	- add a running number on all generated slides, like prize ceremonies etc
 
 
 - Rails 4.1 migration
