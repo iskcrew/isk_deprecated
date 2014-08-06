@@ -10,7 +10,7 @@ div.display_info class=display.status id="display_#{display.id}"
 			li 
 				- if display.presentation
 					| Presentation: 
-					=< link_to display.presentation.name, presentations_path(display.presentation.id)
+					=< link_to display.presentation.name, presentation_path(display.presentation.id)
 				- else
 					| Presentation: Not defined
 			li Status: #{display.status}
