@@ -10,6 +10,7 @@ class MasterGroup < ActiveRecord::Base
 	has_many :slides, -> {order('position ASC').where(deleted: false) }, dependent: :destroy
 	has_many :groups, dependent: :destroy
 	has_many :presentations, -> { uniq }, through: :groups
+	has_many :displays, -> {uniq}, through: :presentations
 	belongs_to :effect
 	belongs_to :event
 	
@@ -66,10 +67,6 @@ class MasterGroup < ActiveRecord::Base
 		self.where(event_id: Event.current.id).where(internal: false)
 	end
 		
-	def displays
-		Display.joins(presentation: {groups: :master_group}).where(master_groups: {id: self.id}).uniq
-	end
-	
 	def hide_slides
 		self.slides.each do |s|
 			s.public = false
