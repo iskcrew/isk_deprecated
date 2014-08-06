@@ -29,7 +29,7 @@ class MasterGroupTest < ActiveSupport::TestCase
 	
 	test "destroy a group" do
 		assert_difference 'MasterGroup.count', -1 do
-			assert_difference 'MasterGroup.find(8).slides.count', master_groups(:ten_slides).slides.count do
+			assert_difference 'MasterGroup.find(10).slides.count', master_groups(:ten_slides).slides.count do
 				master_groups(:ten_slides).destroy
 			end
 		end

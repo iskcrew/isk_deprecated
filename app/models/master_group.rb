@@ -7,7 +7,7 @@
 
 class MasterGroup < ActiveRecord::Base
 	
-	has_many :slides, -> {order('position ASC').where(deleted: false) }
+	has_many :slides, -> {order('position ASC').where(deleted: false) }, dependent: :destroy
 	has_many :groups, :dependent => :destroy
 	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
@@ -83,15 +83,7 @@ class MasterGroup < ActiveRecord::Base
 			s.save!
 		end
 	end
-	
-	# Destroy this group and all slides in it
-	def destroy
-		self.slides.each do |s|
-			s.destroy
-			super
-		end
-	end
-	
+		
 	#Tag for all cache fragments depending on this master_group
 	def cache_tag
 		"master_group_" + self.id.to_s
