@@ -8,13 +8,13 @@
 class MasterGroup < ActiveRecord::Base
 	
 	has_many :slides, -> {order('position ASC').where(deleted: false) }, dependent: :destroy
-	has_many :groups, :dependent => :destroy
+	has_many :groups, dependent: :destroy
 	has_many :presentations, -> { uniq }, through: :groups
 	belongs_to :effect
 	belongs_to :event
 	
-	validates :name, :presence => true, :length => { :maximum => 100 }
-	validates :internal, :inclusion => { :in => [true, false] }
+	validates :name, presence: true, length: { maximum: 100 }
+	validates :internal, inclusion: { in: [true, false] }
 	
 	include ModelAuthorization
 
@@ -27,7 +27,7 @@ class MasterGroup < ActiveRecord::Base
 	# Ticket system
 	include HasTickets
 	
-	scope :defined_groups, -> {where(:internal => false).order('name')}
+	scope :defined_groups, -> {where(internal: false).order('name')}
 	
 	before_create do |g|
 		g.event = Event.current unless g.event
@@ -63,11 +63,11 @@ class MasterGroup < ActiveRecord::Base
 	end
 	
 	def self.current
-		self.where(:event_id => Event.current.id).where(:internal => false)
+		self.where(event_id: Event.current.id).where(internal: false)
 	end
 		
 	def displays
-		Display.joins(:presentation => {:groups => :master_group}).where(:master_groups => {:id => self.id}).uniq
+		Display.joins(presentation: {groups: :master_group}).where(master_groups: {id: self.id}).uniq
 	end
 	
 	def hide_slides
@@ -98,7 +98,7 @@ class MasterGroup < ActiveRecord::Base
 	# We need to proganate timestamps down the presentation chain for
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
-		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
+		d = Display.joins(presentation: :master_groups).where(master_groups: {id: group_id})
 		d.update_all(updated_at: Time.now.utc)
 		
 		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
