@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140801142425) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
     t.integer  "attempts",   default: 0
