@@ -10,4 +10,4 @@ event_2:
     name: Event 2
     current: true
     ungrouped_id: 8
-    thrashed_id: 9
+    thrashed_id: 10
