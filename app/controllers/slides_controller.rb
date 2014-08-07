@@ -21,8 +21,7 @@ class SlidesController < ApplicationController
 		else
 			@groups = Array.new
 			@groups << current_event.ungrouped
-			@groups << MasterGroup.current.order("LOWER(name), name").includes(:slides).to_a
-			@groups.flatten!
+			@groups += MasterGroup.current.order("LOWER(name)").includes(:slides).to_a
 		end
 		
 		respond_to do |format|

@@ -12,3 +12,4 @@ $ ->
 	$(document).tooltip({show: {duration: 1000, easing: 'easeInExpo'}})
 	$( "#tabs" ).tabs()
 	$( "#accordion" ).accordion()
+	$( ".accordion" ).accordion( heightStyle: "content")

@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
 	
 	# Get list of all groups in the current event
 	def index
-		@groups = MasterGroup.current.defined_groups
+		@groups = MasterGroup.current.defined_groups.reorder("LOWER(name)")
 	end
 	
 	# Show detailed information about a group

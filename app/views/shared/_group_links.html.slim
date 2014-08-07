@@ -2,8 +2,11 @@
 	= cache('group_links', tag: ["groups", "slides"]) do
 		div.group_links#scrolling_div
 			p Goto group:
-			ul
-				- @groups.each do |group|
-					- unless group.slides.count == 0
-						li
-							a.group_link href="#group_#{group.id}" = group.name
+			div.accordion
+				- @groups.chunk {|g| g.name.upcase.ord }.each do |ch, groups|
+					h3 #{ch.chr}
+					div
+						ul
+							- groups.each do |group|
+								li
+									a href=("\#group_#{group.id}") #{group.name}
