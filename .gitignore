@@ -4,6 +4,47 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_gilobal
 
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+ 
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+ 
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+ 
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# vim backups
+*~
+
 # Ignore bundler config
 /.bundle
 
@@ -17,8 +58,9 @@
 /data
 !/data/slides/schedule.svg.erb
 !/data/slides/simple.svg
-/config/database.yml
 
+/config/database.yml
+/db/data.yml
 /.svn
 
 coverage
