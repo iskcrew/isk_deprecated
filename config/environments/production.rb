@@ -50,6 +50,9 @@ Isk::Application.configure do
 		end
 	end
 	
+	# Do not log slide image requests
+	config.lograge.ignore_actions = ['slides#preview', 'slides#thumb']
+	
 	# Prepend all log lines with the following tags
 	# config.log_tags = [ :subdomain, :uuid ]
 
