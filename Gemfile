@@ -104,6 +104,9 @@ group :development do
   gem "rails-erd"
 end
 
+# More compact logging
+gem "lograge"
+
 # Color output for our logs
 gem 'colorize'
 
