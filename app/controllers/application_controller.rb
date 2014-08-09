@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
 		@_current_event ||= Event.current
 	end
 
+	def append_info_to_payload(payload)
+		super
+		payload[:user] = current_user
+	end
 
 	private
 	
