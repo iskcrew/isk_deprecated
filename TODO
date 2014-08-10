@@ -5,10 +5,10 @@ BUGS / INCONSISTENCIES:
 	- Cloning adds slides to the front of a group!
 	- The CSS fails with big number of groups
 	- The css fails on narrow windows
-	- last slide on prizegroups gets re-created on all edits
 	- need to do proper template selection for prizegroups
 	- fix template initialization and creating new prizegroups properly
 	- add a running number on all generated slides, like prize ceremonies etc
+	- create a proper backup rake-task
 
 
 - Rails 4.1 migration
@@ -79,7 +79,6 @@ BUGS / INCONSISTENCIES:
 
 - admincontroller
 	- clear cache action: cache_store.clear
-	- regenerate all slides
 
 - config control
 	- Move all magic constants to web editable place
@@ -88,10 +87,6 @@ BUGS / INCONSISTENCIES:
 
 - Ticket system
 	- Create a simple way to request and track slide edit jobs
-
-- Rake tasks
-	- Create a cleanup task to really delete the soft-deleted slides and their images
-
 
 TODO: organize the rest of this and translate...
 
