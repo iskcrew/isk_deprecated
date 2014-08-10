@@ -9,6 +9,12 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+# Check to see that inkscape is available
+require 'mkmf'
+unless find_executable 'inkscape'
+	abort 'ISK needs inkscape to function'
+end
+
 if defined?(Bundler)
 	# Require the gems listed in Gemfile, including any gems
 	# you've limited to :test, :development, or :production.
