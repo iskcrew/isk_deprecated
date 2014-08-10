@@ -4,12 +4,12 @@ source "http://gems.github.com"
 gem 'rails', '~> 4.1.1'
 
 # Database interfaces
-gem 'sqlite3'
+# gem 'sqlite3'
 gem 'pg', '~> 0.17.1'
-gem 'mysql2'
 
 # For migrating from mysql to postgresql
-gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
+# gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
+# gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
