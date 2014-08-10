@@ -45,11 +45,7 @@ class GroupsController < ApplicationController
 		
 		# Handle prizegroup data
 		if @group.is_a? PrizeGroup
-			data = {
-				title: params[:title],
-				awards: params[:data]
-			}
-			@group.data = HashWithIndifferentAccess.new(data)
+			@group.data = params[:master_group][:data]
 		end
 		
 		if @group.update_attributes(master_group_params)
@@ -138,15 +134,7 @@ class GroupsController < ApplicationController
 			# Create new prize ceremony group
 			@group = PrizeGroup.new(master_group_params)
 			@group.event = current_event
-			data = {title: params[:data][:title]}
-			params[:data][:awards].each do |d|
-				data << {
-					:name => d[:name], 
-					:by => d[:by],
-					:pts => d[:pts]
-				}
-			end
-			@group.data = data
+			@group.data = params[:master_group][:data]
 		else
 			# Create normal group
 			@group = MasterGroup.new(master_group_params)
