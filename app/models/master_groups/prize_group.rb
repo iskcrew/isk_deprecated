@@ -71,8 +71,9 @@ class	PrizeGroup < MasterGroup
 		end
 		# Find the PrizeSlides for this group
 		slides = self.slides.where(type: PrizeSlide.sti_name).to_a
-		# Destroy excess slides
-		while (slides.size > awards.size) do
+		# Destroy excess slides, we need awards + 1 slides because first slide
+		# is only for the competition name.
+		while (slides.size > (awards.size + 1)) do
 			s = slides.pop
 			s.destroy
 		end
