@@ -4,7 +4,7 @@ System for centrally managing multiple screens running multiple presentation,
 possibly sharing slides / groups of slides. Has simple online-editor and a
 inkscape plugin for creating more complex slides.
 
-## External dependencies
+## Runtime dependencies for production
 
  * Unix environment (linux or os x)
  * Imagemagick (developed using  6.8.5-5, other versions probably fine)
@@ -29,8 +29,8 @@ To get the dev environment running you need to do the following:
 
 1. redis (in debian redis-server)
 2. memcached
-2. Imagemagick + dev heders (debian: imagemagick libmagickcore-dev libmagickwand-dev)
-3. postgresql (postgresql postgresql-client libpg-dev)
+2. Imagemagick + dev headers (debian: imagemagick libmagickcore-dev libmagickwand-dev)
+3. postgresql + dev headers (postgresql postgresql-client libpg-dev)
 4. inkscape
 5. git
 6. curl
