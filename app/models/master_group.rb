@@ -30,9 +30,8 @@ class MasterGroup < ActiveRecord::Base
 	
 	scope :defined_groups, -> {where(internal: false).order('name')}
 	
-	before_create do |g|
-		g.event = Event.current unless g.event
-	end
+	# Associate the MasterGroup to a event
+	before_create :set_event_id	
 	
 	# Touch associated displays
   after_save :update_timestamps
@@ -90,6 +89,14 @@ class MasterGroup < ActiveRecord::Base
 	
 	def update_timestamps
 		touch_by_group(self.id)
+	end
+	
+	def set_event_id
+		self.event = Event.current unless self.event.present?
+	rescue ActiveRecord::RecordNotFound
+		# In case we don't yet have any events we need to rescue this
+		# Otherwise creating the new default event fails.
+		self.event_id = 0
 	end
 	
 	# We need to proganate timestamps down the presentation chain for
