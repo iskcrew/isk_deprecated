@@ -72,11 +72,17 @@ Now you can start the local isk server instance with "rails s" and then navigate
 
 You also need to start the background process for isk to generate the slide images. This is done by running "bin/delayed_job start".
 
-Copyright
----------
+# Copyright
+
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
 
 Python plugins for Inkscape (c) Copyright 2014 Jarkko Räsänen.
+
+app/assets/images/wait.gif by Jarkko Räsänen, cat photo by Vesa-Pekka Palmu
+app/assets/images/display_error.svg by Vesa-Pekka Palmu
+app/assets/images/ui-* from jquery themeroller
+vendor/assets/javascripts/jquery-noty* from https://github.com/needim/noty with MIT license
+vendor/assets/javascripts/jquery.timer.js from http://jchavannes.com/jquery-timer see file for license
 
 License
 -------
