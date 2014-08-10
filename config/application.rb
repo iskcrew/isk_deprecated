@@ -65,11 +65,10 @@ module Isk
     # Moduulit
     config.autoload_paths += Dir[Rails.root.join('app', 'mixins', '{**}')]
     
-    
+    # Make websocket-rails ping-pong update the last_contact_at on associated displays
     require 'websocket_pong_updates_displays'
 		
-		require 'monitoring'
-		
+		# Log display websocket actions on log/displays.log
 		require 'display_logging'
   end
 end

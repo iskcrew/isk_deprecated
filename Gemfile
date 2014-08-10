@@ -89,7 +89,6 @@ end
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'daemon'
-gem 'rrd-ffi', :require => 'rrd'
 
 # Better caching
 gem 'cashier'
