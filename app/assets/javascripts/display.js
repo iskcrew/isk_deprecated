@@ -23,7 +23,8 @@
 //= require websocket_rails/main
 //
 // three.js and others
-//* require display/three.js
-//* require display/THREEx.WindowResize.js
-//* require display/HREEx.FullScreen.js
-//* require_tree ./display/
+//= require ./display/three.js
+//= require ./display/THREEx.WindowResize.js
+//= require ./display/THREEx.FullScreen.js
+//= require ./display/stats.min.js
+//= require_tree ./display
