@@ -10,12 +10,15 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+// Jquery and plugins
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery.timer
 //= require jquery-noty.main
+// Websocket javascript client and instance bound to window
 //= require websocket_rails/main
 //= require init_dispatcher
-//= require_tree .
+// All javascript in the "main" directory
+//= require_tree ./main
 
