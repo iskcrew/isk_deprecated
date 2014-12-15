@@ -395,6 +395,8 @@ class SlidesController < ApplicationController
 		if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
 			respond_to do |format|
 				format.html {
+					response.headers['Access-Control-Allow-Origin'] = '*'
+					response.headers['Access-Control-Request-Method'] = 'GET'
 					if @slide.ready
 						send_file(filename, {:disposition => 'inline'})
 					else
