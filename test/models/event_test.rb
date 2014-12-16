@@ -13,6 +13,7 @@ class EventTest < ActiveSupport::TestCase
 		
 		
 		assert e.save, "Error saving new event"
+		assert e.reload
 		assert !e.current
 		assert_not_equal e, Event.current, "New event became current"
 		assert_equal c, Event.current, "Current event got changed"
