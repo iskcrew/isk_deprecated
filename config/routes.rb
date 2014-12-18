@@ -61,7 +61,11 @@ Isk::Application.routes.draw do
 	get 'monitor', to: 'monitor#index'
 
 	resources :displays do
-		resources :history
+		resources :history, only: [:index, :show] do
+			collection do
+				post 'clear'
+			end
+		end
 		
 		member do
 			get 'presentation'

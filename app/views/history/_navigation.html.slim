@@ -5,4 +5,6 @@ div.navigation
 		= link_to 'Edit', edit_display_path(@display)
 	= link_to 'Remote control', dpy_control_display_path(@display)
 	= link_to 'Slide history', display_history_index_path(@display)
+	- if @display.admin? current_user
+		= link_to 'Clear history', clear_display_history_index_path(@display), method: :post
 	= yield :navigation
