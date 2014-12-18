@@ -31,9 +31,3 @@ div.display_properties
 			|  presentation flow.
 		- @display.override_queues.each do |oq|
 			= render oq.slide
-
-= content_for :navigation do
-	- if @display.can_edit? current_user
-		= link_to 'Edit', edit_display_path(@display)
-	= link_to 'Remote control', action: :dpy_control, id: @display.id
-	= link_to 'Slide stats', action: :slide_stats, id: @display.id

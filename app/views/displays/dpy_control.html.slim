@@ -14,9 +14,3 @@ div.display_preview
 	
 div.display_control#display_control data-id=@display.id
 
-= content_for :navigation do
-	- if @display.can_edit? current_user
-		=< link_to 'Edit', :action => :edit, :id => @display.id
-	=< link_to 'Remote control', :action => :dpy_control, :id => @display.id
-	=< link_to 'Slide stats', :action => :slide_stats, :id => @display.id
-	
