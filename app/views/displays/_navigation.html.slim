@@ -6,4 +6,5 @@ div.navigation
 		= link_to 'Details', display_path(@display)
 		=< link_to 'Remote control', dpy_control_display_path(@display)
 		=< link_to 'Slide history', display_history_index_path(@display)
+		= display_destroy_button(@display)
 	= yield :navigation
