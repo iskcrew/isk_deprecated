@@ -15,7 +15,7 @@ module DisplaysHelper
 	
 	# First slide shown on the display
 	def display_first_slide(d)
-		first_shown = d.display_counts.order(updated_at: :desc).first
+		first_shown = d.display_counts.order(updated_at: :asc).first
 		l first_shown.updated_at, format: :short
 	end
 	
