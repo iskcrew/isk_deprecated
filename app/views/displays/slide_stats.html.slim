@@ -1,0 +1,20 @@
+h1 Slide statistics for display: #{@display.name}
+p This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).
+
+- if @display.display_counts.present? 
+	table.slide_stats
+		tr: th Shown slides
+		- @display.display_counts.order('updated_at desc').group(:slide_id, :id).each do |dc|
+			tr: td
+				= slide_preview_to_show_tag dc.slide
+				br
+				| Shown total of #{@display.display_counts.where(slide_id: dc.slide_id).count} times.
+				|  Last shown at #{I18n.l(dc.updated_at, :format => :short)}
+- else
+	div.warning
+		p No slides have been shown on this display!
+
+= content_for :navigation do
+	= link_to 'Details', :action => :show, :id => @display.id
+	- if @display.can_edit? current_user
+		= link_to 'Edit', :action => :edit, :id => @display.id
