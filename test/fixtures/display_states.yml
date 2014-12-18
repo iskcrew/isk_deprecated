@@ -68,3 +68,8 @@ six:
     current_group_id: 3
     current_slide_id: 1
     websocket_connection_id: 1
+    
+seven:
+    id: 7
+    display_id: 7
+    

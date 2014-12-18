@@ -83,6 +83,18 @@ class DisplayTest < ActiveSupport::TestCase
 		assert h[:presentation].empty?, "Hash contained a presentation"
 		
 	end
+	
+	test "destroy a display" do
+		d = displays(:with_display_counts)
+		assert d.display_counts.count > 0, "Display fixture didn't have display counts"
+		assert d.display_state.present?, "Display state didn't exist"
+		assert_difference('DisplayCount.count', -d.display_counts.count, "Displaycounts didn't get deleted") do
+			assert_difference('DisplayState.count', -1, "DisplayState didn't get deleted") do
+				assert d.destroy, "Failed to destroy the display"
+			end
+		end
+		
+	end
 
 	
 end

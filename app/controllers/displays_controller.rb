@@ -37,6 +37,17 @@ class DisplaysController < ApplicationController
     @display = Display.find(params[:id])
     
   end
+	
+	# Delete a display and associated data
+	def destroy
+		# Only admins can delete displays
+		require_admin
+		
+		display = Display.find(params[:id])
+		display.destroy
+		flash[:notice] = "Deleted display id: #{display.id} - #{display.name}"
+		redirect_to displays_path
+	end
   
   def new
     

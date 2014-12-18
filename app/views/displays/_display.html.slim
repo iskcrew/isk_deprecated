@@ -28,3 +28,4 @@ div.display_info class=display.status id="display_#{display.id}"
 		= link_to 'Edit', edit_display_path(display), class: 'button'
 		= link_to 'Remote control', {controller: :displays, action: :dpy_control, id: display.id},
 			class: :button
+		= display_destroy_button(display)

@@ -31,4 +31,9 @@ no_timestamps:
     presentation_id: 2
     manual: false
     do_overrides: true
+
+with_display_counts:
+    id: 7
+    name: "I have viewcounts"
+    presentation_id: 2
     

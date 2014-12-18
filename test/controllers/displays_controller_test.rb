@@ -76,4 +76,13 @@ class DisplaysControllerTest < ActionController::TestCase
 		assert assigns(:display).presentation_id == presentations(:with_hidden_slides).id, "Display presentation didn't change"
 	end
 	
+	
+	test "destroy displays" do
+		Display.all.each do |d|
+			assert_difference "Display.count", -1, "Display wasn't deleted" do
+				delete :destroy, {id: d.id}, @adminsession
+				assert_redirected_to displays_path
+			end
+		end
+	end
 end

@@ -13,6 +13,15 @@ module DisplaysHelper
 		link_to link_text, display_path(d)
 	end
 	
+	# Link to displays#destroy if user has sufficient access
+	def display_destroy_button(d)
+		if d.admin?(current_user)
+			link_to icon('times-circle', 'Delete'), display_path(d),
+								data: {confirm: "Are you sure you want to delete the display \"#{d.name}\", this cannot be undone?"}, title: 'Delete this display premanently',
+								method: :delete, class: 'button warning'
+		end
+	end
+	
 	# Render the display ping element
 	def display_ping(d)
 		if d.late?
