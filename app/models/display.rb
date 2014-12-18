@@ -12,7 +12,7 @@ class Display < ActiveRecord::Base
 	has_one :current_group, through: :display_state
 	has_one :current_slide, through: :display_state
 	has_many :override_queues, -> { order(:position).includes(:slide) }
-	has_many :display_counts
+	has_many :display_counts, dependent: :delete_all
 
 	validates :name, :uniqueness => true, :presence => true, :length => { :maximum => 50 }
 	validates :manual, :inclusion => { :in => [true, false] }
