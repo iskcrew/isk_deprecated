@@ -1,7 +1,9 @@
 h1 Slide history for display: #{@display.name}
-p This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).
 
-- if @display.display_counts.present? 
+- if @display.display_counts.present?
+	p This display has shown #{@display.display_counts.count} slides since #{display_first_slide(@display)}
+	p This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).
+
 	table.slide_stats
 		tr: th Shown slides
 		- @display.display_counts.order('updated_at desc').group(:slide_id, :id).each do |dc|

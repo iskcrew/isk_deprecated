@@ -13,6 +13,12 @@ module DisplaysHelper
 		link_to link_text, display_path(d)
 	end
 	
+	# First slide shown on the display
+	def display_first_slide(d)
+		first_shown = d.display_counts.order(updated_at: :desc).first
+		l first_shown.updated_at, format: :short
+	end
+	
 	# Link to displays#destroy if user has sufficient access
 	def display_destroy_button(d)
 		if d.admin?(current_user)
