@@ -1,4 +1,4 @@
-h1 Slide statistics for display: #{@display.name}
+h1 Slide history for display: #{@display.name}
 p This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).
 
 - if @display.display_counts.present? 
@@ -10,11 +10,8 @@ p This is the list of slides shown on this display ordered by last time the slid
 				br
 				| Shown total of #{@display.display_counts.where(slide_id: dc.slide_id).count} times.
 				|  Last shown at #{I18n.l(dc.updated_at, :format => :short)}
+				=< link_to 'Details', display_history_path(@display, dc.slide)
 - else
 	div.warning
 		p No slides have been shown on this display!
 
-= content_for :navigation do
-	= link_to 'Details', :action => :show, :id => @display.id
-	- if @display.can_edit? current_user
-		= link_to 'Edit', :action => :edit, :id => @display.id

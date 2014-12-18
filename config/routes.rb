@@ -61,6 +61,8 @@ Isk::Application.routes.draw do
 	get 'monitor', to: 'monitor#index'
 
 	resources :displays do
+		resources :history
+		
 		member do
 			get 'presentation'
 			get 'slide_queue'

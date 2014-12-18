@@ -1,0 +1,8 @@
+div.navigation
+	= link_to (icon('list') + ' List displays'), displays_path
+	= link_to 'Details', display_path(@display)
+	- if @display.can_edit? current_user
+		= link_to 'Edit', edit_display_path(@display)
+	= link_to 'Remote control', dpy_control_display_path(@display)
+	= link_to 'Slide history', display_history_index_path(@display)
+	= yield :navigation
