@@ -27,3 +27,4 @@ div.slide_info
 		-if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
 			= link_to 'Convert to inkscape', {action: :to_inkscape, id: @slide.id}, method: :post
 		= slide_svg_link @slide
+		= link_to 'Slide display history', slide_history_index_path(@slide)

@@ -136,6 +136,13 @@ Isk::Application.routes.draw do
 	end
 
 	resources :slides do
+		resources :history, only: [:index, :show] do
+			collection do
+				post 'clear'
+			end
+		end
+		
+		
 		member do
 			get 'preview'
 			get 'full'

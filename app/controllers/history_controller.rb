@@ -1,9 +1,17 @@
 class HistoryController < ApplicationController
 	
 	def index
-		@display = Display.find(params[:display_id])
-		@all_slides = @display.display_counts.joins(:slide).order('count_all desc')
-			.group("slides.name", "slides.id").count
+		if params[:display_id].present?
+			@display = Display.find(params[:display_id])
+			@all_slides = @display.display_counts.joins(:slide).order('count_all desc')
+				.group("slides.name", "slides.id").count
+			render :index_by_display and return
+		else
+			@slide = Slide.find(params[:slide_id])
+			@displays = @slide.display_counts.joins(:display).order('count_all desc')
+				.group("displays.name", "displays.id").count
+			render :index_by_slide and return
+		end
 	end
 	
 	def show
