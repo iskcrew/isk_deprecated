@@ -2,17 +2,26 @@ h1 Slide history for display: #{@display.name}
 
 - if @display.display_counts.present?
 	p This display has shown #{@display.display_counts.count} slides since #{display_first_slide(@display)}
-	p This is the list of slides shown on this display ordered by last time the slide has been shown (newest first).
-
+	
 	table.slide_stats
-		tr: th Shown slides
-		- @display.display_counts.order('updated_at desc').group(:slide_id, :id).each do |dc|
+		tr: th 10 most recent slides shown
+		- @display.display_counts.order(updated_at: :desc).limit(10).each do |dc|
 			tr: td
 				= slide_preview_to_show_tag dc.slide
 				br
-				| Shown total of #{@display.display_counts.where(slide_id: dc.slide_id).count} times.
-				|  Last shown at #{I18n.l(dc.updated_at, :format => :short)}
-				=< link_to 'Details', display_history_path(@display, dc.slide)
+				'Shown at #{I18n.l(dc.updated_at, :format => :short)}
+				=< link_to 'Detailed history', display_history_path(@display, dc.slide)
+			
+	
+	h2 All slides shown
+	p This display has shown the following slides, ordered by number of times shown:
+	
+	ul
+		- @all_slides.each_pair do |slide, times|
+			li
+				=> link_to slide.first, slide_path(slide.last)
+				' shown #{times} times.
+				=< link_to "Detailed history", display_history_path(@display, slide.last)
 - else
 	div.warning
 		p No slides have been shown on this display!

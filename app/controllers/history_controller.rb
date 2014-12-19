@@ -2,6 +2,8 @@ class HistoryController < ApplicationController
 	
 	def index
 		@display = Display.find(params[:display_id])
+		@all_slides = @display.display_counts.joins(:slide).order('count_all desc')
+			.group("slides.name", "slides.id").count
 	end
 	
 	def show
