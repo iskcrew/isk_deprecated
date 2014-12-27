@@ -40,10 +40,6 @@ class UsersController < ApplicationController
 
   end
 
-  def list
-    @users = User.find(:all)
-  end
-
   def new
     @edituser=User.new
   end
