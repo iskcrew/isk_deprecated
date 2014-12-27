@@ -21,8 +21,6 @@ class User < ActiveRecord::Base
 	has_many :presentations, -> {order 'presentations.name'},		through: :permissions, source: :target, source_type: 'Presentation'
 	has_many :displays, -> {order 'displays.name'},							through: :permissions, source: :target, source_type: 'Display'
 
-	include ModelAuthorization
-
 	def admin?
 		User::AdminUsers.include?(self.username)
 	end
