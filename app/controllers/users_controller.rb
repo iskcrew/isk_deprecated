@@ -50,11 +50,11 @@ class UsersController < ApplicationController
 
 	# A form for creating a new user
 	def new
-		@edituser=User.new
+		@user=User.new
 	end
 
 	# Create a new user
-	# TODO: clean this up
+	# TODO: password verification into the model?
 	def create
 		User.transaction do 
 			@user=User.new
@@ -62,17 +62,15 @@ class UsersController < ApplicationController
 			if params[:password][:password] == params[:password][:verify] then
 				@user.password=params[:password][:password]
 				if @user.save then
-					flash[:notice]="User created"
-					redirect_to :controller=>"users",:action=>"index"
-				else
-					render :action=>"new"
+					flash[:notice] = "User created"
+					redirect_to users_path and return
 				end
 			else
-				flash[:error]="Passwords don't match"
-				@edituser.errors.add "Passwords don't match",""
-				render :action=>"new"
+				@user.errors.add "Passwords don't match",""
 			end
-
+			
+			flash[:error] = 'Error creating user'
+			render action: :new
 		end
 	end
 
