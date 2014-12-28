@@ -1,0 +1,7 @@
+tr
+	td = user.username
+	td = user.roles_text
+	td
+		= link_to 'Assing roles', roles_user_path(user), class: 'button'
+		=< link_to 'Edit', edit_user_path(user), class: 'button'
+		=< link_to 'X', user_path(user), method: :delete, class: 'button delete'

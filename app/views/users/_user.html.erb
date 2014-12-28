@@ -1,7 +1,0 @@
-<tr>
-  <td><%=user.username%></td>
-	<td><%=user.roles_text%></td>
-	<td>
-	<%=link_to 'Assign roles', :action=>'roles', :id=>user%> | <%=link_to 'edit', :action=>'edit', :id=>user%> | <%=link_to 'show', :action=>'show', :id=>user%> | <%=link_to 'X', {:action => 'destroy', :id=>user}, :class => "button delete"%>
-	</td>
-</tr>
