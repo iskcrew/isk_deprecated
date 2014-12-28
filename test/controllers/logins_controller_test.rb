@@ -34,7 +34,7 @@ class LoginsControllerTest < ActionController::TestCase
 		post :create, data
 		
 		assert_template :show
-		assert_not flash[:error].empty?
+		assert_not session[:user_id].present?
 	end
 	
 	test "failed login with json" do
