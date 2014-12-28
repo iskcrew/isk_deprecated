@@ -5,7 +5,7 @@ event_1:
     ungrouped_id: 7
     thrashed_id: 9
     
-event_2:
+current:
     id: 2
     name: Event 2
     current: true

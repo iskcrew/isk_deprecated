@@ -47,7 +47,7 @@ class EventTest < ActiveSupport::TestCase
 	end
 	
 	test "update current event" do
-		e = events(:event_2)
+		e = events(:current)
 		e.name = "updated name"
 		
 		assert e.save, "Error saving event"
@@ -56,7 +56,7 @@ class EventTest < ActiveSupport::TestCase
 	end
 	
 	test "try to remove current event" do
-		e = events(:event_2)
+		e = events(:current)
 		e.current = false
 		assert !e.save, "Shouldn't be able to unset the current flag"
 		assert e.errors.include?(:current)
