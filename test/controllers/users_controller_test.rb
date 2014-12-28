@@ -43,5 +43,65 @@ class UsersControllerTest < ActionController::TestCase
 			assert_select 'form input[type="checkbox"][checked="checked"]', {count: user.roles.count}
 		end
 	end
+	
+	test "remove all roles" do
+		u = users(:limited)
+		
+		data = {
+			id: u.id,
+			roles: {}
+		}
+		
+		Role.all.each do |r|
+			data[:roles][r.id] = 0
+		end
+		
+		post :grant, data, @adminsession
+		assert_redirected_to users_path
+		assert u.roles.count == 0
+		
+	end
+	
+	test "Grant all roles" do
+		u = users(:limited)
+		
+		data = {
+			id: u.id,
+			roles: {}
+		}
+		
+		Role.all.each do |r|
+			data[:roles][r.id] = 1
+		end
+		
+		post :grant, data, @adminsession
+		assert_redirected_to users_path
+		assert u.roles.count == Role.count
+		
+	end
+	
+	test "delete user" do
+		u = users(:limited)
+		
+		assert_difference 'User.count', -1 do
+			assert_difference 'Permission.count', - u.permissions.count do
+				delete :destroy, {id: u.id}, @adminsession
+				assert_redirected_to users_path
+			end
+		end
+		
+	end
+	
+	test "Get new user form" do
+		get :new, nil, @adminsession
+		assert_response :success
+	end
+	
+	test "Create new user" do
+		assert_difference "User.count" do
+			post :create, @create_data, @adminsession
+			assert_redirected_to users_path
+		end
+	end
 
 end
