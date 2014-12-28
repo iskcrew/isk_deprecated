@@ -1,0 +1,21 @@
+doctype 5
+html
+	head
+		title 
+			| ISK @ #{request.host} : #{controller.controller_name.capitalize}
+			=< controller.action_name.capitalize
+		= stylesheet_link_tag :application, media: :all
+		= javascript_include_tag :application
+		= csrf_meta_tags
+		link rel="icon" type="image/gif" href="/favicon.gif"
+		link rel="icon" type="image/x-icon" href="/favicon.ico"
+	body
+		div#content
+			div.flash
+				div.error = flash[:error]
+				div.notice = flash[:notice]
+				div.warning = flash[:warning]
+				- flash.clear
+			
+			== yield
+	
