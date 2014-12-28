@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
 	#Grant roles to a user
 	def grant
-		user=User.find(params[:id])
+		user = User.find(params[:id])
 		
 		# Iterate over the posted hash of permissions
 		# If it is checked we add it (if needed) and if not
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 		end
 		user.save!
 		flash[:notice] = "User roles changed"
-		redirect_to :action=>'index'
+		redirect_to users_path
 
 	end
 
@@ -59,9 +59,9 @@ class UsersController < ApplicationController
 		User.transaction do 
 			@user=User.new
 			@user.username = params[:user][:username]
-			if params[:password][:password] == params[:password][:verify] then
-				@user.password=params[:password][:password]
-				if @user.save then
+			if verify_password
+				@user.password = params[:password][:password]
+				if @user.save
 					flash[:notice] = "User created"
 					redirect_to users_path and return
 				end
@@ -88,20 +88,19 @@ class UsersController < ApplicationController
 
 	def update
 		@user=User.find(params[:id])
-		unless params[:password][:password].empty? then
-			if params[:password][:password] == params[:password][:verify] then
+		unless params[:password][:password].empty?
+			if verify_password
 				@user.password=params[:password][:password]
 			else
 				@user.errors.add('', "Passwords don't match")
-				render :action => 'edit'
-				return
+				render action: :edit and return
 			end
 		end
 		if @user.save
-			flash[:notice]="User updated"
-			redirect_to :action => :index
+			flash[:notice] = "User updated"
+			redirect_to users_path
 		else
-			render :action=>:edit
+			render action: :edit
 		end
 	end
 	
@@ -118,6 +117,12 @@ class UsersController < ApplicationController
 			flash[:notice] = "User #{user.username} has been deleted."
 			redirect_to action: :index
 		end
+	end
+	
+	private
+	
+	def verify_password
+		params[:password][:password] == params[:password][:verify]
 	end
 
 end
