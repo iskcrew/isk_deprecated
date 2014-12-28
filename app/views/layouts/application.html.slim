@@ -16,8 +16,8 @@ html
 						= navigation_links
 						li#current_event Event: #{current_event.name}
 						li#logout.ui-state-default.ui-corner-top 
-							= link_to "Logout (#{current_user.username})", {controller: :logins, 
-								action: :destroy}, method: :delete, class: 'ui-tabs-anchor'
+							= link_to "Logout (#{current_user.username})", login_path, method: :delete, 
+								class: 'ui-tabs-anchor'
 			= render partial: 'navigation'
 		div#content
 			= render partial: "shared/display_warnings"
