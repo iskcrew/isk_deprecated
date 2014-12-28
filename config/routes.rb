@@ -84,7 +84,7 @@ Isk::Application.routes.draw do
 		end
 	end
 
-	resources :events do
+	resources :events, except: :destroy do
 		member do
 			post 'generate_images'
 		end
