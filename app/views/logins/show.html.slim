@@ -1,0 +1,16 @@
+- if current_user.present?
+	h1 Welcome to ISK #{current_user.username}!
+	
+	= link_to "Logout (#{current_user.username})", login_path, method: :delete
+
+- else
+	h1 ISK - Login required
+	
+	= form_tag login_path do
+		p
+			b Username
+			= text_field_tag :username
+		p
+			b Password
+			= password_field_tag :password
+		= submit_tag 'Login'
