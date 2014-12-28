@@ -1,0 +1,7 @@
+tr
+	td = event.name
+	td = event.current ? 'Current' : ''
+	td
+		= event_edit_button(event)
+		=< event_details_button(event)
+		=< event_delete_button(event)
