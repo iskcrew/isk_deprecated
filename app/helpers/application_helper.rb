@@ -61,6 +61,21 @@ module ApplicationHelper
 		icon 'exclamation-circle', '', class: 'fa-2x fa-pull-left'
 	end
 	
+	# Text for links to details on items
+	def details_link_text
+		icon 'info-circle', 'Details'
+	end
+	
+	# Text for links to edit pages on items
+	def edit_link_text
+		icon 'edit', 'Edit'
+	end
+	
+	# Text for delete links
+	def delete_link_text
+		icon 'times-circle', 'Delete'
+	end
+	
 	# Memoize the current user
 	def current_user
 			@_current_user ||= session[:user_id] &&
@@ -71,5 +86,6 @@ module ApplicationHelper
 	def current_event
 			@_current_event ||= Event.current
 	end
+	
 	
 end

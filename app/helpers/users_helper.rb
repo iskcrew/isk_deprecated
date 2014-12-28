@@ -13,7 +13,7 @@ module UsersHelper
 	end
 	
 	def user_edit_button(user)
-		link_to icon('edit', 'Edit'), edit_user_path(user), class: 'button'
+		link_to edit_link_text, edit_user_path(user), class: 'button'
 	end
 	
 	def user_delete_button(user)
@@ -22,10 +22,10 @@ module UsersHelper
 			class: 'button warning',
 			data: {confirm: "Are you sure you want to delete this user?"}
 		}
-		link_to icon('times-circle', 'Delete'), user_path(user), options 
+		link_to delete_link_text, user_path(user), options 
 	end
 	
 	def user_details_button(user)
-		link_to icon('info-circle', 'Details'), user_path(user), class: 'button'
+		link_to details_link_text, user_path(user), class: 'button'
 	end
 end

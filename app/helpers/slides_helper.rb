@@ -149,8 +149,7 @@ module SlidesHelper
 	
 	# Generate the edit link with consistent confirm message
 	def slide_edit_link(slide)
-		link_text = "#{icon 'edit'} Edit".html_safe
-		link_to link_text, edit_slide_path(slide), 
+		link_to edit_link_text, edit_slide_path(slide), 
 			:class => 'button', title: 'Edit slide metadata', data: {confirm: (
 			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
@@ -158,7 +157,7 @@ module SlidesHelper
 	# Generate the download svg link for the slide with consistent confirm message
 	def slide_svg_link(slide)
 		if [InkscapeSlide].include? slide.class
-			link_text = "#{icon 'download'} SVG".html_safe
+			link_text = icon 'download', 'SVG'
 			link_to link_text, {controller: :slides, action: :svg_data, id: slide.id},
 							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
@@ -173,7 +172,7 @@ module SlidesHelper
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
-		link_to icon('times-circle', 'Delete'), slide_path(slide),
+		link_to delete_link_text, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
 							method: :delete, class: 'button warning'
 	end
