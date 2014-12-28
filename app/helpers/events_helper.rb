@@ -25,6 +25,14 @@ module EventsHelper
 		link_to icon('times-circle', 'Delete'), event_path(event), options
 	end
 	
+	def event_list_button
+		link_to (icon('list') + ' List events'), events_path, class: 'button'
+	end
+	
+	def event_new_button
+		link_to (icon('plus') + ' New event'), new_event_path, class: 'button'
+	end
+	
 	# Select box for choosing the slide resolution for the event.
 	def event_slide_resolution_select(event)
 		resolutions = Event::SupportedResolutions
