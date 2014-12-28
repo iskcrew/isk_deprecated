@@ -46,6 +46,22 @@ div.group_links {
 	a {
 		text-decoration: none;
 	}
+	
+	div.accordion {
+		width: 145px;
+		h3 {
+				font-size: 7pt;
+		}
+		
+		div {
+			padding: 5px;
+		}
+		
+		ul {
+			margin: 5px;
+			font-size: 8px;
+		}
+	}
 }
 
 div.slide_list {
