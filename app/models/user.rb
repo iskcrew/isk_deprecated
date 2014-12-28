@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
 	validates_length_of :username, :in=>1..50
 	validates_uniqueness_of :username
 
-	has_many :permissions
+	has_many :permissions, dependent: :delete_all
 
 	has_many :roles, -> {order 'roles.role'},										through: :permissions, source: :target, source_type: 'Role'
 	has_many :slides, -> {order 'slides.name'},									through: :permissions, source: :target, source_type: 'Slide'

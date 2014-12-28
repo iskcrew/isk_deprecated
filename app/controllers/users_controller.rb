@@ -106,5 +106,20 @@ class UsersController < ApplicationController
 			render :action=>:edit
 		end
 	end
+	
+	# Delete a user
+	def destroy
+		user = User.find(params[:id])
+		
+		# Disallow current user deleting itself
+		if user.id == current_user.id
+			flash[:error] = "You cannot delete your own user account!"
+			redirect_to action: :index
+		else
+			user.destroy
+			flash[:notice] = "User #{user.username} has been deleted."
+			redirect_to action: :index
+		end
+	end
 
 end
