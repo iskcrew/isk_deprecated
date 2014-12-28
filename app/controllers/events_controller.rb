@@ -58,6 +58,17 @@ class EventsController < ApplicationController
 		end
 	end
 	
+	def destroy
+		event = Event.find(params[:id])
+		if event.destroy
+			flash[:notice] = "Deleted event #{event.name}"
+			redirect_to events_path
+		else
+			flash[:error] = "Error deleting event #{event.name}!"
+			redirect_to events_path
+		end
+	end
+	
 	# (re)generate all slide images for this event
 	def generate_images
 		@event = Event.find(params[:id])
