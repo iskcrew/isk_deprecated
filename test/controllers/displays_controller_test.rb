@@ -31,6 +31,13 @@ class DisplaysControllerTest < ActionController::TestCase
 		assert_response :success
 	end
 	
+	test "get index as json" do
+		get :index, {format: :json}, @adminsession
+		assert_response :success
+		body = JSON.parse response.body
+		assert_equal Display.count, body.size, "JSON response array didn't have correct amount of elements"
+	end
+	
 	test "get display info" do
 		@all_displays.each do |d|
 			get :show, {:id => displays(d)}, @adminsession

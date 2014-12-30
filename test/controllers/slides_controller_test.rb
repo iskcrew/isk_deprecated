@@ -128,6 +128,25 @@ class SlidesControllerTest < ActionController::TestCase
 		clear_slide_files(s)
 	end
 	
+	test "create slide json response" do
+		data = @new_slide_data
+		data[:format] = :json
+		
+		post :create, data, @adminsession
+		
+		assert_response :success
+		body = JSON.parse response.body
+		assert body.key?('slide_id')
+	end
+	
+	test "error on create json respnse" do
+		post :create, {format: :json, slide: {name: nil}}, @adminsession
+		
+		assert_response :bad_request
+		body = JSON.parse response.body
+		assert body['errors'].present?, "No errors reported in json response"
+	end
+	
 	test "add slide to group" do
 		assert_difference "MasterGroup.find(master_groups(:one_slide).id).slides.count" do
 			post :add_to_group, {id: slides(:ungrouped), add_to_group: {group_id: master_groups(:one_slide)}}, @adminsession
