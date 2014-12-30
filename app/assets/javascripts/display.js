@@ -15,7 +15,7 @@
 // Jquery and plugins
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
+//= require jquery-ui
 //= require jquery.timer
 //= require jquery-noty.main
 //
