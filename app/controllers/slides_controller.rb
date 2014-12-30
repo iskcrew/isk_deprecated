@@ -128,7 +128,7 @@ class SlidesController < ApplicationController
 			
 			respond_to do |format|
 				format.html {redirect_to :action => :show, :id => @slide.id}
-				format.json {render json: {message: 'Slide was successfully created', slide_id: @slide.id}}
+				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}}
 			end
 			
 		rescue Magick::ImageMagickError
