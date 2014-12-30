@@ -91,8 +91,15 @@ class SlidesController < ApplicationController
 				end
 				
 				unless @slide.save
-					flash[:error] = "Error saving slide."
-					render :new_after_error and return
+					respond_to do |format|
+						format.html {
+							flash[:error] = "Error saving slide."
+							render :new_after_error
+						}
+						format.json {
+							render json: {message: 'Error saving slide.', errors: @slide.errors.messages}
+						}
+					end and return
 				end
 				
 				@slide.reload
@@ -119,7 +126,10 @@ class SlidesController < ApplicationController
 				@slide.delay.generate_images
 			end
 			
-			redirect_to :action => :show, :id => @slide.id
+			respond_to do |format|
+				format.html {redirect_to :action => :show, :id => @slide.id}
+				format.json {render json: {message: 'Slide was successfully created', slide_id: @slide.id}}
+			end
 			
 		rescue Magick::ImageMagickError
 			# image invalid
