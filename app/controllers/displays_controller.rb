@@ -17,6 +17,15 @@ class DisplaysController < ApplicationController
     respond_to do |format|
       format.js
       format.html
+			format.json {
+				render json: @displays.collect { |d|
+					{
+						id: d.id,
+						name: d.name,
+						status: d.status,
+						late: d.late?}
+					}
+			}
     end
     
   end
