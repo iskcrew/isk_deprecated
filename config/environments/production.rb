@@ -41,6 +41,8 @@ Isk::Application.configure do
 	# See everything in the log (default is :info)
 	# config.log_level = :debug
 	
+	config.log_tags = [ :remote_ip ]
+	
 	# More compact logs
 	config.lograge.enabled = true
 	
