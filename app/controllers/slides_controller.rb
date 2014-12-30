@@ -97,7 +97,7 @@ class SlidesController < ApplicationController
 							render :new_after_error
 						}
 						format.json {
-							render json: {message: 'Error saving slide.', errors: @slide.errors.messages}
+							render json: {message: 'Error saving slide.', errors: @slide.errors.messages}, status: :bad_request
 						}
 					end and return
 				end
