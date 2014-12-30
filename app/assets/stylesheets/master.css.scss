@@ -9,6 +9,9 @@
 
 @import 'variables';
 
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
 div.error_notification {
 	font-size: 1.4em;
 	background: $warning_bg;

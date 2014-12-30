@@ -12,11 +12,8 @@
  *= require reset
  *
  * jquery-ui-rails and jquery-themeroller theme with some sass magic on top
- *= require jquery.ui.all
  *= require jquery-ui
- *
- * Font awesome for icons
- *= require font-awesome
+ *= require jquery-ui-theme
  *
  * ISK stylesheets starting from the master one
  *= require master

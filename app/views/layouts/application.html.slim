@@ -22,9 +22,12 @@ html
 		div#content
 			= render partial: "shared/display_warnings"
 			div.flash
-				div.error = flash[:error]
-				div.notice = flash[:notice]
-				div.warning = flash[:warning]
+				- if flash[:error].present?
+					div.error = flash[:error]
+				- if flash[:notice].present?
+					div.notice = flash[:notice]
+				- if flash[:warning].present?
+					div.warning = flash[:warning]
 				- flash.clear
 		
 			== yield

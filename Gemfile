@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 source "http://gems.github.com"
 
-gem 'rails', '~> 4.1.1'
+gem 'rails', '~> 4.1.8'
 
 # Database interfaces
 # gem 'sqlite3'
