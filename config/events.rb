@@ -14,6 +14,11 @@ WebsocketRails::EventMap.describe do
 	#		end
 	# The above will handle an event triggered on the client like `product.new`.
 
+
+	# Check user permissions on :client_connected
+	subscribe :client_connected, to: AuthorizationController, with_method: :new_connection
+
+
 	# Events for creating various svg previews for slide editors
 	namespace :svg do
 		# Create a new svg from suplied data using the SimpeSlide.create_svg method

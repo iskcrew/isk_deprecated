@@ -1,2 +1,2 @@
 # Add the display js blob to precompile list
-Rails.application.config.assets.precompile += ['display.js']
+Rails.application.config.assets.precompile += ['display.js', 'minimal.js']
