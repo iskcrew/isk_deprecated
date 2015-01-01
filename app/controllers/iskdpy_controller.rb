@@ -16,6 +16,11 @@ class IskdpyController < WebsocketRails::BaseController
 	# and to add a new display to the db if need be
 	# message[:display_name] should contain the unique display name
 	def hello
+		unless d = Display.where(:name => message[:display_name]).first and require_display_control(d)
+			trigger_failure forbidden_message
+			return
+		end
+		
 		d = Display.hello(message[:display_name], origin_ip, connection.id)
 		trigger_success d.to_hash
 	end
@@ -23,6 +28,12 @@ class IskdpyController < WebsocketRails::BaseController
 	# The display informs us about its current slide
 	def current_slide
 		d = Display.find(message[:display_id])
+		
+		unless require_display_control(d)
+			trigger_failure forbidden_message
+			return
+		end
+		
 		if message[:override_queue_id]
 			ret = d.override_shown(message[:override_queue_id], connection.id)
 		else
@@ -44,6 +55,11 @@ class IskdpyController < WebsocketRails::BaseController
 	def goto_slide
 		d = Display.find(message[:display_id])
 		
+		unless d.can_edit?(current_user)
+			trigger_failure forbidden_message
+			return
+		end
+		
 		data = message
 		WebsocketRails[d.websocket_channel].trigger(:goto_slide, data)
 		trigger_success data
@@ -59,6 +75,12 @@ class IskdpyController < WebsocketRails::BaseController
 	# Handle a error report from the display
 	def display_error
 		d = Display.find(message[:display_id])
+		
+		unless require_display_control(d)
+			trigger_failure forbidden_message
+			return
+		end
+		
 		d.add_error message[:error]
 		d.save!
 	end
@@ -96,6 +118,14 @@ class IskdpyController < WebsocketRails::BaseController
 			action: action_name, client: client_id, ip: origin_ip, message: message) do
 			yield
 		end
+	end
+	
+	def require_display_control(display)
+		current_user.has_role?('display-client') or display.can_edit?(current_user)
+	end
+	
+	def forbidden_message
+		{message: 'Forbidden'}
 	end
 	
 end
