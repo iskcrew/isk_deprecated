@@ -90,6 +90,9 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'daemon'
 
+# For monitorin scripts
+gem 'highline'
+
 # Better caching
 gem 'cashier'
 

@@ -6,13 +6,20 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+require 'rubygems'
 
-host = ARGV.last
+# Set up gems listed in the Gemfile.
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
 
-def say(msg)
-	puts "#{Time.now.strftime('%FT%T%z')}: #{msg}"
-end
+require 'highline/import'
+require 'colorize'
+require 'faye/websocket'
+require 'json'
+
+host = ARGV[0]
+port = ARGV[1]
+port ||= 80
 
 @connection_id = nil
 @channels = [
@@ -25,8 +32,8 @@ end
 	'display_state'
 ]
 
-Display.all.each do |d|
-	@channels << d.websocket_channel
+def say(msg)
+	puts "#{Time.now.strftime('%FT%T%z')}: #{msg}"
 end
 
 class WsMessage
@@ -36,7 +43,6 @@ class WsMessage
 			@_connection_id = con_id
 			return self
 	end
-
 
 	def name=(n)
 		@_name = n
@@ -58,15 +64,51 @@ class WsMessage
 		end
 		return [@_name, data]
 	end
-
 end
 
+username = ask('Username:  ')
+password = ask("Password:  ") { |q| q.echo = 'x' }
+
+puts "Logging in to ISK at #{host}:#{port}...".green
+
+# Send a POST request to ISK and collect cookies
+http = Net::HTTP.new(host, port)
+resp, data = http.post('/login', "username=#{username}&password=#{password}&format=json")
+
+#Check the return code from the POST request
+if resp.is_a? Net::HTTPForbidden
+	abort "Error loggin into ISK, aborting"
+end
+
+# Extract cookies
+all_cookies = resp.get_fields('set-cookie')
+    cookies_array = Array.new
+    all_cookies.each { | cookie |
+        cookies_array.push(cookie.split('; ')[0])
+    }
+    cookies = cookies_array.join('; ')
+
+# Store the session cookie
+headers = {
+  'Cookie' => cookies,
+ }
+
+ # Get list of displays
+ resp, data = http.get('/displays?format=json', headers)
+ displays = JSON.parse resp.body
+ 
+ displays.each do |d|
+	 @channels << "display_#{d['id']}"
+ end
+
+@connection_opened = Time.now
 
 EM.run {
-  ws = Faye::WebSocket::Client.new("ws://#{host}")
+  ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
   ws.on :open do |event|
     say 'Connection opened'
+		@connection_opened = Time.now
   end
 
   ws.on :message do |event|
@@ -76,7 +118,6 @@ EM.run {
 		msg_channel = msg_hash['channel']
 		case msg_name
 		when 'client_connected'
-			@connection_opened = Time.now
 			@connection_id = msg_hash['data']['connection_id']
 			say "Connection set: #{msg_hash['data']['connection_id']}"
 			
@@ -126,8 +167,9 @@ EM.run {
   end
 
   ws.on :close do |event|
+		say 'Connection closed!'.red
 		say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
 		say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
-    abort "Connection closed!".red
+    abort
   end
 }
