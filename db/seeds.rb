@@ -27,7 +27,7 @@ end
 roles = [
 	['slide-hide', 'Can hide any slide.'],
 	['display-override', 'Can add slides to override queue on any display.'],
-	['display-client'], 'User can run clients on any display via websocket events.'
+	['display-client', 'User can run clients on any display via websocket events.']
 ]
 
 models = [
