@@ -14,67 +14,35 @@
 # Example:
 # ws_hello_test.rb localhost:3000 test_display
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+require 'rubygems'
 
-unless ARGV.size == 2
-	abort "Usage: <host> <display_name>"
-end
-	
+# Set up gems listed in the Gemfile.
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
 
-host = ARGV.first
-display_name = ARGV.last
+require 'highline/import'
+require 'colorize'
+require 'faye/websocket'
+require 'json'
 
-def say(msg)
-	puts "#{Time.now.strftime('%FT%T%z')}: #{msg}"
-end
+require_relative '../lib/cli_helpers.rb'
 
-@connection_id = nil
-@channels = [
-	'slide',
-	'master_group',
-	'group',
-	'presentation',
-	'display',
-	'override_queue',
-	'display_state'
-]
-
-Display.all.each do |d|
-	@channels << d.websocket_channel
+unless ARGV.size >= 2
+	abort "Usage: <display_name> <host> [port]"
 end
 
-class WsMessage
-	def initialize(name, data, con_id = nil)
-	    @_name = name
-			@_data = data
-			@_connection_id = con_id
-			return self
-	end
+display_name = ARGV[0]
+host = ARGV[1]
+port = ARGV[2]
+port ||= 80
 
+username = ask('Username:  ')
+password = ask("Password:  ") { |q| q.echo = 'x' }
 
-	def name=(n)
-		@_name = n
-	end
-	
-	def connection_id=(cid)
-		@_connection_id= cid
-	end
-
-	def data=(d)
-		@_data = d
-	end
-	
-	def to_a
-		data = {}
-		data['data'] = @_data
-		return [@_name, data, @_connection_id]
-	end
-
-end
-
+http, headers = isk_login(host, port, username, password)
 
 EM.run {
-  ws = Faye::WebSocket::Client.new("ws://#{host}/websocket")
+  ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
   ws.on :open do |event|
     say 'Connection opened'
@@ -111,9 +79,7 @@ EM.run {
 				say " -> id: #{data['presentation']['id']}"
 				say "Current group id: #{data['current_group_id']}"
 				say "Current slide id: #{data['current_slide_id']}"
-				say "Slides in override queue: #{data['override_queue'].size}"
-				say "Username: #{data['username']} (has key: #{data.key? 'username'})"
-				
+				say "Slides in override queue: #{data['override_queue'].size}"				
 			else
 				say 'iskdpy.hello unsuccesful, got reply:'
 				puts JSON.pretty_generate JSON.parse(event.data)

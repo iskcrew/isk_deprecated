@@ -17,9 +17,14 @@ require 'colorize'
 require 'faye/websocket'
 require 'json'
 
+require_relative '../lib/cli_helpers.rb'
+
 host = ARGV[0]
 port = ARGV[1]
 port ||= 80
+
+username = ask('Username:  ')
+password = ask("Password:  ") { |q| q.echo = 'x' }
 
 @connection_id = nil
 @channels = [
@@ -32,87 +37,28 @@ port ||= 80
 	'display_state'
 ]
 
-def say(msg)
-	puts "#{Time.now.strftime('%FT%T%z')}: #{msg}"
-end
+http, headers = isk_login(host, port, username, password)
 
-class WsMessage
-	def initialize(name, data, con_id = nil)
-	    @_name = name
-			@_data = data
-			@_connection_id = con_id
-			return self
-	end
-
-	def name=(n)
-		@_name = n
-	end
-	
-	def connection_id=(cid)
-		@_connection_id= cid
-	end
-
-	def data=(d)
-		@_data = d
-	end
-	
-	def to_a
-		data = {}
-		data['data'] = @_data
-		if @_connection_id
-			data['connection_id'] = @_connection_id
-		end
-		return [@_name, data]
-	end
-end
-
-username = ask('Username:  ')
-password = ask("Password:  ") { |q| q.echo = 'x' }
-
-puts "Logging in to ISK at #{host}:#{port}...".green
-
-# Send a POST request to ISK and collect cookies
-http = Net::HTTP.new(host, port)
-resp, data = http.post('/login', "username=#{username}&password=#{password}&format=json")
-
-#Check the return code from the POST request
-if resp.is_a? Net::HTTPForbidden
-	abort "Error loggin into ISK, aborting"
-end
-
-# Extract cookies
-all_cookies = resp.get_fields('set-cookie')
-    cookies_array = Array.new
-    all_cookies.each { | cookie |
-        cookies_array.push(cookie.split('; ')[0])
-    }
-    cookies = cookies_array.join('; ')
-
-# Store the session cookie
-headers = {
-  'Cookie' => cookies,
- }
-
- # Get list of displays
- resp, data = http.get('/displays?format=json', headers)
- displays = JSON.parse resp.body
+# Get list of displays
+resp, data = http.get('/displays?format=json', headers)
+displays = JSON.parse resp.body
  
- displays.each do |d|
-	 @channels << "display_#{d['id']}"
- end
+displays.each do |d|
+	@channels << "display_#{d['id']}"
+end
 
 @connection_opened = Time.now
 
 EM.run {
-  ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
+	ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
-  ws.on :open do |event|
-    say 'Connection opened'
+	ws.on :open do |event|
+		say 'Connection opened'
 		@connection_opened = Time.now
-  end
+	end
 
-  ws.on :message do |event|
-    msg = JSON.parse(event.data).first
+	ws.on :message do |event|
+		msg = JSON.parse(event.data).first
 		msg_name = msg.first
 		msg_hash = msg.last
 		msg_channel = msg_hash['channel']
@@ -164,12 +110,12 @@ EM.run {
 			end
 		end
 	
-  end
+	end
 
-  ws.on :close do |event|
+	ws.on :close do |event|
 		say 'Connection closed!'.red
 		say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
 		say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
-    abort
-  end
+		abort
+	end
 }
