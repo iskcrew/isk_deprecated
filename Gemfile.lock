@@ -43,6 +43,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    ansi (1.4.3)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.9)
     builder (3.2.2)
@@ -98,6 +99,11 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
     minitest (5.5.0)
+    minitest-reporters (1.0.8)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     multi_json (1.10.1)
     pg (0.17.1)
     rack (1.5.2)
@@ -135,8 +141,8 @@ GEM
     redis-objects (1.0.1)
       redis (>= 3.0.2)
     ref (1.0.5)
-    rmagick (2.13.4)
     ruby-graphviz (1.0.9)
+    ruby-progressbar (1.7.1)
     rubyzip (1.1.6)
     sass (3.2.19)
     sass-rails (4.0.5)
@@ -217,13 +223,13 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   lograge
+  minitest-reporters
   pg (~> 0.17.1)
   rack-rewrite (~> 1.2.1)
   rails (~> 4.1.8)
   rails-erd
   rails-observers
   ranked-model
-  rmagick
   rubyzip
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

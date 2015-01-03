@@ -64,9 +64,6 @@ gem 'dalli'
 # Sorting slides in groups etc
 gem 'ranked-model'
 
-# Slide image manipulations
-gem 'rmagick', :require => 'RMagick'
-
 # Use thin as the webserver
 gem 'thin'
 
@@ -112,7 +109,13 @@ gem "lograge"
 # Color output for our logs
 gem 'colorize'
 
-# Code coverage report generator
-gem 'simplecov', :require => false, :group => :test
-# We do loads in after_commit callbacks so need to include them in tests
-gem 'test_after_commit', :group => :test
+group :test do
+	# Color for minitest output
+	gem 'minitest-reporters'
+	
+	# Code coverage report generator
+	gem 'simplecov', :require => false
+	
+	# We do loads in after_commit callbacks so need to include them in tests
+	gem 'test_after_commit'
+end
