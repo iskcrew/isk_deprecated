@@ -340,36 +340,7 @@ class Slide < ActiveRecord::Base
 			touch_by_group(self.master_group_id_was)
 		end
 	end
-	
-	def generate_full_image
-		if self.is_svg?
-			system rsvg_command(:full)
-		else
-			# FIXME: once legacy slides get migrated to ImageSlide this is no longer needed
-			picture = Magick::ImageList.new(self.original_filename).first
-			
-			picture = picture.change_geometry!("#{Slide::FullWidth}x#{Slide::FullHeight}>") { |cols, rows, img|
-				# if the cols or rows are smaller then our predefined sizes
-				# build a black background and center the image in it
-				if cols < Slide::FullWidth || rows < Slide::FullHeight
-					# resize our image
-					img.resize!(cols, rows)
-					# build the black background
-					bg = Magick::Image.new(Slide::FullWidth,Slide::FullHeight){self.background_color = "black"}
-					# center the image on our new white background
-					bg.composite(img, Magick::CenterGravity, Magick::OverCompositeOp)
- 
-				else
-					# in the unlikely event that the new geometry cols and rows match our predefined size
-					# we will not set a bg
-					img.resize!(cols, rows)
-				end
-			}
-				
-			picture.write(self.full_filename)
-		end
-	end
-	
+		
 	# Generate the full size slideimage from svg with inkscape
 	def inkscape_command_line
 		size = picture_sizes[:full]
