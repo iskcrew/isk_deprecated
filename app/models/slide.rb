@@ -324,15 +324,14 @@ class Slide < ActiveRecord::Base
 		Event.current.picture_sizes
 	end
 	
+	def resize_command(file, size)
+		"convert #{self.full_filename} -resize #{size.join('x')} #{file}"
+	end
+	
 	# Create the preview images from the full size slide image
 	def generate_previews
-		picture = Magick::ImageList.new(self.full_filename).first
-	
-		preview_picture = picture.resize( *picture_sizes[:preview] )
-		preview_picture.write(self.preview_filename)
-	
-		thumb_picture = picture.resize( *picture_sizes[:thumb] )
-		thumb_picture.write(self.thumb_filename)
+		system resize_command(self.preview_filename, picture_sizes[:preview])
+		system resize_command(self.thumb_filename, picture_sizes[:thumb])
 	end
 	
 	def update_timestamps
