@@ -58,6 +58,11 @@ class Slide < ActiveRecord::Base
 	
 	include ModelAuthorization
 	
+	# Error to raise when image operation fails
+	class ImageError < StandardError
+		# no further implementation necessary
+	end
+	
 	
 	def self.inherited(child)
 		child.instance_eval do

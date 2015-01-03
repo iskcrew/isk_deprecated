@@ -25,15 +25,21 @@ class	ImageSlide < Slide
 	# Validate and store a new image for the slide
 	# image should be a IO-object
 	def image=(image)
-		begin
-			picture = Magick::Image.from_blob(image.read).first
-			picture.write(self.original_filename)
-		rescue Magick::ImageMagickError
-			if File.exists self.original_filename
-				File::delete(@slide.original_filename)
-			end
-			raise
+		file = Tempfile.new('isk-image', encoding: 'binary')
+		
+		file.write image.read
+		file.close
+		
+		# Verify image integrity
+		command = "identify #{file.path} &> /dev/null"
+		if system command
+			FileUtils.copy file.path, self.original_filename
+		else
+			raise Slide::ImageError, "Invalid image received"
 		end
+		
+	ensure
+		file.unlink
 	end
 		
 	private

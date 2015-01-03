@@ -131,7 +131,7 @@ class SlidesController < ApplicationController
 				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}}
 			end
 			
-		rescue Magick::ImageMagickError
+		rescue Slide::ImageError
 			# image invalid
 			flash[:error] = "Error creating slide, invalid image file"
 			render :action => :new_after_error
