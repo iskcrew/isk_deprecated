@@ -58,7 +58,7 @@ graph_options = {
 	height: 250, 
 	color: ["FONT#000000", "BACK#FFFFFF"],
 	font: [
-		'LEGEND:8:Courier,Monaco,DejaVuSansMono,DejaVu Sans Mono,DejaVu LGC Sans Mono,Bitstream Vera Sans Mono,monospace'
+		'LEGEND:8:DejaVuSansMono,DejaVu Sans Mono,DejaVu LGC Sans Mono,Bitstream Vera Sans Mono,monospace'
 	],
 	start: Time.now - 2.day,
 	end: Time.now
