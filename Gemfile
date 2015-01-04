@@ -109,6 +109,9 @@ gem "lograge"
 # Color output for our logs
 gem 'colorize'
 
+# RRD for statistics collection
+gem 'rrd-ffi', group: :stats
+
 group :test do
 	# Color for minitest output
 	gem 'minitest-reporters'
