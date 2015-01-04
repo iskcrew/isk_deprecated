@@ -57,6 +57,9 @@ graph_options = {
 	width: 800, 
 	height: 250, 
 	color: ["FONT#000000", "BACK#FFFFFF"],
+	font: [
+		'LEGEND:8:Courier,Monaco,DejaVuSansMono,DejaVu Sans Mono,DejaVu LGC Sans Mono,Bitstream Vera Sans Mono,monospace'
+	],
 	start: Time.now - 2.day,
 	end: Time.now
 }
@@ -65,8 +68,12 @@ graph_options = {
 RRD.graph! @rrd_path.join('memory.png').to_s, {title: "Memory usage"}.merge(graph_options) do
 	process_stats.each_pair do |k, v|
 		v.each_with_index do |file, i|
-			for_rrd_data "mem_#{k}_#{i}", memory: :average, from: file
-			draw_line data: "mem_#{k}_#{i}", color: get_color, label: "#{k} \##{i}", width: 1
+			value = "mem_#{k}_#{i}"
+			for_rrd_data value, memory: :average, from: file
+			draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
+			print_value value, format: 'LAST:Current\:%8.2lf %s'
+			print_value value, format: 'AVERAGE:\tAverage\:%8.2lf %s'
+			print_value value, format: 'MAX:\tMaximum\:%8.2lf %s\n'
 		end
 	end
 end
@@ -75,8 +82,12 @@ end
 RRD.graph! @rrd_path.join('cpu.png').to_s, {title: "CPU usage"}.merge(graph_options) do
 	process_stats.each_pair do |k, v|
 		v.each_with_index do |file, i|
-			for_rrd_data "cpu_#{k}_#{i}", cpu: :average, from: file
-			draw_line data: "cpu_#{k}_#{i}", color: get_color, label: "#{k} \##{i}", width: 1
+			value = "cpu_#{k}_#{i}"
+			for_rrd_data value, cpu: :average, from: file
+			draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
+			print_value value, format: 'LAST:Current\: %2.2lf%%'
+			print_value value, format: 'AVERAGE:\tAverage\: %2.2lf%%'
+			print_value value, format: 'MAX:\tMaximum\: %2.2lf%%\n'
 		end
 	end
 end
