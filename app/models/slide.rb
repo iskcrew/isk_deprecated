@@ -208,11 +208,12 @@ class Slide < ActiveRecord::Base
 	# Generate the various different sized images from the slide master image
 	# TODO: Rely more on subclasses
 	def generate_images 
-		generate_full_image
-		generate_previews
+		if generate_full_image
+			generate_previews
+			self.images_updated_at = Time.now
+		end
 		
 		self.ready = true
-		self.images_updated_at = Time.now
 		self.save!
 	end
 	
@@ -342,7 +343,7 @@ class Slide < ActiveRecord::Base
 	end
 		
 	# Generate the full size slideimage from svg with inkscape
-	def inkscape_command_line
+	def inkscape_command_line(tmp_file)
 		size = picture_sizes[:full]
 		command = 'cd '' && inkscape'
 		command = "cd #{Slide::FilePath} && inkscape"
@@ -350,11 +351,23 @@ class Slide < ActiveRecord::Base
 		# Export size
 		command << " -w #{size.first} -h #{size.last}"
 		# Export to file
-		command << " -e #{self.full_filename} #{self.svg_filename}"
+		command << " -e #{tmp_file.path} #{self.svg_filename}"
 		# Supress std-out reporting
 		command << ' >/dev/null'
 		
 		return command 
+	end
+	
+	def compare_new_image(tmp_file)
+		if File.exist?(self.full_filename) && FileUtils.compare_file(tmp_file.path, self.full_filename)
+			# Generated image is the same as the previous one
+			return false
+		else
+			# Remove the previous full image
+			FileUtils.rm self.full_filename, force: true
+			FileUtils.cp tmp_file.path, self.full_filename
+			return true
+		end
 	end
 	
 	# FIXME: Migrate old legacy stuff to new ones and kill this in favor of inkscape

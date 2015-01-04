@@ -71,9 +71,13 @@ class	ImageSlide < Slide
 			geo_str << '!'
 		end
 	
+		# Generate the full sized image to a tempfile
+		tmp_file = Tempfile.new('isk-image')
 		command = "convert #{self.original_filename} -resize #{geo_str}"
-		command << " -background '#{bg_color}' -gravity center -extent #{size} #{self.full_filename}"
+		command << " -background '#{bg_color}' -gravity center -extent #{size} #{tmp_file.path}"
 		system command
+		
+		return compare_new_image(tmp_file)
 	end
 	
 end

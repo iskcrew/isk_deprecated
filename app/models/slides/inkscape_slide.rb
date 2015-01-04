@@ -5,7 +5,7 @@
 # License::		Licensed under GPL v3, see LICENSE.md
 
 
-class InkscapeSlide < Slide
+class InkscapeSlide < SvgSlide
 
 	TypeString = 'inkscape'
 
@@ -119,10 +119,4 @@ class InkscapeSlide < Slide
 	end
 
 	private
-	
-	# Override the default image generator
-	# FIXME: make inkscape the default for everyone and remove this
-	def generate_full_image
-		system inkscape_command_line
-	end
 end

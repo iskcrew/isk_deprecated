@@ -285,12 +285,5 @@ class SimpleSlide < SvgSlide
 			element.attributes['text-anchor'] = text_anchor 
 		end
 		return element
-	end
-	
-	# Override the default image generator
-	# FIXME: make inkscape the default for everyone and remove this
-	def generate_full_image
-		system inkscape_command_line
-	end
- 
+	end 
 end

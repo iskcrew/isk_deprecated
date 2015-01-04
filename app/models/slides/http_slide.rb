@@ -87,6 +87,42 @@ class HttpSlide < Slide
 	
 	private
 	
+	# FIXME: proper inheritance from imageslides!
+	def generate_full_image
+		bg_color = '#000000'
+		scale = 'fit'
+		size = picture_sizes[:full].join('x')
+		
+		# Build the ImageMagick geometry string
+		# The string is WIDTHxHEIGHT + scaling operator as follows
+		# > to scale the image down if its height or width exceed the target
+		# < will scale the image up if its height and width are smaller than the target
+		# ! will scale to fit breaking aspect ratio
+		geo_str = size
+		case scale
+		when 'down'
+			# Scale the image down if needed
+			geo_str << '\>'
+		when 'fit'
+			# Scale the image to fit maintaining aspect ratio
+			# Nothing to do
+		when 'up'
+			# Only scale the image up if needed
+			geo_str << '\<'
+		when 'stretch'
+			# Stretch the image to fill the entire slide disregarding aspect ratio
+			geo_str << '!'
+		end
+	
+		# Generate the full sized image to a tempfile
+		tmp_file = Tempfile.new('isk-image')
+		command = "convert #{self.original_filename} -resize #{geo_str}"
+		command << " -background '#{bg_color}' -gravity center -extent #{size} #{tmp_file.path}"
+		system command
+		
+		return compare_new_image(tmp_file)
+	end
+	
 	# Validates the url
 	def validate_url
 		url = URI::parse slidedata[:url].strip
