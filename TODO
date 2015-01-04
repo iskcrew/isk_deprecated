@@ -66,8 +66,6 @@ BUGS / INCONSISTENCIES:
 		- Set viewBox on upload for the svg or warn the user?
 		- TESTING, TESTING, TESTING
 		- Proper ACL, we currently require global_admin.
-	- SvgSlide
-		- Create migration to inkscape slides and prepare to kill this class
 
 - Presentations
 	- Deep cloning of presentations. clone the presentation structure
@@ -82,11 +80,6 @@ BUGS / INCONSISTENCIES:
 
 - config control
 	- Move all magic constants to web editable place
-	- All svg-manipulations should move to REXML so that they can be
-		stackked on top of each others
-
-- Ticket system
-	- Create a simple way to request and track slide edit jobs
 
 TODO: organize the rest of this and translate...
 
