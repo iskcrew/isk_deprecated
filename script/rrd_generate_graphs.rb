@@ -72,8 +72,8 @@ RRD.graph! @rrd_path.join('memory.png').to_s, {title: "Memory usage"}.merge(grap
 			for_rrd_data value, memory: :average, from: file
 			draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
 			print_value value, format: 'LAST:Current\:%8.2lf %s'
-			print_value value, format: 'AVERAGE:\tAverage\:%8.2lf %s'
-			print_value value, format: 'MAX:\tMaximum\:%8.2lf %s\n'
+			print_value value, format: 'AVERAGE:Average\:%8.2lf %s'
+			print_value value, format: 'MAX:Maximum\:%8.2lf %s\n'
 		end
 	end
 end
@@ -86,8 +86,8 @@ RRD.graph! @rrd_path.join('cpu.png').to_s, {title: "CPU usage"}.merge(graph_opti
 			for_rrd_data value, cpu: :average, from: file
 			draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
 			print_value value, format: 'LAST:Current\: %2.2lf%%'
-			print_value value, format: 'AVERAGE:\tAverage\: %2.2lf%%'
-			print_value value, format: 'MAX:\tMaximum\: %2.2lf%%\n'
+			print_value value, format: 'AVERAGE:Average\: %2.2lf%%'
+			print_value value, format: 'MAX:Maximum\: %2.2lf%%\n'
 		end
 	end
 end
