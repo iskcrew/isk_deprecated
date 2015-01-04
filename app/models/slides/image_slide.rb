@@ -73,7 +73,7 @@ class	ImageSlide < Slide
 	
 		command = "convert #{self.original_filename} -resize #{geo_str}"
 		command << " -background '#{bg_color}' -gravity center -extent #{size} #{self.full_filename}"
-		system command	
+		system command
 	end
 	
 end
