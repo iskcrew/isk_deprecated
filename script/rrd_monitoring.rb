@@ -16,9 +16,16 @@ require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
 
 require 'colorize'
 require 'rrd'
+require 'daemon'
 
-def get_memory_usage(pid)
-	`ps -o rss= -p #{pid}`.to_i # in kilobytes 
+@pid_path = Pathname.new File.expand_path('../../tmp/pids', __FILE__)
+@rrd_path = Pathname.new File.expand_path('../../data/rrd', __FILE__)
+@log_path = Pathname.new File.expand_path('../../log', __FILE__)
+
+
+def get_process_stats(pid)
+	mem, cpu = `ps -o rss= -o %cpu= -p #{pid}`.split
+	return mem.to_i * 1024, cpu.to_f 
 end
 
 def extract_pid(f)
@@ -32,28 +39,46 @@ def extract_pid(f)
 	end
 end
 
+def create_rrd_for_process(rrd_file)
+	rrd = RRD::Base.new(rrd_file)
+	unless File.exists? rrd_file
+		puts "Creating rrd database: #{rrd_file}"
+		rrd.create start: Time.now - 10.seconds, step: 30.seconds do
+			datasource "memory", type: :gauge, heartbeat: 10.minutes, min: 0, max: :unlimited
+			datasource "cpu", type: :gauge, heartbeat: 10.minutes, min: 0, max: :unlimited
+			archive :average, :every => 1.minutes, :during => 1.year
+		end
+	end
+	return rrd
+end
+
+Daemon.daemonize(@pid_path.join('rrd_monitoring.pid'),@log_path.join('rrd_monitoring.log'))
+
+
 # Collect pid files
-@pid_path = Pathname.new File.expand_path('../../tmp/pids', __FILE__)
 
-servers = Dir[@pid_path.join('server*')].collect {|f| extract_pid(f)}
-delayed_jobs =  Dir[@pid_path.join('delayed_job*')].collect {|f| extract_pid(f)}
-background_jobs = Dir[@pid_path.join('background_jobs*')].collect {|f| extract_pid(f)}
+while(true) do
+	servers = Dir[@pid_path.join('server*')].collect {|f| extract_pid(f)}
+	delayed_jobs =  Dir[@pid_path.join('delayed_job*')].collect {|f| extract_pid(f)}
+	background_jobs = Dir[@pid_path.join('background_jobs*')].collect {|f| extract_pid(f)}
 
-servers.each_with_index do |s, i|
-	puts "Server \##{i} pid: #{s} -> Mem: #{get_memory_usage(s)} kb"
+	servers.each_with_index do |pid, i|
+		rrd_file = @rrd_path.join("server_#{i}.rrd").to_s
+		rrd = create_rrd_for_process rrd_file
+		rrd.update Time.now, *get_process_stats(pid)
+	end
+
+	delayed_jobs.each_with_index do |pid, i|
+		rrd_file = @rrd_path.join("delayed_job_#{i}.rrd").to_s
+		rrd = create_rrd_for_process rrd_file
+		rrd.update Time.now, *get_process_stats(pid)
+	end
+
+	background_jobs.each_with_index do |pid, i|
+		rrd_file = @rrd_path.join("background_job_#{i}.rrd").to_s
+		rrd = create_rrd_for_process rrd_file
+		rrd.update Time.now, *get_process_stats(pid)
+	end
+
+	sleep(30)
 end
-
-delayed_jobs.each_with_index do |s, i|
-	puts "Delayed_job worker \##{i} pid: #{s} -> Mem: #{get_memory_usage(s)}kb"
-end
-
-background_jobs.each_with_index do |s, i|
-	puts "Backgroun_job worker \##{i} pid: #{s} -> Mem: #{get_memory_usage(s)}kb"
-end
-
-
-# Create rrd databases if needed
-puts 'Creating rrd databases if needed...'
-
-
-
