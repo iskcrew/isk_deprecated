@@ -15,15 +15,17 @@
 case "$1" in
   start)
        echo "Starting ISK-server..."
-       RAILS_ENV=production bin/delayed_job start > /dev/null
-       RAILS_ENV=production script/background_jobs.rb > /dev/null
-       rails s thin -d -p 12765 -e production > /dev/null
+       bin/delayed_job start > /dev/null
+       script/background_jobs.rb > /dev/null
+			 script/rrd_monitoring.rb > /dev/null
+       rails s thin -d -p 12765 > /dev/null
        ;;
   stop)
        echo "Stopping ISK-server..."
-       kill $(cat tmp/pids/delayed_job.pid)
-       kill $(cat tmp/pids/background_jobs.pid)
-       kill $(cat tmp/pids/server.pid)
+       kill $(cat tmp/pids/delayed_job.pid) &>/dev/null
+       kill $(cat tmp/pids/background_jobs.pid) &>/dev/null
+       kill $(cat tmp/pids/server.pid) &>/dev/null
+			 kill $(cat tmp/pids/rrd_monitoring.pid) &>/dev/null
        ;;
 
   restart|force-reload)
@@ -33,11 +35,13 @@ case "$1" in
        #       just the same as "restart".
        #
        echo "Restarting ISK-server..."
-       RAILS_ENV=production bin/delayed_job restart > /dev/null
-       kill $(cat tmp/pids/background_jobs.pid)
-       RAILS_ENV=production script/background_jobs.rb
-       kill $(cat tmp/pids/server.pid)
-       rails s thin -d -p 12765 -e production > /dev/null
+       bin/delayed_job restart > /dev/null
+       kill $(cat tmp/pids/background_jobs.pid) &>/dev/null
+       script/background_jobs.rb > /dev/null
+       kill $(cat tmp/pids/server.pid) &>/dev/null
+       rails s thin -d -p 12765 > /dev/null
+			 kill $(cat tmp/pids/rrd_monitoring.pid) &>/dev/null
+			 script/rrd_monitoring.rb
        ;;
   pull)
        echo "Updating sources..."
@@ -49,7 +53,7 @@ case "$1" in
        ./isk-server restart
        ;;
   *)
-	echo "Usage: foo {start|stop|restart|force-reload}" >&2
+	echo "Usage: foo {start|stop|restart|pull}" >&2
 	exit 1
 	;;
 esac
