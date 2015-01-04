@@ -53,8 +53,16 @@ process_stats['server'] = Dir[@rrd_path.join('server_*.rrd')].collect {|f| @rrd_
 process_stats['delayed_job'] = Dir[@rrd_path.join('delayed_job_*.rrd')].collect {|f| @rrd_path.join(f)}
 process_stats['background_job'] = Dir[@rrd_path.join('background_job_*.rrd')].collect {|f| @rrd_path.join(f)}
 
+graph_options = {
+	width: 800, 
+	height: 250, 
+	color: ["FONT#000000", "BACK#FFFFFF"],
+	start: Time.now - 2.day,
+	end: Time.now
+}
+
 # Generate graph about memory usage
-RRD.graph! @rrd_path.join('memory.png').to_s, :title => "Memory usage", width: 800, height: 250, color: ["FONT#000000", "BACK#FFFFFF"] do
+RRD.graph! @rrd_path.join('memory.png').to_s, {title: "Memory usage"}.merge(graph_options) do
 	process_stats.each_pair do |k, v|
 		v.each_with_index do |file, i|
 			for_rrd_data "mem_#{k}_#{i}", memory: :average, from: file
@@ -64,7 +72,7 @@ RRD.graph! @rrd_path.join('memory.png').to_s, :title => "Memory usage", width: 8
 end
 
 # Generate graph about CPU usage
-RRD.graph! @rrd_path.join('cpu.png').to_s, :title => "CPU usage", width: 800, height: 250, color: ["FONT#000000", "BACK#FFFFFF"] do
+RRD.graph! @rrd_path.join('cpu.png').to_s, {title: "CPU usage"}.merge(graph_options) do
 	process_stats.each_pair do |k, v|
 		v.each_with_index do |file, i|
 			for_rrd_data "cpu_#{k}_#{i}", cpu: :average, from: file
