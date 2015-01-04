@@ -13,6 +13,7 @@ inkscape plugin for creating more complex slides.
  * redis (2.6.10)
  * inkscape ( for external editing and converting some of the slides from .svg to .png)
  * postgresql (9.1)
+ * rrdtool (1.4.7) for statistic collection and graph generation
  * iskdpy ( http://github.com/deram/iskdpy/ ) for running the slideshows
 
 ## Installation
@@ -27,11 +28,12 @@ To get the dev environment running you need to do the following:
 
 ### Install the external dependencies
 
-1. redis (in debian redis-server)
+1. redis (debian pkg: redis-server)
 2. memcached
-2. Imagemagick + dev headers (debian: imagemagick libmagickcore-dev libmagickwand-dev)
+2. Imagemagick (we use 'convert' and 'identify' imagemagick CLI tools)
 3. postgresql + dev headers (postgresql postgresql-client libpg-dev)
 4. inkscape
+5. rrdtool, librrd + dev headers (rrdtool, librrd4, librrd-dev)
 5. git
 6. curl
 
