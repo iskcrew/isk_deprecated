@@ -29,11 +29,11 @@ options = {
 	dir_mode: :normal,
 	dir: @pid_path.to_s,
 	log_dir: @log_path.to_s,
-	log_output: true
 }
 
 Daemons.run_proc('rrd_monitoring', options) do
-
+	Daemonize.redirect_io @log_path.join 'rrd_monitoring.log'
+	
 	say 'RRD monitoring daemon started'
 
 	def get_process_stats(pid)

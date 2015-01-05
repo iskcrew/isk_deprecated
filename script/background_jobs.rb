@@ -23,11 +23,10 @@ options = {
 	dir_mode: :normal,
 	dir: @pid_path.to_s,
 	log_dir: @log_path.to_s,
-	log_output: true
 }
 
 Daemons.run_proc('background_jobs', options) do
-
+	Daemonize.redirect_io @log_path.join 'background_jobs.log'
 	say "Daemon started"
 
 	# daemonizing the process closes the log files, so set new loggers
