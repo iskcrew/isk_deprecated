@@ -30,7 +30,15 @@ Daemons.run_proc('background_jobs', options) do
 
 	say "Daemon started"
 
+	# daemonizing the process closes the log files, so set new loggers
+	ActiveRecord::Base.logger = Logger.new(STDOUT)
+	ActiveRecord::Base.logger.level = Logger::WARN
+	
+	Rails.logger = Logger.new(STDOUT)
+	Rails.logger.level = Logger::WARN
+	
 	ActiveRecord::Base.connection.reconnect!
+	
 	loop do
 		say 'Fetching http-slides..'
 		realtime = Benchmark.realtime do
