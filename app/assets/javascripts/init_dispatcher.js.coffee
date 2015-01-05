@@ -20,4 +20,4 @@ window.dispatcher = new WebSocketRails(window.location.host + '/websocket')
 
 # Register callbacks on the connection itself, currently they aren't 
 # proganated to the main WebSocketRails class.
-window.dispatcher._conn.on_close = popup_connection_lost
+window.dispatcher.bind 'connection_closed', handler=popup_connection_lost
