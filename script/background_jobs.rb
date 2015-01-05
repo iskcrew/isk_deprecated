@@ -47,6 +47,7 @@ Daemons.run_proc('background_jobs', options) do
 			end
 		end
 		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, @slides.size / realtime]
+		@slides = nil
 	
 		say 'Generating schedule slides..'
 		realtime = Benchmark.realtime do
@@ -55,7 +56,8 @@ Daemons.run_proc('background_jobs', options) do
 			end
 		end
 		say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, @schedules.size / realtime])
-	
+		@schedules = nil
+		
 		say "Sleeping for #{Sleep} seconds"
 		sleep(Sleep)
 	end
