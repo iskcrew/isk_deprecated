@@ -9,37 +9,46 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 
 require 'net/http'
 
+require_relative '../lib/cli_helpers.rb'
+
 Sleep = 3.minutes # Sleep for 3 minutes between loops
 
-def stamped_puts(str)
-	puts "#{Time.now.strftime('%FT%T%z')}: " + str
-end
-
-stamped_puts 'Starting ISK server background process'
 Delayed::Worker.delay_jobs = false
 
-Daemon.daemonize(Rails.root.join('tmp','pids','background_jobs.pid'),Rails.root.join('log', 'background_jobs.log'))
+@pid_path = Pathname.new File.expand_path('../../tmp/pids', __FILE__)
+@log_path = Pathname.new File.expand_path('../../log', __FILE__)
 
-stamped_puts "Daemon started"
+options = {
+	app_name: 'background_jobs',
+	dir_mode: :normal,
+	dir: @pid_path.to_s,
+	log_dir: @log_path.to_s,
+	log_output: true
+}
 
-ActiveRecord::Base.connection.reconnect!
-loop do
-	stamped_puts 'Fetching http-slides..'
-	realtime = Benchmark.realtime do
-		@slides = Event.current.slides.where(type: 'HttpSlide').all.each do |slide|
-			slide.delay.fetch!
+Daemons.run_proc('background_jobs', options) do
+
+	say "Daemon started"
+
+	ActiveRecord::Base.connection.reconnect!
+	loop do
+		say 'Fetching http-slides..'
+		realtime = Benchmark.realtime do
+			@slides = Event.current.slides.where(type: 'HttpSlide').all.each do |slide|
+				slide.delay.fetch!
+			end
 		end
-	end
-	stamped_puts " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, @slides.size / realtime]
+		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, @slides.size / realtime]
 	
-	stamped_puts 'Generating schedule slides..'
-	realtime = Benchmark.realtime do
-		@schedules = Event.current.schedules.all.each do |schedule|
-			schedule.generate_slides
+		say 'Generating schedule slides..'
+		realtime = Benchmark.realtime do
+			@schedules = Event.current.schedules.all.each do |schedule|
+				schedule.generate_slides
+			end
 		end
-	end
-	stamped_puts(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, @schedules.size / realtime])
+		say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, @schedules.size / realtime])
 	
-	stamped_puts "Sleeping for #{Sleep} seconds"
-	sleep(Sleep)
+		say "Sleeping for #{Sleep} seconds"
+		sleep(Sleep)
+	end
 end

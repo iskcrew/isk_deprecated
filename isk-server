@@ -16,8 +16,8 @@ case "$1" in
   start)
        echo "Starting ISK-server..."
        bin/delayed_job start > /dev/null
-       script/background_jobs.rb > /dev/null
-			 script/rrd_monitoring.rb start
+       script/background_jobs.rb start > /dev/null
+			 script/rrd_monitoring.rb start > /dev/null
        rails s thin -d -p 12765 > /dev/null
        ;;
   stop)
@@ -36,8 +36,7 @@ case "$1" in
        #
        echo "Restarting ISK-server..."
        bin/delayed_job restart > /dev/null
-       kill $(cat tmp/pids/background_jobs.pid) &>/dev/null
-       script/background_jobs.rb > /dev/null
+       script/background_jobs.rb restart > /dev/null
        kill $(cat tmp/pids/server.pid) &>/dev/null
        rails s thin -d -p 12765 > /dev/null
 			 script/rrd_monitoring.rb restart
