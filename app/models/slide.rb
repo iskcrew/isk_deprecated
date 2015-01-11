@@ -372,7 +372,7 @@ class Slide < ActiveRecord::Base
 			FileUtils.rm self.full_filename, force: true
 			FileUtils.cp tmp_file.path, self.full_filename
 			# Tmpfile has 700 mode, we need to give other read permissions (mainly the web server)
-			FileUtils.chmod 744, self.full_filename
+			FileUtils.chmod 0644, self.full_filename
 			return true
 		end
 	end
