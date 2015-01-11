@@ -75,9 +75,11 @@ class	ImageSlide < Slide
 		tmp_file = Tempfile.new('isk-image')
 		command = "convert #{self.original_filename} -resize #{geo_str}"
 		command << " -background '#{bg_color}' -gravity center -extent #{size} #{tmp_file.path}"
-		system command
-		
-		return compare_new_image(tmp_file)
+		if system command
+			return compare_new_image(tmp_file)
+		else
+			raise Slide::ImageError, 'Error generating full size slide image!'
+		end
 	end
 	
 end

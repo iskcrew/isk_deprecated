@@ -19,9 +19,11 @@ class SvgSlide < Slide
 	
 	def generate_full_image
 		tmp_file = Tempfile.new('isk-image')
-		system inkscape_command_line(tmp_file)
-		
-		return compare_new_image(tmp_file)
+		if system inkscape_command_line(tmp_file)
+			return compare_new_image(tmp_file)
+		else
+			raise Slide::ImageError, 'Error converting the slide svg into PNG'
+		end
 	end
 
 end
