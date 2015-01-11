@@ -49,6 +49,9 @@ class SlidesControllerTest < ActionController::TestCase
 		Slide.send(:remove_const, :FilePath)
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
 		
+		Slide.all.each do |s|
+			init_slide_files(s)
+		end
 	end
 	
 	def teardown

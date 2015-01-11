@@ -17,7 +17,33 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  # Copy over placeover slide datafiles for testing purposes
+	def init_slide_files(slide)
+		imagefile = Rails.root.join('test', 'assets','image.png').to_s
+		svgfile = Rails.root.join('test', 'assets', 'slide.svg').to_s
+		
+		images = Array.new
+		
+		images << slide.full_filename.to_s
+		images << slide.preview_filename.to_s
+		images << slide.thumb_filename.to_s
+		
+		if slide.is_a?(ImageSlide) || slide.is_a?(HttpSlide)
+			images << slide.original_filename.to_s
+		end
+		
+		images.each do |i|
+			FileUtils.cp imagefile, i
+			FileUtils.chmod 0700, i
+		end
+		
+		if slide.respond_to? :svg_filename
+			FileUtils.cp  svgfile, slide.svg_filename.to_s
+			FileUtils.chmod 0700, slide.svg_filename.to_s
+		end
+		
+	end
+	
 	
 	# During testing we will end up generating slide datafiles in a temporary location.
 	# This method will clear any such files out and is generally called on teardown in tests
