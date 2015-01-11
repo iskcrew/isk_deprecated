@@ -1,5 +1,7 @@
 class TemplatesController < ApplicationController
-	# TODO: proper filters
+	
+	# ACLs
+	# TODO: proper filters, we require global admins in the mean time
 	before_action :require_global_admin
 	
 	def index

@@ -6,9 +6,9 @@
 
 
 class DisplaysController < ApplicationController
+	
+	# ACL filters
   before_action :require_create, :only => [:new, :create]
-  
-  
   skip_before_action :require_login, :only => [:show]
     
   def index

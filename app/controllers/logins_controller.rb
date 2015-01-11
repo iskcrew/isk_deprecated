@@ -6,6 +6,8 @@
 
 
 class LoginsController < ApplicationController
+	
+	# ACLs, we skip the requirement of having a logged in user for the login process
 	skip_before_action :require_login, :only => [:show, :create]
 
 	layout :login_layout

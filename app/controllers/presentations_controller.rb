@@ -6,6 +6,8 @@
 
 
 class PresentationsController < ApplicationController
+	
+	# ACLs
 	before_action :require_create, :only => [:new, :create]
 	
 	# List all presentations

@@ -7,6 +7,7 @@
 
 class IskdpyController < WebsocketRails::BaseController
 	
+	# Wrap calls into ActiveSupport::Notifications for logging
 	around_action :instrument_action
 	
 	# Work-around for websocket-rails issue #228

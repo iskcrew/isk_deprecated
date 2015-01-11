@@ -6,6 +6,8 @@
 
 
 class GroupsController < ApplicationController
+	
+	# ACL filters
 	before_action :require_create, :only => [:new, :create]
 	before_action :require_admin, :only => [:publish_all, :hide_all, :grant, :deny]
 	

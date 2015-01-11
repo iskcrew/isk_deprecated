@@ -7,6 +7,7 @@
 
 class UsersController < ApplicationController
 
+	# ACLs, we require global admin priviledges for all user operations
 	before_action :require_global_admin
 
 	# List all users
@@ -23,7 +24,7 @@ class UsersController < ApplicationController
 	#Grant roles to a user
 	def grant
 		user = User.find(params[:id])
-		
+
 		# Iterate over the posted hash of permissions
 		# If it is checked we add it (if needed) and if not
 		# we remove the role from the user (if needed)
@@ -56,7 +57,7 @@ class UsersController < ApplicationController
 	# Create a new user
 	# TODO: password verification into the model?
 	def create
-		User.transaction do 
+		User.transaction do
 			@user=User.new
 			@user.username = params[:user][:username]
 			if verify_password
@@ -68,7 +69,7 @@ class UsersController < ApplicationController
 			else
 				@user.errors.add "Passwords don't match",""
 			end
-			
+
 			flash[:error] = 'Error creating user'
 			render action: :new
 		end
@@ -103,11 +104,11 @@ class UsersController < ApplicationController
 			render action: :edit
 		end
 	end
-	
+
 	# Delete a user
 	def destroy
 		user = User.find(params[:id])
-		
+
 		# Disallow current user deleting itself
 		if user.id == current_user.id
 			flash[:error] = "You cannot delete your own user account!"
@@ -118,9 +119,9 @@ class UsersController < ApplicationController
 			redirect_to action: :index
 		end
 	end
-	
+
 	private
-	
+
 	def verify_password
 		params[:password][:password] == params[:password][:verify]
 	end
