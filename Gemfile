@@ -5,7 +5,7 @@ gem 'rails', '~> 4.1.8'
 
 # Database interfaces
 # gem 'sqlite3'
-gem 'pg', '~> 0.17.1'
+gem 'pg', '~> 0.18.1'
 
 # For migrating from mysql to postgresql
 # gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'

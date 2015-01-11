@@ -106,7 +106,7 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     multi_json (1.10.1)
-    pg (0.17.1)
+    pg (0.18.1)
     rack (1.5.2)
     rack-rewrite (1.2.1)
     rack-test (0.6.2)
@@ -228,7 +228,7 @@ DEPENDENCIES
   jquery-ui-rails
   lograge
   minitest-reporters
-  pg (~> 0.17.1)
+  pg (~> 0.18.1)
   rack-rewrite (~> 1.2.1)
   rails (~> 4.1.8)
   rails-erd
