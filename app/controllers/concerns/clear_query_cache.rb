@@ -20,7 +20,7 @@ module  ClearQueryCache
 	included do
 		# Register callbacks on the model we are included on
 
-		before_filter :clear_query_cache
+		before_action :clear_query_cache
 	end
 
 	private def clear_query_cache

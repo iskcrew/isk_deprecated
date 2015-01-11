@@ -9,7 +9,7 @@ class EventsController < ApplicationController
 	# their own slidesets.
 	
 	# Only admins should be able to change stuff in here
-	before_filter :require_global_admin
+	before_action :require_global_admin
 	
 	# List all events
 	def index

@@ -6,8 +6,8 @@
 
 
 class GroupsController < ApplicationController
-	before_filter :require_create, :only => [:new, :create]
-	before_filter :require_admin, :only => [:publish_all, :hide_all, :grant, :deny]
+	before_action :require_create, :only => [:new, :create]
+	before_action :require_admin, :only => [:publish_all, :hide_all, :grant, :deny]
 	
 	# Get list of all groups in the current event
 	def index

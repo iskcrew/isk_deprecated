@@ -6,11 +6,11 @@
 
 
 class SlidesController < ApplicationController		
-	before_filter :require_create, :only => [:new, :create, :clone]
-	before_filter :require_admin, :only => [:deny, :grant, :to_inkscape, :to_simple]
+	before_action :require_create, :only => [:new, :create, :clone]
+	before_action :require_admin, :only => [:deny, :grant, :to_inkscape, :to_simple]
 	
 	# Do not require login for getting the slide pictures
-	skip_before_filter :require_login, :only => [:preview, :full, :thumb]
+	skip_before_action :require_login, :only => [:preview, :full, :thumb]
 	
 	# List all slides in the current event
 	# TODO: Better support for filtering the slide list...

@@ -6,7 +6,7 @@
 
 
 class PresentationsController < ApplicationController
-	before_filter :require_create, :only => [:new, :create]
+	before_action :require_create, :only => [:new, :create]
 	
 	# List all presentations
 	#TODO: bind presentations to events and only list current ones

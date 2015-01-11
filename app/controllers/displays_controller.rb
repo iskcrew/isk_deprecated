@@ -6,10 +6,10 @@
 
 
 class DisplaysController < ApplicationController
-  before_filter :require_create, :only => [:new, :create]
+  before_action :require_create, :only => [:new, :create]
   
   
-  skip_before_filter :require_login, :only => [:show]
+  skip_before_action :require_login, :only => [:show]
     
   def index
     @displays = Display.order(:name)

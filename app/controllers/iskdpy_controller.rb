@@ -7,7 +7,7 @@
 
 class IskdpyController < WebsocketRails::BaseController
 	
-	around_filter :instrument_action
+	around_action :instrument_action
 	
 	# Work-around for websocket-rails issue #228
 	include ClearQueryCache

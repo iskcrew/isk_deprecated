@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
 	# TODO: proper filters
-	before_filter :require_global_admin
+	before_action :require_global_admin
 	
 	def index
 		@templates = SlideTemplate.current.all
