@@ -9,7 +9,7 @@
 
 class DisplaysController < ApplicationController
 	# ACL filters
-	before_action :require_create, :only => [:new, :create]
+	before_action :require_create, only: [:new, :create]
 	
 	# List all displays
 	# We support html or json for the whole list and
