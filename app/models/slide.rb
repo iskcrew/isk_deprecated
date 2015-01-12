@@ -329,32 +329,23 @@ class Slide < ActiveRecord::Base
 		Event.current.picture_sizes
 	end
 
-	# Shell command to resize the full sized slide image to requested size.
-	# Size should be a array like [width, height]
-	def resize_command(file, size)
-		"convert #{self.full_filename} -resize #{size.join('x')} #{file}"
-	end
-
 	# Create the preview images from the full size slide image
 	def generate_previews
 		system resize_command(self.preview_filename, picture_sizes[:preview])
 		system resize_command(self.thumb_filename, picture_sizes[:thumb])
 	end
 
-	# Update timestamps of all associated objects
-	def update_timestamps
-		touch_by_group(self.master_group_id)
-		if changed.include? 'master_group_id'
-			touch_by_group(self.master_group_id_was)
-		end
+	# Shell command to resize the full sized slide image to requested size.
+	# Size should be a array like [width, height]
+	def resize_command(file, size)
+		"convert #{self.full_filename} -resize #{size.join('x')} #{file}"
 	end
 
 	# Generate the full size slideimage from svg with inkscape
 	def inkscape_command_line(tmp_file)
 		size = picture_sizes[:full]
-		command = 'cd '' && inkscape'
+		# Chance to proper directory
 		command = "cd #{Slide::FilePath} && inkscape"
-
 		# Export size
 		command << " -w #{size.first} -h #{size.last}"
 		# Export to file
@@ -382,15 +373,24 @@ class Slide < ActiveRecord::Base
 		end
 	end
 
+	# Update timestamps of all associated objects
+	def update_timestamps
+		touch_by_group(self.master_group_id)
+		if changed.include? 'master_group_id'
+			touch_by_group(self.master_group_id_was)
+		end
+	end
+
 	# We need to proganate timestamps down the presentation chain for
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
+		# Touch displays
 		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
 		d.update_all(updated_at: Time.now.utc)
-
+		# Touch presentations
 		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
 		p.update_all(updated_at: Time.now.utc)
-
+		# Touch groups
 		MasterGroup.where(id: group_id).update_all(updated_at: Time.now.utc)
 	end
 
