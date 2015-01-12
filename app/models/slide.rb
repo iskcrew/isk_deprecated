@@ -206,7 +206,6 @@ class Slide < ActiveRecord::Base
 	end
 	
 	# Generate the various different sized images from the slide master image
-	# TODO: Rely more on subclasses
 	def generate_images 
 		if generate_full_image
 			generate_previews
@@ -217,6 +216,7 @@ class Slide < ActiveRecord::Base
 		self.save!
 	end
 	
+	# Filenames of different sized slide images
 	def thumb_filename
 		FilePath.join(self.filename + '_thumb.png')
 	end
@@ -233,12 +233,14 @@ class Slide < ActiveRecord::Base
 		FilePath.join(self.filename + '_original')
 	end
 	
+	# Override the default destroy method to soft-delete slides
 	def destroy
 		self.deleted = true
 		self.master_group_id = Event.current.thrashed.id
 		self.save!
 	end
 	
+	# Mark the slide as not deleted.
 	def undelete
 		self.deleted = false
 		self.save!
@@ -284,7 +286,6 @@ class Slide < ActiveRecord::Base
 		@_svg_data = svg_data
 
 		write_svg_data
-		
 	end
 
 	# Send websocket-messages when a slides images have been updated
@@ -321,10 +322,14 @@ class Slide < ActiveRecord::Base
 		@_picture_sizes ||= self.event.picture_sizes
 	end
 	
+	# Convenience method of getting the configured picture sizes of
+	# the current event.
 	def self.picture_sizes
 		Event.current.picture_sizes
 	end
 	
+	# Shell command to resize the full sized slide image to requested size.
+	# Size should be a array like [width, height]
 	def resize_command(file, size)
 		"convert #{self.full_filename} -resize #{size.join('x')} #{file}"
 	end
@@ -335,6 +340,7 @@ class Slide < ActiveRecord::Base
 		system resize_command(self.thumb_filename, picture_sizes[:thumb])
 	end
 	
+	# Update timestamps of all associated objects
 	def update_timestamps
 		touch_by_group(self.master_group_id)
 		if changed.include? 'master_group_id'
@@ -358,6 +364,9 @@ class Slide < ActiveRecord::Base
 		return command 
 	end
 	
+	# Compare the passed file against the current slide image.
+	# If they differ then copy the tmp_file image as the new slide image.
+	# TODO: Should we be extra careful and validate the image?
 	def compare_new_image(tmp_file)
 		if File.exist?(self.full_filename) && FileUtils.compare_file(tmp_file.path, self.full_filename)
 			# Generated image is the same as the previous one
