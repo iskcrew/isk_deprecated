@@ -1,17 +1,15 @@
 # ISK - A web controllable slideshow system
 #
 # Author::		Vesa-Pekka Palmu
-# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# Copyright:: Copyright (c) Vesa-Pekka Palmu
 # License::		Licensed under GPL v3, see LICENSE.md
 
-
 class PresentationsController < ApplicationController
-	
 	# ACLs
-	before_action :require_create, :only => [:new, :create]
+	before_action :require_create, only: [:new, :create]
 	
 	# List all presentations
-	#TODO: bind presentations to events and only list current ones
+	# TODO: bind presentations to events and only list current ones
 	def index
 		@presentations = current_event.presentations.order(:name)
 	end
@@ -23,13 +21,12 @@ class PresentationsController < ApplicationController
 		
 		respond_to do |format|
 			format.html
-			format.json {render :json =>JSON.pretty_generate(@presentation.to_hash)}
-			
+			format.json {render json: JSON.pretty_generate(@presentation.to_hash)}
 		end
 	end
 	
-	#Change the order of groups in a presentation
-	#Triggered from jquery.sortable widged via ajax
+	# Change the order of groups in a presentation
+	# Triggered from jquery.sortable widged via ajax
 	def sort
 		@presentation = Presentation.includes(groups: :master_group).find(params[:id])
 		require_edit @presentation
@@ -42,12 +39,11 @@ class PresentationsController < ApplicationController
 				format.js {render :sortable_items}
 			end
 		else
-			render :text => "Invalid group count, try refreshing", :status => 400
+			render text: "Invalid group count, try refreshing", status: 400
 		end
-		
 	end
 	
-	#Add all slides in this presentation into override queue for a display
+	# Add all slides in this presentation into override queue for a display
 	def add_to_override
 		presentation = Presentation.find(params[:id])
 		display = Display.find(params[:override][:display_id])
@@ -61,12 +57,11 @@ class PresentationsController < ApplicationController
 		else
 			flash[:error] = "You can't add slides to the override queue on display " + display.name
 		end
-		redirect_to :action => :show, :id => presentation.id
-		
+		redirect_to presentation_path(presentation)
 	end
 	
-	#Add a single group to a presentation
-	#TODO: move the logic to model
+	# Add a single group to a presentation
+	# TODO: move the logic to model
 	def add_group
 			@presentation = Presentation.find(params[:id])
 			require_edit @presentation
@@ -79,7 +74,7 @@ class PresentationsController < ApplicationController
 			redirect_to :back
 	end
 	
-	#Remove a single group from this presentation
+	# Remove a single group from this presentation
 	def remove_group
 		g = Group.find(params[:id])
 		p = g.presentation
@@ -89,53 +84,54 @@ class PresentationsController < ApplicationController
 		flash[:notice] = "Removed group " + g.name + " from presentation"
 		redirect_to :back
 	end
-		
-	#Generate a preview of the presentation, showing all the slides in order
+	
+	# Generate a preview of the presentation, showing all the slides in order
 	def preview
 		@presentation = Presentation.find(params[:id])
 	end
 	
-	#Render form for creating a new presentation	
+	# Render form for creating a new presentation
 	def new
 		@presentation = Presentation.new
 	end
 	
-	#Create a new presentation
-	#If the current user isn't admin add him to the ACL list for this presentation
+	# Create a new presentation
+	# If the current user isn't admin add him to the ACL list for this presentation
 	def create
 		@presentation = Presentation.new(presentation_params)
 		if @presentation.save
 			@presentation.authorized_users << current_user unless Presentation.admin?(current_user)
 			flash[:notice] = 'Presentation was successfully created.'
-			redirect_to :action => :show, :id => @presentation.id
+			redirect_to presentation_path(@presentation)
 		else
-			render :action => :new
-		end	 
+			render action: :new
+		end
 	end
 		
-	#Render the edit form for a presentation
+	# Render the edit form for a presentation
 	def edit
 		@presentation = Presentation.find(params[:id])
 		require_edit @presentation
 		
 		#Seeing what groups aren't already in the presentation is useful sometimes
 		@orphan_groups = current_event.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id	IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq
-	end	 
+	end
 	
-	#Update a presentation
-	#TODO: rewrite the js so that #sort method can be killed off and use this instead	 
+	# Update a presentation
+	# TODO: rewrite the js so that #sort method can be killed off and use this instead
 	def update
 		@presentation =Presentation.find(params[:id])
 		require_edit @presentation
 		
 		if @presentation.update_attributes(presentation_params)
 			flash[:notice] = 'Presentation was successfully updated.'
-			redirect_to :action => 'show', :id => @presentation.id
+			redirect_to presentation_path(@presentation)
 		else
-			render :action => 'edit'
+			render action: :edit
 		end
 	end
 	
+	# FIXME: Move ACL stuff to nested controller
 	# Remove a user from the ACL for this presentation
 	def deny
 		presentation = Presentation.find(params[:id])
@@ -149,25 +145,22 @@ class PresentationsController < ApplicationController
 		presentation = Presentation.find(params[:id])
 		user = User.find(params[:grant][:user_id])
 		presentation.authorized_users << user
-		redirect_to :back		 
+		redirect_to :back
 	end
-	
 	
 	private
 	
 	def presentation_params
 		params.required(:presentation).permit(:name, :effect_id, :delay)
-		
 	end
 	
-	#Filter for actions requiring presentation_admin role
+	# Filter for actions requiring presentation_admin role
 	def require_admin
 		raise ApplicationController::PermissionDenied unless Presentation.admin? current_user
 	end
 	
-	#Filter for actions requiring presentation_create role
+	# Filter for actions requiring presentation_create role
 	def require_create
 		raise ApplicationController::PermissionDenied unless Presentation.can_create? current_user
 	end
-		
 end
