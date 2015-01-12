@@ -371,23 +371,7 @@ class Slide < ActiveRecord::Base
 			return true
 		end
 	end
-	
-	# FIXME: Migrate old legacy stuff to new ones and kill this in favor of inkscape
-	def rsvg_command(type = :full)
-		size = picture_sizes[:full]
-		command = 'cd ' << FilePath.to_s << ' && rsvg-convert'
 		
-		if type == :full
-			command << " -w #{size.first} -h #{size.last}"
-			command << " --base-uri #{Slide::FilePath}/"
-			command << ' -f png'
-			command << ' -o ' << self.full_filename.to_s
-			command << ' ' << self.svg_filename.to_s
-		end
-		
-		return command
-	end
-	
 	# We need to proganate timestamps down the presentation chain for
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
