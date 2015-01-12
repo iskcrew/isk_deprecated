@@ -34,12 +34,12 @@ class ActiveSupport::TestCase
 		
 		images.each do |i|
 			FileUtils.cp imagefile, i
-			FileUtils.chmod 0700, i
+			FileUtils.chmod 0600, i
 		end
 		
 		if slide.respond_to? :svg_filename
 			FileUtils.cp  svgfile, slide.svg_filename.to_s
-			FileUtils.chmod 0700, slide.svg_filename.to_s
+			FileUtils.chmod 0600, slide.svg_filename.to_s
 		end
 		
 	end
