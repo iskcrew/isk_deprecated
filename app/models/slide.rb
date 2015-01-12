@@ -58,6 +58,8 @@ class Slide < ActiveRecord::Base
 	include HasTickets
 	# ACL system
 	include ModelAuthorization
+	# Cache sweeper
+	include CacheSweeper
 
 	# Constants
 	# FIXME: Verify host isn't used anywhere anymore and remove it

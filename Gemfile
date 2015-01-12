@@ -55,9 +55,6 @@ gem 'bcrypt', '~> 3.1.7'
 # font-awesome-sass for icons
 gem 'font-awesome-sass'
 
-# We use observers
-gem 'rails-observers'
-
 # Better memcached interface
 gem 'dalli'
 

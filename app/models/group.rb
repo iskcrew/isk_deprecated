@@ -22,6 +22,8 @@ class Group < ActiveRecord::Base
 
 	# Send websocket messages on create and update
 	include WebsocketMessages
+	# Cache sweeper
+	include CacheSweeper
 
 	def to_hash
 		hash = Hash.new
