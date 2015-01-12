@@ -39,7 +39,7 @@ class Slide < ActiveRecord::Base
 	# Scopes for common queries
 	scope :published, -> {where(public: true)}
 	scope :hidden, -> {where(public: false)}
-	scope :current, -> {where(deleted: false).where(:replacement_id => nil)}
+	scope :current, -> {where(deleted: false).where(replacement_id: nil)}
 	scope :thrashed, -> {where('replacement_id is not null OR deleted = ?', true)}
 
 	# slide.master_group_name delegation
@@ -99,7 +99,7 @@ class Slide < ActiveRecord::Base
 
 	# Log that the slide has been shown on display_id just now.
 	def shown_on(display_id)
-		self.display_counts.create(:display_id => display_id)
+		self.display_counts.create(display_id: display_id)
 	end
 
 	# Create new ungrouped hidden clone of the slide
@@ -128,13 +128,13 @@ class Slide < ActiveRecord::Base
 
 	# Find all displays that have this slide in either their presentation or in their override queues.
 	def displays
-		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
+		displays_via_presentation = Display.joins(presentation: {groups: {master_group: :slides}}).where(slides: {id: self.id}).uniq
 		return displays_via_presentation.to_a | override.to_a
 	end
 
 	# Find all displays that have this slide in their override queues
 	def override
-		Display.joins(:override_queues => :slide).where(:slides => {:id => self.id}).uniq
+		Display.joins(override_queues: :slide).where(slides: {id: self.id}).uniq
 	end
 
 	# Create a hash with the slide metadata
@@ -385,7 +385,7 @@ class Slide < ActiveRecord::Base
 	# the dpy, as it updates it's data based on timestamps
 	def touch_by_group(group_id)
 		# Touch displays
-		d = Display.joins(:presentation => :master_groups).where(master_groups: {id: group_id})
+		d = Display.joins(presentation: :master_groups).where(master_groups: {id: group_id})
 		d.update_all(updated_at: Time.now.utc)
 		# Touch presentations
 		p = Presentation.joins(:master_groups).where(master_groups: {id: group_id})
