@@ -30,10 +30,10 @@ class EventsController < ApplicationController
 				flash[:notice] = "Event created."
 			else
 				flash[:error] = "Error creating event"
-				render :action => :new
+				render action: :new
 				return
 			end
-			redirect_to :action => :index
+			redirect_to events_path
 		end
 	end
 	
@@ -52,12 +52,15 @@ class EventsController < ApplicationController
 		@event = Event.find(params[:id])
 		if @event.update_attributes(event_params)
 			flash[:notice] = 'Event was successfully updated.'
-			redirect_to :action => :index
+			redirect_to events_path
 		else
-			render :action => 'edit'
+			render action: :edit
 		end
 	end
 	
+	# Destroy a event
+	# FIXME: The deletion is currently not routed.
+	# we need to figure out what to do with all the slides etc associated to the deleted event.
 	def destroy
 		event = Event.find(params[:id])
 		if event.destroy
