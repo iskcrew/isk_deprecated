@@ -97,12 +97,12 @@ class Slide < ActiveRecord::Base
 		self.where(:master_group_id => Event.current.ungrouped.id)
 	end
 	
-	#Log that the slide has been shown on display_id just now.
+	# Log that the slide has been shown on display_id just now.
 	def shown_on(display_id)
 		self.display_counts.create(:display_id => display_id)
 	end
 	
-	#Create new ungrouped hidden clone of the slide
+	# Create new ungrouped hidden clone of the slide
 	def clone!
 		new_slide = self.dup
 		new_slide.public = false
@@ -125,12 +125,14 @@ class Slide < ActiveRecord::Base
 		end
 		return new_slide
 	end
-		
+	
+	# Find all displays that have this slide in either their presentation or in their override queues.
 	def displays
 		displays_via_presentation = Display.joins(:presentation => {:groups => {:master_group => :slides}}).where(:slides => {:id => self.id}).uniq
 		return displays_via_presentation.to_a | override.to_a
 	end
 	
+	# Find all displays that have this slide in their override queues
 	def override
 		Display.joins(:override_queues => :slide).where(:slides => {:id => self.id}).uniq
 	end
