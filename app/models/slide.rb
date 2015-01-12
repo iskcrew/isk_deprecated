@@ -236,13 +236,14 @@ class Slide < ActiveRecord::Base
 	# Override the default destroy method to soft-delete slides
 	def destroy
 		self.deleted = true
-		self.master_group_id = Event.current.thrashed.id
+		self.master_group = Event.current.thrashed
 		self.save!
 	end
 	
 	# Mark the slide as not deleted.
 	def undelete
 		self.deleted = false
+		self.master_group = Event.current.ungrouped
 		self.save!
 	end
 	
