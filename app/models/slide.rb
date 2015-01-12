@@ -88,15 +88,7 @@ class Slide < ActiveRecord::Base
 	def hide
 		self[:public] = false
 	end
-	
-	def grouped
-		self.where('master_group_id != ?', Event.current.ungrouped.id)
-	end
-	
-	def ungrouped
-		self.where(:master_group_id => Event.current.ungrouped.id)
-	end
-	
+		
 	# Log that the slide has been shown on display_id just now.
 	def shown_on(display_id)
 		self.display_counts.create(:display_id => display_id)
