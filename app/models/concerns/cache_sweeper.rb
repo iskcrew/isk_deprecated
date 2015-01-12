@@ -54,7 +54,7 @@ module CacheSweeper
 		elsif self.is_a? User
 			
 		elsif self.is_a? Group
-			Cashier.expire self.presentation.cache_tag
+			Cashier.expire obj.presentation.cache_tag
 		elsif self.is_a? Permission
 			Cashier.expire self.user.cache_tag
 		else
