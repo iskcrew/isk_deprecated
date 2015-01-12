@@ -17,16 +17,16 @@ class MasterGroup < ActiveRecord::Base
 	validates :name, presence: true, length: { maximum: 100 }
 	validates :internal, inclusion: { in: [true, false] }
 	
+	# ACL system
 	include ModelAuthorization
-
 	# Send websocket messages on create and update
 	include WebsocketMessages
-	
 	# Allow zipping all associated slide images
 	include ZipSlides
-
 	# Ticket system
 	include HasTickets
+	# Cache sweeper
+	include CacheSweeper
 	
 	scope :defined_groups, -> {where(internal: false).order('name')}
 	
