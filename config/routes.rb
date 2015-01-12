@@ -70,7 +70,6 @@ Isk::Application.routes.draw do
 		member do
 			get 'presentation'
 			get 'slide_queue'
-			get 'slide_stats'
 			post 'sort_queue'
 			post 'remove_override'
 			put 'update_override'

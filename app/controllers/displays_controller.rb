@@ -47,11 +47,6 @@ class DisplaysController < ApplicationController
 		end
 	end
 	
-	# Get the 
-	def slide_stats
-		@display = Display.find(params[:id])
-	end
-	
 	# Delete a display and associated data
 	def destroy
 		# Only admins can delete displays
