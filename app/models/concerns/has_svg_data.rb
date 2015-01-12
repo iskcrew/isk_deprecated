@@ -8,6 +8,8 @@ module HasSvgData
 	extend ActiveSupport::Concern
 	
 	included do
+		# Instance variable to store the svg data in memory between writes
+		@_svg_data = nil
 		
 		# Register a after-create callback to write the svg data on new records
 		after_create do 

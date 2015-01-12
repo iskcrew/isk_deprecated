@@ -63,7 +63,9 @@ class Slide < ActiveRecord::Base
 		# no further implementation necessary
 	end
 	
-	
+	# We need to set the model names and partial paths on all slides inheriting from Slide
+	# If we don't do this we would need to create different partials for each slide type, and handle
+	# them in forms
 	def self.inherited(child)
 		child.instance_eval do
 			def model_name
@@ -78,8 +80,6 @@ class Slide < ActiveRecord::Base
 		end
 		super
 	end
-	
-	@_svg_data = nil	
 	
 	def publish
 		self[:public] = true
