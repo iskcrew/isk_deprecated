@@ -1,5 +1,8 @@
 # ISK - A web controllable slideshow system
 #
+# A WebsocketRails controller to handle the client_connected events
+# We use this to only allow logged in users to open websocket connections.
+#
 # Author::		Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::		Licensed under GPL v3, see LICENSE.md
