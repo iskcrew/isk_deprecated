@@ -331,13 +331,8 @@ class Slide < ActiveRecord::Base
 	
 	# Create the preview images from the full size slide image
 	def generate_previews
-		if system resize_command(self.preview_filename, picture_sizes[:preview])
-			if system resize_command(self.thumb_filename, picture_sizes[:thumb])
-				return true
-			end
-		else
-			raise Slide::ImageError, 'Error creating slide thumbnails'
-		end
+		system resize_command(self.preview_filename, picture_sizes[:preview])
+		system resize_command(self.thumb_filename, picture_sizes[:thumb])
 	end
 	
 	def update_timestamps
