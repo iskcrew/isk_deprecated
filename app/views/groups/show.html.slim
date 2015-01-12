@@ -44,7 +44,7 @@ div#tabs
 			h2 Add all slides in this group to override on a display
 			= form_for :override, url: add_to_override_group_path(@group) do |f|
 				= f.label :display_id, 'Display:'
-				= f.collection_select(:diplay_id, Display.can_override(current_user), :id, :name)
+				= f.collection_select(:display_id, Display.can_override(current_user), :id, :name)
 				= f.label :duration, 'Duration for each slide (sec):'
 				= f.text_field :duration, value: 60, size: 4, class: 'duration_spinner'
 				= f.submit 'Add to override'
