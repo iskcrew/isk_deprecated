@@ -1,12 +1,10 @@
 # ISK - A web controllable slideshow system
 #
 # Author::		Vesa-Pekka Palmu
-# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# Copyright:: Copyright (c) Vesa-Pekka Palmu
 # License::		Licensed under GPL v3, see LICENSE.md
 
-
 class UsersController < ApplicationController
-
 	# ACLs, we require global admin priviledges for all user operations
 	before_action :require_global_admin
 
@@ -35,7 +33,6 @@ class UsersController < ApplicationController
 				unless user.roles.include?(r)
 					user.roles << r
 				end
-
 			else
 				# User shouldn't have this role
 				if user.roles.include?(r)
@@ -46,7 +43,6 @@ class UsersController < ApplicationController
 		user.save!
 		flash[:notice] = "User roles changed"
 		redirect_to users_path
-
 	end
 
 	# A form for creating a new user
@@ -69,7 +65,6 @@ class UsersController < ApplicationController
 			else
 				@user.errors.add "Passwords don't match",""
 			end
-
 			flash[:error] = 'Error creating user'
 			render action: :new
 		end
@@ -125,5 +120,4 @@ class UsersController < ApplicationController
 	def verify_password
 		params[:password][:password] == params[:password][:verify]
 	end
-
 end
