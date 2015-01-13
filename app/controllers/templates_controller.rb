@@ -1,21 +1,30 @@
+# ISK - A web controllable slideshow system
+#
+# Author::		Vesa-Pekka Palmu
+# Copyright:: Copyright (c) Vesa-Pekka Palmu
+# License::		Licensed under GPL v3, see LICENSE.md
+
 class TemplatesController < ApplicationController
-	
 	# ACLs
 	# TODO: proper filters, we require global admins in the mean time
 	before_action :require_global_admin
 	
+	# List all templates for the current event
 	def index
 		@templates = SlideTemplate.current.all
 	end
 	
+	# Show details on a given template
 	def show
 		@template = SlideTemplate.find(params[:id])
 	end
 	
+	# form for creating a new template
 	def new
 		@template = SlideTemplate.new
 	end
 	
+	# create a new template
 	def create
 		@template = SlideTemplate.new(template_params)
 		@template.event = current_event
@@ -29,7 +38,7 @@ class TemplatesController < ApplicationController
 		end
 	end
 	
-	#Change the order of slides in the group, used with jquerry sortable widget.
+	# Change the order of slides in the group, used with jquerry sortable widget.
 	def sort
 		@template = SlideTemplate.find(params[:id])
 		
@@ -41,15 +50,16 @@ class TemplatesController < ApplicationController
 				format.js {render :sortable_items}
 			end
 		else
-			render :text => "Invalid request data", :status => 400
+			render text: "Invalid request data", status: 400
 		end		
 	end
 	
-	
+	# Edit form for a template
 	def edit
 		@template = SlideTemplate.find(params[:id])
 	end
 	
+	# Update a template
 	def update
 		@template = SlideTemplate.find(params[:id])
 
@@ -57,11 +67,12 @@ class TemplatesController < ApplicationController
 			flash[:notice] = 'Template was successfully updated.'
 			redirect_to template_path(@template)
 		else
-			render :action => 'edit'
+			render action: :edit
 		end
 		
 	end
 	
+	# Delete a given template and all slides based on it.
 	def destroy
 		template = SlideTemplate.find(params[:id])
 		template.destroy
@@ -71,6 +82,7 @@ class TemplatesController < ApplicationController
 	
 	private
 	
+	# Whitelist post parameters for update
 	def update_params
 		params.required(:slide_template).permit(
 			:name, 
@@ -79,8 +91,8 @@ class TemplatesController < ApplicationController
 		)
 	end
 
+	# Whitelist post parameters for create
 	def template_params
 		params.required(:slide_template).permit(:name, :upload)
-	end
-	
+	end	
 end
