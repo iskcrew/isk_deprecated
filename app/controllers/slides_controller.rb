@@ -8,11 +8,10 @@
 class SlidesController < ApplicationController
 
 	# ACLs
-	before_action :require_create, :only => [:new, :create, :clone]
-	before_action :require_admin, :only => [:deny, :grant, :to_inkscape, :to_simple]
-
+	before_action :require_create, only: [:new, :create, :clone]
+	before_action :require_admin, only: [:deny, :grant, :to_inkscape, :to_simple]
 	# Do not require login for getting the slide pictures
-	skip_before_action :require_login, :only => [:preview, :full, :thumb]
+	skip_before_action :require_login, only: [:preview, :full, :thumb]
 
 	# List all slides in the current event
 	# TODO: Better support for filtering the slide list...
@@ -129,14 +128,14 @@ class SlidesController < ApplicationController
 			end
 
 			respond_to do |format|
-				format.html {redirect_to :action => :show, :id => @slide.id}
+				format.html {redirect_to slide_path(@slide)}
 				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}}
 			end
 
 		rescue Slide::ImageError
 			# image invalid
 			flash[:error] = "Error creating slide, invalid image file"
-			render :action => :new_after_error
+			render action: :new_after_error
 		end
 
 	end
@@ -165,7 +164,7 @@ class SlidesController < ApplicationController
 				respond_to do |format|
 					format.html {
 						flash[:notice] = 'Slide was successfully updated.'
-						redirect_to :action => 'show', :id => @slide.id and return
+						redirect_to slide_path(@slide) and return
 					}
 					format.js {render :show}
 					format.json {
@@ -178,7 +177,7 @@ class SlidesController < ApplicationController
 				end
 			else
 				flash[:error] = "Error updating slide"
-				render :action => 'edit' and return
+				render action: :edit and return
 			end
 		end
 	end
@@ -192,19 +191,18 @@ class SlidesController < ApplicationController
 		@slide.destroy
 		@slide.save!
 
-		redirect_to :action => :show, :id => @slide.id
+		redirect_to slide_path(@slide)
 	end
 
 	# Remove the deleted flag and move the slide from thrash to ungrouped.
 	def undelete
 		@slide = Slide.find(params[:id])
-
 		require_edit(@slide)
 
 		@slide.undelete
 		@slide.save!
 
-		redirect_to :action => :show, :id => @slide.id
+		redirect_to slide_path(@slide)
 	end
 
 	# Create a clone of the slide
@@ -214,7 +212,7 @@ class SlidesController < ApplicationController
 		slide.delay.generate_images unless slide.ready
 		flash[:notice] = "Slide cloned."
 
-		redirect_to :action => :show, :id => slide.id
+		redirect_to slide_path(slide)
 	end
 
 
@@ -271,7 +269,7 @@ class SlidesController < ApplicationController
 
 		group.slides << slide
 
-		flash[:notice] = "Added slide " << slide.name << " to group " << group.name
+		flash[:notice] = "Added slide #{slide.name} to group #{group.name}."
 
 		redirect_to :back
 	end
@@ -314,11 +312,11 @@ class SlidesController < ApplicationController
 	end
 
 	# Get the svg datafile for a slide for external editing in inkscape etc.
+	# FIXME: move svg handling to nexted svg controller
 	def svg_data
 		@slide = Slide.find(params[:id])
 		@slide.update_metadata! if @slide.is_a? InkscapeSlide
-
-		send_file @slide.svg_filename, :disposition => 'attachment'
+		send_file @slide.svg_filename, disposition: 'attachment'
 	end
 
 	# Save the submitted svg to a slide. Used by the inkscape plugins
@@ -331,7 +329,7 @@ class SlidesController < ApplicationController
 		@slide.save!
 		@slide.delay.generate_images
 
-		render :nothing => true
+		render nothing: true
 	end
 
 
@@ -343,7 +341,7 @@ class SlidesController < ApplicationController
 		slide.replace! ink
 		flash[:notice] = "Slide was converted to inkscape slide"
 
-		redirect_to :action => :show, :id => ink.id
+		redirect_to slide_path(ink)
 	end
 
 	# Convert a slide to a simple editor slide
@@ -355,15 +353,12 @@ class SlidesController < ApplicationController
 				slide.replace! simple
 
 				flash[:notice] = "Slide was converted simple slide"
-
-				redirect_to :action => :edit, :id => simple.id
-
+				redirect_to slide_path(simple)
 			end
 
 		rescue ConvertError
 			flash[:error] = "Conversion error, maybe slide has images?"
-			redirect_to :action => :show, :id => slide.id
-
+			redirect_to slide_path(slide)
 		end
 	end
 
@@ -382,18 +377,18 @@ class SlidesController < ApplicationController
 		begin
 			slide = Slide.find(params[:id])
 			if slide.ready
-				send_file(slide.full_filename, {:disposition => 'inline'})
+				send_file(slide.full_filename, {disposition: 'inline'})
 			else
-				render :nothing => true, :status => 503
+				render nothing: true, status: 503
 			end
 		rescue ActiveRecord::RecordNotFound, ActionController::MissingFile
-			render :nothing => true, :status => 404
+			render nothing: true, status: 404
 		end
 	end
 
-
 	private
 
+	# Send a given sized slide image
 	def send_slide_image(size)
 		case size
 		when :full
@@ -403,16 +398,17 @@ class SlidesController < ApplicationController
 		else
 			filename = @slide.preview_filename
 		end
-
-		if stale?(:last_modified => @slide.images_updated_at.utc, :etag => @slide)
+		
+		if stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
 			respond_to do |format|
 				format.html {
+					# Set content headers so that browser based displays can use the image
 					response.headers['Access-Control-Allow-Origin'] = '*'
 					response.headers['Access-Control-Request-Method'] = 'GET'
 					if @slide.ready
-						send_file(filename, {:disposition => 'inline'})
+						send_file(filename, {disposition: 'inline'})
 					else
-						send_file(Rails.root.join('data','no_image.jpg'), {:disposition => 'inline'})
+						send_file(Rails.root.join('data','no_image.jpg'), {disposition: 'inline'})
 					end
 				}
 				format.js {render :show}
@@ -439,5 +435,4 @@ class SlidesController < ApplicationController
 			raise ApplicationController::PermissionDenied
 		end
 	end
-
 end
