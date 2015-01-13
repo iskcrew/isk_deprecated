@@ -10,10 +10,9 @@ class SchedulesController < ApplicationController
 	# We require admin priviledges for all actions for now...
 	before_action :require_global_admin
 	
-	# List all schedules
-	# TODO: only for current event
+	# List all schedules in the current event
 	def index
-		@schedules = Schedule.all
+		@schedules = Schedule.current
 	end
 
 	# Show details on given schedule

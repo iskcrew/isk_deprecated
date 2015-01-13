@@ -28,6 +28,11 @@ class Schedule < ActiveRecord::Base
 		schedule.up_next_group.update_attributes(:name => ('Schedule: ' + schedule.name + ' up next'))
 	end
 	
+	# Return all schedules in the current event
+	def self.current
+		self.where(event_id: Event.current.id)
+	end
+	
 	#Generate schedule slides
 	def generate_slides
 		Schedule.transaction do
