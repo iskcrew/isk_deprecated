@@ -130,7 +130,7 @@ class DisplaysController < ApplicationController
 				format.js {render :sortable_items}
 			end
 		else
-			render :text => "Invalid request, try refreshing", :status => 400
+			render text: "Invalid request, try refreshing", status: :bad_request
 		end				
 	end
 	
