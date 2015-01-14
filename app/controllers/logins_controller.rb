@@ -53,7 +53,13 @@ class LoginsController < ApplicationController
 	def destroy
 		reset_session
 		flash[:notice]="User logged out"
-		redirect_to :action => :show
+		respond_to do |format|
+			format.html { redirect_to login_path, status: :see_other }
+			format.json { 
+				render json: { message: flash[:notice] }
+				flash.clear
+			}
+		end
 	end
 
 	private
