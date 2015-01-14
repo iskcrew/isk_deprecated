@@ -55,7 +55,7 @@ class DisplaysController < ApplicationController
 		display = Display.find(params[:id])
 		display.destroy
 		flash[:notice] = "Deleted display id: #{display.id} - #{display.name}"
-		redirect_to displays_path
+		redirect_to displays_path, status: :see_other
 	end
 	
 	# FIXME: allow creation of displays from the web gui
@@ -83,13 +83,13 @@ class DisplaysController < ApplicationController
 			respond_to do |format|
 				format.html {
 					flash[:notice] = 'Display was successfully updated.'
-					redirect_to :action => :show, :id => @display.id
+					redirect_to display_path(@display), status: :see_other
 				}
 				format.js {render :show}
 			end
 		else
-			flash[:error] = "Error updating display."
-			render :action => 'edit' and return
+			flash.now[:error] = "Error updating display."
+			render action: :edit and return
 		end		 
 	end	 
 	
