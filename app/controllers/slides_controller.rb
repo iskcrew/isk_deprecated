@@ -1,12 +1,10 @@
 # ISK - A web controllable slideshow system
 #
 # Author::		Vesa-Pekka Palmu
-# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# Copyright:: Copyright (c) Vesa-Pekka Palmu
 # License::		Licensed under GPL v3, see LICENSE.md
 
-
 class SlidesController < ApplicationController
-
 	# ACLs
 	before_action :require_create, only: [:new, :create, :clone]
 	before_action :require_admin, only: [:deny, :grant, :to_inkscape, :to_simple]
@@ -24,7 +22,7 @@ class SlidesController < ApplicationController
 			@groups << current_event.ungrouped
 			@groups += MasterGroup.current.order("LOWER(name)").includes(:slides).to_a
 		end
-
+		
 		respond_to do |format|
 			format.js
 			format.html
@@ -35,7 +33,7 @@ class SlidesController < ApplicationController
 	# the slide info block as needed
 	def show
 		@slide = Slide.find(params[:id])
-
+		
 		respond_to do |format|
 			format.html
 			format.js
@@ -46,20 +44,19 @@ class SlidesController < ApplicationController
 	# Reduced user permissions might limit what we allow the user to create
 	def new
 		@slide = Slide.new
-
+		
 		unless Slide.admin? current_user
 			#sallitaan vain yksinkertaisten ryhmättömien kelmujen luonti
 			render :new_simple
 			return
 		end
-
+		
 		respond_to do |format|
 			format.html
 			format.js {
 				@slide = TemplateSlide.new(foreign_object_id: params[:slide_template_id])
 			}
 		end
-
 	end
 
 	# Create a new slide
@@ -70,11 +67,11 @@ class SlidesController < ApplicationController
 		begin
 			# We need to use a transaction to catch potential errors on processing submitted image data
 			Slide.transaction do
-
+				
 				unless params[:create_type] == 'simple' || Slide.admin?(current_user)
 					raise ApplicationController::PermissionDenied
 				end
-
+				
 				# Create the requested type of slide
 				case params[:create_type]
 				when 'simple'
@@ -90,7 +87,7 @@ class SlidesController < ApplicationController
 				else
 					@slide = Slide.new(slide_params)
 				end
-
+				
 				unless @slide.save
 					respond_to do |format|
 						format.html {
@@ -102,9 +99,9 @@ class SlidesController < ApplicationController
 						}
 					end and return
 				end
-
+				
 				@slide.reload
-
+				
 				# FIXME: The file operations could be prettier and in models
 				# They need to be done after we know the slide id....
 				case params[:create_type]
@@ -117,27 +114,24 @@ class SlidesController < ApplicationController
 				unless @slide.can_edit? current_user
 					@slide.authorized_users << current_user
 				end
-
-
 			end # Transaction
-
+			
 			if @slide.is_a? HttpSlide
 				@slide.delay.fetch!
 			else
 				@slide.delay.generate_images
 			end
-
+			
 			respond_to do |format|
 				format.html {redirect_to slide_path(@slide)}
 				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}}
 			end
-
+			
 		rescue Slide::ImageError
 			# image invalid
 			flash[:error] = "Error creating slide, invalid image file"
 			render action: :new_after_error
 		end
-
 	end
 
 	# Edit a slide
@@ -149,18 +143,17 @@ class SlidesController < ApplicationController
 	# Update a slide
 	def update
 		Slide.transaction do
-
+			
 			@slide =Slide.find(params[:id])
 			require_edit(@slide)
-
+			
 			if @slide.update_attributes(slide_params)
-
 				# Generate images as needed
 				# FIXME: This needs to be more universal...
 				@slide.delay.generate_images if !@slide.is_a?(HttpSlide) && !@slide.ready
-
 				# Fetch the http slide image if needed
 				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
+				
 				respond_to do |format|
 					format.html {
 						flash[:notice] = 'Slide was successfully updated.'
@@ -182,15 +175,12 @@ class SlidesController < ApplicationController
 		end
 	end
 
-
 	# Mark a slide as deleted, we don't hard-delete slides ever
 	def destroy
 		@slide = Slide.find(params[:id])
 		require_edit @slide
-
 		@slide.destroy
 		@slide.save!
-
 		redirect_to slide_path(@slide)
 	end
 
@@ -198,10 +188,8 @@ class SlidesController < ApplicationController
 	def undelete
 		@slide = Slide.find(params[:id])
 		require_edit(@slide)
-
 		@slide.undelete
 		@slide.save!
-
 		redirect_to slide_path(@slide)
 	end
 
@@ -211,7 +199,6 @@ class SlidesController < ApplicationController
 		slide = old_slide.clone!
 		slide.delay.generate_images unless slide.ready
 		flash[:notice] = "Slide cloned."
-
 		redirect_to slide_path(slide)
 	end
 
@@ -220,12 +207,9 @@ class SlidesController < ApplicationController
 	def ungroup
 		slide = Slide.find(params[:id])
 		require_edit(slide)
-
 		slide.master_group = current_event.ungrouped
 		slide.save!
-
 		flash[:notice] = "Ungrouped slide: #{slide.name}"
-
 		respond_to do |format|
 			format.html {redirect_to :back}
 			format.js {render :index}
@@ -237,7 +221,6 @@ class SlidesController < ApplicationController
 		slide = Slide.find(params[:id])
 		user = User.find(params[:user_id])
 		slide.authorized_users.delete(user)
-
 		redirect_to :back
 	end
 
@@ -245,10 +228,8 @@ class SlidesController < ApplicationController
 		slide = Slide.find(params[:id])
 		user = User.find(params[:grant][:user_id])
 		slide.authorized_users << user
-
 		redirect_to :back
 	end
-
 
 	# Add a slide from the current events ungrouped slides group to a real
 	# group.
@@ -261,16 +242,14 @@ class SlidesController < ApplicationController
 			flash[:error] = "This slide is already in a group"
 			redirect_to :back and return
 		end
-
+		
 		require_edit(slide)
-
+		
 		group = current_event.master_groups.find(params[:add_to_group][:group_id])
 		require_edit(group)
-
+		
 		group.slides << slide
-
 		flash[:notice] = "Added slide #{slide.name} to group #{group.name}."
-
 		redirect_to :back
 	end
 
@@ -278,18 +257,17 @@ class SlidesController < ApplicationController
 	def add_to_override
 		slide = Slide.current.find(params[:id])
 		display = Display.find(params[:add_to_override][:display_id])
-
+		
 		raise ApplicationController::PermissionDenied unless display.can_override? current_user
 
 		effect = Effect.find params[:add_to_override][:effect_id]
-
 		display.add_to_override(slide, params[:add_to_override][:duration].to_i, effect)
-
+		
 		unless display.do_overrides
 			flash[:warning] = "WARNING: This display isn't currently showing overrides, displaying this slide will be delayed"
 		end
 		flash[:notice] = "Added slide #{slide.name} to override queue for display #{display.name} with effect #{effect.name}"
-
+		
 		redirect_to :back
 	end
 
@@ -297,14 +275,12 @@ class SlidesController < ApplicationController
 	# We can even use params whitelisting to make this extra-easy!
 	def hide
 		@slide = Slide.find(params[:id])
-
 		unless @slide.can_hide? current_user
 			raise ApplicationController::PermissionDenied
 		end
-
 		@slide.public = false
 		@slide.save!
-
+		
 		respond_to do |format|
 			format.html {redirect_to :back}
 			format.js {render :show}
@@ -324,11 +300,10 @@ class SlidesController < ApplicationController
 	def svg_save
 		@slide = InkscapeSlide.find(params[:id])
 		require_edit(@slide)
-
+		
 		@slide.svg_data = params[:svg]
 		@slide.save!
 		@slide.delay.generate_images
-
 		render nothing: true
 	end
 
@@ -340,7 +315,6 @@ class SlidesController < ApplicationController
 		ink = InkscapeSlide.create_from_simple(slide)
 		slide.replace! ink
 		flash[:notice] = "Slide was converted to inkscape slide"
-
 		redirect_to slide_path(ink)
 	end
 
@@ -351,11 +325,9 @@ class SlidesController < ApplicationController
 			Slide.transaction do
 				simple = SimpleSlide.create_from_svg_slide(slide)
 				slide.replace! simple
-
 				flash[:notice] = "Slide was converted simple slide"
 				redirect_to slide_path(simple)
 			end
-
 		rescue ConvertError
 			flash[:error] = "Conversion error, maybe slide has images?"
 			redirect_to slide_path(slide)
