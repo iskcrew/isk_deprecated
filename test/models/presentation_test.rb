@@ -100,4 +100,12 @@ class PresentationTest < ActiveSupport::TestCase
 		assert_in_delta Time.now.to_i, presentation.updated_at.to_i, 2, "Timestamp didn't update"		
 	end
 	
+	test "delete presentation" do
+		p = presentations(:with_slides)
+		assert p.groups.present?
+		assert_difference "Group.count", -p.groups.count do 
+			assert p.destroy
+		end
+	end
+	
 end

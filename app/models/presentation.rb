@@ -11,7 +11,7 @@ class Presentation < ActiveRecord::Base
 	# of master groups, containing ordered lists of slides
 	
 
-	has_many :groups, -> {order "position ASC"}
+	has_many :groups, -> {order "position ASC"}, dependent: :delete_all
 	has_many :master_groups, through: :groups
 	belongs_to :effect
 	belongs_to :event
