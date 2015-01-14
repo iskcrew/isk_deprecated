@@ -124,7 +124,7 @@ class SlidesController < ApplicationController
 			
 			respond_to do |format|
 				format.html {redirect_to slide_path(@slide)}
-				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}}
+				format.json {render json: {message: 'Slide was successfully created.', slide_id: @slide.id}, status: :created}
 			end
 			
 		rescue Slide::ImageError
