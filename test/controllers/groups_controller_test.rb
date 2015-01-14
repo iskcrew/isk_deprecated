@@ -29,8 +29,6 @@ class GroupsControllerTest < ActionController::TestCase
 				[:adopt_slides, {id: master_groups(:one_slide).id, slides: {one: {id: slides(:simple).id, add: true}}}],
 				[:hide_all, id: master_groups(:ten_slides).id],
 				[:publish_all, id: master_groups(:ten_slides).id],
-				[:grant, {id: master_groups(:one_slide).id, grant: {user_id: users(:no_roles).id}}],
-				[:deny, {id: master_groups(:one_slide).id, user_id: users(:no_roles).id}],
 				[:add_to_override, {id: master_groups(:one_slide).id, override: {display_id: 1, duration: 20}}],
 				[:create, {name: 'Group'}]
 			],

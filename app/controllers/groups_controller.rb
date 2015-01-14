@@ -156,22 +156,7 @@ class GroupsController < ApplicationController
 		group = MasterGroup.find(params[:id])
 		send_data group.zip_slides, filename: "group_#{group.id}_#{group.name}.zip"
 	end
-	
-	# FIXME: Move to nested controller
-	def deny
-		group = MasterGroup.find(params[:id])
-		user = User.find(params[:user_id])
-		group.authorized_users.delete(user)
-		redirect_to :back
-	end
-	
-	def grant
-		group = MasterGroup.find(params[:id])
-		user = User.find(params[:grant][:user_id])
-		group.authorized_users << user
-		redirect_to :back		 
-	end
-	
+		
 	# Add all slides on this group to override on a display
 	def add_to_override
 		group = MasterGroup.find(params[:id])

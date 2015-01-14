@@ -130,24 +130,7 @@ class PresentationsController < ApplicationController
 			render action: :edit
 		end
 	end
-	
-	# FIXME: Move ACL stuff to nested controller
-	# Remove a user from the ACL for this presentation
-	def deny
-		presentation = Presentation.find(params[:id])
-		user = User.find(params[:user_id])
-		presentation.authorized_users.delete(user)
-		redirect_to :back
-	end
-	
-	# Add a user to the ACL for this presentation
-	def grant
-		presentation = Presentation.find(params[:id])
-		user = User.find(params[:grant][:user_id])
-		presentation.authorized_users << user
-		redirect_to :back
-	end
-	
+		
 	private
 	
 	def presentation_params

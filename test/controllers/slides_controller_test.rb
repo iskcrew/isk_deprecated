@@ -32,8 +32,6 @@ class SlidesControllerTest < ActionController::TestCase
 				[:ungroup, id: 1],
 				[:undelete, id: slides(:deleted).id],
 				[:hide, id: 1],
-				[:deny, id: 1],
-				[:grant, id: 1],
 				[:to_inkscape, id: slides(:simple)],
 				[:to_simple, id: slides(:svg)],
 				[:add_to_group, id: slides(:ungrouped)],

@@ -133,22 +133,7 @@ class DisplaysController < ApplicationController
 			render text: "Invalid request, try refreshing", status: :bad_request
 		end				
 	end
-	
-	# FIXME: the ACL stuff needs to go to nested controller
-	def deny
-		display = Display.find(params[:id])
-		user = User.find(params[:user_id])
-		display.authorized_users.delete(user)
-		redirect_to :back
-	end
-	
-	def grant
-		display = Display.find(params[:id])
-		user = User.find(params[:grant][:user_id])
-		display.authorized_users << user
-		redirect_to :back		 
-	end
-	
+		
 	private
 	
 	# Whitelist the parameters for updating displays

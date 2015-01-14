@@ -216,21 +216,6 @@ class SlidesController < ApplicationController
 		end
 	end
 
-	# FIXME: The deny/grant ACL actions should go to a mixin
-	def deny
-		slide = Slide.find(params[:id])
-		user = User.find(params[:user_id])
-		slide.authorized_users.delete(user)
-		redirect_to :back
-	end
-
-	def grant
-		slide = Slide.find(params[:id])
-		user = User.find(params[:grant][:user_id])
-		slide.authorized_users << user
-		redirect_to :back
-	end
-
 	# Add a slide from the current events ungrouped slides group to a real
 	# group.
 	# FIXME: merge this logic to update method and kill this off.

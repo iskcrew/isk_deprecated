@@ -18,3 +18,9 @@ roles_users_limited_<%=i%>:
     target_type: 'Role'
 
 <% end %>
+
+# Allow limited user to edit display id 7
+display_edit:
+    target_id: 7
+    target_type: 'Display'
+    user_id: 3

@@ -60,7 +60,13 @@ Isk::Application.routes.draw do
 
 	get 'monitor', to: 'monitor#index'
 
+	# Common acl grant / deny nesting
+	concern :acl do
+		resource :permission, only: [:create, :destroy]
+	end
+
 	resources :displays do
+		concerns :acl
 		resources :history, only: [:index, :show] do
 			collection do
 				post 'clear'
@@ -73,8 +79,6 @@ Isk::Application.routes.draw do
 			post 'sort_queue'
 			post 'remove_override'
 			put 'update_override'
-			post 'grant'
-			post 'deny'
 			get 'dpy_control'
 		end
 
@@ -94,14 +98,14 @@ Isk::Application.routes.draw do
 	end
 
 	resources :groups do
+		concerns :acl
+		
 		member do
 			post 'sort', :as => 'sort'
 			get 'add_slides'
 			post 'adopt_slides'
 			post 'hide_all'
 			post 'publish_all'
-			post 'grant'
-			post 'deny'
 			post 'add_to_override'
 			get 'download_slides'
 		end
@@ -111,13 +115,13 @@ Isk::Application.routes.draw do
 	end
 
 	resources :presentations do
+		concerns :acl
+		
 		member do
 			post 'sort', :as => 'sort'
 			post 'add_group'
 			post 'remove_group'
 			get 'preview'
-			post 'grant'
-			post 'deny'
 			post 'add_to_override'
 		end
 
@@ -135,6 +139,7 @@ Isk::Application.routes.draw do
 	end
 
 	resources :slides do
+		concerns :acl
 		resources :history, only: [:index, :show] do
 			collection do
 				post 'clear'
@@ -150,8 +155,6 @@ Isk::Application.routes.draw do
 			post 'ungroup'
 			post 'undelete'
 			post 'hide'
-			post 'deny'
-			post 'grant'
 			post 'to_inkscape'
 			post 'to_simple'
 			post 'add_to_group'
