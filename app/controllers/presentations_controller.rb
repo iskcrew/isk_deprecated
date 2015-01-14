@@ -25,6 +25,47 @@ class PresentationsController < ApplicationController
 		end
 	end
 	
+	# Render form for creating a new presentation
+	def new
+		@presentation = Presentation.new
+	end
+	
+	# Create a new presentation
+	# If the current user isn't admin add him to the ACL list for this presentation
+	def create
+		@presentation = Presentation.new(presentation_params)
+		if @presentation.save
+			@presentation.authorized_users << current_user unless Presentation.admin?(current_user)
+			flash[:notice] = 'Presentation was successfully created.'
+			redirect_to presentation_path(@presentation)
+		else
+			render action: :new
+		end
+	end
+		
+	# Render the edit form for a presentation
+	def edit
+		@presentation = Presentation.find(params[:id])
+		require_edit @presentation
+		
+		#Seeing what groups aren't already in the presentation is useful sometimes
+		@orphan_groups = current_event.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id	IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq
+	end
+	
+	# Update a presentation
+	# TODO: rewrite the js so that #sort method can be killed off and use this instead
+	def update
+		@presentation =Presentation.find(params[:id])
+		require_edit @presentation
+		
+		if @presentation.update_attributes(presentation_params)
+			flash[:notice] = 'Presentation was successfully updated.'
+			redirect_to presentation_path(@presentation)
+		else
+			render action: :edit
+		end
+	end
+	
 	# Change the order of groups in a presentation
 	# Triggered from jquery.sortable widged via ajax
 	def sort
@@ -89,48 +130,7 @@ class PresentationsController < ApplicationController
 	def preview
 		@presentation = Presentation.find(params[:id])
 	end
-	
-	# Render form for creating a new presentation
-	def new
-		@presentation = Presentation.new
-	end
-	
-	# Create a new presentation
-	# If the current user isn't admin add him to the ACL list for this presentation
-	def create
-		@presentation = Presentation.new(presentation_params)
-		if @presentation.save
-			@presentation.authorized_users << current_user unless Presentation.admin?(current_user)
-			flash[:notice] = 'Presentation was successfully created.'
-			redirect_to presentation_path(@presentation)
-		else
-			render action: :new
-		end
-	end
-		
-	# Render the edit form for a presentation
-	def edit
-		@presentation = Presentation.find(params[:id])
-		require_edit @presentation
-		
-		#Seeing what groups aren't already in the presentation is useful sometimes
-		@orphan_groups = current_event.master_groups.defined_groups.joins('LEFT OUTER JOIN groups on master_groups.id = groups.master_group_id').where('groups.presentation_id	IS NULL OR (groups.presentation_id <> ? )', params[:id]).uniq
-	end
-	
-	# Update a presentation
-	# TODO: rewrite the js so that #sort method can be killed off and use this instead
-	def update
-		@presentation =Presentation.find(params[:id])
-		require_edit @presentation
-		
-		if @presentation.update_attributes(presentation_params)
-			flash[:notice] = 'Presentation was successfully updated.'
-			redirect_to presentation_path(@presentation)
-		else
-			render action: :edit
-		end
-	end
-		
+			
 	private
 	
 	def presentation_params
