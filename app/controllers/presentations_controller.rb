@@ -66,6 +66,15 @@ class PresentationsController < ApplicationController
 		end
 	end
 	
+	# Delete a presentation
+	def destroy
+		@presentation = Presentation.find(params[:id])
+		require_edit @presentation
+		@presentation.destroy
+		flash[:notice] = "Deleted presentation '#{@presentation.name}'"
+		redirect_to presentations_path, status: :see_other
+	end
+	
 	# Change the order of groups in a presentation
 	# Triggered from jquery.sortable widged via ajax
 	def sort
