@@ -48,6 +48,6 @@ div#tabs
 
 = content_for :navigation do
 	= link_to 'Preview', :action => :preview, :id => @presentation.id
-	- if @presentation.can_edit? current_user
-		=link_to 'Edit', edit_presentation_path(@presentation)
+	= presentation_edit_button(@presentation)
+	= presentation_destroy_button(@presentation)
 	
