@@ -81,9 +81,9 @@ module TicketsHelper
 	private
 	
 	def ticket_open_count
-		if Ticket.open.count > 0
+		if Ticket.current.open.count > 0
 			html = icon 'ticket'
-			html << Ticket.open.count.to_s
+			html << Ticket.ticket.open.count.to_s
 			return html
 		else
 			return ""
