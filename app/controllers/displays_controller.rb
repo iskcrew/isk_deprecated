@@ -60,11 +60,19 @@ class DisplaysController < ApplicationController
 	
 	# FIXME: allow creation of displays from the web gui
 	def new
-		
+		@display = Display.new
 	end
 	
 	def create
-		
+		@display = Display.new(display_params)
+	
+		if @display.save
+			flash[:notice] = "Display created."
+			redirect_to display_path(@display)
+		else
+			flash.now[:error] = "Error creating event"
+			render action: :new
+		end
 	end
 	
 	# Render the edit form for a given display
