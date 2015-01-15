@@ -20,11 +20,10 @@ div.display_info class=display.status id="display_#{display.id}"
 			li Monitored: #{display.monitor ? 'Yes' : 'No'}
 
 	div.display_actions
-		= toggle_link_to 'Overrides', display.do_overrides, {controller: :displays, action: :update, 
-			id: display.id, display: {do_overrides: !display.do_overrides}}, {method: :put, remote: true}
-		= toggle_link_to 'Manual control', display.manual, {controller: :displays, action: :update, 
-			id: display.id, display: {manual: !display.manual}}, {method: :put, remote: true}
-		= link_to 'Details', display_path(display), class: 'button'
-		= link_to 'Edit', edit_display_path(display), class: 'button'
-		= link_to 'Remote control', {controller: :displays, action: :dpy_control, id: display.id},
-			class: :button
+		= toggle_link_to 'Overrides', display.do_overrides, display_path(display, 
+			display: {do_overrides: !display.do_overrides}), {method: :put, remote: true}
+		= toggle_link_to 'Manual control', display.manual, display_path(display, 
+			display: {manual: !display.manual}), {method: :put, remote: true}
+		= link_to details_link_text, display_path(display), class: 'button'
+		= link_to edit_link_text, edit_display_path(display), class: 'button'
+		= link_to 'Remote control', dpy_control_display_path(display),	class: :button
