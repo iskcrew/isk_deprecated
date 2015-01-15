@@ -101,4 +101,12 @@ class PresentationsControllerTest < ActionController::TestCase
 		
 	end
 	
+	test "delete presentation" do
+		p = presentations(:with_slides)
+		assert_difference "Presentation.count", -1 do
+			delete :destroy, {id: p.id}, @adminsession
+		end
+		assert_response :see_other
+		assert_redirected_to presentations_path
+	end
 end
