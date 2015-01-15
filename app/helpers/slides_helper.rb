@@ -18,7 +18,7 @@ module SlidesHelper
 	
 	# Cache key for user-dependant slide info block
 	def slide_key(slide)
-		slide.cache_key + current_user.cache_key
+		"#{slide.cache_key}#{current_user.cache_key}"
 	end
 	
 	# Render the slide duration as text
@@ -41,7 +41,7 @@ module SlidesHelper
 		}
 		
 		if slide.ready
-			url = url_for(:controller => :slides, :action => :preview, :id => slide.id, :t => slide.images_updated_at.to_i)
+			url = preview_slide_path(slide, t: slide.images_updated_at.to_i)
 		else
 			url = 'wait.gif'
 		end
@@ -58,7 +58,7 @@ module SlidesHelper
 			:id => 'slide_thumb_' + slide.id.to_s
 		}
 		if slide.ready
-			url = url_for(:controller => :slides, :action => :thumb, :id => slide.id, :t => slide.images_updated_at.to_i)
+			url = thumb_slide_path(slide, t: slide.images_updated_at.to_i)
 		else
 			url ='wait.gif'
 		end
@@ -67,7 +67,7 @@ module SlidesHelper
 
 	# <img> tag for the slide full image
 	def slide_full_image_tag(slide)
-		image_tag url_for(controller: :slides, action: :full, id: slide.id, t: slide.images_updated_at.to_i),
+		image_tag full_slide_path(slide, t: slide.images_updated_at.to_i),
 		 {class: 'full_slide', id: 'slide_full_' + slide.id.to_s}
 	end
 	
@@ -78,11 +78,7 @@ module SlidesHelper
 			:title => 'Click to show slide details',
 			:class => 'slide-preview-to-show'
 		}
-		url_options = {
-			:controller => :slides,
-			:action => :show,
-			:id => slide.id
-		}
+		url_options = slide_path(slide)
 		return link_to slide_preview_image_tag(slide), url_options, html_options
 	end
 
@@ -93,11 +89,7 @@ module SlidesHelper
 			:title => 'Click to show slide details',
 			:class => 'slide-preview-to-show'
 		}
-		url_options = {
-			:controller => :slides,
-			:action => :show,
-			:id => slide.id
-		}
+		url_options = slide_path(slide)
 		return link_to slide_thumb_image_tag(slide), url_options, html_options
 	end
 
@@ -107,11 +99,7 @@ module SlidesHelper
 			title: 'Click to show full size slide image',
 			class: 'slide-preview-to-full'
 		}
-		url_options = {
-			controller: :slides,
-			action: :full,
-			id: slide.id
-		}
+		url_options = full_slide_path(slide)
 		return link_to slide_preview_image_tag(slide), url_options, html_options
 	end
 	
@@ -144,7 +132,7 @@ module SlidesHelper
 	# Generic toggle button to toggle some boolean on the slide
 	# FIXME OLD STYLE LINK PARAMETERS
 	def slide_toggle_button(name, slide, attrib)
-		toggle_link_to name, slide.send(attrib), {:controller => :slides, :action => :update, :id => slide.id, :slide => {attrib => !slide.send(attrib)}}, :method => :put, :remote => true
+		toggle_link_to name, slide.send(attrib), slide_path(slide, slide: {attrib => !slide.send(attrib)}), method: :patch, remote: true
 	end
 	
 	# Generate the edit link with consistent confirm message
@@ -158,7 +146,7 @@ module SlidesHelper
 	def slide_svg_link(slide)
 		if [InkscapeSlide].include? slide.class
 			link_text = icon 'download', 'SVG'
-			link_to link_text, {controller: :slides, action: :svg_data, id: slide.id},
+			link_to link_text, svg_data_slide_path(slide),
 							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 		end
@@ -166,7 +154,7 @@ module SlidesHelper
 	
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
-		link_to icon('copy', 'Clone'), {:controller => :slides, :action => :clone, :id => slide.id},
+		link_to icon('copy', 'Clone'), clone_slide_path(slide),
 							:method => :post, :title => 'Create clone of this slide', :class => 'button'
 	end
 	
@@ -179,7 +167,7 @@ module SlidesHelper
 	
 	# Ungroup slide button
 	def slide_ungroup_button(slide)
-		link_to (icon 'chain-broken', 'Ungroup'), {:controller => :slides, :action => :ungroup, :id => slide.id},
+		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide),
 							 :method => :post, :class => 'button ungroup'
 	end
 	
