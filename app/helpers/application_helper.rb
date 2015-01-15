@@ -41,8 +41,13 @@ module ApplicationHelper
 	
 	# Active toggle button with a "led"
 	def toggle_link_to(name, selected,options = {}, html_options = {})
-		html_options[:class] = (selected ? 'button led green' : 'button led off')
-		html_options[:title] = (selected ? 'Toggle this off' : 'Toggle this on')
+		if selected
+			html_options[:class] = 'button led green'
+			html_options[:title] = 'Toggle this off'
+		else
+			html_options[:class] = 'button led off'
+			html_options[:title] = 'Toggle this on'
+		end
 		return link_to name, options, html_options
 	end
 	
