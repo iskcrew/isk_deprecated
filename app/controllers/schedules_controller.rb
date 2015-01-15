@@ -31,7 +31,7 @@ class SchedulesController < ApplicationController
 			@schedule = Schedule.new(schedule_params)
 			if @schedule.save
 				flash[:notice] = "Schedule created"
-				redirect_to :action => :show, :id => @schedule.id
+				redirect_to schedule_path(@schedule)
 			else
 				flash[:error] = "Error creating schedule"
 				render :new and return

@@ -201,8 +201,8 @@ module SlidesHelper
 	# Links for filtering the slide list on slides#index
 	def slide_filter_links(filter)
 		html = String.new
-		html << link_to('All slides', {:action => :index}, :class => (filter ? nil : 'current'))
-		html << link_to('Thrashed', {:action => :index, :filter => 'thrashed'}, :class => (filter == :thrashed ? 'current' : nil))
+		html << link_to('All slides', slides_path, :class => (filter ? nil : 'current'))
+		html << link_to('Thrashed', slides_path(filter: 'thrashed'), :class => (filter == :thrashed ? 'current' : nil))
 
 		return html.html_safe
 	end

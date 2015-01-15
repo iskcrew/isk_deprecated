@@ -7,5 +7,5 @@ h1 Editing display: #{@display.name}
 	
 h2 Override queue
 p You can drag the slides to sort the queue
-ul.sortable#override_queues data-sortable=(url_for(action: :sort_queue, id: @display.id))
+ul.sortable#override_queues data-sortable=sort_queue_display_url(@display)
 	= render partial: 'sortable_overrides', locals: {overrides: @display.override_queues}

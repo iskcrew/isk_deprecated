@@ -11,14 +11,14 @@ h2 Group metadata
 	
 h2 Reorder slides in this group
 p Drag slides to reorder them.
-ul#slides.sortable data-sortable=url_for(controller: :groups, action: :sort, id: @group.id)
+ul#slides.sortable data-sortable=sort_group_url(@group)
 	= render partial: 'sortable_slides', locals: {group: @group}
 	
 = content_for :navigation do
-	= link_to 'Details', group_path(@group)
-	= link_to 'Hide all slides', {action: :hide_all, id: @group.id}, method: :post
-	= link_to 'Publish all slides', {action: :publish_all, id: @group.id}, method: :post
-	= link_to 'Add slides', action: :add_slides, id: @group.id
+	= link_to details_link_text, group_path(@group)
+	= link_to 'Hide all slides', hide_all_group_path(@group), method: :post
+	= link_to 'Publish all slides', publish_all_group_path(@group), method: :post
+	= link_to 'Add slides', add_slides_group_path(@group)
 	= link_to 'Delete',group_path(@group), method: :delete,
 		data: {confirm: "Are you sure?"}
 	

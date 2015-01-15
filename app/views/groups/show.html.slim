@@ -61,10 +61,10 @@ table.compact_slidelist
 = content_for :navigation do
 	= group_download_slides_link @group
 	- if @group.can_edit? current_user
-		=link_to 'Hide all slides', {action: :hide_all, id: @group.id}, method: :post
-		=link_to 'Publish all slides', {action: :publish_all, id: @group.id}, method: :post
+		=link_to 'Hide all slides', hide_all_group_path(@group), method: :post
+		=link_to 'Publish all slides', publish_all_group_path(@group), method: :post
 		= group_edit_link @group
-		=link_to icon('plus', 'Add slides'), action: :add_slides, id: @group.id
-		=link_to icon('times-circle', 'Delete'),{action: :destroy, id: @group.id}, method: :delete, 
+		=link_to icon('plus', 'Add slides'), add_slides_group_path(@group)
+		=link_to icon('times-circle', 'Delete'),group_path(@group), method: :delete, 
 			data: {confirm: "Are you sure you want to delete this group? \
 			All slides in this group will become ungrouped."}

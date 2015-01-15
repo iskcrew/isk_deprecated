@@ -31,7 +31,7 @@ div#tabs
 				| Add all slides in this presentation to override queue on a display.
 				|  Will use the order of slides in this presentation and will add multiple copies
 				|  of a slide if it's included multiple times in this presentation.
-			= form_for :override, :url => {:action => :add_to_override, :id => @presentation.id} do |f|
+			= form_for :override, url: add_to_override_presentation_path(@presentation) do |f|
 				= f.label :display_id, 'Display:' 
 				= f.select :display_id, 
 					options_for_select(Display.can_override(current_user).collect {|g| [ g.name, g.id ] })
@@ -47,7 +47,7 @@ div#tabs
 				= render partial: 'slides/slide', collection: group.slides.published
 
 = content_for :navigation do
-	= link_to 'Preview', :action => :preview, :id => @presentation.id
+	= link_to 'Preview', preview_presentation_path(@presentation)
 	= presentation_edit_button(@presentation)
 	= presentation_destroy_button(@presentation)
 	

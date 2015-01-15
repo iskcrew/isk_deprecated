@@ -16,7 +16,7 @@ div.info_block#metadata
 		div.warning
 			p
 				| This slide has been replaced! The replacement slide is: 
-				= link_to @slide.replacement.name, action: :show, id: @slide.replacement.id
+				= link_to @slide.replacement.name, slide_path(@slide.replacement)
 	-elsif @slide.deleted
 		div.warning
 			p

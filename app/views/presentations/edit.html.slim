@@ -34,6 +34,6 @@ ul#groups_sortable.sortable data-sortable=sort_presentation_url(@presentation)
 	= render partial: 'sortable_groups'
 
 = content_for :navigation do
-	=link_to 'Details', :action => :show, :id => @presentation.id
-	=link_to 'Preview', :action => :preview, :id => @presentation.id
+	=link_to details_link_text, presentation_path(@presentation)
+	=link_to 'Preview', preview_presentation_path(@presentation)
 	
