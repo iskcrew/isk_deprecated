@@ -144,6 +144,7 @@ GEM
       activesupport
       ffi
     ruby-graphviz (1.0.9)
+    ruby-prof (0.15.2)
     ruby-progressbar (1.7.1)
     rubyzip (1.1.6)
     sass (3.2.19)
@@ -232,6 +233,7 @@ DEPENDENCIES
   rails-erd
   ranked-model
   rrd-ffi
+  ruby-prof
   rubyzip
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

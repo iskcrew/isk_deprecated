@@ -11,6 +11,10 @@ development:
   <<: *defaults
   database: isk_development
 
+profile:
+  <<: *defaults
+  database: isk_development
+
 test:
   <<: *defaults
   database: isk_test

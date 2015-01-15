@@ -78,6 +78,7 @@ module ApplicationHelper
 	
 	# Memoize the current user
 	def current_user
+		return @_current_user ||= User.first if Rails.env.profile?
 			@_current_user ||= session[:user_id] &&
 				User.includes(:permissions).find_by_id(session[:user_id])
 	end

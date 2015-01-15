@@ -100,6 +100,11 @@ group :development do
   gem "rails-erd"
 end
 
+# Profiling support
+group :profile do
+  gem 'ruby-prof'
+end
+
 # More compact logging
 gem "lograge"
 
