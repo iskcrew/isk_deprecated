@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140801142425) do
+ActiveRecord::Schema.define(version: 20150116185338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,13 +105,14 @@ ActiveRecord::Schema.define(version: 20140801142425) do
   add_index "groups", ["presentation_id"], name: "index_groups_on_presentation_id", using: :btree
 
   create_table "master_groups", force: true do |t|
-    t.string   "name",       limit: 100
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.string   "name",         limit: 100
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.integer  "event_id"
-    t.boolean  "internal",               default: false
+    t.boolean  "internal",                 default: false
     t.string   "type"
     t.integer  "effect_id"
+    t.integer  "slides_count"
   end
 
   add_index "master_groups", ["effect_id"], name: "index_master_groups_on_effect_id", using: :btree

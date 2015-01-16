@@ -25,7 +25,7 @@ class Slide < ActiveRecord::Base
 
 	# Relations
 	belongs_to :replacement, class_name: "Slide", foreign_key: "replacement_id"
-	belongs_to :master_group
+	belongs_to :master_group, counter_cache: true
 	has_many :display_counts
 	has_one :event, through: :master_group
 	has_many :presentations, -> { uniq }, through: :master_group
