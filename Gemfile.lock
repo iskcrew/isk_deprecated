@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/cheald/request_profiler.git
+  revision: 1ddb93c8712b1baebc0c028463f7723781877584
+  specs:
+    request_profiler (0.0.2)
+      ruby-prof
+
+GIT
   remote: https://github.com/depili/websocket-rails.git
   revision: 4c2ae6e90ec98228e7af0e7553cfb6946686ba89
   branch: channel_token_fix
@@ -232,6 +239,7 @@ DEPENDENCIES
   rails (~> 4.1.8)
   rails-erd
   ranked-model
+  request_profiler!
   rrd-ffi
   ruby-prof
   rubyzip

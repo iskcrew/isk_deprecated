@@ -103,6 +103,7 @@ end
 # Profiling support
 group :profile do
   gem 'ruby-prof'
+	gem 'request_profiler', :git => 'git://github.com/cheald/request_profiler.git'
 end
 
 # More compact logging
