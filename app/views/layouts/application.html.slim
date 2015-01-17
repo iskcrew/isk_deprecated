@@ -16,7 +16,7 @@ html
 						= navigation_links
 						li#current_event Event: #{current_event.name}
 						li#logout.ui-state-default.ui-corner-top 
-							= link_to "Logout (#{current_user.username})", login_path, method: :delete, 
+							= link_to icon('power-off', "Logout (#{current_user.username})"), login_path, method: :delete, 
 								class: 'ui-tabs-anchor'
 			= render partial: 'navigation'
 		div#content
