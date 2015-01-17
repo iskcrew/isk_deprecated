@@ -8,6 +8,6 @@ table.slide_templates
 		tr
 			td = t.name
 			td 
-				= link_to 'Details', template_path(t)
-				=< link_to 'Edit', edit_template_path(t)
+				= link_to details_link_text, template_path(t), class: 'button'
+				=< link_to edit_link_text, edit_template_path(t), class: 'button'
 				=< template_destroy_link t
