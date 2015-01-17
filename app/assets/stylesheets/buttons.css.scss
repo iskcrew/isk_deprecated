@@ -71,21 +71,21 @@ a.delete {
 }
 
 .led{
-	&:after {
+	&:before {
 		content: "";
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: baseline;
 		background-color: #000;
 		box-shadow: #333 0 0 7px 1px, inset #DDD 0 0 2px;
-		margin-left: 0.5em;
-		width: 10px;
-		height: 10px;
+		margin-right: 0.5em;
+		width: 8px;
+		height: 8px;
 		border-radius: 50%;
 	}
 	
-	&.red:after { background-color: $red_highlight; }
-	&.green:after { background-color: $green_highlight; }
-	&.blue:after { background-color: $primary_highlight; }
+	&.red:before { background-color: $red_highlight; }
+	&.green:before { background-color: $green_highlight; }
+	&.blue:before { background-color: $primary_highlight; }
 }
 
 
