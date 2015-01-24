@@ -222,19 +222,19 @@ class Slide < ActiveRecord::Base
 
 	# Filenames of different sized slide images
 	def thumb_filename
-		FilePath.join(self.filename + '_thumb.png')
+		FilePath.join("#{self.filename}_thumb.png")
 	end
 
 	def preview_filename
-		FilePath.join(self.filename + '_preview.png')
+		FilePath.join("#{self.filename}_preview.png")
 	end
 
 	def full_filename
-		FilePath.join(self.filename + '_full.png')
+		FilePath.join("#{self.filename}_full.png")
 	end
 
 	def original_filename
-		FilePath.join(self.filename + '_original')
+		FilePath.join("#{self.filename}_original")
 	end
 
 	# Override the default destroy method to soft-delete slides
@@ -298,22 +298,22 @@ class Slide < ActiveRecord::Base
 
 	# Cache tag for all fragments depending on this slide
 	def cache_tag
-		"slide_" + self.id.to_s
+		"slide_#{self.id.to_s}"
 	end
 
 	# Cache key for info fragment with full edit priviledges
 	def rw_cache_key
-		self.cache_tag + "_edit"
+		"#{self.cache_tag}_edit"
 	end
 
 	# Cache key for info fragment with hide priviledge
 	def hide_cache_key
-		self.cache_tag + "_hide"
+		"#{self.cache_tag}_hide"
 	end
 
 	# Cache key for info fragment with no edit priviledges
 	def ro_cache_key
-		self.cache_tag + "_ro"
+		"#{self.cache_tag}_ro"
 	end
 
 	protected
