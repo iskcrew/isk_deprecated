@@ -7,10 +7,10 @@
 
 class Schedule < ActiveRecord::Base
 	# Relations:
-	has_many :schedule_events, -> {order at: :asc}
+	has_many :schedule_events, -> {order at: :asc}, dependent: :delete_all
 	belongs_to :event
-	belongs_to :slidegroup, :class_name => 'MasterGroup'
-	belongs_to :up_next_group, :class_name => 'MasterGroup'
+	belongs_to :slidegroup, :class_name => 'MasterGroup', dependent: :destroy
+	belongs_to :up_next_group, :class_name => 'MasterGroup', dependent: :destroy
   
 	# Allow updating the schedule events in one call
 	accepts_nested_attributes_for :schedule_events, allow_destroy: true
