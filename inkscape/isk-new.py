@@ -93,11 +93,11 @@ data = urllib.urlencode(payload)
 req = urllib2.Request(hostname+"/login", data)
 
 # For login purpose, CookieProcessor saves the cookie to the opener after this.
-
-resp = opener.open(req)
-#except:
-#	print "Error while logging into ISK, aborting"
-#	raise SystemExit
+try:
+	resp = opener.open(req)
+except:
+	print "Error while logging into ISK, aborting"
+	raise SystemExit
 
 # Build the data for the POST request to create a new slide
 payload = {
