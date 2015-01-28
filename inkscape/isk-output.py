@@ -26,10 +26,6 @@ slidename = ""
 hostname = ""
 svg_file = ""
 
-f = open("C:\Users\T430s\Documents\debug.txt", "w")
-f.write(str(argv)+"\n")
-f.close()
-
 while 1:
 	if value >= len(argv):
 		break
