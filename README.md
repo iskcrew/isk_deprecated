@@ -26,7 +26,7 @@ Copyright
 ---------
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
 
-Python plugins for Inkscape (c) Copyright 2014 Jarkko Räsänen.
+Python plugins for Inkscape (c) Copyright 2015 Jarkko Räsänen.
 
 License
 -------
