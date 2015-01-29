@@ -78,7 +78,7 @@ You also need to start the background process for isk to generate the slide imag
 
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
 
-Python plugins for Inkscape (c) Copyright 2014 Jarkko Räsänen.
+Python plugins for Inkscape (c) Copyright 2015 Jarkko Räsänen.
 
 * app/assets/images/wait.gif by Jarkko Räsänen, cat photo by Vesa-Pekka Palmu
 * app/assets/images/display_error.svg by Vesa-Pekka Palmu
