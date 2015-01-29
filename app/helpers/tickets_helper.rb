@@ -64,8 +64,8 @@ module TicketsHelper
 		end
 	end
 	
-	def ticket_tab_link
-		link_name = "Tickets #{ticket_open_count}"
+	def ticket_tab_link(open)
+		link_name = "Tickets #{icon 'ticket', open}"
 		return link_to link_name.html_safe, tickets_path, class: 'ui-tabs-anchor'
 	end
 	
