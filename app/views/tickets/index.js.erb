@@ -1,5 +1,5 @@
 $('#tickets_tab').html(
-	'<%=j ticket_tab_link %>'
+	'<%=j ticket_tab_link(@open_tickets) %>'
 );
 
 <% if @open_tickets == 0 %>
