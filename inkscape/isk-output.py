@@ -9,44 +9,88 @@
 # This is an Python rewrite of isk-output.rb
 #
 # Author::    Jarkko Räsänen
-# Copyright:: Copyright (c) 2014 Jarkko Räsänen
+# Copyright:: Copyright (c) 2015 Jarkko Räsänen
 # License::   Licensed under GPL v3, see LICENSE.md
 
-import argparse
 import urllib
 import urllib2
 import cookielib
 import sys
 from xml.dom import minidom
+from sys import argv
 
-parser = argparse.ArgumentParser(add_help=True)
+value = 1
+username = ""
+password = ""
+slidename = ""
+hostname = ""
+svg_file = ""
 
-parser.add_argument("-u", "--username", dest="username", help="Specify username for ISK login")
-parser.add_argument("-p", "--password", dest="password", help="Specify password for ISK login")
-parser.add_argument("-n", "--slidename", dest="slidename", help="Specify slidename")
-parser.add_argument("-i", "--iskhost", dest="hostname", help="Specify ISK server hostname")
-parser.add_argument("-e", "--id", dest="object_id", help="Specify object ID")
-parser.add_argument("svg_file", help="Name of the file containing SVG data")
-args = parser.parse_args()
+while 1:
+	if value >= len(argv):
+		break
+	if argv[value].split("=")[0] == "--username":
+		username = argv[value].split("=")[1]
+		value = value+1
+	
+	elif argv[value].split("=")[0] == "--password":
+		password = argv[value].split("=")[1]
+		value = value+1
+		
+	elif argv[value].split("=")[0] == "--slidename":
+		slidename = argv[value].split("=")[1]
+		value = value+1
+	
+	elif argv[value].split("=")[0] == "--iskhost":
+		hostname = argv[value].split("=")[1]
+		value = value+1
+		
+	elif argv[value].split("=")[0] == "--id":
+		value = value+1
+		
+	elif ".svg" in argv[value]:
+		svg_file = argv[value]
+		value = value+1
+	else:
+		#print "wat is dis"
+		break
+
+try:
+	if "username" != "":
+		pass
+	if "password" != "":
+		pass
+	if "slidename" != "":
+		pass
+	if "hostname" != "":
+		pass
+	if "svg_file" != "":
+		pass
+	else:
+		#print "Some parameter(s) is missing!"
+		raise Exception
+except:
+	#print "Missing mandatory arguments!"
+	raise SystemExit
 
 cookiejar = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
 
 # Login info
 payload = {
-	"username": args.username,
-	"password": args.password
+	"username": username,
+	"password": password
 }
 
 # Let's make the request ready.
 data = urllib.urlencode(payload)
-req = urllib2.Request(args.hostname+"/login", data)
+req = urllib2.Request(hostname+"/login", data)
 
 # For login purpose, CookieProcessor saves the cookie to the opener after this.
 resp = opener.open(req)
 
 # Open the SVG file for manipulation.
-xmldoc = minidom.parse(args.svg_file)
+xmldoc = minidom.parse(svg_file)
 
 # Let's get all necessary tags and pieces...
 val = xmldoc.getElementsByTagName("image")
@@ -66,7 +110,7 @@ payload = {
 }
 
 data = urllib.urlencode(payload)
-req = urllib2.Request(args.hostname+"/slides/%s/svg_data"%id, data)
+req = urllib2.Request(hostname+"/slides/%s/svg_data"%id, data)
 resp = opener.open(req)
 
 sys.stdout.write(newsvg)

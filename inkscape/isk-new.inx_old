@@ -3,7 +3,7 @@
 	<_name>Create new slide</_name>
 	<id>org.asm.isk.new</id>
 	<dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
-	<dependency type="executable" location="extensions">isk-new.py</dependency>
+	<dependency type="executable" location="extensions">isk-new.rb</dependency>
 	<param name="iskhost" type="string" _gui-text="ISK hostname">example.com</param>
 	<param name="slidename" type="string" _gui-text="Slide name">Created from inkscape</param>
 	<param name="username" type="string" _gui-text="ISK username">user</param>
@@ -16,7 +16,7 @@
   </effect>
 
 	<script>
-		<command reldir="extensions" interpreter="python">isk-new.py</command>
+		<command reldir="extensions" interpreter="ruby">isk-new.rb</command>
 		<helper_extension>org.inkscape.output.svg.inkscape</helper_extension>
 	</script>
 </inkscape-extension>
