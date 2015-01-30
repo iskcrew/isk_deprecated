@@ -2,8 +2,7 @@ namespace :isk do
 	desc "Backup the database"
 	task sql_backup: :environment do
 		backup_file = Tempfile.new 'isk-database-backup'
-		sql_backup(backup_file)
-		FileUtils.mv backup_file.path, sql_backup_location.to_s
+		sql_backup(sql_backup_location)
 		puts "SQL backup created: #{sql_backup_location.to_s}"
 	end
 
@@ -29,7 +28,7 @@ namespace :isk do
 			cmd = "pg_dump "
 			cmd << "--host #{host} " if host.present?
 			cmd << "--username #{user} " if user.present?
-			cmd << "--clean --no-owner --no-acl --format=c #{db} > #{backup_file.path}"
+			cmd << "--clean --no-owner #{db} > #{backup_file}"
 		end
 		puts "Creating database dump..."
 		system cmd
