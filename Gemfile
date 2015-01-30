@@ -52,6 +52,9 @@ gem 'bcrypt', '~> 3.1.7'
 
 #### END OF RAILS DEFAULT GEMFILE
 
+# Nokogiri for XML processing
+gem 'nokogiri'
+
 # font-awesome-sass for icons
 gem 'font-awesome-sass'
 
