@@ -12,8 +12,8 @@ class ScheduleSlide < SvgSlide
 	# FIXME: proper settings
 	SubheaderX = 50
 	SubheaderFill = '#e2e534'
-	TimeX = SubheaderX + 50
-	ItemNameX = TimeX + 230
+	TimeIndent = 50
+	ItemNameIndent = TimeIndent + 230
 	ItemSpacing = 80
 	FontSize = '72px'
 	
@@ -38,20 +38,19 @@ class ScheduleSlide < SvgSlide
 			
 			if item[:subheader]
 				tspan = Nokogiri::XML::Node.new 'tspan', row
-				tspan['x'] = SubheaderX
 				tspan['fill'] = SubheaderFill
 				tspan.content = item[:subheader]
 				row.add_child tspan
 			else
 				# Time
 				tspan_time = Nokogiri::XML::Node.new 'tspan', row
-				tspan_time['x'] = TimeX
+				tspan_time['x'] = body['x'].to_i + TimeIndent
 				tspan_time.content = item[:time]
 				row.add_child tspan_time
 				
 				# name
 				tspan_name = Nokogiri::XML::Node.new 'tspan', row
-				tspan_name['x'] = ItemNameX
+				tspan_name['x'] = body['x'].to_i + ItemNameIndent
 				tspan_name.content = item[:name]
 				row.add_child tspan_name
 			end
