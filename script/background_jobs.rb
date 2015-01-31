@@ -13,8 +13,6 @@ require_relative '../lib/cli_helpers.rb'
 
 Sleep = 3.minutes # Sleep for 3 minutes between loops
 
-Delayed::Worker.delay_jobs = false
-
 @pid_path = Pathname.new File.expand_path('../../tmp/pids', __FILE__)
 @log_path = Pathname.new File.expand_path('../../log', __FILE__)
 
