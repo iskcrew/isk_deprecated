@@ -12,6 +12,16 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
+// Tag to show that ISK is running in development mode
+div#dev_mode {
+  position: fixed;
+  right: 0px;
+  top: 25px;
+  z-index: 1000;
+  font-size: 30pt;
+  color: red;
+}
+
 div.error_notification {
 	font-size: 1.4em;
 	background: $warning_bg;
