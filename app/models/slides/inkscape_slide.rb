@@ -62,33 +62,25 @@ class InkscapeSlide < SvgSlide
 	end
 
 	def update_metadata!
-		svg = REXML::Document.new(File.read(self.svg_filename))
-
+		svg = Nokogiri::XML(self.svg_data)
 		svg = metadata_contents(svg)
 
-		svg_data = String.new
-
-		svg.write svg_data
-
 		File.open(self.svg_filename, 'w') do |f|
-			f.write svg_data
+			f.write svg.to_xml
 		end
 	end
 
 	protected
 
-	def metadata_contents(svg = self.svg_data)
-		svg.elements.delete_all('//metadata')
-		metadata = svg.root.add_element('metadata')
-		metadata.attributes['id'] = 'metadata1'
-		meta = String.new
-
-		meta << self.id.to_s
-		meta << '!'
-		meta << Host
-
-		metadata.text = meta
-
+	def metadata_contents(svg)
+		svg.css('metadata').each do |meta|
+			meta.remove
+		end
+		metadata = Nokogiri::XML::Node.new 'metadata', svg
+		metadata['id'] = 'metadata1'
+		meta = "#{self.id}!depricated.invalid.com"
+		metadata.content = meta
+		svg.root.add_child metadata
 		return svg
 	end
 
