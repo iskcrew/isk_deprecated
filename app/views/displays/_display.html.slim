@@ -7,6 +7,18 @@ div.display_info class=display.status id="display_#{display.id}"
 		= display_current_slide(display)
 	div.display_metadata
 		ul
+			- if display.current_slide.present?
+				li 
+					| Current slide:
+					=< link_to display.current_slide.name, slide_path(display.current_slide)
+			- else
+				li Current slide: Unknown
+			- if display.current_group.present?
+				li
+					| Current group:
+					=< link_to display.current_group.name, group_path(display.current_group)
+			- else
+				li Current group: Unknown
 			li 
 				- if display.presentation
 					| Presentation: 
