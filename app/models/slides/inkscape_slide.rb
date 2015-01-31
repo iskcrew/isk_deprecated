@@ -6,11 +6,10 @@
 
 
 class InkscapeSlide < SvgSlide
-
+	# Constants
+	# Slide type to report in html views
 	TypeString = 'inkscape'
-
-	EmptySVG = Rails.root.join('data','templates', 'inkscape_empty.svg')
-
+	
 	before_create do |slide|
 		slide.is_svg = true
 		true
