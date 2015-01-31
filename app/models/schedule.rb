@@ -55,9 +55,15 @@ class Schedule < ActiveRecord::Base
 			# Slide description to use on all generated slides
 			slide_description = "Automatically generated from schedule #{self.name} at #{I18n.l Time.now, format: :short}"
 			# Make sure there are right amount of slides in our group
-			add_scheduleslides(slide_data.count - schedule_slide_count)
-			# Hide all slides while we are regenerating them, this also keeps extra uneeded slides hidden
-			self.slidegroup.hide_slides
+			delta = slide_data.count - schedule_slide_count
+			if delta > 0
+				add_scheduleslides(slide_data.count - schedule_slide_count)
+			elsif delta < 0
+				self.slidegroup.slides.where(type: ScheduleSlide.sti_name).limit(-delta).each do |s|
+					s.destroy
+				end
+			end
+			
 			# Find the scheduleslides in our slidegroup
 			schedule_slides = self.slidegroup.slides.where(type: ScheduleSlide.sti_name).to_a
 			
@@ -87,6 +93,8 @@ class Schedule < ActiveRecord::Base
 			
 				current_slide += 1
 			end # slides.each
+			
+			self.slidegroup.publish_slides
 			
 			# Generate the "up next" slide if needed
 			if self.up_next and self.schedule_events.present?

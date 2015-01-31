@@ -5,7 +5,7 @@
 en:
     time:
         formats:
-            short: "%H:%M:%S %d.%m.%y"
+            short: "%a %H:%M:%S %d.%m.%y"
             iso: "%Y-%m-%dT%H:%M:%S"            
     activerecord:
         attributes:
