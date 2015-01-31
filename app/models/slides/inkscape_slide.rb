@@ -37,30 +37,24 @@ class InkscapeSlide < SvgSlide
 		return ink
 	end
 
+	# Create a new InkscapeSlide from a SimpleSlide
 	def self.create_from_simple(simple_slide)
-		self.create_from_svg(simple_slide)
-	end
-
-	def self.create_from_svg(simple_slide)
-		return nil unless simple_slide.is_a? SvgSlide
-
+		raise ApplicationController::ConvertError unless simple_slide.is_a? SimpleSlide
+		
 		ink = InkscapeSlide.new
-
-		ink.name = simple_slide.name + " (converted)"
+		ink.name = "#{simple_slide.name} (converted)"
+		ink.description = "Converted from a simple slide #{simple_slide.name} at #{I18n.l Time.now, format: :short}"
 		ink.ready = false
+		ink.svg_data = simple_slide.svg_data
 		ink.save!
-
-		FileUtils.copy(simple_slide.svg_filename, ink.svg_filename)
-
-		ink.send :inkscape_modifications
-		ink.update_metadata!
-
 		ink.delay.generate_images
-
 		return ink
-
 	end
 
+	# We carry the slide id in a metadata tag
+	# This is used by the inkscape plugins
+	# TODO: verification cookie?
+	# FIXME: Use a better id and sync with plugins!
 	def update_metadata!
 		svg = Nokogiri::XML(self.svg_data)
 		svg = metadata_contents(svg)
