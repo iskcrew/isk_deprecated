@@ -78,31 +78,5 @@ class InkscapeSlide < SvgSlide
 		return svg
 	end
 
-	def inkscape_modifications
-		svg = REXML::Document.new(self.svg_data)
-
-		svg.root.add_namespace('sodipodi', "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd")
-		svg.root.add_namespace('inkscape', "http://www.inkscape.org/namespaces/inkscape")
-
-		#TODO named-view?
-		inkscape_settings = REXML::Document.new(File.read(InkscapeSlide::InkscapeFragment))
-
-		svg.root.delete_element('//sodipodi:namedview')
-		svg.root[0,0] = inkscape_settings.root.elements['sodipodi:namedview']
-
-		svg.root.elements.each('//text') do |e|
-			e.delete_attribute 'xml:space'
-			e.attributes['sodipodi:linespacing'] = '125%'
-			e.elements.each('tspan') do |ts|
-				ts.attributes['sodipodi:role'] = 'line'
-			end
-		end
-
-		svg_data = svg.to_s
-		svg_data.gsub!('FranklinGothicHeavy', 'Franklin Gothic Heavy')
-
-		self.svg_data = svg_data
-	end
-
 	private
 end
