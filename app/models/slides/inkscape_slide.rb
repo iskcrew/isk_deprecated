@@ -11,8 +11,6 @@ class InkscapeSlide < SvgSlide
 
 	EmptySVG = Rails.root.join('data','templates', 'inkscape_empty.svg')
 
-	InkscapeFragment = Rails.root.join('data','templates', 'inkscape_settings_fragment.xml')
-
 	before_create do |slide|
 		slide.is_svg = true
 		true
