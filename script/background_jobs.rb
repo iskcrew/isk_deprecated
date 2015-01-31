@@ -43,7 +43,7 @@ Daemons.run_proc('background_jobs', options) do
 				slide.delay.fetch!
 			end
 		end
-		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, @slides.size / realtime]
+		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
 		@slides = nil
 	
 		say 'Generating schedule slides..'
@@ -52,7 +52,7 @@ Daemons.run_proc('background_jobs', options) do
 				schedule.generate_slides
 			end
 		end
-		say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, @schedules.size / realtime])
+		say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
 		@schedules = nil
 		
 		say "Sleeping for #{Sleep} seconds"
