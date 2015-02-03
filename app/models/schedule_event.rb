@@ -11,6 +11,7 @@ class ScheduleEvent < ActiveRecord::Base
 	validates :at, :name, presence: true
 	validates :major, :rescheduled, :cancelled, inclusion: { in: [true, false] }	
 	validates :linecount, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1}
+	validates :schedule, presence: true
 	
 	before_save do |event|
 		if event.name.length > 35
