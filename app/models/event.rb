@@ -94,6 +94,26 @@ class Event < ActiveRecord::Base
 		end
 	end
 	
+	# The configuration options for the simple editor
+	# FIXME: True dynamic settings!
+	def simple_editor_settings
+		settings = {
+			heading: {
+				font_size: 120,
+				coordinates: [500, 130]
+			},
+			body: {
+				margins: [550, picture_sizes[:full].first - 30],
+				y_coordinate: 280
+			},
+			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
+		}
+		if self.picture_sizes[:full] == SupportedResolutions[1]
+			settings[:font_sizes] = [80,90,100,120,160,200,300,400]
+		end
+		return settings
+	end
+	
 	# Set the size for full slide pictures. Checks that the resolution is supported.
 	def picture_size=(size)
 		if SupportedResolutions.include? size
@@ -119,26 +139,6 @@ class Event < ActiveRecord::Base
 	# FIXME: True dynamic setting!
 	def background_image
 		return 'backgrounds/empty.png'
-	end
-	
-	# The configuration options for the simple editor
-	# FIXME: True dynamic settings!
-	def simple_editor_settings
-		settings = {
-			heading: {
-				font_size: 120,
-				coordinates: [500, 130]
-			},
-			body: {
-				margins: [550, picture_sizes[:full].first - 30],
-				y_coordinate: 280
-			},
-			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
-		}
-		if self.picture_sizes[:full] == SupportedResolutions[1]
-			settings[:font_sizes] = [80,90,100,120,160,200,300,400]
-		end
-		return settings
 	end
 	
 	def prize_template
