@@ -8,7 +8,7 @@
 class ScheduleSlide < SvgSlide
 	#Automatically generated schedule slide
 	TypeString = 'schedule'
-	
+		
 	# FIXME: proper settings
 	SubheaderX = 50
 	SubheaderFill = '#e2e534'
@@ -17,7 +17,11 @@ class ScheduleSlide < SvgSlide
 	ItemSpacing = 80
 	FontSize = '72px'
 	
-	
+	# Find the schedule this slide belongs to
+	def schedule
+		Schedule.joins(:slidegroup).where(master_groups: {id: self.master_group_id}).first ||
+		Schedule.joins(:up_next_group).where(master_groups: {id: self.master_group_id}).first
+	end
 	
 	# Create the slide svg from passed schedule events
 	def create_svg(header, items)
