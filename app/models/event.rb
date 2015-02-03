@@ -60,7 +60,7 @@ class Event < ActiveRecord::Base
 				linespacing: '100%'
 			}
 		}
-	}
+	}.with_indifferent_access
 	
 	# Resolutions that are currently supported.
 	# Note that the display (eg. iskdpy) also needs to support them.
