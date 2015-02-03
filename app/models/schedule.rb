@@ -20,9 +20,7 @@ class Schedule < ActiveRecord::Base
 	validates :name, :presence => true
 	
 	# Constants:
-	# Template to use
 	# FIXME: fetch from event configuration and use templateslides?
-	TemplateFile = Rails.root.join('data', 'templates', 'schedule.svg.erb')
 	# How many schedule events fit on one slide
 	EventsPerSlide = 9
 	# If event has started more than this amount of time ago it won't be shown on slides
@@ -45,8 +43,6 @@ class Schedule < ActiveRecord::Base
 	# FIXME: break this into smaller methods...
 	def generate_slides
 		Schedule.transaction do
-			# Load the schedule template
-			slide_template = ERB.new(File.read(TemplateFile))
 			# Paginate the schedule events into slides
 			slide_data = paginate_events(events_array)
 			total_slides = slide_data.size
@@ -88,7 +84,8 @@ class Schedule < ActiveRecord::Base
 				slide.publish
 				slide.save!
 				@items = s.last
-				slide.svg_data = slide_template.result(binding)
+				# Generate the slide SVG
+				slide.create_svg(@header, @items)
 				slide.delay.generate_images
 			
 				current_slide += 1
@@ -122,7 +119,6 @@ class Schedule < ActiveRecord::Base
 	
 	# Generate a slide with the next EventsPerSlide schedule events
 	def generate_up_next_slide
-		slide_template = ERB.new(File.read(TemplateFile))
 		slide_description = "Next #{EventsPerSlide.to_s} events on schedule #{self.name}"
 		slide_name = "Next up: #{self.name}"
 		
@@ -133,7 +129,7 @@ class Schedule < ActiveRecord::Base
 			uns.description = slide_description
 			@header = slide_name
 			@items = slide
-			uns.svg_data = slide_template.result(binding)
+			uns.create_svg @header, @items
 			uns.save!
 			uns.delay.generate_images
 			break

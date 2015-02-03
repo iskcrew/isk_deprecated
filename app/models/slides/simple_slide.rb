@@ -20,9 +20,9 @@ class SimpleSlide < SvgSlide
 	include HasSlidedata
 
 	BaseTemplate = Rails.root.join('data', 'templates', 'simple.svg')
-	HeadingSelector = "//text[@id = 'header']"
-	BodySelector = "//text[@id = 'slide_content']"
-	BackgroundSelector = "//image[@id = 'background_picture']"
+	HeadingSelector = 'text#header'
+	BodySelector = 'text#slide_content'
+	BackgroundSelector = 'image#background_picture'
 
 	# If our slidedata chances mark the slide as not ready when saving it.
 	before_save do
@@ -52,7 +52,7 @@ class SimpleSlide < SvgSlide
 		return simple
 	end
 	
-	
+	# TODO: migrate to nokogiri
 	def self.create_from_svg_slide(svg_slide)
 		raise ApplicationController::ConvertError unless svg_slide.is_a? SvgSlide
 
@@ -116,61 +116,61 @@ class SimpleSlide < SvgSlide
 		
 		svg = prepare_template(settings, size, current_event.background_image)
 		
-		head = svg.elements[HeadingSelector]
+		head = svg.at_css(HeadingSelector)
 		head = set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
 		
 		# Find out the text x coordinate
 		text_x = row_x(text_align, settings[:body][:margins])		
-		body = svg.elements[BodySelector]
+		body = svg.at_css(BodySelector)
 		body = set_text(body, text, text_x, color, text_size, text_align)
 				
-		return svg.to_s
+		return svg.to_xml
 	end
 	
 	private
 	
 	# Prepare the base template based on event config
 	def self.prepare_template(settings, size, background_image)
-		svg = REXML::Document.new(File.open(BaseTemplate))
+		svg = Nokogiri::XML(File.open(BaseTemplate))
 		
 		# Add sodipodi namespace
-		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
+		svg.root.add_namespace 'sodipodi', 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
 				
 		# Set dimensions
-		svg.root.attributes['width'] = size.first
-		svg.root.attributes['height'] = size.last
+		svg.root['width'] = size.first
+		svg.root['height'] = size.last
 		
 		# Set viewbox
-		svg.root.attributes['viewBox'] = "0 0 #{size.first} #{size.last}"
+		svg.root['viewBox'] = "0 0 #{size.first} #{size.last}"
 		
 		# Set background
-		bg = svg.elements[BackgroundSelector]
-		bg.attributes['xlink:href'] = background_image
-		bg.attributes['x'] = 0
-		bg.attributes['y'] = 0
-		bg.attributes['width'] = size.first
-		bg.attributes['height'] = size.last
+		bg = svg.at_css(BackgroundSelector)
+		bg['xlink:href'] = background_image
+		bg['x'] = 0
+		bg['y'] = 0
+		bg['width'] = size.first
+		bg['height'] = size.last
 		
 		# Position header
-		header = svg.elements[HeadingSelector]
-		header.attributes['x'] = settings[:heading][:coordinates].first
-		header.attributes['y'] = settings[:heading][:coordinates].last
+		header = svg.at_css(HeadingSelector)
+		header['x'] = settings[:heading][:coordinates].first
+		header['y'] = settings[:heading][:coordinates].last
 		
 		# Header font size
-		header.attributes['font-size'] = settings[:heading][:font_size]
+		header['font-size'] = settings[:heading][:font_size]
 				
 		# Position body
-		body = svg.elements[BodySelector]
-		body.attributes['y'] = settings[:body][:y_coordinate]
+		body = svg.at_css(BodySelector)
+		body['y'] = settings[:body][:y_coordinate]
 		
 		# Clear child elements from header and body
 		clear_childs(header)
 		clear_childs(body)
 		
 		# Set guides
-		named_view = svg.elements['//sodipodi:namedview']
-		named_view.elements.each('sodipodi:guide') do |e|
-			named_view.delete_element(e)
+		named_view = svg.at_css('sodipodi|namedview')
+		named_view.css('sodipodi|guide').each do |e|
+			e.remove
 		end
 		
 		# Vertical guides
@@ -179,7 +179,7 @@ class SimpleSlide < SvgSlide
 			"#{settings[:body][:margins].last},0",
 			"#{settings[:heading][:coordinates].first},0"
 		].each do |coord|
-			named_view.add_element( create_guide(coord, '-200,0'))
+			named_view.add_child( create_guide(svg, coord, '-200,0'))
 		end
 		
 		# Horizontal guides
@@ -187,60 +187,62 @@ class SimpleSlide < SvgSlide
 			"0,#{size.last - settings[:body][:y_coordinate]}",
 			"0,#{size.last - settings[:heading][:coordinates].last}"
 		].each do |coord|
-			named_view.add_element( create_guide(coord, '0,-200'))
+			named_view.add_child( create_guide(svg, coord, '0,-200'))
 		end
 		
 		return svg
 	end
 	
 	# Create a new sodipodi:guide element
-	def self.create_guide(position, orientation)
-		guide = REXML::Element.new('sodipodi:guide')
-		guide.attributes['position'] = position
-		guide.attributes['orientation'] = orientation
+	def self.create_guide(svg, position, orientation)
+		guide = Nokogiri::XML::Node.new('sodipodi:guide', svg)
+		guide['position'] = position
+		guide['orientation'] = orientation
 		return guide
 	end
 	
 	def self.set_text(element, text, text_x, color = nil,size = nil, align = nil)
 		# Set default attributes
-		element.attributes['sodipodi:linespacing'] = '125%'
-		element.attributes['x'] = text_x
+		element['sodipodi:linespacing'] = '125%'
+		element['x'] = text_x
 		
 		if size
-			element.attributes['font-size'] = size
+			element['font-size'] = size
 		else
-			size = element.attributes['font-size']
+			size = element['font-size']
 		end
 		
 		first_line = true
 		
 		text.each_line do |l|
-			row = element.add_element 'tspan'
-			row.attributes['x'] = text_x
-			row.attributes['sodipodi:role'] = "line"
-			row.attributes["xml:space"] = "preserve"
+			row = Nokogiri::XML::Node.new 'tspan', element
+			row['x'] = text_x
+			row['sodipodi:role'] = "line"
+			row["xml:space"] = "preserve"
 			
 			#First line requires little different attributes
 			if first_line
 				first_line = false
 			elsif l.strip.empty?
-				row.attributes['font-size'] = (size.to_i * 0.4).to_i
-				row.attributes['dy'] = '1em'
-				row.attributes['fill-opacity'] = 0
-				row.attributes['stroke-opacity'] = 0
-				row.text = 'a'
+				row['font-size'] = (size.to_i * 0.4).to_i
+				row['dy'] = '1em'
+				row['fill-opacity'] = 0
+				row['stroke-opacity'] = 0
+				row.content = 'a'
 				next
 			else
-				row.attributes['dy'] = '1em'
+				row['dy'] = '1em'
 			end
 			parts = l.split(/<([^>]*)>/)
 			parts.each_index do |i|
-				ts = row.add_element 'tspan'
+				ts = Nokogiri::XML::Node.new 'tspan', row
 				if color && (i%2 == 1)
-					ts.attributes['fill'] = color
+					ts['fill'] = color
 				end
-				ts.text = parts[i]
+				ts.content = parts[i]
+				row.add_child ts
 			end
+			element.add_child row
 		end
 		
 		return set_text_anchor(element, align)
@@ -264,10 +266,10 @@ class SimpleSlide < SvgSlide
 	# Clear child elements
 	def self.clear_childs(e)
 		# Clear child elements (delete_element deletes only one element)
-		e.elements.each do
-			e.delete_element('*')
+		e.children.each do |c|
+			c.remove
 		end
-		e.text = ''
+		e.content = ''
 		
 		return e
 	end
@@ -282,7 +284,7 @@ class SimpleSlide < SvgSlide
 			else
 				text_anchor = 'start'
 			end
-			element.attributes['text-anchor'] = text_anchor 
+			element['text-anchor'] = text_anchor 
 		end
 		return element
 	end 

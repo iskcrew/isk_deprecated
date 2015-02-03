@@ -251,46 +251,6 @@ class Slide < ActiveRecord::Base
 		self.save!
 	end
 
-	# Convert a old legacy svg-editor slide to inkscape slide
-	# FIXME: remove this and do a migration for all possibly remaining legacy slides
-	def svg_edit_to_inscape!
-
-		return unless self.is_svg?
-
-		svg = REXML::Document.new(File.read(self.svg_filename))
-		svg.elements.delete_all('//metadata')
-		metadata = svg.root.add_element('metadata')
-		metadata.attributes['id'] = 'metadata1'
-		metadata.text = self.id.to_s
-
-		svg.root.attributes['xmlns:sodipodi'] = 'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
-
-		svg.root.elements.each('//text') do |e|
-			e.attributes['sodipodi:linespacing'] = '125%'
-			e.delete_attribute 'transform'
-			i = 0
-			e.elements.each('//tspan') do |t|
-				t.attributes['dy'] = '1em' unless i == 0
-				t.attributes['sodipodi:role'] = "line"
-				t.delete_attribute 'y'
-				t.delete_attribute 'transform'
-				i += 1
-			end
-		end
-
-		bg = svg.root.elements.each("//image[@id='background_picture']") do |bg|
-			bg.attributes['xlink:href'] = 'backgrounds/empty.png'
-		end
-
-		svg_data = String.new
-		svg.write svg_data
-		svg_data.gsub!('FranklinGothicHeavy', 'Franklin Gothic Heavy')
-
-		@_svg_data = svg_data
-
-		write_svg_data
-	end
-
 	# Send websocket-messages when a slides images have been updated
 	def updated_image_notifications
 		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
