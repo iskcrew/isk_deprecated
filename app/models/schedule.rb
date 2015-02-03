@@ -31,26 +31,9 @@ class Schedule < ActiveRecord::Base
 	end
 	
 	# Settings for this schedule
-	# TODO: Read the settings from events
 	# TODO: Still allow custom per schedule settings?
 	def settings
-		return {
-			# How many events to typeset per slide
-			events_per_slide: 9,
-			# Show events at most this long in the past
-			time_tolerance: 15.minutes,
-			# ScheduleSlide config
-			slides: {
-				# Date subheaders
-				subheader_fill: '#e2e534',
-				indent: {
-					time: 50,
-					name: (50 + 230)
-				},
-				font_size: '72px',
-				linespacing: '100%'
-			}
-		}	
+		@_settings ||= self.event.config[:schedules]
 	end
 	
 	# Generate schedule slides

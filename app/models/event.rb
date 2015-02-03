@@ -42,6 +42,23 @@ class Event < ActiveRecord::Base
 		thumb: { # Small thumbnail size
 			width: 128,
 			height: 72
+		},
+		schedules: {
+			# How many events to typeset per slide
+			events_per_slide: 9,
+			# Show events at most this long in the past
+			time_tolerance: 15.minutes,
+			# ScheduleSlide config
+			slides: {
+				# Date subheaders
+				subheader_fill: '#e2e534',
+				indent: {
+					time: 50,
+					name: (50 + 230)
+				},
+				font_size: '72px',
+				linespacing: '100%'
+			}
 		}
 	}
 	
