@@ -27,11 +27,10 @@ class Schedule < ActiveRecord::Base
 	TimeTolerance = 15.minutes
 	
 	# Callbacks:
+	# Create groups that will contain the slides generated from this schedule
 	after_create :create_groups
-	after_update do |schedule|
-		schedule.slidegroup.update_attributes(:name => ('Schedule: ' + schedule.name + ' slides'))
-		schedule.up_next_group.update_attributes(:name => ('Schedule: ' + schedule.name + ' up next'))
-	end
+	# Rename the associated groups if the schedule name changes
+	after_update :rename_groups
 	
 	# Return all schedules in the current event
 	def self.current
@@ -115,6 +114,12 @@ class Schedule < ActiveRecord::Base
 			self.event_id = Event.current.id
 		end
 		self.save!
+	end
+	
+	# Rename the groups containing our slides on update
+	def rename_groups
+		self.slidegroup.update_attributes(name: "Schedule: #{self.name} slides")
+		self.up_next_group.update_attributes(name: "Schedule #{self.name} next up")
 	end
 	
 	# Generate a slide with the next EventsPerSlide schedule events
