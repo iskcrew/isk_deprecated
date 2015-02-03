@@ -8,14 +8,6 @@
 class ScheduleSlide < SvgSlide
 	#Automatically generated schedule slide
 	TypeString = 'schedule'
-		
-	# FIXME: proper settings
-	SubheaderX = 50
-	SubheaderFill = '#e2e534'
-	TimeIndent = 50
-	ItemNameIndent = TimeIndent + 230
-	ItemSpacing = 80
-	FontSize = '72px'
 	
 	# Find the schedule this slide belongs to
 	def schedule
@@ -33,28 +25,28 @@ class ScheduleSlide < SvgSlide
 			c.remove
 		end
 
-		body['sodipodi:linespacing'] = '100%'
+		body['sodipodi:linespacing'] = settings[:linespacing]
 		
 		items.each do |item|
 			row = Nokogiri::XML::Node.new 'tspan', body
 			row['sodipodi:role'] = 'line'
-			row['font-size'] = FontSize
+			row['font-size'] = settings[:font_size]
 			
 			if item[:subheader]
 				tspan = Nokogiri::XML::Node.new 'tspan', row
-				tspan['fill'] = SubheaderFill
+				tspan['fill'] = settings[:subheader_fill]
 				tspan.content = item[:subheader]
 				row.add_child tspan
 			else
 				# Time
 				tspan_time = Nokogiri::XML::Node.new 'tspan', row
-				tspan_time['x'] = body['x'].to_i + TimeIndent
+				tspan_time['x'] = body['x'].to_i + settings[:indent][:time]
 				tspan_time.content = item[:time]
 				row.add_child tspan_time
 				
 				# name
 				tspan_name = Nokogiri::XML::Node.new 'tspan', row
-				tspan_name['x'] = body['x'].to_i + ItemNameIndent
+				tspan_name['x'] = body['x'].to_i + settings[:indent][:name]
 				tspan_name.content = item[:name]
 				row.add_child tspan_name
 			end
@@ -65,5 +57,9 @@ class ScheduleSlide < SvgSlide
 	end
 
 	private
+	
+	def settings
+		@_settings ||= self.schedule.settings[:slides]
+	end
 	
 end

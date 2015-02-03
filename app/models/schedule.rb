@@ -18,14 +18,7 @@ class Schedule < ActiveRecord::Base
 	# Validations:
 	# TODO: validate slidegroup etc existance
 	validates :name, :presence => true
-	
-	# Constants:
-	# FIXME: fetch from event configuration and use templateslides?
-	# How many schedule events fit on one slide
-	EventsPerSlide = 9
-	# If event has started more than this amount of time ago it won't be shown on slides
-	TimeTolerance = 15.minutes
-	
+		
 	# Callbacks:
 	# Create groups that will contain the slides generated from this schedule
 	after_create :create_groups
@@ -35,6 +28,29 @@ class Schedule < ActiveRecord::Base
 	# Return all schedules in the current event
 	def self.current
 		self.where(event_id: Event.current.id)
+	end
+	
+	# Settings for this schedule
+	# TODO: Read the settings from events
+	# TODO: Still allow custom per schedule settings?
+	def settings
+		return {
+			# How many events to typeset per slide
+			events_per_slide: 9,
+			# Show events at most this long in the past
+			time_tolerance: 15.minutes,
+			# ScheduleSlide config
+			slides: {
+				# Date subheaders
+				subheader_fill: '#e2e534',
+				indent: {
+					time: 50,
+					name: (50 + 230)
+				},
+				font_size: '72px',
+				linespacing: '100%'
+			}
+		}	
 	end
 	
 	# Generate schedule slides
@@ -74,7 +90,7 @@ class Schedule < ActiveRecord::Base
 				if total_slides == 1
 					@header = self.name
 				else
-					@header = self.name + ' ' + current_slide.to_s + '/' + total_slides.to_s
+					@header = "#{self.name} #{current_slide}/#{total_slides}"
 				end
 				slide = s.first
 				slide.name = @header
@@ -102,7 +118,7 @@ class Schedule < ActiveRecord::Base
 	end
 	
 	private
-	
+		
 	# Create the associated groups when a new schedule is created
 	def create_groups
 		sg = MasterGroup.create(name: ("Schedule: #{self.name} slides"), event_id: self.event_id)
@@ -124,7 +140,7 @@ class Schedule < ActiveRecord::Base
 	
 	# Generate a slide with the next EventsPerSlide schedule events
 	def generate_up_next_slide
-		slide_description = "Next #{EventsPerSlide.to_s} events on schedule #{self.name}"
+		slide_description = "Next #{settings[:events_per_slide]} events on schedule #{self.name}"
 		slide_name = "Next up: #{self.name}"
 		
 		slides = paginate_events(events_array(false))
@@ -176,8 +192,8 @@ class Schedule < ActiveRecord::Base
 		last_date = nil
 		
 		self.schedule_events.each do |e|
-			# Ignore events that are more than TimeTolerance in past
-			unless (e.at + TimeTolerance).past?
+			# Ignore events that are more than settings[:time_tolerance] in past
+			unless (e.at + settings[:time_tolerance]).past?
 				# Insert a subheader if next event is in different day
 				if do_subheaders && !(e.at.to_date === last_date)
 					slide_items << {subheader: (e.at.strftime('%A %d.%m.')), linecount: 1}
@@ -202,7 +218,7 @@ class Schedule < ActiveRecord::Base
 	
 		slide_items.each do |item|
 			if item[:subheader]
-				if (this_slide.size + self.min_events_on_next_day > Schedule::EventsPerSlide) 
+				if (this_slide.size + self.min_events_on_next_day > settings[:events_per_slide]) 
 					slides << this_slide
 					this_slide = Array.new
 				end
@@ -214,7 +230,7 @@ class Schedule < ActiveRecord::Base
 			if item[:linecount] == 1
 				this_slide << item
 			else
-				if (this_slide.size + item[:linecount]) > Schedule::EventsPerSlide
+				if (this_slide.size + item[:linecount]) > settings[:events_per_slide]
 					if this_slide.last[:subheader]
 						this_slide.pop
 					end
@@ -231,7 +247,7 @@ class Schedule < ActiveRecord::Base
 				end
 			end
 		
-			if this_slide.size >= Schedule::EventsPerSlide
+			if this_slide.size >= settings[:events_per_slide]
 				slides << this_slide
 				this_slide = Array.new
 			end			
