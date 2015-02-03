@@ -65,9 +65,5 @@ class ScheduleSlide < SvgSlide
 	end
 
 	private
-
-	def schedule_row(row, item)
-		
-	end
-
+	
 end
