@@ -1,0 +1,5 @@
+{
+  "update": { "name": "difference_zoomer" },
+  "normal": { "name": "crossfade" },
+  "alert": { "name": "alert" }
+}

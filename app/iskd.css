@@ -1,0 +1,111 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background: black;
+}
+
+div#renderer {
+    overflow: hidden;
+    cursor: none;
+    display: block;
+    position: absolute;
+    height:100%;
+    width:100%;
+    margin: 0 auto; 
+    top: 0px;
+    left: 0px;
+}
+
+div#renderer div {
+    display: block;
+    position: absolute;
+    height:100%;
+    width:100%;
+    margin: 0 auto; 
+    left: 0px; right: 0px; top: 0px;
+    #z-index: 1;
+}
+div#clock object {
+    display: block;
+    position: normal;
+    height: 100%;
+    min-width: 100%;
+    margin: 0px;
+}
+img#empty {
+    display: block;
+    position: absolute;
+    height:100%;
+    margin: 0 auto; left: 0; right: 0;
+    top: 0px;
+    #z-index: -1000;
+}
+
+div#canvas * {
+    display: block !important;
+}
+
+div#stats {
+    display:inline-block;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    #z-index: 1000;
+}
+div#stats * {
+    position: relative;
+}
+
+div#errors {
+    display:inline-block;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+div#errors * {
+    position: relative;
+    display: none;
+}
+
+div#errors *.active{
+   display: block;
+}
+
+div#pres{
+    display: none !important;
+}
+
+div#choise h1{
+    display: inline;
+}
+div#choise #logout{
+    margin: 0 2em;
+    cursor: pointer;
+    color: red;
+}
+div#choise{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    color: white;
+    margin-left: 30%;
+    #z-index: -10;
+}
+div#choise ul li{
+    cursor: pointer;
+    list-style-type: none;
+}
+div#choise ul li span{
+    color: gray;
+    margin-left: 1em;
+}
+label{
+    width: 15%;
+    text-align: right;
+    margin-right: 0.5em;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
