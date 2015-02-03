@@ -45,7 +45,10 @@ class Event < ActiveRecord::Base
 		},
 		schedules: {
 			# How many events to typeset per slide
-			events_per_slide: 9,
+			events: {
+				per_slide: 9,
+				line_length: 30
+			},
 			# Show events at most this long in the past
 			time_tolerance: 15.minutes,
 			# ScheduleSlide config

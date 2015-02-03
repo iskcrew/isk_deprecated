@@ -123,7 +123,7 @@ class Schedule < ActiveRecord::Base
 	
 	# Generate a slide with the next EventsPerSlide schedule events
 	def generate_up_next_slide
-		slide_description = "Next #{settings[:events_per_slide]} events on schedule #{self.name}"
+		slide_description = "Next #{settings[:events][:per_slide]} events on schedule #{self.name}"
 		slide_name = "Next up: #{self.name}"
 		
 		slides = paginate_events(events_array(false))
@@ -201,7 +201,7 @@ class Schedule < ActiveRecord::Base
 	
 		slide_items.each do |item|
 			if item[:subheader]
-				if (this_slide.size + self.min_events_on_next_day > settings[:events_per_slide]) 
+				if (this_slide.size + self.min_events_on_next_day > settings[:events][:per_slide]) 
 					slides << this_slide
 					this_slide = Array.new
 				end
@@ -213,7 +213,7 @@ class Schedule < ActiveRecord::Base
 			if item[:linecount] == 1
 				this_slide << item
 			else
-				if (this_slide.size + item[:linecount]) > settings[:events_per_slide]
+				if (this_slide.size + item[:linecount]) > settings[:events][:per_slide]
 					if this_slide.last[:subheader]
 						this_slide.pop
 					end
@@ -230,7 +230,7 @@ class Schedule < ActiveRecord::Base
 				end
 			end
 		
-			if this_slide.size >= settings[:events_per_slide]
+			if this_slide.size >= settings[:events][:per_slide]
 				slides << this_slide
 				this_slide = Array.new
 			end			

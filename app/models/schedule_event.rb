@@ -18,7 +18,7 @@ class ScheduleEvent < ActiveRecord::Base
 			new_name = String.new
 			line = String.new
 			event.name.split.each do |word|
-				if line.length + word.length > 30
+				if line.length + word.length > self.schedule.settings[:events][:line_length]
 					new_name << line << "\n"
 					line = String.new
 				end
