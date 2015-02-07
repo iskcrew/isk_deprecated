@@ -2,10 +2,12 @@
 	h2 Metadata and settings
 	table
 		tr: td #{f.label :name}: #{f.text_field :name}
+		tr: td #{f.label :slide_header}: #{f.text_field :slide_header}
 		/ TODO: spinner
 		tr: td #{f.label :max_slides}: #{f.text_field :max_slides, size: 3}
 		tr: td #{f.label :min_events_on_next_day}: #{f.text_field :min_events_on_next_day, size: 3}
 		tr: td #{f.label :next_up}: #{f.check_box :next_up}
+		tr: td #{f.label :next_up_header}: #{f.text_field :next_up_header}
 	= f.submit
 	
 	- if @schedule.schedule_events.present?

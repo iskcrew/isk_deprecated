@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150207204318) do
+ActiveRecord::Schema.define(version: 20150207205618) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,6 +190,8 @@ ActiveRecord::Schema.define(version: 20150207204318) do
     t.integer  "min_events_on_next_day", default: 3
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.string   "next_up_header"
+    t.string   "slide_header"
   end
 
   add_index "schedules", ["event_id"], name: "index_schedules_on_event_id", using: :btree

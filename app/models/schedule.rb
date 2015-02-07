@@ -41,6 +41,9 @@ class Schedule < ActiveRecord::Base
 	# FIXME: break this into smaller methods...
 	def generate_slides
 		Schedule.transaction do
+			# Use the schedule name if custom slide header hasn't been defined
+			header = self.slide_header.present? ? self.slide_header : self.name
+			
 			# Paginate the schedule events into slides
 			slide_data = paginate_events(events_array)
 			total_slides = slide_data.size
@@ -71,9 +74,9 @@ class Schedule < ActiveRecord::Base
 			# Set the data to each corresponding slide
 			slides.each do |s|
 				if total_slides == 1
-					@header = self.name
+					@header = header
 				else
-					@header = "#{self.name} #{current_slide}/#{total_slides}"
+					@header = "#{header} #{current_slide}/#{total_slides}"
 				end
 				slide = s.first
 				slide.name = @header
@@ -124,7 +127,7 @@ class Schedule < ActiveRecord::Base
 	# Generate a slide with the next EventsPerSlide schedule events
 	def generate_next_up_slide
 		slide_description = "Next #{settings[:events][:per_slide]} events on schedule #{self.name}"
-		slide_name = "Next up: #{self.name}"
+		slide_name = self.next_up_header.present? ? self.next_up_header : "Next up: #{self.name}"
 		
 		slides = paginate_events(events_array(false))
 		slides.each do |slide|

@@ -73,6 +73,7 @@ class SchedulesController < ApplicationController
 	# Whitelist POST parameters for create and update
 	def schedule_params
 		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
+			:slide_header, :next_up_header,
 			{schedule_events_attributes: [:id, :name, :major, :at, :_destroy ]}
 			)
 	end
