@@ -10,7 +10,7 @@ class Schedule < ActiveRecord::Base
 	has_many :schedule_events, -> {order at: :asc}, dependent: :delete_all
 	belongs_to :event
 	belongs_to :slidegroup, class_name: 'MasterGroup', dependent: :destroy
-	belongs_to :up_next_group, class_name: 'MasterGroup', dependent: :destroy
+	belongs_to :next_up_group, class_name: 'MasterGroup', dependent: :destroy
   
 	# Allow updating the schedule events in one call
 	accepts_nested_attributes_for :schedule_events, allow_destroy: true
@@ -92,8 +92,8 @@ class Schedule < ActiveRecord::Base
 			self.slidegroup.publish_slides
 			
 			# Generate the "up next" slide if needed
-			if self.up_next and self.schedule_events.present?
-				generate_up_next_slide
+			if self.next_up and self.schedule_events.present?
+				generate_next_up_slide
 			end
 		
 		end # Transaction
@@ -108,7 +108,7 @@ class Schedule < ActiveRecord::Base
 		ung = MasterGroup.create(:name => ("Schedule: #{self.name} next up"), event_id: self.event_id)
     
 		self.slidegroup = sg
-		self.up_next_group = ung
+		self.next_up_group = ung
 		unless self.event_id
 			self.event_id = Event.current.id
 		end
@@ -118,36 +118,36 @@ class Schedule < ActiveRecord::Base
 	# Rename the groups containing our slides on update
 	def rename_groups
 		self.slidegroup.update_attributes(name: "Schedule: #{self.name} slides")
-		self.up_next_group.update_attributes(name: "Schedule #{self.name} next up")
+		self.next_up_group.update_attributes(name: "Schedule #{self.name} next up")
 	end
 	
 	# Generate a slide with the next EventsPerSlide schedule events
-	def generate_up_next_slide
+	def generate_next_up_slide
 		slide_description = "Next #{settings[:events][:per_slide]} events on schedule #{self.name}"
 		slide_name = "Next up: #{self.name}"
 		
 		slides = paginate_events(events_array(false))
 		slides.each do |slide|
-			uns = find_or_initialize_up_next_slide
-			uns.name = slide_name
-			uns.description = slide_description
+			nus = find_or_initialize_next_up_slide
+			nus.name = slide_name
+			nus.description = slide_description
 			@header = slide_name
 			@items = slide
-			uns.create_svg @header, @items
-			uns.save!
-			uns.delay.generate_images
+			nus.create_svg @header, @items
+			nus.save!
+			nus.delay.generate_images
 			break
 		end
 		return true
 	end
 	
 	# Find or create the slide for "next up" slide
-	def find_or_initialize_up_next_slide
-		if self.up_next_group.slides.where(type: ScheduleSlide.sti_name).first.present?
-			return self.up_next_group.slides.where(type: ScheduleSlide.sti_name).first!
+	def find_or_initialize_next_up_slide
+		if self.next_up_group.slides.where(type: ScheduleSlide.sti_name).first.present?
+			return self.next_up_group.slides.where(type: ScheduleSlide.sti_name).first!
 		else
 			slide = ScheduleSlide.new
-			self.up_next_group.slides << slide
+			self.next_up_group.slides << slide
 			return slide
 		end
 	end

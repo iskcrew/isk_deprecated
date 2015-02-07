@@ -10,10 +10,10 @@ div.schedule_info id="schedule_#{schedule.id}"
 			li 
 				| Maximum number of generated slides:
 				=< schedule.max_slides == -1 ? 'Unlimited' : schedule.max_slides
-			li Generate "next up" -slides: #{schedule.up_next ? 'Yes' : 'No'}
+			li Generate "next up" -slides: #{schedule.next_up ? 'Yes' : 'No'}
 			li 
 				| Group for "next up" -slides: 
-				=< link_to schedule.up_next_group.name, group_path(schedule.up_next_group)
+				=< link_to schedule.next_up_group.name, group_path(schedule.next_up_group)
 	div.schedule_actions
 		= link_to icon('info-circle', 'Details'), schedule_path(schedule), class: 'button'
 		= link_to icon('edit', 'Edit'), edit_schedule_path(schedule), class: 'button'

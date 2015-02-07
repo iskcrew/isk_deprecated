@@ -5,7 +5,7 @@
 		/ TODO: spinner
 		tr: td #{f.label :max_slides}: #{f.text_field :max_slides, size: 3}
 		tr: td #{f.label :min_events_on_next_day}: #{f.text_field :min_events_on_next_day, size: 3}
-		tr: td #{f.label :up_next}: #{f.check_box :up_next}
+		tr: td #{f.label :next_up}: #{f.check_box :next_up}
 	= f.submit
 	
 	- if @schedule.schedule_events.present?

@@ -12,7 +12,7 @@ class ScheduleSlide < SvgSlide
 	# Find the schedule this slide belongs to
 	def schedule
 		Schedule.joins(:slidegroup).where(master_groups: {id: self.master_group_id}).first ||
-		Schedule.joins(:up_next_group).where(master_groups: {id: self.master_group_id}).first
+		Schedule.joins(:next_up_group).where(master_groups: {id: self.master_group_id}).first
 	end
 	
 	# Create the slide svg from passed schedule events

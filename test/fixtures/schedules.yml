@@ -9,11 +9,11 @@ empty:
     name: No events
     event_id: 2
     slidegroup_id: 11
-    up_next_group_id: 12
+    next_up_group_id: 12
     
 normal:
     id: 2
     name: Normal
     event_id: 2
     slidegroup_id: 13
-    up_next_group_id: 14
+    next_up_group_id: 14

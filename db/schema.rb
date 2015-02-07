@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150116185338) do
+ActiveRecord::Schema.define(version: 20150207204318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,8 +184,8 @@ ActiveRecord::Schema.define(version: 20150116185338) do
     t.integer  "event_id"
     t.string   "name"
     t.integer  "slidegroup_id"
-    t.integer  "up_next_group_id"
-    t.boolean  "up_next",                default: true
+    t.integer  "next_up_group_id"
+    t.boolean  "next_up",                default: true
     t.integer  "max_slides",             default: -1
     t.integer  "min_events_on_next_day", default: 3
     t.datetime "created_at",                            null: false
@@ -193,8 +193,8 @@ ActiveRecord::Schema.define(version: 20150116185338) do
   end
 
   add_index "schedules", ["event_id"], name: "index_schedules_on_event_id", using: :btree
+  add_index "schedules", ["next_up_group_id"], name: "index_schedules_on_next_up_group_id", using: :btree
   add_index "schedules", ["slidegroup_id"], name: "index_schedules_on_slidegroup_id", using: :btree
-  add_index "schedules", ["up_next_group_id"], name: "index_schedules_on_up_next_group_id", using: :btree
 
   create_table "slide_templates", force: true do |t|
     t.string   "name"
