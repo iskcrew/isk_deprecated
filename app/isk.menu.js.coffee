@@ -46,12 +46,27 @@ show_choise = ->
     .fail ->
       console.log "error fetching displays"
       isk.show_login()
-  
+
+
+escapetimeout=undefined
+escape=3
+
+reset_escape = ->
+  escape=3
+
 $(document).keypress (e) ->
-  if e?.ctrlKey and e?.key == "Esc"
-    display_name.clear()
-    isk.close_client()
-    show_choise()
+  clearTimeout(escapetimeout)
+  escapetimeout=setTimeout(reset_escape, 300)
+  if e?.key == "Escape" or e?.key == "Esc"
+    if --escape <= 0
+      display_name.clear()
+      isk.close_client()
+      show_menu()
+      return false
+  else
+    reset_escape()
+  return true
+    
 
 $ -> init_choise()
 
