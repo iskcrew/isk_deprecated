@@ -16,7 +16,6 @@ send_logout = ->
       isk.menu.displays.hide()
 
 show_login = ->
-  $('#ISKDPY #menu h1').html "ISK-DPY Login"
   ul=$('<ul />')
   ul.append '<li><label>Username:</label><input type="text" id="username" /></li>'
   ul.append '<li><label>Password:</label><input type="password" id="password" /></li>'
@@ -24,13 +23,20 @@ show_login = ->
   ul.find('#submit').click (e) ->
     send_login ul.find('#username').val(), ul.find('#password').val()
 
+  ul.find('input').keypress (e) ->
+    if e.key == 'Enter'
+      ul.find('#submit').click()
+      false
+
   $('#ISKDPY #menu #login').html ul
   true
 
 show_logout = ->
-  $('#ISKDPY #login')
-   .html '<a id="logout">(Logout)</a>'
-   .children().click send_logout
+  ul=$('<ul />')
+    .html '<li><input type="submit" id="logout" value="Logout"/></li>'
+    .find('#logout').click send_logout
+
+  $('#ISKDPY #menu #login').html ul
 
 # EXPORTS:
 @isk.show_login=show_login
