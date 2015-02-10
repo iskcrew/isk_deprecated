@@ -13,35 +13,41 @@ class PermanentData
 
 display_name = new PermanentData 'name'
 
-init_choise = ->
-  $('#ISKDPY #choise').html '<h1></h1><span id="logout"/><ul></ul>'
+init_displays = ->
+  $('#ISKDPY #menu #displays').html '<ul />'
   name=display_name.get()
   if name?
     isk.start_client name
-    hide_choise()
+    hide_menu()
   else
     isk.close_client()
-    show_choise()
-  $('#ISKDPY #choise ul').click (e) ->
+    show_menu()
+  $('#ISKDPY #menu #displays ul').click (e) ->
     name = $(e?.target).data('name')
     if name?
       display_name.set name
       isk.start_client name
-      hide_choise()
+      hide_menu()
 
-hide_choise = ->
-  $('#ISKDPY #choise').hide()
+hide_menu = ->
+  $('#ISKDPY #menu').fadeOut()
+  hide_displays()
 
-show_choise = ->
-  $('#ISKDPY #choise').show()
-  $('#ISKDPY #choise h1').html ""
-  ul=$('#ISKDPY #choise ul').html ""
+show_menu = ->
+  $('#ISKDPY #menu').fadeIn()
+  show_displays()
+
+hide_displays = ->
+  $('#ISKDPY #menu #displays ul').fadeOut()
+
+show_displays = ->
+  ul=$('#ISKDPY #menu #displays ul').html ""
   $.getJSON '/displays/?format=json'
     .done (displays) ->
       console.log "fetched displays", displays
-      $('#ISKDPY #choise h1').html 'Select display:'
       for d in displays
         ul.append "<li data-name='#{d?.name}'>#{d?.name} <br/><span>status: #{d?.status}</span></li>"
+      ul.fadeIn()
       isk.show_logout()
     .fail ->
       console.log "error fetching displays"
@@ -68,9 +74,14 @@ $(document).keypress (e) ->
   return true
     
 
-$ -> init_choise()
+$ -> init_displays()
 
 #EXPORTS:
-@isk.show_choise=show_choise
+@isk.menu=
+  show: show_menu
+  hide: hide_menu
+  displays:
+    show: show_displays
+    hide: hide_displays
 @isk.display_name=display_name
 

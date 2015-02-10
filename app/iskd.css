@@ -11,7 +11,7 @@ div#renderer {
     position: absolute;
     height:100%;
     width:100%;
-    margin: 0 auto; 
+    margin: 0 auto;
     top: 0px;
     left: 0px;
 }
@@ -21,7 +21,7 @@ div#renderer div {
     position: absolute;
     height:100%;
     width:100%;
-    margin: 0 auto; 
+    margin: 0 auto;
     left: 0px; right: 0px; top: 0px;
     #z-index: 1;
 }
@@ -75,32 +75,50 @@ div#pres{
     display: none !important;
 }
 
-div#choise h1{
-    display: inline;
+div#menu h1{
+    text-align:center;
 }
-div#choise #logout{
-    margin: 0 2em;
+
+div#menu div{
+    float: left;
+    background: #500;
+    height: 70%;
+    width: 32%;
+    margin-left: 1%;
+    overflow: auto;
+}
+
+div#menu div#login ul li{
+    margin-bottom: 1ex;
+}
+
+div#menu div#login #logout{
     cursor: pointer;
     color: red;
 }
-div#choise{
+
+div#menu{
     position: absolute;
     left: 0px;
     top: 0px;
     color: white;
-    margin-left: 30%;
-    #z-index: -10;
+    width: 100%;
+    height: 100%;
 }
-div#choise ul li{
-    cursor: pointer;
+
+div#menu * ul{
     list-style-type: none;
 }
-div#choise ul li span{
+
+div#menu div#displays ul li{
+    cursor: pointer;
+}
+div#menu div#displays ul li span{
     color: gray;
     margin-left: 1em;
 }
 label{
-    width: 15%;
+    width: 30%;
     text-align: right;
     margin-right: 0.5em;
 
