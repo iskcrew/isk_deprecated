@@ -33,8 +33,8 @@ show_login = ->
 
 show_logout = ->
   ul=$('<ul />')
-    .html '<li><input type="submit" id="logout" value="Logout"/></li>'
-    .find('#logout').click send_logout
+  ul.html '<li><input type="submit" id="logout" value="Logout"/></li>'
+  ul.find('#logout').click send_logout
 
   $('#ISKDPY #menu #login').html ul
 
