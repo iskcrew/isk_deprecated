@@ -4,16 +4,15 @@ send_login = (username, password) ->
   $.post "/login?format=json", {username: username, password: password}
     .fail (d) ->
       console.log 'Login failed', d?.responseJSON?.message
-      isk.menu.displays.hide()
+      isk.fsm.logout()
     .done (data) ->
       if data?.message
-        isk.menu.displays.show()
+        isk.fsm.login()
 
 send_logout = ->
   $.post "/login?format=json", {_method: "delete"}
     .success ->
-      show_login()
-      isk.menu.displays.hide()
+      isk.fsm.logout()
 
 show_login = ->
   ul=$('<ul />')

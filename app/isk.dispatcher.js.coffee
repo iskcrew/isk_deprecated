@@ -1,25 +1,17 @@
 @isk or= {}
 
-timer=undefined
-connection_lost = (msg) ->
-  console.log "Connection lost", msg?.type, msg
-  $('#errors #connection').addClass('active')
-  reconnect = ->
-    console.log "Reconnection attempt"
-    dispatcher.reconnect()
-    timer = setTimeout( reconnect, 10000 )
-  timer = setTimeout( reconnect, 1000 ) if not timer?
-
 dispatcher = new WebSocketRails(window.location.host + '/websocket')
 
-#dispatcher.bind 'connection_error', handler=connection_lost
-dispatcher.bind 'connection_closed', handler=connection_lost
+#dispatcher.disconnect()
 
-dispatcher.on_open = ->
-  if not dispatcher?.connection_stale()
-    $('#errors #connection').removeClass('active')
-    clearTimeout(timer)
-    timer=undefined
+#dispatcher.bind 'connection_error', handler=connection_lost
+dispatcher.bind 'connection_closed', handler = (msg) ->
+  console.log "Connection lost", msg?.type, msg
+  isk.fsm.websocket_error()
+
+dispatcher.on_open = (msg) ->
+  console.log "Connection established", msg?.type, msg
+  isk.fsm.websocket_connected()
 
 #EXPORTS:
 @isk.dispatcher = dispatcher

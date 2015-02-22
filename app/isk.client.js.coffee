@@ -180,7 +180,7 @@ start_client = (name) ->
   $('#ISKDPY #renderer').fadeIn()
   send_hello name
 
-close_client = ->
+stop_client = ->
   $('#ISKDPY #renderer').fadeOut()
   if display_id?
     isk.dispatcher.unsubscribe "display_"+display_id
@@ -189,8 +189,9 @@ close_client = ->
   root?.html ""
 
 #EXPORTS:
-@isk.start_client = start_client
-@isk.close_client = close_client
-@isk.prev_slide = prev_slide
-@isk.next_slide = next_slide
+@isk.client=
+  start: start_client
+  stop: stop_client
+  prev_slid: prev_slide
+  next_slide: next_slide
 

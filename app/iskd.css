@@ -98,6 +98,7 @@ div#menu div#login #logout{
 }
 
 div#menu{
+    display: none;
     position: absolute;
     left: 0px;
     top: 0px;
