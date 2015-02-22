@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 class PermanentData
   constructor: (@name, initial) ->

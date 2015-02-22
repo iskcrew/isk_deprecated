@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 elem = undefined
 svg = undefined

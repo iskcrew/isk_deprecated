@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 send_login = (username, password) ->
   $.post "/login?format=json", {username: username, password: password}

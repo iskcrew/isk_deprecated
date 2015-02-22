@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 root=$('#ISKDPY #pres').first()
 if not (root?) then return

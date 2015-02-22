@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 shadername=
   fs: 'fragmentShader'

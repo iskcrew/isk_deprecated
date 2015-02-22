@@ -1,4 +1,4 @@
-@isk = @isk || {}
+@isk or= {}
 
 timer=undefined
 connection_lost = (msg) ->
