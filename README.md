@@ -68,11 +68,21 @@ After the database exists and the database.yml file points to it you can run:
 
 This will initialize the database.
 
-### Start the server
+### Development: Start the server
 
 Now you can start the local isk server instance with "rails s" and then navigate to http://localhost:3000/ with a browser. The default login for a new installation is username: admin password: admin.
 
 You also need to start the background process for isk to generate the slide images. This is done by running "bin/delayed_job start".
+
+For periodic tasks, like updating schedule slides there is a another background daemon you can start it with, "script/background_jobs.rb start".
+
+### Production environment
+
+It is highly recomended that you first generate new session cookie encryption keys ("rake secret") and update config/initializers/secret_token.rb, otherwise you will be vulnerable to session forgery.
+
+For performance you will want to have nginx in front of ISK for serving static files (slide images mostly). Example configuration for nginx is available at config/nginx/isk-server. Consult that file and update as needed.
+
+To run the ISK rails application in production mode set the RAILS_ENV environmental variable to 'production'. The script /isk-server gives a example for starting/stopping all the needed components.
 
 # Copyright
 
