@@ -84,6 +84,8 @@ For performance you will want to have nginx in front of ISK for serving static f
 
 To run the ISK rails application in production mode set the RAILS_ENV environmental variable to 'production'. The script /isk-server gives a example for starting/stopping all the needed components.
 
+For the default production configuration the server will expect precompiled javascript/css files, to generate them you need to run "rake assets:precompile" on the production environment.
+
 # Inkscape integration
 
 For more complex slides the best (and just about only) tool available is inkscape (http://inkscape.org). ISK includes two plugins for inkscape at inkscape/, the isk-new and isk-output. You need to place them in the inkscape extensions directory.
