@@ -84,6 +84,24 @@ For performance you will want to have nginx in front of ISK for serving static f
 
 To run the ISK rails application in production mode set the RAILS_ENV environmental variable to 'production'. The script /isk-server gives a example for starting/stopping all the needed components.
 
+# Inkscape integration
+
+For more complex slides the best (and just about only) tool available is inkscape (http://inkscape.org). ISK includes two plugins for inkscape at inkscape/, the isk-new and isk-output. You need to place them in the inkscape extensions directory.
+
+## Background images
+
+By default the base svg template for slides in ISK uses a relative path for the slide background image to keep the svg document sizes as low as possible. This unfortunately causes some issues with editing the slides in inkscape. In order for inkscape to find the background image you need to place it at backgrounds/empty.png relative to the directory you open the slide svg from. For example windows with firefox and "open link with..." needs the backgrounds at %TEMP%\backgrounds\
+
+## isk-new extension
+
+This extension is for quickly creating new slides within inkscape. The new slides will be ungrouped and hidden after creation.
+
+This extension can be found in the extensions -> isk -> new menu item. Activating the extension first gives you a dialog asking for the URL to your ISK server and login details. In addition there is a field for the name for the slide. Activating the extension will replace the current open inkscape document with that of the new slide.
+
+## isk-output extension
+
+This extension is for sending the modifications made to a slide in inkscape back to the ISK server. It can be found at extensions -> publish to -> isk menu item. It has similiar fields for the servers url and login details as the isk-new extension. Activating the extension will read the slide id from the svg metadata and then push it to the ISK server replacing the existing slides image.
+
 # Copyright
 
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
