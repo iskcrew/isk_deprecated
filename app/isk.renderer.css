@@ -1,0 +1,57 @@
+body {
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    background: black;
+}
+
+div#renderer {
+    cursor: none;
+    height:100%;
+    width:100%;
+}
+
+div#renderer * {
+    position: absolute;
+    height:100%;
+    width:100%;
+}
+
+div#clock object {
+    display: block;
+}
+
+div#canvas * {
+    display: block !important;
+}
+
+div#stats {
+    display:inline-block;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+div#stats * {
+    position: relative;
+}
+
+div#errors {
+    display:inline-block;
+    position: absolute;
+    font-size: 50px;
+    right: 0px;
+    top: 0px;
+}
+div#errors * {
+    position: relative;
+    display: none;
+}
+
+div#errors *.active{
+   display: block;
+}
+
+div#pres{
+    display: none !important;
+}
+
