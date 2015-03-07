@@ -5,12 +5,8 @@
 
 - else
 	h1 ISK - Login required
-	
-	= form_tag login_path do
-		p
-			b Username
-			= text_field_tag :username
-		p
-			b Password
-			= password_field_tag :password
-		= submit_tag 'Login'
+
+	= bootstrap_form_tag url: login_path do |f|
+		= f.text_field :username
+		= f.password_field :password
+		= f.submit 'Login', class: 'btn, btn-success, btn-lg'
