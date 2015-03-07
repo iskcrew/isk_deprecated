@@ -1,7 +1,7 @@
 //
 // slides.css.scss
 // isk
-// 
+//
 // Created by Vesa-Pekka Palmu on 2014-06-10.
 // Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
 //
@@ -9,16 +9,16 @@
 @import 'variables';
 
 @font-face{
-font-family: 'Franklin Gothic Heavy';
-src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
-     url('/fonts/Franklin_Gothic_Heavy-Regular.eot'); /* IE9 */
+	font-family: 'Franklin Gothic Heavy';
+	src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
+	url('/fonts/Franklin_Gothic_Heavy-Regular.eot'); /* IE9 */
 }
 
 @font-face{
-font-family: 'Franklin Gothic Heavy';
-src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
-     url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
-font-style: italic;
+	font-family: 'Franklin Gothic Heavy';
+	src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
+	url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
+	font-style: italic;
 }
 
 //slide preview image
@@ -42,21 +42,21 @@ div.group_links {
 	margin: 75px 15px 0px 0px;
 	top: 0px;
 	right: 6px; // WTF is this requirement?
-	
+
 	a {
 		text-decoration: none;
 	}
-	
+
 	div.accordion {
 		width: 145px;
 		h3 {
-				font-size: 7pt;
+			font-size: 7pt;
 		}
-		
+
 		div {
 			padding: 5px;
 		}
-		
+
 		ul {
 			margin: 5px;
 			font-size: 8px;
@@ -85,23 +85,23 @@ div.slide {
 	border-radius: 10px;
 	background: $slide_public_bg;
 	display: inline-block;
-	
+
 	&.slide-hidden {
 		background: $slide_hidden_bg;
 		border: $slide_hidden_border;
 
 		img {
-				opacity: 0.6;
+			opacity: 0.6;
 		}
 	}
-	
-	
+
+
 	div.slide_header {
 		width: 400px;
 		margin-bottom: 5px;
 		font-size: 1.5em;
 		padding-bottom: 5px;
-	
+
 		div.slide_type {
 			float: right;
 			padding: 5px 5px;
@@ -109,58 +109,67 @@ div.slide {
 			border-radius: 10px;
 			border: 1px solid #333;
 			display: inline-block;
-			
+
 			&.image {
 				background: $primary;
 			}
-	
+
 			&.svg-edit {
 				background: $green_dark;
 			}
-	
+
 			&.simple {
 				background: $green;
 			}
-	
+
 			&.inkscape {
 				background: $red;
 			}
-			
+
 			&.template {
 				background: $red_highlight;
 			}
-	
+
 			&.http {
 				background: $secondary;
 			}
-	
+
 			&.video {
 				background: $secondary_highlight;
 			}
 		}
 	}
-	
+
 	div.slide_name {
 		max-width: 320px;
 		overflow: hidden;
 		display: inline-block;
 	}
-	
-	
-	
+
+
+
 	div.slide_buttons {
 		margin-top: 5px;
+		margin-left: auto;
+		margin-right: auto;
 		text-align: center;
 		min-height: 22px;
-		width: 400px;	
+		width: 400px;
+
+		div.btn-toolbar {
+			text-align: center;
+			width: inherit;
+			display: inline-block;
+			margin: 0 auto;
+		}
 	}
-	
+
 }
 
 div.slide_filter {
 	display: inline-block;
 	margin: 20px 1.5em;
-	
+
 	a {
 		text-decoration: none;
 		display: inline-block;
@@ -169,19 +178,19 @@ div.slide_filter {
 		padding: 5px 10px;
 		float: left;
 	}
-	
+
 	a:first-child {
 		border-top-left-radius: 10px;
 		border-bottom-left-radius: 10px;
 	}
-	
+
 	a:last-child {
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 		border-right: 2px solid white;
 		float: none;
 	}
-	
+
 	a.current {
 		background-color: #666;
 		font-weight: bold;
@@ -194,18 +203,18 @@ div.slide_info {
 	div.slide {
 		float: left;
 	}
-	
+
 	div#tabs {
 		float: left;
 		width: 500px;
 	}
-	
-	div.info_block {		
+
+	div.info_block {
 		h2 {
 			margin-top: 0px;
 		}
 	}
-	
+
 	div#group_info {
 		li.current {
 			font-weight: bolder;
@@ -214,18 +223,18 @@ div.slide_info {
 			}
 		}
 	}
-	
+
 	div#metadata {
 		width: 500px;
 		float: left;
 	}
-		
+
 	table.add_override {
 		border: none;
-		
+
 		tr {
 			border: none;
-			
+
 			td {
 				border: none;
 			}
@@ -235,7 +244,7 @@ div.slide_info {
 
 
 div.slide_form {
-	max-width: 420px;	
+	max-width: 420px;
 	textarea {
 		width: 400px;
 	}
@@ -253,7 +262,7 @@ table.template_slide_fields {
 	input[type="text"], textarea {
 		width: 300px;
 	}
-	
+
 	textarea{
 		resize: none;
 		height: 100px;
@@ -263,20 +272,20 @@ table.template_slide_fields {
 
 // Simple editor view and preview
 div#simple_editor {
-		
+
 	div.controls {
 		textarea#simple_head {
-		  font-family: 'Franklin Gothic Heavy';
-		  font-weight: normal;
-		  font-size: 2em;
+			font-family: 'Franklin Gothic Heavy';
+			font-weight: normal;
+			font-size: 2em;
 		}
 
 		textarea#simple_text {
-		  font-family: 'Franklin Gothic Heavy';
-		  font-weight: normal;
-		  font-size: 1.2em;
+			font-family: 'Franklin Gothic Heavy';
+			font-weight: normal;
+			font-size: 1.2em;
 		}
-	
+
 	}
 
 }
@@ -285,19 +294,19 @@ div#simple_editor {
 div.svg_editor_container {
 	min-width: 850px;
 	display: block;
-	
+
 	div.controls {
 		max-width: 400px;
 		margin-right: 5px;
 		display: inline-block;
 	}
-	
+
 	div.svg_preview {
 		border: 2px solid #555;
 		margin-left: 10px;
 		text-align: center;
 		float: right;
-			
+
 		div.updating_preview {
 			position: relative;
 			top: 5em;
@@ -309,22 +318,22 @@ div.svg_editor_container {
 				display: inline-block;
 				padding: 1em;
 				opacity: 0.5;
-						
+
 			}
 		}
-	
+
 		div.svg_container {
 			width: 400px;
 			height: 225px;
-			padding: 0px; 
+			padding: 0px;
 			border: 1px solid black;
 
 			svg {
 				width: 400px;
 				height: 225px;
 			}
-		}		
-	}	
-	
+		}
+	}
+
 }
 

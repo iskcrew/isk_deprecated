@@ -155,21 +155,34 @@ module SlidesHelper
 	
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
+		slide_clone_link(slide, 'btn btn-default')
+	end
+	
+	def slide_clone_link(slide, html_class=nil)
 		link_to icon('copy', 'Clone'), clone_slide_path(slide),
-							method: :post, title: 'Create clone of this slide', class: 'btn btn-default'
+							method: :post, title: 'Create clone of this slide', class: html_class
 	end
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
+		slide_delete_link(slide, 'btn btn-danger')
+	end
+	
+	# Delete link for dropdowns
+	def slide_delete_link(slide, html_class=nil)
 		link_to delete_link_text, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: 'btn btn-danger'
+							method: :delete, class: html_class
 	end
 	
 	# Ungroup slide button
 	def slide_ungroup_button(slide)
-		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide),
-							 :method => :post, :class => 'btn btn-warning'
+		slide_ungroup_link(slide, 'btn btn-warning')
+	end
+	
+	# Ungroup link for dropdowns
+	def slide_ungroup_link(slide, html_class=nil)
+		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide), method: :post, class: html_class
 	end
 	
 	# Link to next slide in the same group as this slide
