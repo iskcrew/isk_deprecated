@@ -86,7 +86,7 @@ div.slide {
 	background: $slide_public_bg;
 	display: inline-block;
 	
-	&.hidden {
+	&.slide-hidden {
 		background: $slide_hidden_bg;
 		border: $slide_hidden_border;
 

@@ -8,5 +8,8 @@
 @import "font-awesome";
 @import "bootstrap-sprockets";
 @import "bootstrap_custom";
+@import 'master';
+@import 'buttons';
+@import 'slides';
 
-body { padding-top: 70px; }
+body { padding-top: 85px; }
