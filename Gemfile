@@ -52,6 +52,13 @@ gem 'bcrypt', '~> 3.1.7'
 
 #### END OF RAILS DEFAULT GEMFILE
 
+# Twitter bootstrap for base css styling
+gem 'bootstrap-sass', '~> 3.3.3'
+# Bootstrap aware formbuilder 
+gem 'bootstrap_form'
+# navbar
+gem 'rails_bootstrap_navbar'
+
 # Nokogiri for XML processing
 gem 'nokogiri'
 
