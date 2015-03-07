@@ -17,17 +17,17 @@ module ApplicationHelper
 		tabs += admin_controllers if current_user.admin?
 		tabs.each do |c|
 			html_options = {
-				class: 'ui-state-default ui-corner-top',
+				class: '',
 				id: "#{c.downcase}_tab"
 			}
 			if controller.class.name.include?(c)
-				html_options[:class] =	'ui-tabs-active ui-state-active ui-corner-top'
+				html_options[:class] =	'active'
 			end
-			ret << content_tag('li', link_to(c, {:controller => c.downcase},class: 'ui-tabs-anchor'), html_options)
+			ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
 		end
 		return ret.html_safe 
 	end
-	
+		
 	# Inactive toggle button with "led"
 	def inactive_toggle(name, status)
 		if status
