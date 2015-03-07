@@ -24,7 +24,7 @@ nav class="navbar navbar-default navbar-fixed-top"
 			ul class="nav navbar-nav navbar-right"
 				li
 					= form_tag login_path, method: :delete do
-						button.btn.navbar-btn.btn-danger
+						button.btn.navbar-btn.btn-danger.btn-sm
 							= icon 'power-off', "Logout (#{current_user.username})"
 	div.container
 		= render partial: 'navigation'

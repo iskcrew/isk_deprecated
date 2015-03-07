@@ -16,14 +16,16 @@ div.slide class=(slide.public ? 'slide-public' : 'slide-hidden') id="slide_#{sli
 					- if slide.can_edit? current_user
 						= link_to 'Undelete', undelete_slide_path(slide), :method => :post, :class => 'button'
 			- elsif slide.can_edit? current_user
-				=< slide_toggle_button 'Public', slide, :public
-				=< slide_toggle_button 'Clock', slide, :show_clock
-				=< slide_edit_link(slide)
-				=< slide_svg_link(slide)
-				- if slide.master_group_id != current_event.ungrouped_id
-					=< slide_ungroup_button(slide)
-				=< slide_clone_button(slide)
-				=< slide_delete_button(slide)
+				div.btn-toolbar
+					div.btn-group-xs
+						=< slide_toggle_button 'Public', slide, :public
+						=< slide_toggle_button 'Clock', slide, :show_clock
+						=< slide_edit_link(slide)
+						=< slide_svg_link(slide)
+						- if slide.master_group_id != current_event.ungrouped_id
+							=< slide_ungroup_button(slide)
+						=< slide_clone_button(slide)
+						=< slide_delete_button(slide)
 			- else
 				/ can't edit
 				=< slide_hide_button_or_status(slide)

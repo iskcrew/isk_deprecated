@@ -137,8 +137,8 @@ module SlidesHelper
 	
 	# Generate the edit link with consistent confirm message
 	def slide_edit_link(slide)
-		link_to edit_link_text, edit_slide_path(slide), 
-			:class => 'button', title: 'Edit slide metadata', data: {confirm: (
+		link_to edit_link_text, edit_slide_path(slide),
+			class: 'btn btn-warning', data: {confirm: (
 			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
 	
@@ -147,7 +147,8 @@ module SlidesHelper
 		if [InkscapeSlide].include? slide.class
 			link_text = icon 'download', 'SVG'
 			link_to link_text, svg_data_slide_path(slide),
-							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
+							class: 'btn btn-default', title: 'Download slide in SVG format',
+							data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 		end
 	end
@@ -155,20 +156,20 @@ module SlidesHelper
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
 		link_to icon('copy', 'Clone'), clone_slide_path(slide),
-							:method => :post, :title => 'Create clone of this slide', :class => 'button'
+							method: :post, title: 'Create clone of this slide', class: 'btn btn-default'
 	end
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
 		link_to delete_link_text, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: 'button warning'
+							method: :delete, class: 'btn btn-danger'
 	end
 	
 	# Ungroup slide button
 	def slide_ungroup_button(slide)
 		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide),
-							 :method => :post, :class => 'button ungroup'
+							 :method => :post, :class => 'btn btn-warning'
 	end
 	
 	# Link to next slide in the same group as this slide
