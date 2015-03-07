@@ -10,11 +10,9 @@ html
 		link rel="icon" type="image/gif" href="/favicon.gif"
 		link rel="icon" type="image/x-icon" href="/favicon.ico"
 	body
-		-if Rails.env.development?
-			div#dev_mode DEV
 		= render partial: "shared/navbar"
 					
-		div#content.container
+		div#content.container-fluid
 			= render partial: "shared/display_warnings"
 			div.flash
 				- if flash[:error].present?

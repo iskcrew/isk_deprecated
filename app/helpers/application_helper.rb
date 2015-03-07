@@ -10,11 +10,10 @@ module ApplicationHelper
 	# Generate the top navigation tabs and set a special style for the tab of the current controller
 	def navigation_links
 		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules', 'Tickets']
-		admin_controllers = ['Templates', 'Users', 'Events']
 		ret = String.new
 		base_html_options = {class: 'ui-state-default ui-corner-top'}
+		# Build navigation tabs for basic controllers
 		tabs = controllers
-		tabs += admin_controllers if current_user.admin?
 		tabs.each do |c|
 			html_options = {
 				class: '',
@@ -25,6 +24,7 @@ module ApplicationHelper
 			end
 			ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
 		end
+		
 		return ret.html_safe 
 	end
 		
