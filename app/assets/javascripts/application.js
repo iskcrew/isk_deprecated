@@ -14,6 +14,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require bootstrap-sprockets
 //= require jquery.timer
 //= require jquery-noty.main
 // Websocket javascript client and instance bound to window
