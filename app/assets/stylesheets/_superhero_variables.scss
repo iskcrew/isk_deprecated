@@ -692,19 +692,19 @@ $list-group-link-heading-color: $text-color;
 //
 //##
 
-$panel-bg:                    $gray-light;
+$panel-bg:                    lighten($body-bg, 10%);
 $panel-body-padding:          15px;
 $panel-heading-padding:       10px 15px;
 $panel-footer-padding:        $panel-heading-padding;
 $panel-border-radius:         $border-radius-base;
 
 //** Border color for elements within panels
-$panel-inner-border:          transparent;
+$panel-inner-border:          $gray-dark;
 $panel-footer-bg:             $table-bg-hover;
 
-$panel-default-text:          $gray-dark;
+$panel-default-text:          $gray-lighter;
 $panel-default-border:        $gray-darker;
-$panel-default-heading-bg:    #f5f5f5;
+$panel-default-heading-bg:    lighten($body-bg, 15%);
 
 $panel-primary-text:          #fff;
 $panel-primary-border:        $brand-primary;
