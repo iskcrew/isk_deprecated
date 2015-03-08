@@ -417,7 +417,7 @@ $nav-disabled-link-color:                   $gray-light;
 $nav-disabled-link-hover-color:             $gray-light;
 
 //== Tabs
-$nav-tabs-border-color:                     transparent;
+$nav-tabs-border-color:                     lighten($gray-light, 20%);
 
 $nav-tabs-link-hover-border-color:          $gray-light;
 
