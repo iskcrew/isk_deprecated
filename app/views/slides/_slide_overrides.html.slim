@@ -1,5 +1,5 @@
 - unless @slide.deleted? || @slide.replaced?
-	div.slide_overrides.info_block#overrides
+	div.tab-pane.slide_overrides.info_block#overrides
 		h2 Override queues
 		- if @slide.override.empty?
 			p This slide isn't on any displays override queue currently.
