@@ -35,33 +35,13 @@ div.scrolling_div-wrapper {
 	padding: 0px;
 }
 
-div.group_links {
+div#group_links {
 	display: block;
 	position: fixed;
 	max-width: 150px;
 	margin: 75px 15px 0px 0px;
 	top: 0px;
 	right: 6px; // WTF is this requirement?
-
-	a {
-		text-decoration: none;
-	}
-
-	div.accordion {
-		width: 145px;
-		h3 {
-			font-size: 7pt;
-		}
-
-		div {
-			padding: 5px;
-		}
-
-		ul {
-			margin: 5px;
-			font-size: 8px;
-		}
-	}
 }
 
 div.slide_list {

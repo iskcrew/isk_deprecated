@@ -1,12 +1,17 @@
 - if @groups && @groups.size > 1
 	= cache('group_links', tag: ["groups", "slides"]) do
-		div.group_links#scrolling_div
-			p Goto group:
-			div.accordion
-				- @groups.chunk {|g| g.name.upcase.ord }.each do |ch, groups|
-					h3 #{ch.chr}
-					div
-						ul
-							- groups.each do |group|
-								li
-									a href=("\#group_#{group.id}") #{group.name}
+		div#group_links
+			h4 Goto group:
+			
+			div.btn-group.btn-group-vertical
+				- @groups.chunk {|g| g.name.upcase.ord}.each do |ch, groups|
+					- if groups.size > 1
+						div.btn-group
+							button.btn.btn-default.dropdown-toggle data-toggle="dropdown"
+								= ch.chr
+								span.caret
+							ul.dropdown-menu
+								- groups.each do |group|
+									li: a.group_link href=("\#group_#{group.id}") #{group.name}
+					- else
+						a.btn.btn-default href=("\#group_#{groups.first.id}") #{groups.first.name}
