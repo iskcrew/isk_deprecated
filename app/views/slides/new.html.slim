@@ -13,10 +13,10 @@ div#tabs
 	- if current_templates.present?	
 		div#template
 			h2 New slide from template
-			= form_for @slide, html: {id: 'new_template_slide'} do |f|
+			= bootstrap_form_for @slide, html: {id: 'new_template_slide'} do |f|
 				= f.error_messages
 				= hidden_field_tag :create_type, 'template'
-				= render partial: 'form'
+				= render partial: 'form', locals: {f: f}
 				p
 					| Template: 
 					= f.collection_select(:foreign_object_id, current_templates, :id, :name)
@@ -25,30 +25,30 @@ div#tabs
 	
 	div#simple
 		h2 New simple editor slide
-		= form_for @slide, html: {id: 'new_simple_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_simple_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'simple'
-			= render partial: 'form'
-			= render partial: 'simple_edit'
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'simple_edit', locals: {f: f}
 			p = f.submit
 	
 	div#inkscape
 		h2 New inkscape slide
 		p The slide will have the same starting template as a simple slide.
-		= form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'inkscape'
-			= render partial: 'form'
+			= render partial: 'form', locals: {f: f}
 			p = f.submit
 	
 	div#httpslide
 		h2 New http fecher slide
 		p The slide will be automatically updated periodically by the background process.
-		= form_for @slide, html: {id: 'new_http_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_http_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'http_slide'
-			= render partial: 'form'
-			= render partial: 'http_slide_form'
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'http_slide_form', locals: {f: f}
 			p = f.submit
 		
 	div#image
@@ -56,11 +56,11 @@ div#tabs
 		p 
 			| You can upload a image in any format understood by imagemagick library.
 			|  The image will be shown centered on a black background and resized down if needed.
-		= form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
+		= bootstrap_form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'image'
-			= render partial: 'form'
-			= render partial: 'image_slide_form'
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'image_slide_form', locals: {f: f}
 			p: b Choose the image to upload:
 			= file_field_tag :image
 			p = f.submit

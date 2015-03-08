@@ -3,14 +3,7 @@
 ruby:
 	slidedata = (@slide.is_a?(HttpSlide) ? @slide.slidedata : HttpSlide::DefaultSlidedata)
 
-= fields_for @slide do |f|
-	= f.fields_for :slidedata do |f2|
-		p
-			=> f.url_field :url, :value => slidedata[:url]
-			= f.label :url, 'URL to fetch from (http or https)'
-		p
-			=> f.text_field :user, :value => slidedata[:user]
-			= f.label :user, "HTTP basic auth username (if needed)"
-		p
-			=> f.text_field :password, :value => slidedata[:password]
-			= f.label :password, 'HTTP basic auth password (if needed, stored clear text)'
+= f.fields_for :slidedata do |ff|
+	= ff.url_field :url, value: slidedata[:url], label: 'URL to fetch from (http or https)'
+	= ff.text_field :user, value: slidedata[:user], label: "HTTP basic auth username (if needed)"
+	= ff.text_field :password, value: slidedata[:password], label: 'HTTP basic auth password (stored clear text)'
