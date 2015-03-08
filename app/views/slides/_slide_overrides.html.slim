@@ -12,17 +12,20 @@
 		/ the form for doing so
 		- unless Display.can_override(current_user).empty?
 			h3 Add this slide as override
-			= bootstrap_form_for :add_to_override, :url => add_to_override_slide_path(@slide) do |f|
+			= bootstrap_form_for :add_to_override, url: add_to_override_slide_path(@slide), layout: :horizontal,
+				 label_col: 'col-sm-4', control_col: 'col-sm-8' do |f|
 				= f.collection_select :display_id, Display.can_override(current_user).order(:name),
 					:id, :name, label: 'Display'
-				div.input-group.spinner
-					= f.label :duration, 'Duration (seconds)',class: 'control-label'
-					div
-						= f.text_field_without_bootstrap :duration, class: 'form-control'
-						div.input-group-btn-vertical
-							a.btn.btn-default
-								i.fa.fa-caret-up
-							a.btn.btn-default
-								i.fa.fa-caret-down
+				div.form-group
+					= f.label :duration, 'Duration (seconds)',class: 'control-label col-sm-4'
+					div.col-sm-8
+						div.input-group.spinner
+							= f.text_field_without_bootstrap :duration, class: 'form-control', value: 5.minutes
+							div.input-group-btn-vertical
+								a.btn.btn-default
+									i.fa.fa-caret-up
+								a.btn.btn-default
+									i.fa.fa-caret-down
 				= f.collection_select :effect_id, Effect.all, :id, :name, label: 'Transition effect'
-				= f.primary 'Add override'
+				= f.form_group do
+					= f.primary 'Add override'
