@@ -111,6 +111,7 @@ This extension is for sending the modifications made to a slide in inkscape back
 Python plugins for Inkscape (c) Copyright 2015 Jarkko Räsänen.
 
 * app/assets/images/wait.gif by Jarkko Räsänen, cat photo by Vesa-Pekka Palmu
+* app/assets/images/isklogo_* by Jarkko Räsänen
 * app/assets/images/display_error.svg by Vesa-Pekka Palmu
 * app/assets/images/ui-* from jquery themeroller
 * vendor/assets/javascripts/jquery-noty* from https://github.com/needim/noty with MIT license

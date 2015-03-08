@@ -1,12 +1,24 @@
+div.row
+	div.col-md-4
+	div.col-md-4
+		= image_tag 'isklogo_h250px_transparent.png'
+	div.col-md-4
+
 - if current_user.present?
-	h1 Welcome to ISK #{current_user.username}!
-	
-	= link_to "Logout (#{current_user.username})", login_path, method: :delete
+	div.row
+		div.col-md-4
+		div.col-md-4
+			h1 Welcome to ISK #{current_user.username}!
+			= link_to "Logout (#{current_user.username})", login_path, method: :delete
+		div.col-md-4
 
 - else
-	h1 ISK - Login required
-
-	= bootstrap_form_tag url: login_path do |f|
-		= f.text_field :username
-		= f.password_field :password
-		= f.submit 'Login', class: 'btn, btn-success, btn-lg'
+	div.row
+		div.col-md-4
+		div.col-md-4
+			h1 ISK - Login required
+			= bootstrap_form_tag url: login_path, layout: :horizontal, label_col: 'col-md-4', control_col: 'col-md-5' do |f|
+				= f.text_field :username
+				= f.password_field :password
+				= f.form_group do
+					= f.primary 'Login'

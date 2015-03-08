@@ -1,9 +1,10 @@
-nav class="navbar navbar-default navbar-fixed-top"
+nav.navbar.navbar-default.navbar-fixed-top#top-navbar
 	div class="container-fluid"
 		/ Brand and toggle get grouped for better mobile display -->
 		div class="navbar-header"
 			- if Rails.env.development?
-				a.navbar-brand href="/" DEV MODE
+				a.navbar-brand href="/"
+					= image_tag 'isklogo_h50px_transparent.png'
 			- else
 				a.navbar-brand href="/" ISK
 		/ Collect the nav links, forms, and other content for toggling -->

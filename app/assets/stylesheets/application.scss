@@ -14,7 +14,15 @@
 
 
 // TODO: move to other files
+// Navbar
 body { padding-top: 85px; }
+
+nav#top-navbar {
+  
+  a.navbar-brand {
+    padding: 5px 15px;
+  }
+}
 
 div.panel-heading {
   font-size: 150%;
