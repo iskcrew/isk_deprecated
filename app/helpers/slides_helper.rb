@@ -188,14 +188,14 @@ module SlidesHelper
 	# Link to next slide in the same group as this slide
 	def slide_next_in_group_link(slide)
 		if s = slide.master_group.slides.where("position > #{slide.position}").first
-			link_to ("Next slide #{icon('forward')}").html_safe, slide_path(s), class: 'button'
+			link_to ("Next slide #{icon('forward')}").html_safe, slide_path(s), class: 'btn btn-primary btn-xs'
 		end
 	end
 
 	# Link to previous slide in the same group as this slide
 	def slide_previous_in_group_link(slide)
 		if s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
-			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'button'
+			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'btn btn-primary btn-xs'
 		end
 	end
 
