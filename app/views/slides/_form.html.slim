@@ -1,24 +1,25 @@
-div.slide_form
-	h2 Metadata
-	p Metadata is used only internally and never shown on the displays.
+div.row
+	div.col-md-6
+		h2 Metadata
+		p Metadata is used only internally and never shown on the displays.
 	
-	= f.text_field :name
+		= f.text_field :name
+		= f.text_area :description, :cols => 50, :rows => 5
 	
-	= f.text_area :description, :cols => 50, :rows => 5
-	
-	h2 Settings
-	p 
-		| Setting affect how this slide is shown on displays if part of a presentation.
-		|  They have no effect on how the slide behaves when put into override queue of a
-		|  display.
-	= f.check_box :show_clock
-	= f.check_box :public
-	div.input-group.spinner
-		= f.label :duration, class: 'control-label'
-		div
-			= f.text_field_without_bootstrap :duration, class: 'form-control'
-			div.input-group-btn-vertical
-				a.btn.btn-default
-					i.fa.fa-caret-up
-				a.btn.btn-default
-					i.fa.fa-caret-down
+	div.col-md-6
+		h2 Settings
+		p 
+			| Setting affect how this slide is shown on displays if part of a presentation.
+			|  They have no effect on how the slide behaves when put into override queue of a
+			|  display.
+		= f.check_box :show_clock
+		= f.check_box :public
+		div.input-group.spinner
+			= f.label :duration, class: 'control-label'
+			div
+				= f.text_field_without_bootstrap :duration, class: 'form-control'
+				div.input-group-btn-vertical
+					a.btn.btn-default
+						i.fa.fa-caret-up
+					a.btn.btn-default
+						i.fa.fa-caret-down

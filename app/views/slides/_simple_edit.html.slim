@@ -1,10 +1,10 @@
-div.svg_editor_container#simple_editor
+div.svg_editor_container#simple_editor.row
 	/ Since when creating a new slide we have instance of Slide instead of SimpleSlide we need
 	/ to make sure we have some defaults.
 	ruby:
 		slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
 	
-	div.controls
+	div.controls.col-sm-6
 		h2 Slide contents
 		p 
 		 | Use &lt;foo&gt; to highlight text in the slide.
@@ -17,9 +17,10 @@ div.svg_editor_container#simple_editor
 			= simple_text_size_select(ff, slidedata[:text_size])
 			= simple_color_select(ff, slidedata[:color])
 	
-	div.svg_preview
-		h2 Preview
-		div.updating_preview
-			p #{icon "refresh", nil, class: 'fa-spin'} Updating preview...
-		div#svg_container.svg_container
-			svg#svg
+	div.col-sm-6
+		div.svg_preview
+			h2 Preview
+			div.updating_preview
+				p #{icon "refresh", nil, class: 'fa-spin'} Updating preview...
+			div#svg_container.svg_container
+				svg#svg
