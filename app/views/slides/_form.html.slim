@@ -1,13 +1,11 @@
 div.slide_form
-	= fields_for @slide do |f|
+	= f.fields_for @slide do |ff|
 		h2 Metadata
 		p Metadata is used only internally and never shown on the displays.
 		
-		h3 = f.label :name
-		= f.text_field :name
+		= ff.text_field :name
 		
-		h3 = f.label :description
-		= f.text_area :description, :cols => 50, :rows => 5
+		= ff.text_area :description, :cols => 50, :rows => 5
 		
 		h2 Settings
 		p 
@@ -16,11 +14,16 @@ div.slide_form
 			|  display.
 		table.slide_settings
 			tr
-				td = f.check_box :show_clock
-				td = f.label :show_clock
+				td = ff.check_box :show_clock
 			tr
-				td = f.check_box :public
-				td = f.label :public
+				td = ff.check_box :public
 			tr
-				td = f.text_field :duration, size: 3, class: 'duration_spinner'
-				td = f.label :duration
+				td 
+					div.input-group.spinner
+						= ff.text_field_without_bootstrap :duration, size: 3, class: 'form-control'
+						div.input-group-btn-vertical
+							a.btn.btn-default
+								i.fa.fa-caret-up
+							a.btn.btn-default
+								i.fa.fa-caret-down
+					= ff.label :duration, class: 'control-label'
