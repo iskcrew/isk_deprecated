@@ -147,7 +147,7 @@ module SlidesHelper
 		if [InkscapeSlide].include? slide.class
 			link_text = icon 'download', 'SVG'
 			link_to link_text, svg_data_slide_path(slide),
-							class: 'btn btn-default', title: 'Download slide in SVG format',
+							class: 'btn btn-primary', title: 'Download slide in SVG format',
 							data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 		end
@@ -155,7 +155,7 @@ module SlidesHelper
 	
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
-		slide_clone_link(slide, 'btn btn-default')
+		slide_clone_link(slide, 'btn btn-primary')
 	end
 	
 	def slide_clone_link(slide, html_class=nil)

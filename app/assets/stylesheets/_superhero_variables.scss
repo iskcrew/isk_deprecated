@@ -226,7 +226,7 @@ $cursor-disabled:                not-allowed;
 //** Background for the dropdown menu.
 $dropdown-bg:                    $gray-light;
 //** Dropdown menu `border-color`.
-$dropdown-border:                transparent;
+$dropdown-border:                $gray-darker;
 //** Dropdown menu `border-color` **for IE8**.
 $dropdown-fallback-border:       transparent;
 //** Divider color for between dropdown items.
@@ -703,27 +703,27 @@ $panel-inner-border:          transparent;
 $panel-footer-bg:             $table-bg-hover;
 
 $panel-default-text:          $gray-dark;
-$panel-default-border:        transparent;
+$panel-default-border:        $gray-darker;
 $panel-default-heading-bg:    #f5f5f5;
 
 $panel-primary-text:          #fff;
-$panel-primary-border:        transparent;
+$panel-primary-border:        $brand-primary;
 $panel-primary-heading-bg:    $brand-primary;
 
 $panel-success-text:          $state-success-text;
-$panel-success-border:        transparent;
+$panel-success-border:        $state-success-bg;
 $panel-success-heading-bg:    $state-success-bg;
 
 $panel-info-text:             $state-info-text;
-$panel-info-border:           transparent;
+$panel-info-border:           $state-info-bg;
 $panel-info-heading-bg:       $state-info-bg;
 
 $panel-warning-text:          $state-warning-text;
-$panel-warning-border:        transparent;
+$panel-warning-border:        $state-warning-bg;
 $panel-warning-heading-bg:    $state-warning-bg;
 
 $panel-danger-text:           $state-danger-text;
-$panel-danger-border:         transparent;
+$panel-danger-border:         $state-danger-bg;
 $panel-danger-heading-bg:     $state-danger-bg;
 
 

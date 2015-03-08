@@ -79,17 +79,16 @@ table.compact_slidelist {
 
 // app/views/slides/_slide.html.slim
 div.slide {
-	margin: 2px;
-	padding: 5px;
-	border: $slide_border;
-	border-radius: 10px;
-	background: $slide_public_bg;
 	display: inline-block;
+	margin: 5px;
 
 	&.slide-hidden {
-		background: $slide_hidden_bg;
-		border: $slide_hidden_border;
-
+		border-color: darken($panel-primary-border, 20%);
+		
+		div.panel-heading {
+			background: darken($panel-primary-heading-bg, 20%);
+		}
+		
 		img {
 			opacity: 0.6;
 		}
@@ -98,9 +97,14 @@ div.slide {
 
 	div.slide_header {
 		width: 400px;
-		margin-bottom: 5px;
-		font-size: 1.5em;
-		padding-bottom: 5px;
+		padding: 5px 10px;
+		
+		div.slide_name {
+			max-width: 310px;
+			height: 25px;
+			overflow: hidden;
+			display: inline-block;
+		}
 
 		div.slide_type {
 			float: right;
@@ -140,13 +144,9 @@ div.slide {
 		}
 	}
 
-	div.slide_name {
-		max-width: 320px;
-		overflow: hidden;
-		display: inline-block;
+	div.panel-body {
+		padding: 0px;
 	}
-
-
 
 	div.slide_buttons {
 		margin-top: 5px;
@@ -155,6 +155,7 @@ div.slide {
 		text-align: center;
 		min-height: 22px;
 		width: 400px;
+		padding: 5px 0;
 
 		div.btn-toolbar {
 			text-align: center;
