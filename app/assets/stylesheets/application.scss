@@ -12,6 +12,8 @@
 @import "buttons";
 @import "slides";
 
+
+// TODO: move to other files
 body { padding-top: 85px; }
 
 div.panel-heading {
@@ -19,5 +21,15 @@ div.panel-heading {
   
   a {
     color: inherit;
+  }
+}
+
+form.form-inline {
+  label {
+    margin: 0px 5px;
+  }
+  
+  input {
+    margin: 0px 5px;
   }
 }

@@ -14,8 +14,7 @@ div.tab-pane.authorized_users.info_block#authorized_users
 							class: 'button warning fa fa-times-circle',
 							title: 'Remove user permissions'
 	- if obj.admin? current_user
-		= form_for :grant, url: permission_path(obj) do |f|
-			p Add edit priviledges for a user
-			= f.select :user_id, options_for_select(User.all.collect {|u| [ u.username, 
-				u.id ] })
-			=< f.submit 'Add'
+		h3 Add edit permissions for user
+		= bootstrap_form_for :grant, url: permission_path(obj), layout: :inline do |f|
+			= f.collection_select :user_id, User.all.order(:username), :id, :username, label: 'User'
+			= f.primary 'Add'
