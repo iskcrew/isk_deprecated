@@ -1,17 +1,17 @@
 h1 Create a new slide
 
 p Choose the slide type to create.
-div#tabs
-	ul
-		li: a href="#simple" Simple editor
-		li: a href="#inkscape" Inkscape
-		li: a href="#httpslide" Http fecher
-		li: a href="#image" Upload image
-		- if current_templates.present? 
-			li: a href="#template" Slide from template
-	
+ul.nav.nav-tabs
+	li.active: a href="#simple" data-toggle="tab" Simple editor
+	li: a href="#inkscape" data-toggle="tab" Inkscape
+	li: a href="#httpslide" data-toggle="tab" Http fecher
+	li: a href="#image" data-toggle="tab" Upload image
+	- if current_templates.present? 
+		li: a href="#template" data-toggle="tab" Slide from template
+
+div.tab-content
 	- if current_templates.present?	
-		div#template
+		div.tab-pane#template
 			h2 New slide from template
 			= bootstrap_form_for @slide, html: {id: 'new_template_slide'} do |f|
 				= f.error_messages
@@ -23,7 +23,7 @@ div#tabs
 				div#template_slide_form.svg_editor_container
 				p = f.submit
 	
-	div#simple
+	div.tab-pane.active#simple
 		h2 New simple editor slide
 		= bootstrap_form_for @slide, html: {id: 'new_simple_slide'} do |f|
 			= f.error_messages
@@ -32,7 +32,7 @@ div#tabs
 			= render partial: 'simple_edit', locals: {f: f}
 			p = f.submit
 	
-	div#inkscape
+	div.tab-pane#inkscape
 		h2 New inkscape slide
 		p The slide will have the same starting template as a simple slide.
 		= bootstrap_form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
@@ -41,7 +41,7 @@ div#tabs
 			= render partial: 'form', locals: {f: f}
 			p = f.submit
 	
-	div#httpslide
+	div.tab-pane#httpslide
 		h2 New http fecher slide
 		p The slide will be automatically updated periodically by the background process.
 		= bootstrap_form_for @slide, html: {id: 'new_http_slide'} do |f|
@@ -51,7 +51,7 @@ div#tabs
 			= render partial: 'http_slide_form', locals: {f: f}
 			p = f.submit
 		
-	div#image
+	div.tab-pane#image
 		h2 New slide from image
 		p 
 			| You can upload a image in any format understood by imagemagick library.
