@@ -12,3 +12,9 @@
 @import "slides";
 
 body { padding-top: 85px; }
+
+div.panel-heading {
+  a {
+    color: inherit;
+  }
+}
