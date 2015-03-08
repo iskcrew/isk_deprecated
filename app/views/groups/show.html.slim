@@ -1,53 +1,52 @@
-h1 Information for group: #{@group.name}
+div.row
+	h1 Information for group: #{@group.name}
 
-
-div#tabs
-	ul
-		- if @group.is_a? PrizeGroup
-			li: a href="#prize_group" Prize group data
-		li: a href="#tickets" Tickets
-		- if @group.presentations.present?
-			li: a href="#presentations" Presentations
-		- if Display.can_override(current_user).present?
-			li: a href="#overrides" Overrides
-		li: a href="#authorized_users" Authorized users
-
-	- if @group.is_a? PrizeGroup
-		div#prize_group
-			h2 Prize group data
-			p Tittle: #{@group.data[:title]}
-			ol
-				- @group.data[:awards].each do |d|
-					li
-						b Name:
-						= d[:name]
-						b By:
-						= d[:by]
-						b Points:
-						= d[:pts]
 	
-	= tickets_partial(@group)
+	div.panel.panel-default
+		ul.nav.nav-tabs
+			li.active: a data-toggle="tab" href="#presentations" Presentations
+			- if @group.is_a? PrizeGroup
+				li: a data-toggle="tab" href="#prize_group" Prize group data
+			li: a data-toggle="tab" href="#tickets" Tickets
+			- if Display.can_override(current_user).present?
+				li: a data-toggle="tab" href="#overrides" Overrides
+			li: a data-toggle="tab" href="#authorized_users" Authorized users
+		div.tab-content.panel-body
+			div.tab-pane.active#presentations
+				h2 Presentations
+				- if @group.presentations.present?
+					p This group is part of the following presentations:
+					ul
+						- @group.presentations.each do |p|
+							li = link_to p.name, presentations_path(p)
+				- else
+					p This group doesn't belong to any presentation.
+			
+			- if @group.is_a? PrizeGroup
+				div.tab-pane#prize_group
+					h2 Prize group data
+					p Title: #{@group.data[:title]}
+					ol
+						- @group.data[:awards].each do |d|
+							li
+								b Name:
+								= d[:name]
+								b By:
+								= d[:by]
+								b Points:
+								= d[:pts]
+			- if Display.can_override(current_user).present?
+				div.tab-pane#overrides
+					h2 Add all slides in this group to override on a display
+					= bootstrap_form_for :override, url: add_to_override_group_path(@group) do |f|
+						= f.label :display_id, 'Display:'
+						= f.collection_select(:display_id, Display.can_override(current_user), :id, :name)
+						= f.label :duration, 'Duration for each slide (sec):'
+						= f.text_field :duration, value: 60, size: 4, class: 'duration_spinner'
+						= f.submit 'Add to override'
+			= tickets_partial(@group)
+			= authorized_users(@group)
 
-	- if @group.presentations.present?
-		div#presentations
-			h2 Presentations
-			p This group is part of the following presentations:
-			ul
-				- @group.presentations.each do |p|
-					li
-						= link_to p.name, presentations_path(p)
-	
-	=authorized_users(@group)
-
-	- if Display.can_override(current_user).present?
-		div#overrides
-			h2 Add all slides in this group to override on a display
-			= form_for :override, url: add_to_override_group_path(@group) do |f|
-				= f.label :display_id, 'Display:'
-				= f.collection_select(:display_id, Display.can_override(current_user), :id, :name)
-				= f.label :duration, 'Duration for each slide (sec):'
-				= f.text_field :duration, value: 60, size: 4, class: 'duration_spinner'
-				= f.submit 'Add to override'
 
 h2 Slides in this group
 
