@@ -19,7 +19,7 @@ div.tab-pane.active.slide_group_info.info_block#group_info
 		p 
 			| This slide doesn't belong to a group. As such this slide can't be a part of a 
 			| presentation until it is added to a group.
-		= bootstrap_form_for :add_to_group, url: add_to_group_slide_path(@slide.id) do |f|
+		= bootstrap_form_for :add_to_group, url: add_to_group_slide_path(@slide.id), layout: :inline do |f|
 			= f.collection_select :group_id, MasterGroup.current.can_edit(current_user).order(:name),
 				:id, :name, label: "Group"
 			= f.primary "Add"
