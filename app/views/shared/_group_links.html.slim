@@ -3,7 +3,7 @@
 		div#group_links
 			h4 Goto group:
 			
-			div.btn-group.btn-group-vertical
+			div.btn-group.btn-group-vertical.btn-group-sm
 				- @groups.chunk {|g| g.name.upcase.ord}.each do |ch, groups|
 					- if groups.size > 1
 						div.btn-group
@@ -14,4 +14,4 @@
 								- groups.each do |group|
 									li: a.group_link href=("\#group_#{group.id}") #{group.name}
 					- else
-						a.btn.btn-default href=("\#group_#{groups.first.id}") #{groups.first.name}
+						a.btn.btn-default.group_link href=("\#group_#{groups.first.id}") #{groups.first.name}
