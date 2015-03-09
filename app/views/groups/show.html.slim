@@ -1,66 +1,28 @@
 div.row
-	h1 Information for group: #{@group.name}
+	div.col-xs-8
+		h1 Information for group: #{@group.name}
 
-	
-	div.panel.panel-default
-		ul.nav.nav-tabs
-			li.active: a data-toggle="tab" href="#presentations" Presentations
-			- if @group.is_a? PrizeGroup
-				li: a data-toggle="tab" href="#prize_group" Prize group data
-			li: a data-toggle="tab" href="#tickets" Tickets
-			- if Display.can_override(current_user).present?
-				li: a data-toggle="tab" href="#overrides" Overrides
-			li: a data-toggle="tab" href="#authorized_users" Authorized users
-		div.tab-content.panel-body
-			div.tab-pane.active#presentations
-				h2 Presentations
-				- if @group.presentations.present?
-					p This group is part of the following presentations:
-					ul
-						- @group.presentations.each do |p|
-							li = link_to p.name, presentations_path(p)
-				- else
-					p This group doesn't belong to any presentation.
-			
-			- if @group.is_a? PrizeGroup
-				div.tab-pane#prize_group
-					h2 Prize group data
-					p Title: #{@group.data[:title]}
-					ol
-						- @group.data[:awards].each do |d|
-							li
-								b Name:
-								= d[:name]
-								b By:
-								= d[:by]
-								b Points:
-								= d[:pts]
-			- if Display.can_override(current_user).present?
-				div.tab-pane#overrides
-					h2 Add all slides in this group to override on a display
-					= bootstrap_form_for :override, url: add_to_override_group_path(@group), layout: :horizontal,
-						 label_col: 'col-sm-2', control_col: 'col-sm-4' do |f|
-						= f.collection_select(:display_id, Display.can_override(current_user), :id, :name)
-						div.form-group
-							= f.label :duration, 'Duration (seconds)',class: 'control-label col-sm-2'
-							div.col-sm-4
-								div.input-group.spinner
-									= f.text_field_without_bootstrap :duration, class: 'form-control', value: 5.minutes
-									div.input-group-btn-vertical
-										a.btn.btn-default
-											i.fa.fa-caret-up
-										a.btn.btn-default
-											i.fa.fa-caret-down
-						= f.form_group do
-							= f.primary 'Add to override'
-			= tickets_partial(@group)
-			= authorized_users(@group)
+		div.panel.panel-default
+			ul.nav.nav-tabs
+				li.active: a data-toggle="tab" href="#presentations" Presentations
+				- if @group.is_a? PrizeGroup
+					li: a data-toggle="tab" href="#prize_group" Prize group data
+				li: a data-toggle="tab" href="#tickets" Tickets
+				- if Display.can_override(current_user).present?
+					li: a data-toggle="tab" href="#overrides" Overrides
+				li: a data-toggle="tab" href="#authorized_users" Authorized users
+			div.tab-content.panel-body
+				= render partial: 'presentations_pane'
+				= render partial: 'prizegroup_pane'
+				= render partial: 'override_pane'
+				= tickets_partial(@group)
+				= authorized_users(@group)
+div.row
+		div.col-xs-12
+			h2 Slides in this group
 
-
-h2 Slides in this group
-
-table.compact_slidelist
-	tr: th Slides
-	tr
-		td
-			= render partial: 'slides/slide', collection: @group.slides
+			table.compact_slidelist
+				tr: th Slides
+				tr
+					td
+						= render partial: 'slides/slide', collection: @group.slides
