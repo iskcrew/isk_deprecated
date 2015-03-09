@@ -25,6 +25,8 @@ connection = StateMachine.create
       isk.show_login()
       isk.dispatcher.disconnect()
       isk.menu.displays.hide()
+      app.normal() if app.can('normal')
+
     onleaveCONN: -> isk.show_logout()
 
     onREADY: ->
