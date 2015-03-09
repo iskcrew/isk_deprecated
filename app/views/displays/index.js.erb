@@ -1,6 +1,6 @@
 $('div#display_warnings').replaceWith('<%=j render :partial => 'shared/display_warnings' %>');
 <% if Display.late.present? -%>
-	$('#displays_tab').addClass('warning');
+	$('#displays_tab').addClass('bg-warning');
 <% else -%>
-	$('#displays_tab').removeClass('warning');
+	$('#displays_tab').removeClass('bg-warning');
 <% end -%>

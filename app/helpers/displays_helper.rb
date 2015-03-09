@@ -10,7 +10,7 @@ module DisplaysHelper
 	# Links to the details for all late displays
 	def late_display_warning(d)
 		link_text = "#{d.name} (#{d.ip}) is more than #{Display::Timeout} minutes late!"
-		link_to link_text, display_path(d)
+		link_to link_text, display_path(d), class: 'alert-link'
 	end
 		
 	# Link to displays#destroy if user has sufficient access
