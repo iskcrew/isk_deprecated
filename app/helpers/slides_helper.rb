@@ -214,11 +214,10 @@ module SlidesHelper
 	
 	# Links for filtering the slide list on slides#index
 	def slide_filter_links(filter)
-		html = String.new
-		html << link_to('All slides', slides_path, :class => (filter ? nil : 'current'))
-		html << link_to('Thrashed', slides_path(filter: 'thrashed'), :class => (filter == :thrashed ? 'current' : nil))
-
-		return html.html_safe
+		content_tag 'div', class: 'btn-group' do
+			link_to('All slides', slides_path, class: (filter ? 'btn btn-primary' : 'btn btn-primary active')) +
+			link_to('Thrashed', slides_path(filter: 'thrashed'), class: (filter == :thrashed ? 'btn btn-primary active' : 'btn btn-primary'))
+		end
 	end
 	
 	private

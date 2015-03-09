@@ -1,10 +1,11 @@
 div.row
-	h1 Listing slides for event #{current_event.name}
+	div.col-sm-12
+		h1 Listing slides for event #{current_event.name}
 
-	div.slide_filter
-		= slide_filter_links @filter
+		div.slide_filter
+			= slide_filter_links @filter
 	
-	div.slide_list
-		= render partial: "slidegroups"
+		div.slide_list
+			= render partial: "slidegroups"
 		= render partial: "shared/group_links"
 		
