@@ -45,9 +45,3 @@ div#tabs
 		tr
 			td
 				= render partial: 'slides/slide', collection: group.slides.published
-
-= content_for :navigation do
-	= link_to 'Preview', preview_presentation_path(@presentation)
-	= presentation_edit_button(@presentation)
-	= presentation_destroy_button(@presentation)
-	
