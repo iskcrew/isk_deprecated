@@ -1,10 +1,10 @@
 div.row
 	h1	Information for slide: #{@slide.name}
-	div.col-md-6.col-md-push-5
+	div.col-md-6.col-md-push-6
 		/ Normal slide-block
 		= render partial: @slide
 	
-	div.col-md-5.col-sm-8.col-md-pull-6
+	div.col-md-6.col-sm-8.col-md-pull-6
 		
 		= render partial: 'slide_metadata'
 		div.panel.panel-default
