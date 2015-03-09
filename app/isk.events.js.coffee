@@ -16,4 +16,11 @@ $(document).keypress (e) ->
   else
     reset_escape()
   return true
- 
+
+$('#renderer').click (e) ->
+  clearTimeout(escapetimeout)
+  escapetimeout=setTimeout(reset_escape, 300)
+  if --escape <= 0
+    isk.fsm.exit()
+    return false
+  return true
