@@ -20,9 +20,4 @@ div.row
 div.row
 		div.col-xs-12
 			h2 Slides in this group
-
-			table.compact_slidelist
-				tr: th Slides
-				tr
-					td
-						= render partial: 'slides/slide', collection: @group.slides
+			= render partial: 'slides/group', collection: [@group]
