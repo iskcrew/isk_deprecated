@@ -49,40 +49,4 @@ ul#slides {
 	div.ungroup_slide {
 		float: right;
 	}
-} 
-
-
-table.group_item {
-	width: 100%;
-	margin: 10px 0px;
-	
-	td.buttons {
-		margin-right: 5px;
-		text-align: right;
-	}
-    
-	img {
-		width: 128px;
-		height: 72px;
-		border: 2px solid $primary_highlight;
-		margin: 2px;
-	}
-
-	img.slide-hidden {
-		opacity: 0.6;
-	}
-
-	div.no_slides {
-		font-size: 18px;
-		color: $red_highlight;
-		text-align: center;
-		width: 100%;
-	}   
-
-}
-
-
-div.group_list {
-    margin-right: 175px;
-	margin-left: 0px;
 }

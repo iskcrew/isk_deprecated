@@ -1,24 +1,19 @@
-h1 Edit group: #{@group.name}
-
-h2 Group metadata
-
-= form_for @group, url: group_path(@group) do |f|
-	= f.error_messages
-	= render partial: 'form'
-	- if @group.is_a? PrizeGroup
-		= render partial: 'prize_form'
-	= f.submit 'Update group'
+div.row
+	h1 Edit group: #{@group.name}
 	
-h2 Reorder slides in this group
-p Drag slides to reorder them.
-ul#slides.sortable data-sortable=sort_group_url(@group)
-	= render partial: 'sortable_slides', locals: {group: @group}
+	= bootstrap_form_for @group, url: group_path(@group) do |f|
+		= f.error_messages
+		div.col-md-4
+			h2 Group metadata
+			= render partial: 'form', locals: {f: f}
+			
+		- if @group.is_a? PrizeGroup
+			= render partial: 'prize_form', locals: {f: f}
+		div.col-md-8
+			= f.primary 'Update group'
 	
-= content_for :navigation do
-	= link_to details_link_text, group_path(@group)
-	= link_to 'Hide all slides', hide_all_group_path(@group), method: :post
-	= link_to 'Publish all slides', publish_all_group_path(@group), method: :post
-	= link_to 'Add slides', add_slides_group_path(@group)
-	= link_to 'Delete',group_path(@group), method: :delete,
-		data: {confirm: "Are you sure?"}
-	
+	div.col-md-12
+		h2 Reorder slides in this group
+		p Drag slides to reorder them.
+		ul#slides.sortable data-sortable=sort_group_url(@group)
+			= render partial: 'sortable_slides', locals: {group: @group}

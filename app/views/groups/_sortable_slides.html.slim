@@ -6,5 +6,5 @@
 				tr: th = link_to slide.name, slide_path(slide.id)
 				tr: td = slide_preview_to_show_tag slide
 		div.ungroup_slide
-			= button_to 'Ungroup', ungroup_slide_path(slide), class: 'button warning'
+			= link_to icon('chain-broken','Ungroup'), ungroup_slide_path(slide), class: 'btn btn-danger'
 		
