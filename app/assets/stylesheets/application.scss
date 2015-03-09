@@ -36,10 +36,15 @@ div.group_list {
 body { padding-top: 90px; }
 
 nav#top-navbar {
-  
   a.navbar-brand {
     padding-top: 18px;
   }
+	
+	#tickets_tab {
+		.badge {
+			background-color: $brand-warning;
+		}
+	}
 	
 	#navbar-actions {
 		margin-left: 60px;
