@@ -15,22 +15,7 @@
 @import "sortable";
 @import "groups";
 
-
 // TODO: move to other files
-
-
-div.group_list {
-  margin-right: 150px;
-  margin-left: 0px;
-  
-  div.panel {
-    div.panel-heading {
-      div.btn-group {
-        float: right;
-      }
-    }
-  }
-}
 
 // Navbar
 body { padding-top: 90px; }
