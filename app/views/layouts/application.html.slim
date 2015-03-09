@@ -12,7 +12,7 @@ html
 	body
 		= render partial: "shared/navbar"
 		
-		div#content.container-fluid
+		div#content.container
 			= render partial: "shared/display_warnings"
 			div.flash
 				- if flash[:error].present?
@@ -22,5 +22,5 @@ html
 				- if flash[:warning].present?
 					div.warning = flash[:warning]
 				- flash.clear
-		
+			div.clearfix
 			== yield
