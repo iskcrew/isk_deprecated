@@ -31,13 +31,17 @@ div.group_list {
 }
 
 // Navbar
-body { padding-top: 85px; }
+body { padding-top: 90px; }
 
 nav#top-navbar {
   
   a.navbar-brand {
     padding: 5px 15px;
   }
+	
+	#navbar-actions {
+		margin-left: 60px;
+	}
 }
 
 div.panel-heading {

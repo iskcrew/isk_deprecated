@@ -26,12 +26,3 @@ div.container
 		div.col-xs-5
 			/ Normal slide-block
 			= render partial: @slide
-
-/If current user can edit this slide add the appropriate links to navigation bar
--if @slide.can_edit? current_user
-	- content_for :navigation do
-		= slide_edit_link @slide
-		-if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
-			= link_to 'Convert to inkscape', to_inkscape_slide_path(@slide), method: :post
-		= slide_svg_link @slide
-		= link_to 'Slide display history', slide_history_index_path(@slide)

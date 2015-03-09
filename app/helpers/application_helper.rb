@@ -27,7 +27,12 @@ module ApplicationHelper
 		
 		return ret.html_safe 
 	end
-		
+	
+	# Sets the 'active' class if current action matches the provided one
+	def active_action?(action)
+		controller.action_name == action ? 'active' : nil
+	end
+	
 	# Inactive toggle button with "led"
 	def inactive_toggle(name, status)
 		if status

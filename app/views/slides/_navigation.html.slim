@@ -1,7 +1,12 @@
-div.navigation
-	| &nbsp;
-	= link_to (icon('list') + ' List slides'), slides_path
+	li class=active_action?('index') = link_to (icon('list') + ' List slides'), slides_path
 	- if Slide.can_create? current_user
-		= link_to (icon('plus') + " New slide"), new_slide_path
-	= yield :navigation
-		
+		li class=active_action?('new') = link_to (icon('plus') + " New slide"), new_slide_path
+	- if @slide.present? && !@slide.new_record?
+		li class=active_action?('show') = link_to details_link_text, slide_path(@slide)
+		li = link_to 'Slide display history', slide_history_index_path(@slide)
+		- if @slide.can_edit? current_user
+			li class=active_action?('edit') = link_to edit_link_text, edit_slide_path(@slide)
+		- if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
+			li = link_to 'Convert to inkscape', to_inkscape_slide_path(@slide), method: :post
+		- if @slide.is_a? InkscapeSlide
+			li = link_to icon('download', 'SVG'), svg_data_slide_path(@slide) 
