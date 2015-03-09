@@ -19,14 +19,14 @@ module PresentationsHelper
 			link_to delete_link_text, presentation_path(p),
 								data: {confirm: "Are you sure you want to delete the presentation \"#{p.name}\", this cannot be undone?"}, 
 								title: 'Delete this presentation premanently',
-								method: :delete, class: 'button warning'
+								method: :delete, class: 'btn btn-danger'
 		end
 	end
 	
 	# Button to edit a presentation
 	def presentation_edit_button(p)
 		if p.can_edit? current_user
-			return link_to edit_link_text, edit_presentation_path(p), class: 'button'
+			return link_to edit_link_text, edit_presentation_path(p), class: 'btn btn-primary'
 		end
 	end
 end

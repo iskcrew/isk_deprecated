@@ -1,21 +1,29 @@
-h1 Listing all presentations in current event
+div.row
+	h1 Listing all presentations in current event
 
-table.presentationtable
-	tr
-		th Name
-		th Groups
-		th Public slides
-		th Total runtime
-		th -
-	- @presentations.each do |p|
-		tr
-			td = link_to p.name, presentation_path(p)
-			td = p.groups.count
-			td = p.total_slides
-			td = duration_to_text p.duration
-			td 
-				= link_to details_link_text, presentation_path(p), class: 'button'
-				=< link_to 'Preview', preview_presentation_path(p), class: 'button'
-				=< presentation_edit_button(p)
-				=< presentation_destroy_button(p)
-			
+	table.presentation-table.table
+		colgroup
+			col.presentation-name
+			col.presentation-groups
+			col.presentation-slides
+			col.presentation-runtime
+			col.presentation-actions
+		tbody
+			tr
+				th Name
+				th Groups
+				th Public slides
+				th Total runtime
+				th Actions
+			- @presentations.each do |p|
+				tr
+					td = link_to p.name, presentation_path(p)
+					td = p.groups.count
+					td = p.total_slides
+					td = duration_to_text p.duration
+					td
+						div.btn-group.btn-group-sm
+							= link_to details_link_text, presentation_path(p), class: 'btn btn-primary'
+							= link_to 'Preview', preview_presentation_path(p), class: 'btn btn-primary'
+							= presentation_edit_button(p)
+							= presentation_destroy_button(p)

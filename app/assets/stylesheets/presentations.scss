@@ -6,7 +6,30 @@
 // Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
 //
 
-@import 'variables';
+table.presentation-table {
+	max-width: 640px;
+	
+	col.presentation-name {
+		max-width: 200px;
+		font-weight: bold;
+	}
+	
+	col.presentation-groups {
+		width: 50px;
+	}
+	
+	col.presentation-slides {
+		width: 50px;
+	}
+	
+	col.presentation-runtime {
+		width: 50px;
+	}
+	
+	col.presentation-actions {
+		width: 260px;
+	}
+}
 
 table.preview {
 	td.group {
