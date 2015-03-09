@@ -8,12 +8,14 @@
 @import "font-awesome";
 @import "bootstrap-sprockets";
 @import "bootstrap_custom";
+@import 'variables';
+@import "slides";
 @import "spinner";
 @import "buttons";
-@import "slides";
 
 
 // TODO: move to other files
+
 
 div.group_list {
   margin-right: 150px;

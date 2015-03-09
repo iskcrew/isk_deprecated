@@ -6,8 +6,6 @@
 // Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
 //
 
-@import 'variables';
-
 @font-face{
 	font-family: 'Franklin Gothic Heavy';
 	src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
@@ -25,14 +23,6 @@
 img.preview {
 	width: 400px;
 	height: 255px;
-	border: 2px solid $primary_highlight;
-}
-
-
-div.scrolling_div-wrapper {
-	float: right;
-	margin: 0px;
-	padding: 0px;
 }
 
 div#group_links {
@@ -45,16 +35,8 @@ div#group_links {
 }
 
 div.slide_list {
-	min-width: 600px;
-}
-
-div.slide_groups {
 	margin-right: 150px;
-}
-
-table.compact_slidelist {
-	width: 100%;
-	min-width: 430px;
+	min-width: 600px
 }
 
 // app/views/slides/_slide.html.slim
@@ -147,55 +129,8 @@ div.slide {
 
 }
 
-div.slide_filter {
-	display: inline-block;
-	margin: 20px 1.5em;
-
-	a {
-		text-decoration: none;
-		display: inline-block;
-		border: 2px solid white;
-		border-right: none;
-		padding: 5px 10px;
-		float: left;
-	}
-
-	a:first-child {
-		border-top-left-radius: 10px;
-		border-bottom-left-radius: 10px;
-	}
-
-	a:last-child {
-		border-top-right-radius: 10px;
-		border-bottom-right-radius: 10px;
-		border-right: 2px solid white;
-		float: none;
-	}
-
-	a.current {
-		background-color: #666;
-		font-weight: bold;
-	}
-}
-
-
 // slide#show
 div.slide_info {
-	div.slide {
-		float: left;
-	}
-
-	div#tabs {
-		float: left;
-		width: 500px;
-	}
-
-	div.info_block {
-		h2 {
-			margin-top: 0px;
-		}
-	}
-
 	div#group_info {
 		li.current {
 			font-weight: bolder;
@@ -203,35 +138,6 @@ div.slide_info {
 				text-decoration: none;
 			}
 		}
-	}
-
-	div#metadata {
-		width: 500px;
-		float: left;
-	}
-
-	table.add_override {
-		border: none;
-
-		tr {
-			border: none;
-
-			td {
-				border: none;
-			}
-		}
-	}
-}
-
-
-div.slide_form {
-	max-width: 420px;
-	textarea {
-		width: 400px;
-	}
-
-	input#slide_name {
-		width: 400px;
 	}
 }
 
@@ -315,6 +221,5 @@ div.svg_editor_container {
 			}
 		}
 	}
-
 }
 
