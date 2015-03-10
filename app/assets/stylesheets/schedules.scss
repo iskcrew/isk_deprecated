@@ -15,3 +15,9 @@ div.schedule_events {
 		text-align: center;
 	}
 }
+
+table.schedule_events_edit {
+	select {
+		color: $input-color;
+	}
+}

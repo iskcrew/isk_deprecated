@@ -1,27 +1,46 @@
-= fields_for @schedule do |f|
-	h2 Metadata and settings
-	table
-		tr: td #{f.label :name}: #{f.text_field :name}
-		tr: td #{f.label :slide_header}: #{f.text_field :slide_header}
-		/ TODO: spinner
-		tr: td #{f.label :max_slides}: #{f.text_field :max_slides, size: 3}
-		tr: td #{f.label :min_events_on_next_day}: #{f.text_field :min_events_on_next_day, size: 3}
-		tr: td #{f.label :next_up}: #{f.check_box :next_up}
-		tr: td #{f.label :next_up_header}: #{f.text_field :next_up_header}
-	= f.submit
+= bootstrap_form_for @schedule do |f|
+	div.col-sm-6.col-md-4.col-lg-3
+		h2 Metadata and settings
 	
-	- if @schedule.schedule_events.present?
-		h2 Schedule events
-		table.schedule_events_edit
-			tr
-				th Time
-				th Name
-				th Major
-				th Delete
-			= f.fields_for :schedule_events do |e|
+		= f.text_field :name
+		= f.text_field :slide_header
+		= f.text_field :max_slides
+		= f.text_field :min_events_on_next_day
+		= f.text_field :next_up
+		= f.text_field :next_up_header
+	
+		= f.primary
+	
+	- unless @schedule.new_record?
+		div.col-md-10
+			h2 Add a new event
+			= form_for @schedule, remote: true, html: {class: 'add_event_form'} do |f|
+					=f.fields_for :schedule_events, @new_event do |ff|
+						table.schedule_events_edit
+							tr
+								th Time
+								th Name
+								th Major
+								th -
+							tr
+								td = ff.datetime_select :at
+								td = ff.text_field :name, class: 'form-control'
+								td = ff.check_box :major, class: 'form-control'
+								td = ff.submit 'Add event', class: 'btn btn-primary'
+	
+	div.col-md-10
+		- if @schedule.schedule_events.present?
+			h2 Schedule events
+			table.schedule_events_edit
 				tr
-					td = e.datetime_select :at
-					td = e.text_field :name
-					td = e.check_box :major
-					td = e.check_box :_destroy
-		= f.submit
+					th Time
+					th Name
+					th Major
+					th Delete
+				= f.fields_for :schedule_events do |e|
+					tr
+						td = e.datetime_select_without_bootstrap :at, class: 'form-control'
+						td = e.text_field_without_bootstrap :name, class: 'form-control'
+						td = e.check_box_without_bootstrap :major, class: 'form-control'
+						td = e.check_box_without_bootstrap :_destroy, class: 'form-control'
+			= f.primary
