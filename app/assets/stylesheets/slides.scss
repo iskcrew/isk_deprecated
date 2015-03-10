@@ -64,7 +64,9 @@ div.slide {
 		div.slide_name {
 			max-width: 310px;
 			height: 25px;
+			text-overflow: ellipsis;
 			overflow: hidden;
+			white-space: nowrap;
 			display: inline-block;
 		}
 
