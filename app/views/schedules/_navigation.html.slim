@@ -1,4 +1,5 @@
-div.navigation
-	= link_to (icon('list') + ' List schedules'), schedules_path
-	=< link_to (icon('plus') + ' New schedule'), new_schedule_path
-	= yield :navigation
+li class=active_action?('index') = link_to icon('list', 'List schedules'), schedules_path
+li class=active_action?('new') = link_to icon('plus', 'New schedule'), new_schedule_path
+- if @schedule.present? && !@schedule.new_record?
+	li class=active_action?('show') = link_to details_link_text, schedule_path(@schedule)
+	li class=active_action?('edit') = link_to edit_link_text, edit_schedule_path(@schedule)
