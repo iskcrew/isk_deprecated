@@ -50,6 +50,30 @@ nav#top-navbar {
 	}
 }
 
+div.panel-display {
+	display: inline-block;
+	margin: 5px;
+	
+	div.panel-body {
+		padding: 0;
+		
+		img {
+			margin-bottom: 5px;
+		}
+	}
+	
+	div.panel-footer {
+		padding: 5px;
+		text-align: center;
+		
+		div.btn-group {
+			a {
+				padding: 5px;
+			}
+		}
+	}
+}
+
 div.panel-heading {
   font-size: 150%;
   

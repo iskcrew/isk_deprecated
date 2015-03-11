@@ -22,6 +22,22 @@ module DisplaysHelper
 		end
 	end
 	
+	# Set the panel class based on display status
+	def display_class(display)
+		if display.late?
+			'panel-warning'
+		else
+			case display.status
+			when 'running'
+				'panel-success'
+			when 'disconnected'
+				'panel-default'
+			else
+				'panel-danger'
+			end
+		end
+	end
+	
 	# Render the display ping element
 	def display_ping(d)
 		if d.late?
