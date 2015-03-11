@@ -33,12 +33,20 @@ nav#top-navbar {
 		}
 	}
 	
+	li.navbar-warning {
+		background-color: $state-warning-bg;
+	}
+	
+	li.navbar-warning a:hover {
+		background-color: darken($state-warning-bg, 10%);
+	}
+	
 	#navbar-actions {
 		margin-left: 60px;
 		
 		a {
 			padding: 5px 5px;
-		}
+			color: $text_color;		}
 	}
 }
 
