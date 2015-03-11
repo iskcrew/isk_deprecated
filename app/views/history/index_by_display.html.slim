@@ -1,28 +1,29 @@
-h1 Slide history for display: #{@display.name}
-
-- if @display.display_counts.present?
-	p This display has shown #{@display.display_counts.count} slides since #{display_first_slide(@display)}
+div.row
+	h1 Slide history for display: #{@display.name}
 	
-	table.slide_stats
-		tr: th 10 most recent slides shown
-		- @display.display_counts.order(updated_at: :desc).limit(10).each do |dc|
-			tr: td
-				= slide_preview_to_show_tag dc.slide
-				br
-				'Shown at #{I18n.l(dc.updated_at, :format => :short)}
-				=< link_to 'Detailed history', display_history_path(@display, dc.slide)
+	- if @display.display_counts.present?
+		div.col-md-6.col-lg-5
+			p This display has shown #{@display.display_counts.count} slides since #{display_first_slide(@display)}
 			
-	
-	h2 All slides shown
-	p This display has shown the following slides, ordered by number of times shown:
-	
-	ul
-		- @all_slides.each_pair do |slide, times|
-			li
-				=> link_to slide.first, slide_path(slide.last)
-				' shown #{times} times.
-				=< link_to "Detailed history", display_history_path(@display, slide.last)
-- else
-	div.warning
-		p No slides have been shown on this display!
+			table.slide_stats.table
+				tr: th 10 most recent slides shown
+				- @display.display_counts.order(updated_at: :desc).limit(10).each do |dc|
+					tr: td
+						= slide_preview_to_show_tag dc.slide
+						br
+						'Shown at #{I18n.l(dc.updated_at, :format => :short)}
+						=< link_to 'Detailed history', display_history_path(@display, dc.slide)
+		div.col-md-6.col-lg-5
+			h2 All slides shown
+			p This display has shown the following slides, ordered by number of times shown:
+			
+			ul
+				- @all_slides.each_pair do |slide, times|
+					li
+						=> link_to slide.first, slide_path(slide.last)
+						' shown #{times} times.
+						=< link_to "Detailed history", display_history_path(@display, slide.last)
+	- else
+		div.alert.alert-warning
+			p No slides have been shown on this display!
 
