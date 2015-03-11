@@ -70,7 +70,7 @@ class DisplaysController < ApplicationController
 			flash[:notice] = "Display created."
 			redirect_to display_path(@display)
 		else
-			flash.now[:error] = "Error creating event"
+			flash.now[:error] = "Error creating display."
 			render action: :new
 		end
 	end
