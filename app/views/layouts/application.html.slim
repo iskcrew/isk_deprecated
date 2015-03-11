@@ -14,13 +14,15 @@ html
 		
 		div#content.container
 			= render partial: "shared/display_warnings"
-			div.flash
-				- if flash[:error].present?
-					div.error = flash[:error]
-				- if flash[:notice].present?
-					div.notice = flash[:notice]
-				- if flash[:warning].present?
-					div.warning = flash[:warning]
-				- flash.clear
+			div.clearfix
+			div.xs-12
+				div.flash
+					- if flash[:error].present?
+						div.error = flash[:error]
+					- if flash[:notice].present?
+						div.notice = flash[:notice]
+					- if flash[:warning].present?
+						div.warning = flash[:warning]
+					- flash.clear
 			div.clearfix
 			== yield
