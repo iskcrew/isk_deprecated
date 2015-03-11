@@ -47,36 +47,51 @@ module TicketsHelper
 		case ticket.status
 		when Ticket::StatusNew
 			html_class = "label-danger"
+			icon_type = 'square-o'
 		when Ticket::StatusOpen
 			html_class = "label-warning"
+			icon_type = 'square-o'
 		else
 			html_class = "label-success"
+			icon_type = 'check-square-o'
 		end
 		content_tag 'span', class: "label #{html_class}" do
-			ticket.status_text
+			icon icon_type, ticket.status_text
 		end
 	end
 	
-	def ticket_edit_link(ticket)
+	def ticket_edit_link(ticket, html_class = nil)
 		if ticket.can_edit? current_user
-			link_to icon('edit', 'Edit'), edit_ticket_path(ticket), class: 'btn btn-primary'
+			link_to edit_link_text, edit_ticket_path(ticket), class: html_class
 		end
 	end
 	
-	def ticket_close_link(ticket)
+	def ticket_edit_button(ticket)
+		ticket_edit_link(ticket, 'btn btn-primary')
+	end
+	
+	def ticket_close_link(ticket, html_class = nil)
 		if ticket.can_close? current_user
 			link_to icon('check-square-o', 'Close'), 
 				ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
-				class: 'btn btn-warning', method: :put
+				method: :put, class: html_class
 		end
 	end
 	
-	def ticket_destroy_link(ticket)
+	def ticket_close_button(ticket)
+		ticket_close_link(ticket, 'btn btn-success')
+	end
+	
+	def ticket_destroy_link(ticket, html_class = nil)
 		if ticket.admin? current_user
 			link_to icon('times-circle', 'Delete'), 
-				ticket_path(ticket), class: 'btn btn-danger', method: :delete,
+				ticket_path(ticket), class: html_class, method: :delete,
 				data: {confirm: 'Are you sure you want to permanently delete this ticket?'}
 		end
+	end
+	
+	def ticket_destroy_button(ticket)
+		ticket_destroy_link(ticket, 'btn btn-danger')
 	end
 	
 	def ticket_tab_link(open)

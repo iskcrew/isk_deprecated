@@ -6,7 +6,7 @@ div.row
 	table.tickets.table
 		tr
 			th Status
-			th Kind
+			th Type
 			th Name
 			th Concerning
 			th Last updated
@@ -21,6 +21,6 @@ div.row
 				td
 					div.btn-group.btn-group-sm
 						= link_to details_link_text, ticket_path(ticket), class: 'btn btn-primary'
-						= ticket_edit_link(ticket)
-						= ticket_close_link(ticket)
-						= ticket_destroy_link(ticket)
+						= ticket_edit_button(ticket)
+						= ticket_close_button(ticket)
+						= ticket_destroy_button(ticket)
