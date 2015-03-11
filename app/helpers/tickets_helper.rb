@@ -42,9 +42,24 @@ module TicketsHelper
 		end
 	end
 	
+	# A bootstrap badge for the ticket status
+	def ticket_status(ticket)
+		case ticket.status
+		when Ticket::StatusNew
+			html_class = "label-danger"
+		when Ticket::StatusOpen
+			html_class = "label-warning"
+		else
+			html_class = "label-success"
+		end
+		content_tag 'span', class: "label #{html_class}" do
+			ticket.status_text
+		end
+	end
+	
 	def ticket_edit_link(ticket)
 		if ticket.can_edit? current_user
-			link_to icon('edit', 'Edit'), edit_ticket_path(ticket), class: 'button'
+			link_to icon('edit', 'Edit'), edit_ticket_path(ticket), class: 'btn btn-primary'
 		end
 	end
 	
@@ -52,14 +67,14 @@ module TicketsHelper
 		if ticket.can_close? current_user
 			link_to icon('check-square-o', 'Close'), 
 				ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
-				class: 'button warning', method: :put
+				class: 'btn btn-warning', method: :put
 		end
 	end
 	
 	def ticket_destroy_link(ticket)
 		if ticket.admin? current_user
 			link_to icon('times-circle', 'Delete'), 
-				ticket_path(ticket), class: 'button warning', method: :delete,
+				ticket_path(ticket), class: 'btn btn-danger', method: :delete,
 				data: {confirm: 'Are you sure you want to permanently delete this ticket?'}
 		end
 	end
@@ -72,9 +87,13 @@ module TicketsHelper
 	def ticket_kind(ticket)
 		case ticket.kind
 		when 'error'
-			(icon('warning') + ' ' + ticket.kind.capitalize)
+			content_tag 'span', class: 'label label-danger' do
+				icon('warning', ticket.kind.capitalize)
+			end
 		else
-			ticket.kind.capitalize
+			content_tag 'span', class: 'label label-info' do
+				ticket.kind.capitalize
+			end
 		end
 	end
 	
