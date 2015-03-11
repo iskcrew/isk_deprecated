@@ -9,6 +9,9 @@ en:
       iso: "%Y-%m-%dT%H:%M:%S"            
   activerecord:
     attributes:
+      display:
+        monitor: 'Monitor this display'
+        manual: 'Manual control only'
       event:
         name: 'Event name:'
         current: 'Current event:'
