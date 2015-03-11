@@ -6,11 +6,14 @@ div.container
 		= render partial: "form", locals: {f: f}
 		- if @slide.is_a? HttpSlide
 			= render partial: "http_slide_form", locals: {f: f}
-		- elsif @slide.is_a? SimpleSlide
-			= render partial: 'simple_edit', locals: {f: f}
-		- elsif @slide.is_a? TemplateSlide
-			div#template_slide_form.svg_editor_container
-			= render partial: 'template_slide_form', locals: {f: f}
 		- elsif @slide.is_a? ImageSlide
 			= render partial: 'image_slide_form', locals: {f: f}
-		= f.submit
+		- elsif @slide.is_a? SimpleSlide
+			= f.primary
+			= render partial: 'simple_edit', locals: {f: f}
+		- elsif @slide.is_a? TemplateSlide
+			= f.primary
+			div#template_slide_form.svg_editor_container
+				= render partial: 'template_slide_form', locals: {f: f}
+		div.col-xs-12
+			= f.primary
