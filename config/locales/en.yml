@@ -3,37 +3,37 @@
 # spaceja, ei tabeja kiitos
 
 en:
-    time:
-        formats:
-            short: "%a %H:%M:%S %d.%m.%y"
-            iso: "%Y-%m-%dT%H:%M:%S"            
-    activerecord:
-        attributes:
-            event:
-                name: 'Event name:'
-                current: 'Current event:'
-            presentation:
-                delay: "Slide duration (seconds)"
-                effect_id: "Slide transition effect"
-            slide:
-                show_clock: "Show overlay clock with this slide"
-                public: "Public slide (hidden slides won't be shown)"
-                name: 'Slide name'
-                description: 'Slide description'
-                duration: 'Slide duration (seconds), -1 for presentation default, 0 for infinite'
-            schedule:
-                schedule_group_id: "Group for generated slides"
-                next_up: 'Generate a slide showing just few upcoming events'
-                max_slides: 'Maximum number of schedule slides generated (-1 for unlimited)'
-                min_events_on_next_day: "Move events to next slide if there are less than this many events incoming to a slide"
-            schedule_event:
-                at: "Event start"
-                name: "Event name"
-                description: "Short description of this event"
-                location: "Event location"
-                major: "Major event"
-                cancelled: "Event cancelled"
-                rescheduled: "Event resheduled"
-            ticket:
-                name: "Name for the ticket:"
-                description: "Describe what should be done:"
+  time:
+    formats:
+      short: "%a %H:%M:%S %d.%m.%y"
+      iso: "%Y-%m-%dT%H:%M:%S"            
+  activerecord:
+    attributes:
+      event:
+        name: 'Event name:'
+        current: 'Current event:'
+      presentation:
+        delay: "Slide duration (seconds)"
+        effect_id: "Slide transition effect"
+      slide:
+        show_clock: "Show overlay clock with this slide"
+        public: "Public slide (hidden slides won't be shown)"
+        name: 'Slide name'
+        description: 'Slide description'
+        duration: 'Slide duration (seconds), -1 for presentation default, 0 for infinite'
+      schedule:
+        schedule_group_id: "Group for generated slides"
+        next_up: 'Generate a slide showing just few upcoming events'
+        max_slides: 'Maximum number of schedule slides generated (-1 for unlimited)'
+        min_events_on_next_day: "Move events to next slide if there are less than this many events incoming to a slide"
+      schedule_event:
+        at: "Event start"
+        name: "Event name"
+        description: "Short description of this event"
+        location: "Event location"
+        major: "Major event"
+        cancelled: "Event cancelled"
+        rescheduled: "Event resheduled"
+      ticket:
+        name: "Name for the ticket:"
+        description: "Describe what should be done:"
