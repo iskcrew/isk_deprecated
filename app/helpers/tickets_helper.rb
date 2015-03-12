@@ -60,6 +60,18 @@ module TicketsHelper
 		end
 	end
 	
+	# Color the rows in tickets#index table per ticket status
+	def ticket_row_class(ticket)
+		case ticket.status
+		when Ticket::StatusNew
+			'danger'
+		when Ticket::StatusOpen
+			'warning'
+		when Ticket::StatusClosed
+			'success'
+		end
+	end
+	
 	def ticket_edit_link(ticket, html_class = nil)
 		if ticket.can_edit? current_user
 			link_to edit_link_text, edit_ticket_path(ticket), class: html_class

@@ -3,7 +3,7 @@ div.row
 	p
 		| Tickets represent requests to do something about different slideshow components.
 
-	table.tickets.table
+	table.tickets.table.table-hover.table-bordered
 		tr
 			th Status
 			th Type
@@ -12,8 +12,8 @@ div.row
 			th Last updated
 			th Actions
 		- @tickets.each do |ticket|
-			tr class=ticket.status_text
-				td = ticket_status(ticket)
+			tr
+				td class=ticket_row_class(ticket) = ticket.status_text.capitalize
 				td = ticket_kind(ticket)
 				td #{link_to ticket.name, ticket_path(ticket)}
 				td = ticket_concerning(ticket)
