@@ -1,17 +1,17 @@
 - if @groups && @groups.size > 1
 	= cache('group_links', tag: ["groups", "slides"]) do
-		div#group_links
+		div#group_links.spy-target
 			h4 Goto group:
 			
-			div.btn-group.btn-group-vertical.btn-group-sm
+			ul.nav.nav-pills.nav-stacked#group-nav
 				- @groups.chunk {|g| g.name.upcase.ord}.each do |ch, groups|
 					- if groups.size > 1
-						div.btn-group
-							button.btn.btn-default.dropdown-toggle data-toggle="dropdown"
+						li.dropdown
+							a.dropdown-toggle data-toggle="dropdown" href="#" role="button"
 								= ch.chr
 								span.caret
 							ul.dropdown-menu
 								- groups.each do |group|
-									li: a.group_link href=("\#group_#{group.id}") #{group.name}
+									li: a.group_link href=("\#anchor_group_#{group.id}") #{group.name}
 					- else
-						a.btn.btn-default.group_link href=("\#group_#{groups.first.id}") #{groups.first.name}
+						li: a.group_link href=("\#anchor_group_#{groups.first.id}") #{groups.first.name}

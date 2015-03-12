@@ -8,7 +8,7 @@
 
 $ ->
 	scrollToAnchor = (aid) ->
-		aTag = $("a[name='#{aid}']")
+		aTag = $("\##{aid}")
 		# The top navigation bars take up 75px of space, so scroll -85px to leave little
 		# room between the navigation bars and the anchor
 		$('html,body').animate({scrollTop: aTag.offset().top - 85},200)

@@ -1,9 +1,9 @@
 = cache group_cache_key(group), tag: [group.cache_tag, current_user.cache_tag] do
 	- unless group.slides.empty?
-		div.compact_slidelist.panel.panel-default
+		div.compact_slidelist.panel.panel-default id="anchor_group_#{group.id}"
 			div.panel-heading
 				-if group.is_a? UnGroup
-					a name="group_#{group.id}" Ungrouped slides
+					a name="anchor_group_#{group.id}" Ungrouped slides
 				-else
 					= group_link_tag(group)
 			div.panle-body

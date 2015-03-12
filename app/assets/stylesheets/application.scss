@@ -20,7 +20,10 @@
 // TODO: move to other files
 
 // Navbar
-body { padding-top: 90px; }
+body { 
+	padding-top: 90px;
+	position: relative;
+}
 
 nav#top-navbar {
   a.navbar-brand {
