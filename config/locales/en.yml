@@ -24,6 +24,8 @@ en:
         name: 'Slide name'
         description: 'Slide description'
         duration: 'Slide duration (seconds), -1 for presentation default, 0 for infinite'
+      slide_template:
+        upload: 'SVG file to use as template'
       schedule:
         schedule_group_id: "Group for generated slides"
         next_up: 'Generate a slide showing just few upcoming events'
@@ -40,3 +42,4 @@ en:
       ticket:
         name: "Name for the ticket:"
         description: "Describe what should be done:"
+        
