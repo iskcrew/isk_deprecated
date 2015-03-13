@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 					redirect_to users_path and return
 				end
 			else
-				@user.errors.add "Passwords don't match",""
+				@user.errors.add('Password', "verification error")
 			end
 			flash[:error] = 'Error creating user'
 			render action: :new
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
 			if verify_password
 				@user.password=params[:password][:password]
 			else
-				@user.errors.add('', "Passwords don't match")
+				@user.errors.add('Password', "verification error")
 				render action: :edit and return
 			end
 		end
