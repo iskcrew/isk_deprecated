@@ -1,7 +1,8 @@
-tr
-	td = event.name
+tr class=event_current_class(event)
+	td = link_to event.name, event_path(event)
 	td = event.current ? 'Current' : ''
 	td
-		= event_edit_button(event)
-		=< event_details_button(event)
-		/=< event_delete_button(event)
+		div.btn-group.btn-group-sm
+			= event_edit_button(event)
+			= event_details_button(event)
+			/=< event_delete_button(event)
