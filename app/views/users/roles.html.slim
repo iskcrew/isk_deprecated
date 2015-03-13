@@ -1,11 +1,10 @@
 h1 Assign roles to user: #{@user.username}
 
-= form_for :roles, url: grant_user_path(@user) do |f|
-	table.roles
+= bootstrap_form_for :roles, url: grant_user_path(@user) do |f|
+	table.roles.table.table-bordered.table-hover
 		tr: th Roles
 		- @roles.each do |r|
 			tr
 				td
-					= f.check_box(r.id, {checked: ( @user.roles.include?(r) )} )
-					=< r.role
-	= f.submit 'Assing roles'
+					= f.check_box(r.id, {checked: ( @user.roles.include?(r) ), label: r.role} )
+	= f.primary 'Assing roles'

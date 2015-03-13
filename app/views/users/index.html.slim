@@ -1,9 +1,14 @@
 h1 User management
 
 div.user_list
-	table.users
-		tr
-			th Username
-			th Roles
-			th Actions
-		= render @users
+	table.users.table.table-bordered.table-hover
+		colgroup
+			col.username
+			col.roles
+			col.actions
+		tbody
+			tr
+				th Username
+				th Roles
+				th Actions
+			= render @users
