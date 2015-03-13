@@ -23,5 +23,5 @@ div.row
 	div.col-md-4
 		h2 Reorder groups in presentation
 		p Drag groups to reorder them.
-		ul#groups_sortable.sortable data-sortable=sort_presentation_url(@presentation)
+		ul#groups_sortable.sortable.list-group data-sortable=sort_presentation_url(@presentation)
 			= render partial: 'sortable_groups'

@@ -39,17 +39,16 @@ table.preview {
 	}
 }
 
-ul#groups_sortable {
-	display: inline-block;
-	min-width: 200px;
+li.sortable-group {
 	overflow: auto;
 	
-	div.group_name {
-		float: left;
-		margin-right: 10px;
+	border: 1px solid $gray-light;
+	
+	div.btn-group {
+		float: right;
 	}
 	
-	div.remove_group {
-		float: right;
+	&.ui-sortable-placeholder {
+		height: 30px;
 	}
 }
