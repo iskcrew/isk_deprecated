@@ -21,7 +21,7 @@ div.tab-content
 					| Template: 
 					= f.collection_select(:foreign_object_id, current_templates, :id, :name)
 				div#template_slide_form.svg_editor_container
-				p = f.submit
+				p = f.primary
 	
 	div.tab-pane.active#simple
 		h2 New simple editor slide
@@ -30,7 +30,7 @@ div.tab-content
 			= hidden_field_tag :create_type, 'simple'
 			= render partial: 'form', locals: {f: f}
 			= render partial: 'simple_edit', locals: {f: f}
-			p = f.submit
+			p = f.primary
 	
 	div.tab-pane#inkscape
 		h2 New inkscape slide
@@ -39,7 +39,7 @@ div.tab-content
 			= f.error_messages
 			= hidden_field_tag :create_type, 'inkscape'
 			= render partial: 'form', locals: {f: f}
-			p = f.submit
+			p = f.primary
 	
 	div.tab-pane#httpslide
 		h2 New http fecher slide
@@ -49,7 +49,7 @@ div.tab-content
 			= hidden_field_tag :create_type, 'http_slide'
 			= render partial: 'form', locals: {f: f}
 			= render partial: 'http_slide_form', locals: {f: f}
-			p = f.submit
+			p = f.primary
 		
 	div.tab-pane#image
 		h2 New slide from image
@@ -63,4 +63,4 @@ div.tab-content
 			= render partial: 'image_slide_form', locals: {f: f}
 			p: b Choose the image to upload:
 			= file_field_tag :image
-			p = f.submit
+			p = f.primary
