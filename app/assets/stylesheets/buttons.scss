@@ -1,75 +1,12 @@
 //
-// buttons.css.scss
+// buttons.scss
 // isk
 // 
+// Toggle buttons with status leds
+//
 // Created by Vesa-Pekka Palmu on 2014-06-10.
 // Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
 //
-
-@import 'variables';
-
-//input[type=submit].green.button {
-//  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9dce2c), color-stop(1, #8cb82b) );
-//  background:-moz-linear-gradient( center top, #9dce2c 5%, #8cb82b 100% );
-//  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9dce2c', endColorstr='#8cb82b');
-//  background-color:#9dce2c;
-//  -moz-border-radius:5px;
-//  -webkit-border-radius:5px;
-//  border-radius:5px;
-//  border:1px solid #83c41a;
-//  display:inline-block;
-//  color:#ffffff;
-//  font-family:arial;
-//  font-size:14px;
-//  font-weight:bold;
-//  padding:0px 5px;
-//  text-decoration:none;
-//}
-//
-//a.button, input[type=submit] {
-//    text-decoration: none;
-//  background: $button_bg;
-//  border: $button_border;
-//  border-radius:5px;
-//  display: inline-block;
-//  padding: 4px 4px;
-//  cursor: pointer;
-//  color: $button_font_color;
-//
-//  &:hover {
-//    background: $button_hover_bg;
-//    color: $button_hover_font_color;
-//  };
-//
-//  &.warning {
-//    background: $warning_bg;
-//    border-color: $warning_border;
-//    color: $warning_text_color;
-//
-//    &:hover {
-//      background: $warning_hover_bg;
-//      border-color: $warning_hover_border;
-//      color: $link_hover_color;
-//    };
-//  };
-//
-//  &.inactive {
-//    background: $button_inactive_bg;
-//    color: $button_inactive_font_color;
-//    cursor: default;
-//
-//    &:hover {
-//        cursor: default;
-//      }
-//  }
-//
-//};
-//
-//
-//a.delete {
-//  background-color: $warning_bg;
-//}
-
 
 .led{
 	&:before {
@@ -88,6 +25,3 @@
 	&.green:before { background-color: $green_highlight; }
 	&.blue:before { background-color: $primary_highlight; }
 }
-
-
-
