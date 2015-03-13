@@ -1,7 +1,5 @@
-= form_for @ticket, html: {class: 'tickets'} do |f|
+= bootstrap_form_for @ticket, html: {class: 'tickets'} do |f|
 	= f.error_messages
-	p = f.label :name
 	= f.text_field :name
-	p = f.label :description
 	= f.text_area :description
-	p = f.submit
+	= f.primary
