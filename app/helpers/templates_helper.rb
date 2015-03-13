@@ -4,7 +4,7 @@ module TemplatesHelper
 	end
 	
 	def template_destroy_link(template)
-		link_to 'Delete', template_path(template), method: :delete, class: 'button warning'
+		link_to 'Delete', template_path(template), method: :delete, class: 'btn btn-danger'
 	end
 	
 end

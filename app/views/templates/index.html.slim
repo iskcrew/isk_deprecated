@@ -1,13 +1,14 @@
 h1 Listing all slide templates
 
-table.slide_templates
+table.slide_templates.table.table-bordered.table-hover
 	tr
 		th Name
 		th -
 	- @templates.each do |t|
 		tr
-			td = t.name
-			td 
-				= link_to details_link_text, template_path(t), class: 'button'
-				=< link_to edit_link_text, edit_template_path(t), class: 'button'
-				=< template_destroy_link t
+			td = link_to t.name, template_path(t)
+			td
+				div.btn-group.btn-group-sm
+					= link_to details_link_text, template_path(t), class: 'btn btn-primary'
+					= link_to edit_link_text, edit_template_path(t), class: 'btn btn-primary'
+					= template_destroy_link t
