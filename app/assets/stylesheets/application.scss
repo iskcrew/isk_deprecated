@@ -3,12 +3,11 @@
 // Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
 // or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
 @import "jquery-ui";
-@import "jquery-ui-theme";
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "bootstrap-sprockets";
 @import "bootstrap_custom";
-@import 'variables';
+@import "variables";
 @import "slides";
 @import "spinner";
 @import "buttons";
