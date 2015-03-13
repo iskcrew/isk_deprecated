@@ -1,5 +1,5 @@
 //
-// groups.css.scss
+// groups.scss
 // isk
 // 
 // Created by Vesa-Pekka Palmu on 2014-06-13.
@@ -20,7 +20,6 @@ div.group_list {
   }
 }
 
-
 // Table in add slides
 table#slide_selection {
 	max-width: 660px;
@@ -34,50 +33,5 @@ table#slide_selection {
 	
 	col.checkbox {
 		max-width: 50px;
-	}
-}
-
-
-// Drag-and-Drop sortable slides inside groups#edit
-ul#slides {
-	display: inline-block;
-	
-	div.slide_image {
-		float: left;
-		padding-right: 20px;
-		
-		table {
-			border: none;
-			border-collapse: collapse;
-			
-			td, th {
-				border: none;
-				border-collapse: collapse;
-				background-color: inherit;
-			}
-			
-			th {
-				font-size: 1em;
-			}
-		}
-		
-		img {
-			width: 160px;
-			height: 90px;
-		}
-	}
-	
-	li.published:nth-child(odd) {
-		color:white;
-		background-color: $green;
-	}
-	
-	li.published:nth-child(even) {
-		color:white;
-		background-color: $green_dark;
-	}
-	
-	div.ungroup_slide {
-		float: right;
 	}
 }
