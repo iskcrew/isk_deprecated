@@ -1,6 +1,6 @@
 - overrides.each do |o|
 	li.sortable id="override_queue_#{o.id}"
-		div.panel.panel-default.panel-sortable-overrides
+		div.panel.panel-default.sortable-slide
 			div.panel-heading
 				span.handle.fa.fa-arrows-v
 				= link_to o.slide.name, slide_path( o.slide.id )

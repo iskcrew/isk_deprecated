@@ -1,10 +1,11 @@
 - group.slides.each do |slide|
-	li.sortable id="slide_#{slide.id.to_s}" class=(slide.public ? 'published' : 'hidden')
-		span.handle.fa.fa-arrows-v.fa-2x
-		div.slide_image 
-			table
-				tr: th = link_to slide.name, slide_path(slide.id)
-				tr: td = slide_preview_to_show_tag slide
-		div.ungroup_slide
-			= link_to icon('chain-broken','Ungroup'), ungroup_slide_path(slide), class: 'btn btn-danger'
+	li.sortable id="slide_#{slide.id.to_s}" class=(slide.public ? 'slide-public' : 'slide-hidden')
+		div.panel.panel-default.sortable-slide
+			div.panel-heading
+				span.handle.fa.fa-arrows-v
+				= link_to slide.name, slide_path(slide.id)
+			div.panel-body
+				= slide_preview_to_show_tag slide
+			div.panel-footer
+				= link_to icon('chain-broken','Ungroup'), ungroup_slide_path(slide), class: 'btn btn-danger'
 		

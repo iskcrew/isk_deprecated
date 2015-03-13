@@ -15,5 +15,8 @@ div.row
 	div.col-md-12
 		h2 Reorder slides in this group
 		p Drag slides to reorder them.
-		ul#slides.sortable data-sortable=sort_group_url(@group)
-			= render partial: 'sortable_slides', locals: {group: @group}
+		div.sortable-container.panel.panel-primary
+			div.panel-heading Slides in this group
+			div.panel-body
+				ul#slides.sortable.panel-group.list-group data-sortable=sort_group_url(@group)
+					= render partial: 'sortable_slides', locals: {group: @group}

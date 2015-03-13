@@ -26,5 +26,10 @@ div.sortable-container {
 	display: inline-block;
 	
 	div.panel {
+		display: inline-block;
+		
+		div.panel-body {
+			padding: 0px;
+		}
 	}
 }
