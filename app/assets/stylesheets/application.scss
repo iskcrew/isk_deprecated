@@ -56,8 +56,9 @@ nav#top-navbar {
 // displays#edit
 div.panel-sortable-overrides {
 	display: inline-block;
+	
 	div.panel-heading {
-		width: 400px;
+		width: 300px;
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
@@ -67,6 +68,8 @@ div.panel-sortable-overrides {
 		padding: 0px;
 		
 		img {
+			width: 300px;
+			height: auto;
 			padding: 0px;
 		}
 	}

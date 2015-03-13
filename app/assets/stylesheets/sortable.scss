@@ -7,32 +7,24 @@
 //
 // For drag-and-drop sortable lists
 
-@import 'variables';
-
-ul.sortable { 
-	//list-style-type: none;
-	//margin: 0px;
-	//padding: 0px;	
+.ui-sortable-placeholder {
+	height: 75px;
 }
 
-.sortable {
-	li.sortable {
-		//margin: none;
-		//padding: 5px 5px;
-		//font-size: 1.4em;
-		//border: $table_row_border;
-		//background-color: $table_row_bg;
-		overflow: auto;
-	}
-	
-	li.sortable:nth-child(even) {
-		//background-color: $table_row_odd_bg;
-	}
-	
+ul.sortable {
+	list-style: none;
 	.handle {
 		cursor: move;
 		float: left;
 		margin-right: 10px;
 		padding: 5px;
+		font-size: 150%;
+	}
+}
+
+div.sortable-container {
+	display: inline-block;
+	
+	div.panel {
 	}
 }
