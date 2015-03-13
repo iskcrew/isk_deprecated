@@ -1,9 +1,8 @@
 h1 Editing slide template #{@template.name}
 
-= form_for @template, url: template_path(@template) do |f|
+= bootstrap_form_for @template, url: template_path(@template) do |f|
 	h2 Metadata
-	= f.label :name
-	=< f.text_field :name
+	= f.text_field :name
 
 	h2 Fields in this template
 	
@@ -25,7 +24,7 @@ h1 Editing slide template #{@template.name}
 		dd The default value for this field in the slide editor. 
 	
 	ul#fields.sortable data-sortable=sort_template_url(@template)
-		= render partial: 'template_fields'
-	= f.submit 'Update'
+		= render partial: 'template_fields', locals: {f: f}
+	= f.primary 'Update template'
 			
 	

@@ -1,19 +1,15 @@
-= fields_for @template do |f|
-	= f.fields_for :fields do |ff|
-		li.sortable id="template_field_#{ff.object.id.to_s}"
-			span.handle ⇕
-			div.field_attributes
-				table
-					tr: th colspan="2" Name: #{ff.object.element_id}
-					tr
-						th Settings
-						th Default value
-					tr
-						td
-							= ff.hidden_field :id
-							ul.field_settings
-								li #{ff.check_box :editable} Editable
-								li #{ff.check_box :multiline} Multiline
-								li #{ff.color_field :color} Color
-						
-						td = ff.text_area :default_value, {cols: 40, rows: 5}
+= f.fields_for :fields do |ff|
+	li.sortable id="template_field_#{ff.object.id.to_s}"
+		span.handle.fa.fa-arrows-v.fa-2x
+		div.field_attributes
+			table.table
+				tr: th colspan="2" Name: #{ff.object.element_id}
+				tr
+					td
+						= ff.hidden_field :id
+						ul.field_settings
+							li #{ff.check_box :editable}
+							li #{ff.check_box :multiline}
+							li #{ff.color_field :color}
+					
+					td = ff.text_area :default_value, {cols: 40, rows: 5}
