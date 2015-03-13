@@ -53,6 +53,25 @@ nav#top-navbar {
 	}
 }
 
+// displays#edit
+div.panel-sortable-overrides {
+	display: inline-block;
+	div.panel-heading {
+		width: 400px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	
+	div.panel-body {
+		padding: 0px;
+		
+		img {
+			padding: 0px;
+		}
+	}
+}
+
 // users#index
 table.users {
 	col.username {

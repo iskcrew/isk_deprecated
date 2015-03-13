@@ -10,23 +10,23 @@
 @import 'variables';
 
 ul.sortable { 
-	list-style-type: none;
-	margin: 0px;
-	padding: 0px;	
+	//list-style-type: none;
+	//margin: 0px;
+	//padding: 0px;	
 }
 
 .sortable {
 	li.sortable {
-		margin: none;
-		padding: 5px 5px;
-		font-size: 1.4em;
-		border: $table_row_border;
-		background-color: $table_row_bg;
+		//margin: none;
+		//padding: 5px 5px;
+		//font-size: 1.4em;
+		//border: $table_row_border;
+		//background-color: $table_row_bg;
 		overflow: auto;
 	}
 	
 	li.sortable:nth-child(even) {
-		background-color: $table_row_odd_bg;
+		//background-color: $table_row_odd_bg;
 	}
 	
 	.handle {
