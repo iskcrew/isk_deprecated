@@ -19,22 +19,27 @@
 // TODO: move to other files
 
 // Navbar
+
+// Bootstrap scrollspy requires that the body has relative postitioning
 body { 
 	padding-top: 90px;
 	position: relative;
 }
 
 nav#top-navbar {
+	// Pad the isk logo so that it sits nicely
   a.navbar-brand {
     padding-top: 18px;
   }
 	
+	// Highlight color for the number of open tickets
 	#tickets_tab {
 		.badge {
 			background-color: $brand-warning;
 		}
 	}
 	
+	// Tabs that want attention, like displays when there are errors detected
 	li.navbar-warning {
 		background-color: $state-warning-bg;
 	}
@@ -43,6 +48,7 @@ nav#top-navbar {
 		background-color: darken($state-warning-bg, 10%);
 	}
 	
+	// The lower navigation bar for component specific actions (list, new, etc)
 	#navbar-actions {
 		margin-left: 60px;
 		
@@ -52,7 +58,8 @@ nav#top-navbar {
 	}
 }
 
-// displays#edit
+// Slide panels for jquery-ui sortable widgets.
+// They are used in groups/edit.html.slim and displays/edit.html.slim
 div.sortable-slide {
 	
 	div.panel-heading {
@@ -73,7 +80,7 @@ div.sortable-slide {
 	}
 }
 
-// users#index
+// Styling for the user list table on users/index.html.slim
 table.users {
 	col.username {
 	}
@@ -100,7 +107,8 @@ div.field_attributes {
 	}
 }
 
-// Display panels
+// displays/_display.html.slim partial styling
+// A bootstrap panel with condensed information for a display
 div.panel-display {
 	display: inline-block;
 	margin: 5px;
@@ -125,6 +133,7 @@ div.panel-display {
 	}
 }
 
+// Use a slightly bigger font on panel headings and fix link color on them
 div.panel-heading {
   font-size: 150%;
   
@@ -133,6 +142,7 @@ div.panel-heading {
   }
 }
 
+// Add a tad of margins for inline style bootsrap forms
 form.form-inline {
   label {
     margin: 0px 5px;
