@@ -14,7 +14,6 @@
 @import "sortable";
 @import "groups";
 @import "presentations";
-@import "schedules";
 
 // TODO: move to other files
 
@@ -140,6 +139,14 @@ div.panel-heading {
   a {
     color: inherit;
   }
+}
+
+// Schedules#edit
+// Fix text color on schedule event select controls
+table.schedule_events_edit {
+	select {
+		color: $input-color;
+	}
 }
 
 // Add a tad of margins for inline style bootsrap forms
