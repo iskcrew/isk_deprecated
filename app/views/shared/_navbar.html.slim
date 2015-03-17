@@ -20,7 +20,8 @@ nav.navbar.navbar-default.navbar-fixed-top#top-navbar
 							- ['Templates','Events','Users'].each do |c|
 								li
 									= link_to c, controller: c.downcase
-			
+			- unless Rails.env.production?
+				p.navbar-text.danger #{Rails.env.to_s.capitalize} mode
 			ul class="nav navbar-nav navbar-right"
 				li
 					= form_tag login_path, method: :delete do

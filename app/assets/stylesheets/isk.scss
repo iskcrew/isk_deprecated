@@ -46,7 +46,14 @@ nav#top-navbar {
 		
 		a {
 			padding: 5px 5px;
-			color: $text_color;		}
+			color: $text_color;
+		}
+	}
+	
+	// Notification if running on non-production environment
+	p.danger {
+		color: $brand-danger;
+		font-weight: bold;
 	}
 }
 
