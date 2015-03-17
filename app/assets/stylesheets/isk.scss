@@ -46,7 +46,6 @@ nav#top-navbar {
 		
 		a {
 			padding: 5px 5px;
-			color: $text_color;
 		}
 	}
 	
@@ -136,3 +135,11 @@ form.form-inline {
   }
 }
 
+// Tabs
+
+// Better link color on tabs
+ul.nav.nav-tabs {
+	a {
+		color: $text-color;
+	}
+}
