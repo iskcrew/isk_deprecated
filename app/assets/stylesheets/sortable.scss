@@ -32,3 +32,40 @@ div.sortable-container {
 		}
 	}
 }
+
+// Slide panels for jquery-ui sortable widgets.
+// They are used in groups/edit.html.slim and displays/edit.html.slim
+div.sortable-slide {
+	
+	div.panel-heading {
+		width: 300px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	
+	div.panel-body {
+		padding: 0px;
+		
+		img {
+			width: 300px;
+			height: auto;
+			padding: 0px;
+		}
+	}
+}
+
+// Sortable groups in presentations/edit.html.slim
+li.sortable-group {
+	overflow: auto;
+	
+	border: 1px solid $gray-light;
+	
+	div.btn-group {
+		float: right;
+	}
+	
+	&.ui-sortable-placeholder {
+		height: 30px;
+	}
+}

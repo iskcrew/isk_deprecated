@@ -19,30 +19,10 @@
 	font-style: italic;
 }
 
-div#slide-index {
-	position: relative;
-}
-
 //slide preview image
 img.preview {
 	width: 400px;
 	height: 255px;
-}
-
-div#group_links {
-	display: block;
-	position: fixed;
-	max-width: 150px;
-	margin: 75px 15px 0px 0px;
-	top: 0px;
-	right: 6px; // WTF is this requirement?
-	
-	li {		
-		a {
-			color: $text_color;
-			padding: 2px 5px;
-		}
-	}
 }
 
 div.slide_list {

@@ -38,17 +38,3 @@ table.preview {
 		background: $green;
 	}
 }
-
-li.sortable-group {
-	overflow: auto;
-	
-	border: 1px solid $gray-light;
-	
-	div.btn-group {
-		float: right;
-	}
-	
-	&.ui-sortable-placeholder {
-		height: 30px;
-	}
-}

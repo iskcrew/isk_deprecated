@@ -21,7 +21,7 @@
 		border-radius: 50%;
 	}
 	
-	&.red:before { background-color: $red_highlight; }
-	&.green:before { background-color: $green_highlight; }
-	&.blue:before { background-color: $primary_highlight; }
+	&.red:before { background-color: $brand-danger; }
+	&.green:before { background-color: $brand-success; }
+	&.blue:before { background-color: $brand-info; }
 }
