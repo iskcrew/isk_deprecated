@@ -17,8 +17,15 @@ div#renderer * {
     width:100%;
 }
 
+div#bgrs img {
+    height:unset;
+    max-height: 100%;
+}
+
 div#clock object {
     display: block;
+    height:unset;
+    max-height: 100%;
 }
 
 div#canvas * {
@@ -28,6 +35,8 @@ div#canvas * {
 div#stats {
     display:inline-block;
     position: absolute;
+    height: unset;
+    width: unset;
     right: 0px;
     bottom: 0px;
 }
