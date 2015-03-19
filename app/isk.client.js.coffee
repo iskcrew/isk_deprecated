@@ -43,7 +43,7 @@ handle_hello = (display) ->
     timed_next_slide()
 
 handle_display = (display) ->
-  console.log "received display",  display
+  console.debug "received display",  display
   slide = (slide) ->
     if slide?.group?
       gs_id="slide_G#{slide.group}S#{slide.id}"
@@ -70,7 +70,7 @@ handle_display = (display) ->
   old_slide = root.find('#presentation .current').first()
   if old_slide.length
     id = old_slide.attr('id')
-    console.log 'Marking current slide', id
+    console.debug 'Marking current slide', id
     new_slide = elems.find('#'+id)
     new_slide.addClass('current')
     if (old_slide.data()?.slide?.images_updated_at <
@@ -81,7 +81,7 @@ handle_display = (display) ->
   manual_mode.set display?.manual == true
 
 handle_goto_slide = (d) ->
-  console.log "received goto_slide", d
+  console.debug "received goto_slide", d
   if d?.slide == "next" then next_slide()
   else if d?.slide == "previous" then prev_slide()
   else
@@ -90,14 +90,14 @@ handle_goto_slide = (d) ->
   true
 
 send_hello = (name) ->
-  console.log "sending_hello", name
+  console.debug "sending_hello", name
   isk.dispatcher.trigger 'iskdpy.hello', {display_name: name},
     success = (d) -> handle_hello d,
     failure = (d) -> alert 'Websocket failed'
 
 send_shutdown = (display_id) ->
   data = { display_id: display_id }
-  console.log 'sending shutdown', data
+  console.debug 'sending shutdown', data
   isk.dispatcher.trigger 'iskdpy.shutdown', data
 
 send_current_slide = (slide) ->
@@ -109,11 +109,11 @@ send_current_slide = (slide) ->
     override_queue_id: d?.slide?.override_queue_id
     }
   if data?.slide_id and (data?.group_id or data?.override_queue_id)
-    console.log 'sending current_slide', data
+    console.debug 'sending current_slide', data
     isk.dispatcher.trigger 'iskdpy.current_slide', data
   else
     data.error = d?.error_message or "Unknown slide shown"
-    console.log 'sending error', data
+    console.debug 'sending error', data
     isk.dispatcher.trigger 'iskdpy.error', data
 
 send_error = (msg) ->
@@ -121,7 +121,7 @@ send_error = (msg) ->
     display_id: display_id,
     error: msg
   }
-  console.log 'sending error', data
+  console.debug 'sending error', data
   isk.dispatcher.trigger 'iskdpy.error', data
   
 
@@ -145,7 +145,7 @@ set_current = (elem) ->
   else timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
 
 set_current_updated = (elem) ->
-  console.log 'UPDATED', elem
+  console.debug 'UPDATED', elem
   if elem.length and elem.data('slide')?.ready
     clearTimeout(timer)
     when_ready elem, ->
