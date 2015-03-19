@@ -28,6 +28,15 @@ class IskDisplayRenderer
                 if value.fs? and value.vs?
                   value.material.needsUpdate=true
 
+  handle_window_size: =>
+    elem=@renderer.domElement?.parentNode?.parentNode?.firstElementChild?.firstElementChild
+    [w,h]=[elem?.clientWidth,elem?.clientHeight]
+    if not w? and h?
+      [w,h]=[window?.innerWidth,window?.innerHeight]
+    @renderer.setSize( w,h )
+    @camera.aspect = w/h
+    @camera.updateProjectionMatrix()
+
   init_renderer: ->
     @renderer = new THREE.WebGLRenderer({antialias: true})
     @renderer.setSize(window.innerWidth, window.innerHeight)
@@ -36,8 +45,6 @@ class IskDisplayRenderer
     @scene = new THREE.Scene()
     @camera = new THREE.PerspectiveCamera( 90.0, window.innerWidth/window.innerHeight, 1.0, 10000.0 )
     @camera.position.z = 108.0/2
-
-    THREEx.WindowResize(@renderer, @camera)
 
     #geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
     geometry = new THREE.PlaneBufferGeometry( 192, 108,0,0 )
@@ -98,8 +105,14 @@ class IskDisplayRenderer
     requestAnimationFrame @animate
 
     $('#stats').append(@stats?.domElement) if stats and @stats?
+
     $(@renderer.domElement).hide().fadeIn(2000)
     $('#canvas').append(@renderer?.domElement)
+
+    # Add window size event and run it once (to set initial values)
+    window.addEventListener('resize', @handle_window_size, false)
+    @handle_window_size()
+
     THREEx?.FullScreen?.request()
 
   transition_start: (type) ->
