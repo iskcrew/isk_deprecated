@@ -1,9 +1,7 @@
-precision mediump float;
 uniform sampler2D empty;
 uniform sampler2D from;
 uniform sampler2D to;
 uniform float time;
-uniform int transition_type;
 uniform float transition_time;
 varying vec2 vUv;
 

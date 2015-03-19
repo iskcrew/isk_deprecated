@@ -1,5 +1,3 @@
-precision mediump float;
-uniform int transition_type;
 uniform float transition_time;
 uniform float time;
 

@@ -1,4 +1,3 @@
-precision mediump float;
 uniform sampler2D empty;
 uniform sampler2D from;
 uniform sampler2D to;
