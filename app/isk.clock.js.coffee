@@ -11,10 +11,14 @@ init = ->
   time=svg.find('#clock')
 
 show = ->
-  elem.animate({top: "0%"})
+  elem.animate {top: "0%"},
+    start: ->
+      elem.show()
 
 hide = ->
-  elem.animate({top: "15%"})
+  elem.animate {top: "15%"},
+    done: ->
+      elem.hide()
 
 set_current_time = ->
   t=Date().split(' ')
