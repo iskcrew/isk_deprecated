@@ -24,17 +24,17 @@ module DisplaysHelper
 	
 	# Set the panel class based on display status
 	def display_class(display)
-		if display.late?
-			'panel-warning'
-		else
-			case display.status
-			when 'running'
-				'panel-success'
-			when 'disconnected'
-				'panel-default'
+		case display.status
+		when 'running'
+			if display.late?
+				'panel-warning'
 			else
-				'panel-danger'
+				'panel-success'
 			end
+		when 'disconnected'
+			'panel-default'
+		else
+			'panel-danger'
 		end
 	end
 	
