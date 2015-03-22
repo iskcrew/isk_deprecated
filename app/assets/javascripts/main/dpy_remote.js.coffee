@@ -12,7 +12,7 @@
 
 $ -> 
 	# Only run the script if the remote control interface is on this page
-	root=$('#display_control').first()
+	root=$('#display-control').first()
 	if not root then return
 
 	display_id=root.attr('data-id')
@@ -33,7 +33,9 @@ $ ->
 				g = $('<div/>')
 				g.attr {id: "group_" + slide.group}
 				g.addClass "group"
-				g.append $('<h1/>').text slide.group_name
+				g.addClass "panel"
+				g.addClass "panel-primary"
+				g.append $('<div class="panel-heading"/>').text slide.group_name
 				root.append g
 			# Append the slide to the group
 			gs_id="#{slide?.group}_#{slide?.id}"

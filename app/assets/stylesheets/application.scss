@@ -18,6 +18,71 @@
 
 // TODO: move to other files
 
+
+div.display-preview {
+	display: block;
+	position:fixed;
+	top: 120px;
+	right: 15px;
+	box-shadow:0 2px 4px rgba(0, 0, 0, .3);	
+
+	img {
+		border: 5px solid $state-danger-bg;
+	}
+	
+	div.control-buttons {
+		display: block;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+div.display-control-header {
+	margin-right: 425px;
+}
+
+div.display-control {
+	margin-right: 425px;
+		
+	div.group {
+		div.panel-heading {
+			font-size: $font-size-base;
+			padding: 5px;
+		}
+		
+		div.slide {
+			display: inline-block;
+			margin: 5px;
+			background: $gray-dark;
+			
+			h2.slideheader {
+				font-size: 8pt;
+				max-width: 130px;
+				overflow: hidden;
+				text-align: center;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			img {
+				width: 128px;
+				height: 72px;
+				padding: 5px;
+				cursor: pointer;
+			}
+		}
+	}
+	
+	.active {
+		background: $state-danger-bg;
+	}
+}
+
+
+
 // Styling for the user list table on users/index.html.slim
 table.users {
 	col.username {
