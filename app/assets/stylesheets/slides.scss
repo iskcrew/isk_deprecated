@@ -30,6 +30,15 @@ div.slide_list {
 	min-width: 600px
 }
 
+// app/views/slides/index.html.slim
+// app/views/slides/_group.html.slim
+// Less padding on the panel-body
+div.compact-slidelist {
+	div.slides-list {
+		padding: 2px;
+	}
+}
+
 // app/views/slides/_slide.html.slim
 div.slide {
 	display: inline-block;
