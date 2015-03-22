@@ -1,11 +1,16 @@
-h1 Editing display: #{@display.name}
+div.row
+	h1 Editing display: #{@display.name}
 
-= form_for @display do |f|
-	= f.error_messages
-	= render partial: 'form'
-	= f.submit
-	
-h2 Override queue
-p You can drag the slides to sort the queue
-ul.sortable#override_queues data-sortable=sort_queue_display_url(@display)
-	= render partial: 'sortable_overrides', locals: {overrides: @display.override_queues}
+	div.col-sm-6.col-md-4.col-lg-3
+		= render partial: 'form'
+
+div.row
+	div.col-md-6.col-lg-5	
+		h2 Override queue
+		p You can drag the slides to sort the queue
+		
+		div.panel.panel-primary.sortable-container
+			div.panel-heading Slides in override queue
+			div.panel-body
+				ul.sortable#override_queues.panel-group.list-group data-sortable=sort_queue_display_url(@display)
+					= render partial: 'sortable_overrides', locals: {overrides: @display.override_queues}

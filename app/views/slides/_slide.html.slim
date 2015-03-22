@@ -1,11 +1,13 @@
-div.slide class=(slide.public ? 'public' : 'hidden') id="slide_#{slide.id}"
-	div.slide_header
-		div.slide_name = link_to slide.name, slide_path(slide)
+div.slide.panel.panel-primary class=(slide.public ? 'slide-public' : 'slide-hidden') id="slide_#{slide.id}"
+	div.slide_header.panel-heading
+		div.slide_name 
+			= link_to slide.name, slide_path(slide)
 		div.slide_type class=(slide.type_str) = slide.type_str
-	- if defined?(to_full) || (controller.controller_name == 'slides' && controller.action_name == 'show')
-		= slide_preview_to_full_tag(slide)
-	- else
-		= slide_preview_to_show_tag(slide)
+	div.panel-body
+		- if defined?(to_full) || (controller.controller_name == 'slides' && controller.action_name == 'show')
+			= slide_preview_to_full_tag(slide)
+		- else
+			= slide_preview_to_show_tag(slide)
 	/ cache is here instead of top of the file because we want to be able to control
 	/ where the link on the slide preview leads
 	= cache slide_key(slide), tag: [slide.cache_tag, current_user.cache_tag] do
@@ -16,14 +18,21 @@ div.slide class=(slide.public ? 'public' : 'hidden') id="slide_#{slide.id}"
 					- if slide.can_edit? current_user
 						= link_to 'Undelete', undelete_slide_path(slide), :method => :post, :class => 'button'
 			- elsif slide.can_edit? current_user
-				=< slide_toggle_button 'Public', slide, :public
-				=< slide_toggle_button 'Clock', slide, :show_clock
-				=< slide_edit_link(slide)
-				=< slide_svg_link(slide)
-				- if slide.master_group_id != current_event.ungrouped_id
-					=< slide_ungroup_button(slide)
-				=< slide_clone_button(slide)
-				=< slide_delete_button(slide)
+				div
+					div.btn-group-xs
+						=< slide_toggle_button 'Public', slide, :public
+						=< slide_toggle_button 'Clock', slide, :show_clock
+						=< slide_svg_link(slide)
+						=< slide_edit_link(slide)
+						div.btn-group.btn-group-xs
+							a.btn.btn-primary.dropdown-toggle data-toggle="dropdown"
+								| More
+								span.caret
+							ul.dropdown-menu
+								- if slide.master_group_id != current_event.ungrouped_id
+									li = slide_ungroup_link(slide)
+								li = slide_clone_link(slide)
+								li = slide_delete_link(slide)
 			- else
 				/ can't edit
 				=< slide_hide_button_or_status(slide)

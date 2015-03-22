@@ -158,6 +158,7 @@ class GroupsController < ApplicationController
 	end
 		
 	# Add all slides on this group to override on a display
+	# FIXME: effect!
 	def add_to_override
 		group = MasterGroup.find(params[:id])
 		display = Display.find(params[:override][:display_id])

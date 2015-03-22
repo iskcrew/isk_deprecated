@@ -1,16 +1,19 @@
-h1 Editing slide: #{@slide.name}
-
-/ @slide is STI model, so we need to cast it into the base model name or rails gets too clever
-= form_for @slide, :as => :slide, :url => slide_path(@slide) do |f|
-	= f.error_messages
-	= render partial: "form"
-	- if @slide.is_a? HttpSlide
-		= render partial: "http_slide_form"
-	- elsif @slide.is_a? SimpleSlide
-		= render partial: 'simple_edit'
-	- elsif @slide.is_a? TemplateSlide
-		div#template_slide_form.svg_editor_container
-			= render partial: 'template_slide_form'
-	- elsif @slide.is_a? ImageSlide
-		= render partial: 'image_slide_form'
-	= f.submit
+div.container
+	h1 Editing slide: #{@slide.name}
+	/ @slide is STI model, so we need to cast it into the base model name or rails gets too clever
+	= bootstrap_form_for @slide, :as => :slide, :url => slide_path(@slide) do |f|
+		= f.error_messages
+		= render partial: "form", locals: {f: f}
+		- if @slide.is_a? HttpSlide
+			= render partial: "http_slide_form", locals: {f: f}
+		- elsif @slide.is_a? ImageSlide
+			= render partial: 'image_slide_form', locals: {f: f}
+		- elsif @slide.is_a? SimpleSlide
+			= f.primary
+			= render partial: 'simple_edit', locals: {f: f}
+		- elsif @slide.is_a? TemplateSlide
+			= f.primary
+			div#template_slide_form.svg_editor_container
+				= render partial: 'template_slide_form', locals: {f: f}
+		div.col-xs-12
+			= f.primary

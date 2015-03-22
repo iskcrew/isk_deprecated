@@ -1,66 +1,66 @@
 h1 Create a new slide
 
 p Choose the slide type to create.
-div#tabs
-	ul
-		li: a href="#simple" Simple editor
-		li: a href="#inkscape" Inkscape
-		li: a href="#httpslide" Http fecher
-		li: a href="#image" Upload image
-		- if current_templates.present? 
-			li: a href="#template" Slide from template
-	
+ul.nav.nav-tabs
+	li.active: a href="#simple" data-toggle="tab" Simple editor
+	li: a href="#inkscape" data-toggle="tab" Inkscape
+	li: a href="#httpslide" data-toggle="tab" Http fecher
+	li: a href="#image" data-toggle="tab" Upload image
+	- if current_templates.present? 
+		li: a href="#template" data-toggle="tab" Slide from template
+
+div.tab-content
 	- if current_templates.present?	
-		div#template
+		div.tab-pane#template
 			h2 New slide from template
-			= form_for @slide, html: {id: 'new_template_slide'} do |f|
+			= bootstrap_form_for @slide, html: {id: 'new_template_slide'} do |f|
 				= f.error_messages
 				= hidden_field_tag :create_type, 'template'
-				= render partial: 'form'
+				= render partial: 'form', locals: {f: f}
 				p
 					| Template: 
 					= f.collection_select(:foreign_object_id, current_templates, :id, :name)
 				div#template_slide_form.svg_editor_container
-				p = f.submit
+				p = f.primary
 	
-	div#simple
+	div.tab-pane.active#simple
 		h2 New simple editor slide
-		= form_for @slide, html: {id: 'new_simple_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_simple_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'simple'
-			= render partial: 'form'
-			= render partial: 'simple_edit'
-			p = f.submit
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'simple_edit', locals: {f: f}
+			p = f.primary
 	
-	div#inkscape
+	div.tab-pane#inkscape
 		h2 New inkscape slide
 		p The slide will have the same starting template as a simple slide.
-		= form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_inkscape_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'inkscape'
-			= render partial: 'form'
-			p = f.submit
+			= render partial: 'form', locals: {f: f}
+			p = f.primary
 	
-	div#httpslide
+	div.tab-pane#httpslide
 		h2 New http fecher slide
 		p The slide will be automatically updated periodically by the background process.
-		= form_for @slide, html: {id: 'new_http_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_http_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'http_slide'
-			= render partial: 'form'
-			= render partial: 'http_slide_form'
-			p = f.submit
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'http_slide_form', locals: {f: f}
+			p = f.primary
 		
-	div#image
+	div.tab-pane#image
 		h2 New slide from image
 		p 
 			| You can upload a image in any format understood by imagemagick library.
 			|  The image will be shown centered on a black background and resized down if needed.
-		= form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
+		= bootstrap_form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'image'
-			= render partial: 'form'
-			= render partial: 'image_slide_form'
+			= render partial: 'form', locals: {f: f}
+			= render partial: 'image_slide_form', locals: {f: f}
 			p: b Choose the image to upload:
 			= file_field_tag :image
-			p = f.submit
+			p = f.primary

@@ -10,7 +10,7 @@ module DisplaysHelper
 	# Links to the details for all late displays
 	def late_display_warning(d)
 		link_text = "#{d.name} (#{d.ip}) is more than #{Display::Timeout} minutes late!"
-		link_to link_text, display_path(d)
+		link_to link_text, display_path(d), class: 'alert-link'
 	end
 		
 	# Link to displays#destroy if user has sufficient access
@@ -19,6 +19,22 @@ module DisplaysHelper
 			link_to icon('times-circle', 'Delete'), display_path(d),
 								data: {confirm: "Are you sure you want to delete the display \"#{d.name}\", this cannot be undone?"}, title: 'Delete this display premanently',
 								method: :delete, class: 'button warning'
+		end
+	end
+	
+	# Set the panel class based on display status
+	def display_class(display)
+		if display.late?
+			'panel-warning'
+		else
+			case display.status
+			when 'running'
+				'panel-success'
+			when 'disconnected'
+				'panel-default'
+			else
+				'panel-danger'
+			end
 		end
 	end
 	

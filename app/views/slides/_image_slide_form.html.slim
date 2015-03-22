@@ -4,27 +4,26 @@ ruby:
 	slidedata = (@slide.is_a?(ImageSlide) ? @slide.slidedata : ImageSlide::DefaultSlidedata)
 
 h3 Image scaling options
-= fields_for @slide do |f|
-	= f.fields_for :slidedata do |ff|
-		p Image scaling
-		dl
-			dt Fit
-			dd
-				| Image will be scaled to fit the slide dimensions maintaining aspect ratio.
-			dt Down only
-			dd 
-				| Image will be scaled only if its height or width exceed the slide dimensions.
-				|  Aspect ratio will be maintained. Images smaller than the slide will be centered and
-				|  displayed 1:1.
-			dt Up only
-			dd
-				| The image will be scaled up if both its height and width are smaller than the slide.
-				|  Aspect ratio will be maintained.
-			dt Stretch
-			dd
-				| Image will be streched to the slide dimensions ignoring the aspect ratio.
-		= ff.select :scale, ImageSlide::ScalingOptions, selected: slidedata[:scale]
-		p 
-			| Background color. When the (scaled) slide image is smaller than the slide it will be centered on
-			   the slide and rest of the slide will be filled with solid color background.
-		= ff.color_field :background, value: slidedata[:background]
+= f.fields_for :slidedata do |ff|
+	p Image scaling
+	dl
+		dt Fit
+		dd
+			| Image will be scaled to fit the slide dimensions maintaining aspect ratio.
+		dt Down only
+		dd 
+			| Image will be scaled only if its height or width exceed the slide dimensions.
+			|  Aspect ratio will be maintained. Images smaller than the slide will be centered and
+			|  displayed 1:1.
+		dt Up only
+		dd
+			| The image will be scaled up if both its height and width are smaller than the slide.
+			|  Aspect ratio will be maintained.
+		dt Stretch
+		dd
+			| Image will be streched to the slide dimensions ignoring the aspect ratio.
+	= ff.select :scale, ImageSlide::ScalingOptions, selected: slidedata[:scale]
+	p 
+		| Background color. When the (scaled) slide image is smaller than the slide it will be centered on
+		   the slide and rest of the slide will be filled with solid color background.
+	= ff.color_field :background, value: slidedata[:background]

@@ -42,39 +42,85 @@ module TicketsHelper
 		end
 	end
 	
-	def ticket_edit_link(ticket)
-		if ticket.can_edit? current_user
-			link_to icon('edit', 'Edit'), edit_ticket_path(ticket), class: 'button'
+	# A bootstrap badge for the ticket status
+	def ticket_status(ticket)
+		case ticket.status
+		when Ticket::StatusNew
+			html_class = "label-danger"
+			icon_type = 'square-o'
+		when Ticket::StatusOpen
+			html_class = "label-warning"
+			icon_type = 'square-o'
+		else
+			html_class = "label-success"
+			icon_type = 'check-square-o'
+		end
+		content_tag 'span', class: "label #{html_class}" do
+			icon icon_type, ticket.status_text
 		end
 	end
 	
-	def ticket_close_link(ticket)
+	# Color the rows in tickets#index table per ticket status
+	def ticket_row_class(ticket)
+		case ticket.status
+		when Ticket::StatusNew
+			'danger'
+		when Ticket::StatusOpen
+			'warning'
+		when Ticket::StatusClosed
+			'success'
+		end
+	end
+	
+	def ticket_edit_link(ticket, html_class = nil)
+		if ticket.can_edit? current_user
+			link_to edit_link_text, edit_ticket_path(ticket), class: html_class
+		end
+	end
+	
+	def ticket_edit_button(ticket)
+		ticket_edit_link(ticket, 'btn btn-primary')
+	end
+	
+	def ticket_close_link(ticket, html_class = nil)
 		if ticket.can_close? current_user
 			link_to icon('check-square-o', 'Close'), 
 				ticket_path(ticket, ticket: {status: Ticket::StatusClosed}), 
-				class: 'button warning', method: :put
+				method: :put, class: html_class
 		end
 	end
 	
-	def ticket_destroy_link(ticket)
+	def ticket_close_button(ticket)
+		ticket_close_link(ticket, 'btn btn-success')
+	end
+	
+	def ticket_destroy_link(ticket, html_class = nil)
 		if ticket.admin? current_user
 			link_to icon('times-circle', 'Delete'), 
-				ticket_path(ticket), class: 'button warning', method: :delete,
+				ticket_path(ticket), class: html_class, method: :delete,
 				data: {confirm: 'Are you sure you want to permanently delete this ticket?'}
 		end
 	end
 	
+	def ticket_destroy_button(ticket)
+		ticket_destroy_link(ticket, 'btn btn-danger')
+	end
+	
 	def ticket_tab_link(open)
-		link_name = "Tickets #{icon 'ticket', open}"
+		link_name = "Tickets <span class=badge>#{icon 'ticket', open}</span>"
 		return link_to link_name.html_safe, tickets_path, class: 'ui-tabs-anchor'
 	end
 	
 	def ticket_kind(ticket)
 		case ticket.kind
 		when 'error'
-			(icon('warning') + ' ' + ticket.kind.capitalize)
+			content_tag 'span', class: 'label label-danger' do
+				icon('warning', ticket.kind.capitalize)
+			end
 		else
-			ticket.kind.capitalize
+			content_tag 'span', class: 'label label-info' do
+				ticket.kind.capitalize
+			end
 		end
 	end
 	

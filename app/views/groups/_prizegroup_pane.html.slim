@@ -1,0 +1,13 @@
+- if @group.is_a? PrizeGroup
+	div.tab-pane#prize_group
+		h2 Prize group data
+		p Title: #{@group.data[:title]}
+		ol
+			- @group.data[:awards].each do |d|
+				li
+					b Name:
+					= d[:name]
+					b By:
+					= d[:by]
+					b Points:
+					= d[:pts]

@@ -3,9 +3,9 @@
 
 h1 Create new slide
 
-= form_for @slide, html: {multipart: (@slide.is_a? ImageSlide)} do |f|
+= bootstrap_form_for @slide, html: {multipart: (@slide.is_a? ImageSlide)} do |f|
 	= f.error_messages
-	= render partial: 'form'
+	= render partial: 'form', locals: {f: f}
 	- if @slide.class == TemplateSlide
 		= hidden_field_tag :create_type, 'template'
 		p
@@ -14,14 +14,14 @@ h1 Create new slide
 		div#template_slide_form.svg_editor_container
 	- elsif @slide.class == SimpleSlide
 		= hidden_field_tag :create_type, 'simple'
-		= render partial: 'simple_edit'
+		= render partial: 'simple_edit', locals: {f: f}
 	- elsif @slide.class == InkscapeSlide
 		= hidden_field_tag :create_type, 'inkscape'
 	- elsif @slide.class == HttpSlide
 		= hidden_field_tag :create_type, 'http_slide'
-		= render partial: 'http_slide_form'
+		= render partial: 'http_slide_form', locals: {f: f}
 	- elsif @slide.class == ImageSlide
 		= hidden_field_tag :create_type, 'image'
-		= render partial: 'image_slide_form'
+		= render partial: 'image_slide_form', locals: {f: f}
 		= file_field_tag :image
 	= f.submit

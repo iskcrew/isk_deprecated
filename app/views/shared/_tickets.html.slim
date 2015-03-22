@@ -1,4 +1,4 @@
-div#tickets.info_block
+div#tickets.info_block.tab-pane
 	- if obj.tickets.open.present?
 		h2 Open tickets referencing this #{ticket_object_type(obj)}
 		
@@ -10,14 +10,12 @@ div#tickets.info_block
 	
 	h2 Open new ticket
 	p Create a new ticket about this #{ ticket_object_type(obj) }.
-	= form_for (@ticket = Ticket.new) do |f|
+	= bootstrap_form_for (@ticket = Ticket.new) do |f|
 		= f.hidden_field :about_type, value: obj.class.base_class.name
 		= f.hidden_field :about_id, value: obj.id
 		
-		p = f.label :name
 		= f.text_field :name
 		
-		p = f.label :description
 		= f.text_area :description
 		
-		p = f.submit
+		= f.primary 'Open ticket'

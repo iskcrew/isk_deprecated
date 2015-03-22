@@ -6,19 +6,19 @@ div.info_block#metadata
 			 tr: th Slide description
 			 tr: td == simple_format @slide.description
 	-if @slide.public
-		div.warning
+		div.alert.alert-warning
 			p This slide is public, you should hide it before editing it.
 	-else
 		div
 			p This slide is hidden. It won't be shown on any presentations.
 				| You need to publish it before it can be shown.
 	-if @slide.replaced?
-		div.warning
+		div.alert.alert-warning
 			p
 				| This slide has been replaced! The replacement slide is: 
 				= link_to @slide.replacement.name, slide_path(@slide.replacement)
 	-elsif @slide.deleted
-		div.warning
+		div.alert.alert-warning
 			p
 				| This slide has been deleted!
 				- if Slide.admin? current_user

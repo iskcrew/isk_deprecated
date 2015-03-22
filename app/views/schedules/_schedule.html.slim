@@ -1,19 +1,21 @@
-div.schedule_info id="schedule_#{schedule.id}"
-	div.schedule_header
-		= link_to schedule.name, schedule_path(schedule)
-	div.schedule_data
-		ul
-			li Events in this schedule: #{schedule.schedule_events.count}
-			li 
-				| Group for generated slides:
-				=< link_to schedule.slidegroup.name, group_path(schedule.slidegroup)
-			li 
-				| Maximum number of generated slides:
-				=< schedule.max_slides == -1 ? 'Unlimited' : schedule.max_slides
-			li Generate "next up" -slides: #{schedule.next_up ? 'Yes' : 'No'}
-			li 
-				| Group for "next up" -slides: 
-				=< link_to schedule.next_up_group.name, group_path(schedule.next_up_group)
-	div.schedule_actions
-		= link_to icon('info-circle', 'Details'), schedule_path(schedule), class: 'button'
-		= link_to icon('edit', 'Edit'), edit_schedule_path(schedule), class: 'button'
+div.col-md-4.col-sm-6.col-lg-3
+	div.panel-schedule.panel.panel-primary id="schedule_#{schedule.id}"
+		div.panel-heading
+			= link_to schedule.name, schedule_path(schedule)
+		div.panel-body
+			ul
+				li Events in this schedule: #{schedule.schedule_events.count}
+				li 
+					| Group for generated slides:
+					=< link_to schedule.slidegroup.name, group_path(schedule.slidegroup)
+				li 
+					| Maximum number of generated slides:
+					=< schedule.max_slides == -1 ? 'Unlimited' : schedule.max_slides
+				li Generate "next up" -slides: #{schedule.next_up ? 'Yes' : 'No'}
+				li 
+					| Group for "next up" -slides: 
+					=< link_to schedule.next_up_group.name, group_path(schedule.next_up_group)
+		div.panel-footer
+			div.btn-group.btn-group-sm
+				= link_to icon('info-circle', 'Details'), schedule_path(schedule), class: 'btn btn-primary'
+				= link_to icon('edit', 'Edit'), edit_schedule_path(schedule), class: 'btn btn-primary'

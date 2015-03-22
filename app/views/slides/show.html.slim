@@ -1,30 +1,27 @@
-h1	Information for slide: #{@slide.name}
-
-div.slide_info
-	/ Normal slide-block
-	= render partial: @slide
-	= render partial: 'slide_metadata'
-	div#tabs
-		ul
-			li: a href="#group_info" Group
-			li: a href="#presentations" Presentations
-			li: a href="#overrides" Overrides
-			li: a href="#tickets" Tickets
-			li: a href="#authorized_users" Authorized users
+div.row
+	h1	Information for slide: #{@slide.name}
+	div.col-md-6.col-md-push-6
+		/ Normal slide-block
+		= render partial: @slide
+	
+	div.col-md-6.col-sm-8.col-md-pull-6
 		
-		/ List of presentations this slide belongs to
-		= render :partial => 'slide_presentation_list'
-		/ List of displays where this slide is in their override queue
-		= render :partial => 'slide_overrides'
-		= render partial: "slide_group_info"
-		= render partial: "shared/authorized_users", locals: {obj: @slide}
-		= render partial: "shared/tickets", locals: {obj: @slide}
-
-/If current user can edit this slide add the appropriate links to navigation bar
--if @slide.can_edit? current_user
-	- content_for :navigation do
-		= slide_edit_link @slide
-		-if @slide.is_a?(SvgSlide) && Slide.admin?(current_user)
-			= link_to 'Convert to inkscape', to_inkscape_slide_path(@slide), method: :post
-		= slide_svg_link @slide
-		= link_to 'Slide display history', slide_history_index_path(@slide)
+		= render partial: 'slide_metadata'
+		div.panel.panel-default
+			ul.nav.nav-tabs
+				li.active: a data-toggle="tab" href="#group_info" Group
+				li: a data-toggle="tab" href="#presentations" Presentations
+				li: a data-toggle="tab" href="#overrides" Overrides
+				li: a data-toggle="tab" href="#tickets" Tickets
+				li: a data-toggle="tab" href="#authorized_users" Authorized users
+			div.tab-content.panel-body
+				/ List of presentations this slide belongs to
+				= render :partial => 'slide_presentation_list'
+				/ List of displays where this slide is in their override queue
+				= render :partial => 'slide_overrides'
+				/ Group this slide belongs to
+				= render partial: "slide_group_info"
+				/ ACL management
+				= render partial: "shared/authorized_users", locals: {obj: @slide}
+				/ Ticket system
+				= render partial: "shared/tickets", locals: {obj: @slide}

@@ -11,7 +11,7 @@ gem 'pg', '~> 0.18.1'
 # gem 'mysql2'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0.1'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -50,6 +50,13 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'debugger', group: [:development, :test]
 
 #### END OF RAILS DEFAULT GEMFILE
+
+# Twitter bootstrap for base css styling
+gem 'bootstrap-sass', '~> 3.3.3'
+# Bootstrap aware formbuilder 
+gem 'bootstrap_form'
+# navbar
+gem 'rails_bootstrap_navbar'
 
 # Nokogiri for XML processing
 gem 'nokogiri'

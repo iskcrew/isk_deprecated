@@ -1,0 +1,18 @@
+- if Display.can_override(current_user).present?
+	div.tab-pane#overrides
+		h2 Add all slides in this group to override on a display
+		= bootstrap_form_for :override, url: add_to_override_group_path(@group), layout: :horizontal,
+			 label_col: 'col-sm-2', control_col: 'col-sm-4' do |f|
+			= f.collection_select(:display_id, Display.can_override(current_user), :id, :name)
+			div.form-group
+				= f.label :duration, 'Duration (seconds)',class: 'control-label col-sm-2'
+				div.col-sm-4
+					div.input-group.spinner
+						= f.text_field_without_bootstrap :duration, class: 'form-control', value: 5.minutes
+						div.input-group-btn-vertical
+							a.btn.btn-default
+								i.fa.fa-caret-up
+							a.btn.btn-default
+								i.fa.fa-caret-down
+			= f.form_group do
+				= f.primary 'Add to override'

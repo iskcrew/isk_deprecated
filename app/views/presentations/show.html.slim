@@ -1,53 +1,35 @@
-h1 Information for presentation: #{@presentation.name}
+div.row
+	h1 Information for presentation: #{@presentation.name}
 
-div#tabs
-	ul
-		li: a href="#metadata" Metadata
-		li: a href="#tickets" Tickets
-		- if @presentation.displays.present?
-			li: a href="#displays" Displays
-		li: a href="#authorized_users" Authorized users
-		- if Display.can_override(current_user).present?
-			li: a href="#overrides" Overrides
+	div.col-md-6
+		div.panel.panel-default
+			ul.nav.nav-tabs
+				li.active: a data-toggle="tab" href="#metadata" Metadata
+				li: a data-toggle="tab" href="#tickets" Tickets
+				- if @presentation.displays.present?
+					li: a data-toggle="tab" href="#displays" Displays
+				li: a data-toggle="tab" href="#authorized_users" Authorized users
+				- if Display.can_override(current_user).present?
+					li: a data-toggle="tab" href="#overrides" Overrides
+		div.tab-content.panel-body
+			div#metadata.tab-pane.active
+				= render @presentation
+			= render partial: 'displays_pane'
+			= tickets_partial(@presentation)
+			= authorized_users(@presentation)
+			= render partial: 'overrides_pane'
+	div.col-md-6
+		h2 Groups in this presentation
+		- if @presentation.groups.present?
+			ol
+				- @presentation.groups.each do |group|
+					li = group_link_tag group.master_group
+		- else
+			div.alert.alert-warning This presentation is empty!
 	
-	div#metadata
-		= render @presentation
-	
-	- if @presentation.displays.present?
-		div#displays
-			h2 Displays showing this presentation
-			p This presentation is being shown on following displays:
-			ul
-				- @presentation.displays.each do |d|
-					li = link_to d.name, display_path(d)
-
-	= tickets_partial(@presentation)
-	= authorized_users(@presentation)
-
-	- if Display.can_override(current_user).present?
-		div#overrides
-			h2 Add to override
-			p 
-				| Add all slides in this presentation to override queue on a display.
-				|  Will use the order of slides in this presentation and will add multiple copies
-				|  of a slide if it's included multiple times in this presentation.
-			= form_for :override, url: add_to_override_presentation_path(@presentation) do |f|
-				= f.label :display_id, 'Display:' 
-				= f.select :display_id, 
-					options_for_select(Display.can_override(current_user).collect {|g| [ g.name, g.id ] })
-				= f.label :duration, 'Duration of each slide (sec):'
-				= f.text_field :duration, value: 60, size: 4, class: 'duration_spinner'
-				= f.submit 'Add'
-
-- @presentation.groups.each do |group|
-	table.compact_slidelist
-		tr: th #{group_link_tag(group.master_group)}
-		tr
-			td
-				= render partial: 'slides/slide', collection: group.slides.published
-
-= content_for :navigation do
-	= link_to 'Preview', preview_presentation_path(@presentation)
-	= presentation_edit_button(@presentation)
-	= presentation_destroy_button(@presentation)
-	
+	div.col-md-12
+		- @presentation.groups.each do |group|
+			div.panel.panel-primary
+				div.panel-heading = group_link_tag(group.master_group)
+				div.panel-body
+					= render partial: 'slides/slide', collection: group.slides.published

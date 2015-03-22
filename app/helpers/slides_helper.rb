@@ -137,8 +137,8 @@ module SlidesHelper
 	
 	# Generate the edit link with consistent confirm message
 	def slide_edit_link(slide)
-		link_to edit_link_text, edit_slide_path(slide), 
-			:class => 'button', title: 'Edit slide metadata', data: {confirm: (
+		link_to edit_link_text, edit_slide_path(slide),
+			class: 'btn btn-warning', data: {confirm: (
 			slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 	end
 	
@@ -147,41 +147,55 @@ module SlidesHelper
 		if [InkscapeSlide].include? slide.class
 			link_text = icon 'download', 'SVG'
 			link_to link_text, svg_data_slide_path(slide),
-							 class: 'button', title: 'Download slide in SVG format', data: {confirm: (
+							class: 'btn btn-primary', title: 'Download slide in SVG format',
+							data: {confirm: (
 						 		slide.public ? 'This is a public slide, are you sure you want to edit it?' : nil)}
 		end
 	end
 	
 	# Generate the slide clone button with tooltip
 	def slide_clone_button(slide)
+		slide_clone_link(slide, 'btn btn-primary')
+	end
+	
+	def slide_clone_link(slide, html_class=nil)
 		link_to icon('copy', 'Clone'), clone_slide_path(slide),
-							:method => :post, :title => 'Create clone of this slide', :class => 'button'
+							method: :post, title: 'Create clone of this slide', class: html_class
 	end
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
+		slide_delete_link(slide, 'btn btn-danger')
+	end
+	
+	# Delete link for dropdowns
+	def slide_delete_link(slide, html_class=nil)
 		link_to delete_link_text, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: 'button warning'
+							method: :delete, class: html_class
 	end
 	
 	# Ungroup slide button
 	def slide_ungroup_button(slide)
-		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide),
-							 :method => :post, :class => 'button ungroup'
+		slide_ungroup_link(slide, 'btn btn-warning')
+	end
+	
+	# Ungroup link for dropdowns
+	def slide_ungroup_link(slide, html_class=nil)
+		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide), method: :post, class: html_class
 	end
 	
 	# Link to next slide in the same group as this slide
 	def slide_next_in_group_link(slide)
 		if s = slide.master_group.slides.where("position > #{slide.position}").first
-			link_to ("Next slide #{icon('forward')}").html_safe, slide_path(s), class: 'button'
+			link_to ("Next slide #{icon('forward')}").html_safe, slide_path(s), class: 'btn btn-primary btn-xs'
 		end
 	end
 
 	# Link to previous slide in the same group as this slide
 	def slide_previous_in_group_link(slide)
 		if s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
-			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'button'
+			link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: 'btn btn-primary btn-xs'
 		end
 	end
 
@@ -200,11 +214,10 @@ module SlidesHelper
 	
 	# Links for filtering the slide list on slides#index
 	def slide_filter_links(filter)
-		html = String.new
-		html << link_to('All slides', slides_path, :class => (filter ? nil : 'current'))
-		html << link_to('Thrashed', slides_path(filter: 'thrashed'), :class => (filter == :thrashed ? 'current' : nil))
-
-		return html.html_safe
+		content_tag 'div', class: 'btn-group' do
+			link_to('All slides', slides_path, class: (filter ? 'btn btn-primary' : 'btn btn-primary active')) +
+			link_to('Thrashed', slides_path(filter: 'thrashed'), class: (filter == :thrashed ? 'btn btn-primary active' : 'btn btn-primary'))
+		end
 	end
 	
 	private

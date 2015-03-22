@@ -1,8 +1,5 @@
 h1 Create new event
 
-p.warning Currently deleting of events is not implemented.
+div.alert.alert-warning Currently deleting of events is not implemented.
 
-=form_for @event do |f|
-	= f.error_messages
-	= render partial: 'form'
-	= f.submit
+= render partial: 'form'

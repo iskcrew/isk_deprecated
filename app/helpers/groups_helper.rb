@@ -22,11 +22,11 @@ module GroupsHelper
 	
 	def group_download_slides_link(group)
 		link_text = icon 'download', 'Slides (zip)'
-		link_to link_text, download_slides_group_path(group), class: 'button'
+		link_to link_text, download_slides_group_path(group), class: 'btn btn-primary'
 	end
 	
 	def group_edit_link(group)
-		link_to edit_link_text, edit_group_path(group), class: 'button', 
+		link_to edit_link_text, edit_group_path(group), class: 'btn btn-primary', 
 			title: 'Edit slide order and group metadata.'
 	end
 	

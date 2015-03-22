@@ -1,13 +1,7 @@
-= fields_for @display do |f|
-	p
-		b Name:
-		=< f.text_field :name
-	p
-		b Monitor this display?
-		=< f.check_box :monitor
-	p
-		b Manual control only?
-		=< f.check_box :manual
-	p
-		b Presentation:
-		=< f.collection_select(:presentation_id, current_event.presentations, :id, :name, {include_blank: true})
+= bootstrap_form_for @display do |f|
+	= f.error_messages
+	= f.text_field :name
+	= f.check_box :monitor
+	= f.check_box :manual
+	= f.collection_select(:presentation_id, current_event.presentations.order(:name), :id, :name, {include_blank: true})
+	= f.primary

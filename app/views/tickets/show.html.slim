@@ -1,14 +1,16 @@
-h1 Information for ticket: #{@ticket.name} (#{@ticket.status_text})
-
-h2 Description
-= simple_format @ticket.description
-
-- if @ticket.about
-	h3 Associated object
-	p This ticket concerns this #{@ticket.about_type.downcase}:
-	= render @ticket.about
+div.row
+	div.col-sm-6.col-md-4.col-lg-3
+		h1 Information for ticket: #{@ticket.name} (#{@ticket.status_text})
 	
-= content_for :navigation do
-	=< ticket_edit_link @ticket
-	=< ticket_close_link @ticket
-	=< ticket_destroy_link @ticket
+		p
+			' This is a #{@ticket.kind} ticket opened at #{l @ticket.created_at, format: :short}.
+			' The ticket has been last modified at #{l @ticket.updated_at, format: :short}.
+
+		h2 Description
+		= simple_format @ticket.description
+
+	- if @ticket.about
+		div.col-sm-6.col-md-4.col-lg-3
+			h2 Associated object
+			p This ticket concerns this #{@ticket.about_type.downcase}:
+			= render @ticket.about

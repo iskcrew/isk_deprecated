@@ -1,4 +1,6 @@
-div.navigation
-	= event_list_button
-	= event_new_button
-	= yield :navigation
+li class=active_action?('index') = link_to icon('list', 'List events'), events_path
+li class=active_action?('new') = link_to icon('plus', 'New event'), new_event_path
+- if @event.present? && !@event.new_record?
+	li class=active_action?('show') = link_to details_link_text, event_path(@event)
+	li class=active_action?('edit') = link_to edit_link_text, edit_event_path(@event)
+	li = event_generate_images_link(@event)

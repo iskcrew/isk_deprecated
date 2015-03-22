@@ -1,33 +1,40 @@
-h1 Information for display: #{@display.name} (#{@display.ip})
-
-div.display_properties
-	= render @display
+div.row
+	h1 Information for display: #{@display.name} (#{@display.ip})
 	
-	div.extra_information
-		ul
-			li Status: #{@display.status}
-			li IP: #{@display.ip}
-			- if @display.last_contact_at
-				li Last contact at: #{l @display.last_contact_at, :format => :short}
-			- else
-				li Last contact at: UNKNOWN
-			
-			- if @display.last_hello
-				li Last initialization at: #{l @display.last_hello, format: :short}
-			- else
-				li Last initialization at: UNKNOWN
-			
-			li State updated at: #{l @display.state_updated_at, :format => :short}
-			li Metadata updated at: #{l @display.updated_at, :format => :short}
-			li Created at: #{l @display.created_at, :format => :short}
+	div.col-md-6.col-lg-5
+		div.display_properties
+			= render @display
+	
+	div.col-sm-6.col-md-4.col-lg-3
+		div.extra_information
+			h2 Detailed status
+			ul
+				li Status: #{@display.status}
+				li IP: #{@display.ip}
+				- if @display.last_contact_at
+					li Last contact at: #{l @display.last_contact_at, :format => :short}
+				- else
+					li Last contact at: UNKNOWN
+		
+				- if @display.last_hello
+					li Last initialization at: #{l @display.last_hello, format: :short}
+				- else
+					li Last initialization at: UNKNOWN
+				li State updated at: #{l @display.state_updated_at, :format => :short}
+				li Metadata updated at: #{l @display.updated_at, :format => :short}
+				li Created at: #{l @display.created_at, :format => :short}
+	
+	div.col-sm-6.col-md-4.col-lg-3
 		= authorized_users @display
+	div.col-sm-6.col-md-4.col-lg-3
 		= tickets_partial @display
 
-- if @display.override_queues.present?
-	div.override_queue
-		h2 Slides in override queue
-		p 
-			| The slides in override queue will be displayed as soon as possible interrupting the normal
-			|  presentation flow.
-		- @display.override_queues.each do |oq|
-			= render oq.slide
+	div.col-md-6
+		- if @display.override_queues.present?
+			div.override_queue
+				h2 Slides in override queue
+				p 
+					| The slides in override queue will be displayed as soon as possible interrupting the normal
+					|  presentation flow.
+				- @display.override_queues.each do |oq|
+					= render oq.slide

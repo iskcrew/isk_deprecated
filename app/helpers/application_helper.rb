@@ -10,22 +10,27 @@ module ApplicationHelper
 	# Generate the top navigation tabs and set a special style for the tab of the current controller
 	def navigation_links
 		controllers = ['Slides', 'Groups', 'Presentations', 'Displays', 'Schedules', 'Tickets']
-		admin_controllers = ['Templates', 'Users', 'Events']
 		ret = String.new
 		base_html_options = {class: 'ui-state-default ui-corner-top'}
+		# Build navigation tabs for basic controllers
 		tabs = controllers
-		tabs += admin_controllers if current_user.admin?
 		tabs.each do |c|
 			html_options = {
-				class: 'ui-state-default ui-corner-top',
+				class: '',
 				id: "#{c.downcase}_tab"
 			}
 			if controller.class.name.include?(c)
-				html_options[:class] =	'ui-tabs-active ui-state-active ui-corner-top'
+				html_options[:class] =	'active'
 			end
-			ret << content_tag('li', link_to(c, {:controller => c.downcase},class: 'ui-tabs-anchor'), html_options)
+			ret << content_tag('li', link_to(c, {:controller => c.downcase}), html_options)
 		end
+		
 		return ret.html_safe 
+	end
+	
+	# Sets the 'active' class if current action matches the provided one
+	def active_action?(action)
+		controller.action_name == action ? 'active' : nil
 	end
 	
 	# Inactive toggle button with "led"
@@ -42,10 +47,10 @@ module ApplicationHelper
 	# Active toggle button with a "led"
 	def toggle_link_to(name, selected,options = {}, html_options = {})
 		if selected
-			html_options[:class] = 'button led green'
+			html_options[:class] = 'btn btn-primary led green'
 			html_options[:title] = 'Toggle this off'
 		else
-			html_options[:class] = 'button led off'
+			html_options[:class] = 'btn btn-primary led off'
 			html_options[:title] = 'Toggle this on'
 		end
 		return link_to name, options, html_options

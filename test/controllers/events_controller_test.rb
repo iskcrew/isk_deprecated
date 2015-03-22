@@ -32,7 +32,7 @@ class EventsControllerTest < ActionController::TestCase
 		}
 		
 		post :update, data, @adminsession
-		assert_redirected_to events_path
+		assert_redirected_to event_path(e.id)
 		assert e.reload
 		assert e.name == 'Changed'
 	end

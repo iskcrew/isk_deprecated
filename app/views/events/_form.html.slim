@@ -1,10 +1,6 @@
-= fields_for :event do |f|
-	p 
-		= f.label :name
-		=< f.text_field :name
-	p
-		= f.label :current
-		=< f.check_box :current
-	p
-		| Slide resolution
-		=< event_slide_resolution_select(@event)
+= bootstrap_form_for @event do |f|
+	= f.error_messages
+	= f.text_field :name
+	= f.check_box :current
+	= event_slide_resolution_select(@event)
+	= f.primary

@@ -1,0 +1,71 @@
+//
+// sortable.css.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-10.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+// For drag-and-drop sortable lists
+
+.ui-sortable-placeholder {
+	height: 75px;
+}
+
+ul.sortable {
+	list-style: none;
+	.handle {
+		cursor: move;
+		margin-right: 10px;
+		padding: 5px;
+		font-size: 150%;
+	}
+}
+
+div.sortable-container {
+	display: inline-block;
+	
+	div.panel {
+		display: inline-block;
+		
+		div.panel-body {
+			padding: 0px;
+		}
+	}
+}
+
+// Slide panels for jquery-ui sortable widgets.
+// They are used in groups/edit.html.slim and displays/edit.html.slim
+div.sortable-slide {
+	
+	div.panel-heading {
+		width: 300px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	
+	div.panel-body {
+		padding: 0px;
+		
+		img {
+			width: 300px;
+			height: auto;
+			padding: 0px;
+		}
+	}
+}
+
+// Sortable groups in presentations/edit.html.slim
+li.sortable-group {
+	overflow: auto;
+	
+	border: 1px solid $gray-light;
+	
+	div.btn-group {
+		float: right;
+	}
+	
+	&.ui-sortable-placeholder {
+		height: 30px;
+	}
+}

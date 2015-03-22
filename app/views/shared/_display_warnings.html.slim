@@ -1,5 +1,9 @@
-div.error_notification#display_warnings data-refresh-url=displays_url
-	- Display.late.each do |d|
-		= late_display_warning d
-		br
+- if Display.late.present?
+	div#display_warnings.alert.alert-warning.col-sm-6 data-refresh-url=displays_url
+		h4 = icon 'warning', 'Displays not responding!'
+		- Display.late.each do |d|
+			= late_display_warning d
+			br
+- else
+	div#display_warnings data-refresh-url=displays_url
 		

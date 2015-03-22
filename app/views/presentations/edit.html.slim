@@ -1,39 +1,27 @@
-h1 Edit presentations #{@presentation.name}
-
-= form_for @presentation do |f|
-	= f.error_messages
-	= render partial: 'form'
-	= f.submit
-
-h2 Component groups
-
-p Here you can add new groups to this presentation and change the order of the groups already in it.
-
-/ This should be refactored with accepts_nested_attributes_for and update...
-h3 Add a group
-p Add a group to the end of this presentation.
-
-ul
-	li 
-		| All groups
-	 	ul
-			li
-	 			= form_for :group, url: add_group_presentation_path(@presentation) do |f|
-					= f.select :id, MasterGroup.current.defined_groups.to_a.collect {|p| [ p.name, p.id ] }
-					=< f.submit 'Add group'
-	- if @orphan_groups.present?
-		li 
-			| Groups not already in this presentation
-			ul
-				li
-					= form_for :group, url: add_group_presentation_path(@presentation) do |f|
-						= f.select :id, @orphan_groups.collect {|p| [ p.name, p.id ] }
-						=< f.submit 'Add group'
+div.row
+	h1 Edit presentations #{@presentation.name}
 	
-ul#groups_sortable.sortable data-sortable=sort_presentation_url(@presentation)
-	= render partial: 'sortable_groups'
+	div.col-md-4.col-sm-6
+		h2 Settings
+		= render partial: 'form'
 
-= content_for :navigation do
-	=link_to details_link_text, presentation_path(@presentation)
-	=link_to 'Preview', preview_presentation_path(@presentation)
-	
+	div.col-md-4.col-sm-6
+		h2 Add groups to presentation
+
+		p Add a group to the end of this presentation.
+
+		= bootstrap_form_for :group, url: add_group_presentation_path(@presentation) do |f|
+			= f.collection_select :id, MasterGroup.current.defined_groups, :id, :name,
+				label: 'All groups'
+			= f.primary 'Add group'
+			/ FIXME: The orphans groups sql is broken due to the postgresql migration!
+			/- if @orphan_groups.present?
+			/	= bootstrap_form_for :group, url: add_group_presentation_path(@presentation) do |f|
+			/		= f.collection_select :id, @orphan_groups, :id, :name,
+			/			label: 'Groups not in this presentation'
+			/		= f.primary 'Add group'
+	div.col-md-4
+		h2 Reorder groups in presentation
+		p Drag groups to reorder them.
+		ul#groups_sortable.sortable.list-group data-sortable=sort_presentation_url(@presentation)
+			= render partial: 'sortable_groups'

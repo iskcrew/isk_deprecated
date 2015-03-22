@@ -1,9 +1,7 @@
 h1 Create a new user
 
-= form_for @user do |f|
+= bootstrap_form_for @user do |f|
 	= f.error_messages
-	p
-		label Username
-		= f.text_field :username
+	= f.text_field :username
 	= render partial: 'password_form'
-	= f.submit
+	= f.primary

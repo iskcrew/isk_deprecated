@@ -1,25 +1,23 @@
-= fields_for @slide do |f|
-	div.svg_editor_container#simple_editor
-		/ Since when creating a new slide we have instance of Slide instead of SimpleSlide we need
-		/ to make sure we have some defaults.
-		ruby:
-			slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
-		
-		div.controls
-			h2 Slide contents
-			p 
-			 | Use &lt;foo&gt; to highlight text in the slide.
-			= f.fields_for :slidedata do |f|
-				p Slide heading
-				= f.text_area :heading, {id: "simple_head", rows: 1, cols: 31, wrap: "soft",
-					value: slidedata[:heading], data: {simple_field: true}}
-				p Slide text
-				= f.text_area :text, {id: "simple_text", rows: 6, cols: 53, value: slidedata[:text],
-					data: {simple_field: true}}
-				= simple_text_align_select(f, slidedata[:text_align])
-				= simple_text_size_select(f, slidedata[:text_size])
-				= simple_color_select(f, slidedata[:color])
-		
+div.svg_editor_container#simple_editor.row
+	/ Since when creating a new slide we have instance of Slide instead of SimpleSlide we need
+	/ to make sure we have some defaults.
+	ruby:
+		slidedata = (@slide.is_a?(SimpleSlide) ? @slide.slidedata : SimpleSlide::DefaultSlidedata)
+	
+	div.controls.col-sm-6
+		h2 Slide contents
+		p 
+		 | Use &lt;foo&gt; to highlight text in the slide.
+		= f.fields_for :slidedata do |ff|
+			= ff.text_area :heading, {id: "simple_head", rows: 1, cols: 31, wrap: "soft",
+				value: slidedata[:heading], data: {simple_field: true}}
+			= ff.text_area :text, {id: "simple_text", rows: 6, cols: 53, value: slidedata[:text],
+				data: {simple_field: true}}
+			= simple_text_align_select(ff, slidedata[:text_align])
+			= simple_text_size_select(ff, slidedata[:text_size])
+			= simple_color_select(ff, slidedata[:color])
+	
+	div.col-sm-6
 		div.svg_preview
 			h2 Preview
 			div.updating_preview

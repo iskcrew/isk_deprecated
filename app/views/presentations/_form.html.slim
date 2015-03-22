@@ -1,10 +1,5 @@
-= fields_for @presentation do |f|
-	p
-		b Name:
-		= f.text_field :name
-	p
-		b Slide duration (seconds):
-		= f.text_field :delay
-	p
-		b Transition effect:
-		= f.select :effect_id, Effect.all.collect {|p| [ p.name, p.id ] }
+= bootstrap_form_for @presentation do |f|
+	= f.text_field :name
+	= f.text_field :delay
+	= f.select :effect_id, Effect.all.collect {|p| [ p.name, p.id ] }
+	= f.primary

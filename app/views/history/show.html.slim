@@ -1,12 +1,11 @@
-h1 Detailed history for display "#{@display.name}" and slide "#{@slide.name}"
+div.row
+	h1 Detailed history for display "#{@display.name}" and slide "#{@slide.name}"
 
-p 
-	'The display #{link_to @display.name, display_path(@display)} has shown the slide
-	'#{link_to @slide.name, slide_path(@slide)} #{@display_counts.count} times.
-p
-	'The slide has been shown at:
-
-ol.display_counts
-	- @display_counts.each do |dc|
-		li = I18n.l(dc.updated_at, :format => :short)
-
+	p 
+		'The display #{link_to @display.name, display_path(@display)} has shown the slide
+		'#{link_to @slide.name, slide_path(@slide)} #{@display_counts.count} times.
+	p
+		'The slide has been shown at:
+		ol.display_counts
+			- @display_counts.each do |dc|
+				li = I18n.l(dc.updated_at, :format => :short)

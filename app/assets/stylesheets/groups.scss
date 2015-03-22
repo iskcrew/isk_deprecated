@@ -1,0 +1,28 @@
+//
+// groups.scss
+// isk
+// 
+// Created by Vesa-Pekka Palmu on 2014-06-13.
+// Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+//
+
+// groups#index
+div.group-list {
+  margin-right: 150px;
+}
+
+// Table in add slides
+table#slide_selection {
+	max-width: 660px;
+	
+	col.slide-name {
+		max-width: 200px;
+	}
+	col.slide-preview {
+		width: 410px;
+	}
+	
+	col.checkbox {
+		max-width: 50px;
+	}
+}

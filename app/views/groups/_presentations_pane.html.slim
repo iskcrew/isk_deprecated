@@ -1,0 +1,9 @@
+div.tab-pane.active#presentations
+	h2 Presentations
+	- if @group.presentations.present?
+		p This group is part of the following presentations:
+		ul
+			- @group.presentations.each do |p|
+				li = link_to p.name, presentations_path(p)
+	- else
+		p This group doesn't belong to any presentation.
