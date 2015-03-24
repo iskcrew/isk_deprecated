@@ -5,10 +5,13 @@ svg = undefined
 time = undefined
 
 init = ->
-  elem=$('#ISKDPY #clock').first()
-  svg=$(elem.find('object')[0]?.getSVGDocument())
-  svg.find('svg')[0]?.setAttribute('viewBox', "0 0 1920 1080")
-  time=svg.find('#clock')
+  elem=$('<object type="image/svg+xml" data="clock.svg"></object>')
+  elem[0]?.addEventListener 'load', ->
+    svg=$(elem[0]?.getSVGDocument())
+    svg.find('svg')[0]?.setAttribute('viewBox', "0 0 1920 1080")
+    time=svg.find('#clock')
+    run()
+  elem.appendTo $('#ISKDPY #clock')
 
 show = ->
   elem.animate {top: "0%"},
@@ -32,8 +35,8 @@ run = ->
 
 $ ->
   init()
-  if time?.length
-    run()
 
 #EXPORTS:
-isk.clock={show: show, hide: hide}
+isk.clock =
+  show: show
+  hide: hide
