@@ -63,7 +63,7 @@ handle_display = (display) ->
   if display?.presentation?.slides?.length == 0
     console.log "Presentation is empty"
     $('#empty').clone()
-      .data('slide', {duration: 1})
+      .data('slide', {duration: 1, ready: true})
       .data('error_message', 'Presentation empty, showing empty slide')
       .appendTo elems
 
@@ -131,17 +131,18 @@ when_ready = (elem, f) ->
 
 set_current = (elem) ->
   clearTimeout(timer)
-  if elem.length
+  if elem.length and elem.data('slide')?.ready
     when_ready elem, ->
       if @?.width
         send_current_slide @
+        $(@).addClass('current').siblings('.current').removeClass('current')
+        clock_mode.set $(@).data()?.slide?.show_clock == true
+        dur=$(@).data()?.slide?.duration
+        if dur
+          timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
       else
         send_error "Unknown error in slide image (#{@.id})"
-      $(@).addClass('current').siblings('.current').removeClass('current')
-      clock_mode.set $(@).data()?.slide?.show_clock == true
-      dur=$(@).data()?.slide?.duration
-      if dur
-        timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
+        timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
   else timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
 
 set_current_updated = (elem) ->
@@ -151,13 +152,14 @@ set_current_updated = (elem) ->
     when_ready elem, ->
       if @?.width
         send_current_slide @
+        $(@).addClass('updated').siblings('.updated').removeClass('updated')
+        clock_mode.set $(@).data()?.slide?.show_clock == true
+        dur=$(@).data()?.slide?.duration
+        if dur
+          timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
       else
         send_error "Unknown error in slide image (#{@.id})"
-      $(@).addClass('updated').siblings('.updated').removeClass('updated')
-      clock_mode.set $(@).data()?.slide?.show_clock == true
-      dur=$(@).data()?.slide?.duration
-      if dur
-        timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
+        timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
 
 prev_slide = ->
   prev=$('.current').prev('img')
