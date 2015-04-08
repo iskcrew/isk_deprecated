@@ -77,6 +77,8 @@ class IskDisplayRenderer
     [@prev_t, dt] = [t, t-@prev_t]
 
     @cu.time.value += 0.001 * dt
+    #@cu.delta_time.value = 0.001 * dt
+    @cu.delta_time.value = (0.0001 * dt + @cu.delta_time.value * 0.9)
     if @transition_active()
       @transition_progress(dt)
 
