@@ -3,6 +3,8 @@
 elem = undefined
 svg = undefined
 time = undefined
+shown = true
+old_t = ""
 
 init = ->
   elem=$('<object type="image/svg+xml" data="clock.svg"></object>')
@@ -17,17 +19,22 @@ show = ->
   elem.animate {top: "0%"},
     start: ->
       elem.show()
+      shown=true
 
 hide = ->
   elem.animate {top: "15%"},
     done: ->
       elem.hide()
+      shown=false
 
 set_current_time = ->
-  t=Date().split(' ')
-  ts = [t[0], t[4]].join ' '
-  if time.text() != ts
-    time.text ts
+  if time? and shown
+    t=Date()
+    if t != old_t
+      old_t = t
+      s = t.split(' ')
+      ts = [s[0], s[4]].join ' '
+      time?.text ts
 
 run = ->
   requestAnimationFrame run
