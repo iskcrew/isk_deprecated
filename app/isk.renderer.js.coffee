@@ -51,6 +51,9 @@ class IskDisplayRenderer
     @tex1=new THREE.Texture( $('#empty')[0] )
     @tex2=new THREE.Texture( $('#empty')[0] )
     @tex_empty=new THREE.Texture( $('#empty')[0] )
+    @tex1.minFilter=THREE.NearestFilter
+    @tex2.minFilter=THREE.NearestFilter
+    @tex_empty.minFilter=THREE.NearestFilter
     @tex1.needsUpdate=true
     @tex2.needsUpdate=true
     @tex_empty.needsUpdate=true
@@ -134,16 +137,23 @@ class IskDisplayRenderer
     @cu.transition_time.value != 0
 
   change_slide: (slide, update) ->
+    console.debug 'renderer: change_slide', slide, update
     d=$(slide).data()
     if @transition_active()
-        @change_slide_end()
+      @change_slide_end()
     @tex2.image = slide
-    @tex2.needsUpdate = true
 
+    effect_id=d?.slide?.effect_id or ""
+    effect_name=undefined
     if update
-      @transition_start effectname['u'+d.slide.effect_id]
+      effect_name = effectname['u'+effect_id]
     else
-      @transition_start effectname['c'+d.slide.effect_id]
+      effect_name = effectname['c'+effect_id]
+
+    @tex2.onUpdate = =>
+      @tex2.onUpdate = undefined
+      @transition_start effect_name
+    @tex2.needsUpdate = true
 
   change_slide_end: ->
     @tex1.image = @tex2.image
