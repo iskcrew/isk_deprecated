@@ -20,7 +20,7 @@ Isk::Application.configure do
 	config.eager_load = false
 
 	# Configure static asset server for tests with Cache-Control for performance.
-	config.serve_static_assets	= true
+	config.serve_static_files	= true
 	config.static_cache_control = 'public, max-age=3600'
 
 	# Show full error reports and disable caching.
@@ -44,4 +44,11 @@ Isk::Application.configure do
 
 	# Raises error for missing translations
 	# config.action_view.raise_on_missing_translations = true
+  
+  # Test order
+  config.active_support.test_order = :random
+  
+  ActiveSupport::Deprecation.behavior = Proc.new { |message, callstack|
+    raise message + "\n" + callstack.join("\n  ")
+  }
 end
