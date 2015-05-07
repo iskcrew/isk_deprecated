@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.8'
+gem 'rails', '~> 4.2.1'
 
 # Database interfaces
 # gem 'sqlite3'
@@ -55,8 +55,6 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootstrap-sass', '~> 3.3.3'
 # Bootstrap aware formbuilder 
 gem 'bootstrap_form'
-# navbar
-gem 'rails_bootstrap_navbar'
 
 # Nokogiri for XML processing
 gem 'nokogiri'
@@ -107,6 +105,7 @@ gem 'rack-rewrite', '~> 1.2.1'
 
 group :development do
   gem "rails-erd"
+  gem 'web-console', '~> 2.0'
 end
 
 # Profiling support

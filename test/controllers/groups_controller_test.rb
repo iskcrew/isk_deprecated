@@ -112,7 +112,7 @@ class GroupsControllerTest < ActionController::TestCase
 				duration: 60
 			}
 		}
-		assert_difference "Display.find(displays(:normal)).override_queues.count", 10 do
+		assert_difference "Display.find(displays(:normal).id).override_queues.count", 10 do
 			post :add_to_override, override_data, @adminsession
 		end
 		assert_redirected_to group_path(master_groups(:ten_slides)), "Should redirect to show"

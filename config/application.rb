@@ -68,6 +68,9 @@ module Isk
 		# Add app/mixins to load paths, we use that to store modules containing common functionality
 		config.autoload_paths += Dir[Rails.root.join('app', 'mixins', '{**}')]
 		
+    # after_commit callbacks raise errors now
+    config.active_record.raise_in_transactional_callbacks = true
+    
 		# Make websocket-rails ping-pong update the last_contact_at on associated displays
 		require 'websocket_pong_updates_displays'
 		
