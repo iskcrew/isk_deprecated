@@ -35,6 +35,12 @@ class LoginsController < ApplicationController
 					render json: json.to_json
 				}
 			end
+      return
+    elsif display = Token.authenticate_display(params[:token])
+      reset_session
+      session[:display_id] = display.id
+      render json: { message: "Authenticated display: #{display.name}", display_id: display.id}
+      return
 		else
 			# Username or password was invalid
 			flash[:error] = "Login invalid"

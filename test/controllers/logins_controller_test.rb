@@ -48,5 +48,11 @@ class LoginsControllerTest < ActionController::TestCase
 		json = JSON.parse @response.body
 		assert_equal json['message'], 'Login invalid'
 	end
+  
+  test "authenticate with token" do
+    post :create, {token: tokens(:one).token}
+    assert_response :success
+    assert session[:display_id] == tokens(:one).access.id
+  end
 	
 end

@@ -33,6 +33,9 @@ class Display < ActiveRecord::Base
 	
 	# Ticket system
 	include HasTickets
+  
+  # Autentication tokens for the display API
+  include HasTokens
 	
 	# Delegations to the display state object, mostly for legacy reasons
 	delegate :last_contact_at, :last_contact_at=,									to: :display_state, allow_nil: true
