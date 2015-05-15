@@ -103,6 +103,9 @@ gem 'rubyzip', require: 'zip'
 # For simple-edit previews to work in development
 gem 'rack-rewrite', '~> 1.2.1'
 
+# Pry for better console
+gem 'pry-rails'
+
 group :development do
   gem "rails-erd"
   gem 'web-console', '~> 2.0'
