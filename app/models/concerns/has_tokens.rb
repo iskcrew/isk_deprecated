@@ -8,7 +8,7 @@ module	HasTokens
 	extend ActiveSupport::Concern
 
 	included do
-		has_many :tickets, as: :about
+		has_many :tokens, as: :access
 	end
 	
 	# Define class methods for the model including this
