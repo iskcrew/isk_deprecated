@@ -357,3 +357,12 @@ class Slide < ActiveRecord::Base
 	end
 
 end
+
+# Require grandchild-leaves of Slide STI class
+# This is required to prevent auto-load issues
+# http://guides.rubyonrails.org/autoloading_and_reloading_constants.html#autoloading-and-sti
+require_dependency 'inkscape_slide'
+require_dependency 'prize_slide'
+require_dependency 'schedule_slide'
+require_dependency 'simple_slide'
+require_dependency 'template_slide'
