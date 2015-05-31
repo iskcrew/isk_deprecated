@@ -1,11 +1,13 @@
 @isk or= {}
 
-root=$('#ISKDPY #pres').first()
+root=document.querySelector('#ISKDPY #pres')
 if not (root?) then return
 
 debug=false
 timer=undefined
 display_id=undefined
+
+current=root.getElementsByClassName('current')
  
 class ChangeNotifier
   constructor: (initial, callback) ->
@@ -22,7 +24,7 @@ manual_mode = new ChangeNotifier false, (manual) ->
   if manual
     clearTimeout(timer)
   else
-    dur=root.find('.current').first().data()?.slide?.duration
+    dur=current?[0]?.dataset?.slide?.duration
     if dur?
       timer=setTimeout(timed_next_slide, dur*1000) if dur > 0
 
@@ -48,35 +50,43 @@ handle_display = (display) ->
     if slide?.group?
       gs_id="slide_G#{slide.group}S#{slide.id}"
     else gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
-    img=$('<img/>')
-    img.attr
-      id: gs_id,
-      src: "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
-    img.data 'slide', slide
+    img=document.createElement('img')
+    img.id=gs_id
+    img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
+    img.iskSlide = slide
+    img
     
-  overrides=$('<div id="override"/>')
+  overrides=document.createElement('div')
+  overrides.id='overrides'
   overrides.append slide s for s in display?.override_queue
 
-  elems=$('<div id="presentation"/>')
-  elems.append slide s for s in display?.presentation?.slides
+  elems=document.createElement('div')
+  elems.id='presentation'
+  elems.appendChild slide s for s in display?.presentation?.slides
 
   if display?.presentation?.slides?.length == 0
     console.log "Presentation is empty"
-    $('#empty').clone()
-      .data('slide', {duration: 1, ready: true})
-      .data('error_message', 'Presentation empty, showing empty slide')
-      .appendTo elems
+    empty=document.querySelector('#empty').cloneNode()
+    empty.iskSlide = {duration: 1, ready: true}
+    empty.dataset.error_message ='Presentation empty, showing empty slide'
+    empty.appendTo elems
 
-  old_slide = root.find('#presentation .current').first()
-  if old_slide.length
-    id = old_slide.attr('id')
+  old_slide = current?[0]
+  if old_slide?
+    id = old_slide.id
     console.debug 'Marking current slide', id
-    new_slide = elems.find('#'+id)
-    new_slide.addClass('current')
-    if (old_slide.data()?.slide?.images_updated_at <
-        new_slide.data()?.slide?.images_updated_at)
-      set_current_updated new_slide
-  root.html overrides.add(elems)
+    new_slide = elems.children[id]
+    if new_slide?
+      new_slide.classList.add('current')
+      if (old_slide?.iskSlide?.images_updated_at <
+          new_slide?.iskSlide?.images_updated_at)
+        set_current_updated new_slide
+
+  while (root?.firstChild?)
+    root.removeChild(root.firstChild)
+
+  root.appendChild overrides
+  root.appendChild elems
 
   manual_mode.set display?.manual == true
 
@@ -85,8 +95,8 @@ handle_goto_slide = (d) ->
   if d?.slide == "next" then next_slide()
   else if d?.slide == "previous" then prev_slide()
   else
-    elem=$("#slide_G#{d?.group_id}S#{d?.slide_id}")
-    if elem.length then set_current(elem)
+    elem=root.children["slide_G#{d?.group_id}S#{d?.slide_id}"]
+    if elem? then set_current(elem)
   true
 
 send_hello = (name) ->
@@ -101,18 +111,18 @@ send_shutdown = (display_id) ->
   isk.dispatcher.trigger 'iskdpy.shutdown', data
 
 send_current_slide = (slide) ->
-  d=$(slide).data()
+  s=slide.iskSlide
   data = {
     display_id: display_id,
-    group_id: d?.slide?.group
-    slide_id: d?.slide?.id,
-    override_queue_id: d?.slide?.override_queue_id
+    group_id: s?.group
+    slide_id: s?.id,
+    override_queue_id: s?.override_queue_id
     }
   if data?.slide_id and (data?.group_id or data?.override_queue_id)
     console.debug 'sending current_slide', data
     isk.dispatcher.trigger 'iskdpy.current_slide', data
   else
-    data.error = d?.error_message or "Unknown slide shown"
+    data.error = slide.dataset?.error_message or "Unknown slide shown"
     console.debug 'sending error', data
     isk.dispatcher.trigger 'iskdpy.error', data
 
@@ -129,50 +139,62 @@ when_ready = (elem, f) ->
   $(elem).one 'load', f
   .each -> $(@).load() if @complete
 
+#when_ready = (elem, cb) ->
+#  elem.addEventListener 'load', f = (e) ->
+#    e.target.removeEventListener(e.type, arguments.callee)
+#    cb(e)
+#  f.apply(elem) if elem.complete
+
 set_current = (elem) ->
   clearTimeout(timer)
-  if elem.length and elem.data('slide')?.ready
+  if elem? and elem?.iskSlide?.ready
+    console.debug 'CURRENT', elem
     when_ready elem, ->
       if @?.width
         send_current_slide @
-        $(@).addClass('current').siblings('.current').removeClass('current')
-        clock_mode.set $(@).data()?.slide?.show_clock == true
-        dur=$(@).data()?.slide?.duration
+        [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
+          e.classList.remove('current')
+        @.classList.add('current')
+        clock_mode.set @?.iskSlide?.show_clock == true
+        dur=@?.iskSlide?.duration
         if dur
           timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
       else
         send_error "Unknown error in slide image (#{@.id})"
         timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
   else timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
+  undefined
 
 set_current_updated = (elem) ->
   console.debug 'UPDATED', elem
-  if elem.length and elem.data('slide')?.ready
+  if elem? and elem?.iskSlide?.ready
     clearTimeout(timer)
     when_ready elem, ->
       if @?.width
         send_current_slide @
-        $(@).addClass('updated').siblings('.updated').removeClass('updated')
-        clock_mode.set $(@).data()?.slide?.show_clock == true
-        dur=$(@).data()?.slide?.duration
+        [].forEach.call @.parentElement.getElementsByClassName('updated'), (e) ->
+          e.classList.remove('updated')
+        clock_mode.set @?.iskSlide?.show_clock == true
+        dur=@?.iskSlide?.duration
         if dur
           timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
       else
         send_error "Unknown error in slide image (#{@.id})"
         timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
+  undefined
 
 prev_slide = ->
-  prev=$('.current').prev('img')
-  if (prev.length == 0)
-    prev=$('#pres img:last')
+  prev=current?[0]?.previousElementSibling
+  if (not prev?)
+    prev=root.lastElementChild
   set_current(prev)
 
 next_slide = ->
-  next=$('#pres #override img:first')
-  if (next.length == 0)
-    next=$('.current').next('img')
-  if (next.length == 0)
-    next=$('#pres img:first')
+  next=root.firstElementChild.firstElementChild
+  if (not next?)
+    next=current?[0]?.nextElementSibling
+  if (not next?)
+    next=root.lastElementChild.firstElementChild
   set_current(next)
 
 timed_next_slide = ->
