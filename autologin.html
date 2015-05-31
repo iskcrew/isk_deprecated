@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base href="/iskdpy/" />
+<link href="app/isk.menu.css" media="all" rel="stylesheet" type="text/css" />
+<link href="app/isk.renderer.css" media="all" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="lib/coffee-script.js"></script>
+<script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
+
+<script type="text/coffeescript" src="app/isk.login.js.coffee"></script>
+
+<title>ISK-Display Autologin</title>
+</head>
+<body>
+<div id="ISKDPY">
+<div id="renderer">
+  <div id="bgrs"><img id="empty" src="/backgrounds/empty.png" /></div>
+</div>
+</div>
+<script type="text/coffeescript">
+@isk or= {}
+$ ->
+  if location.hash
+    isk.fsm={ }
+    d=location.hash.split('#')
+    if d.length >=4
+      localStorage.setItem('name', d[3])
+    if d.length >=3
+      isk.fsm.login = -> window.location='/iskdpy/'
+      isk.fsm.logout = -> alert(d)
+      isk.send_login(d[1], d[2])
+
+</script>
+</body>
+</html>

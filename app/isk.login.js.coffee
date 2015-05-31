@@ -40,4 +40,6 @@ show_logout = ->
 # EXPORTS:
 @isk.show_login=show_login
 @isk.show_logout=show_logout
+@isk.send_login=send_login
+@isk.send_logout=send_logout
 
