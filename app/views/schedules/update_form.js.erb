@@ -1,4 +1,4 @@
-$('form.edit_schedule').html('<%=j render :partial => 'form' %>');
+$('#schedule-edit-form').replaceWith('<%=j render :partial => 'form' %>');
 var message = noty({
 	text: '<%=@message%>',
 	type: 'Information',

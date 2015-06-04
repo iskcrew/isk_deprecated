@@ -50,15 +50,16 @@ class SchedulesController < ApplicationController
 		@schedule = Schedule.find(params[:id])
 
 		if @schedule.update_attributes(schedule_params)
-			flash[:notice] = 'Schedule updated'
 			@schedule.delay.generate_slides
 			respond_to do |format|
 				format.html {
+					flash[:notice] = 'Schedule updated'
 					redirect_to schedule_path(@schedule)
 				}
 
 				format.js {
-					@message = 'Event added'
+					@new_event = @schedule.schedule_events.reorder(id: :desc).first
+					@message = "Event added: #{@new_event.name}"
 					render :update_form
 				}
 			end
@@ -72,7 +73,7 @@ class SchedulesController < ApplicationController
 
 	# Whitelist POST parameters for create and update
 	def schedule_params
-		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :up_next,
+		params.required(:schedule).permit(:name, :max_slides, :min_events_on_next_day, :next_up,
 			:slide_header, :next_up_header,
 			{schedule_events_attributes: [:id, :name, :major, :at, :_destroy ]}
 			)
