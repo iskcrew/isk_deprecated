@@ -24,7 +24,7 @@ manual_mode = new ChangeNotifier false, (manual) ->
   if manual
     clearTimeout(timer)
   else
-    dur=current?[0]?.dataset?.slide?.duration
+    dur=current?[0]?.iskSlide?.duration
     if dur?
       timer=setTimeout(timed_next_slide, dur*1000) if dur > 0
 

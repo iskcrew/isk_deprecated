@@ -5,6 +5,8 @@ shadername=
   vs: 'vertexShader'
 
 effectname=
+  c: 'benchmark'
+  u: 'benchmark'
   c0: 'normal'
   c1: 'normal'
   c2: 'update'
@@ -13,6 +15,8 @@ effectname=
   u1: 'update'
   u2: 'update'
   u3: 'alert'
+  c4: 'benchmark'
+  u4: 'benchmark'
 
 class IskDisplayRenderer
   init_shaders: (uri)->
@@ -47,23 +51,19 @@ class IskDisplayRenderer
     @camera.position.z = 108.0/2
 
     #geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
-    geometry = new THREE.PlaneBufferGeometry( 192, 108,0,0 )
-    @tex1=new THREE.Texture( $('#empty')[0] )
-    @tex2=new THREE.Texture( $('#empty')[0] )
+    geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
+    #geometry = new THREE.PlaneGeometry( 192, 108,0,0 )
     @tex_empty=new THREE.Texture( $('#empty')[0] )
-    @tex1.minFilter=THREE.NearestFilter
-    @tex2.minFilter=THREE.NearestFilter
-    @tex_empty.minFilter=THREE.NearestFilter
-    @tex1.needsUpdate=true
-    @tex2.needsUpdate=true
+    @tex_empty.minFilter=THREE.LinearFilter
     @tex_empty.needsUpdate=true
     @cu=
-         from: { type: "t", value: @tex1}
-         to: { type: "t", value: @tex2}
+         from: { type: "t", value: @tex_empty}
+         to: { type: "t", value: @tex_empty}
          empty: { type: "t", value: @tex_empty}
          time: { type: "1f", value: 0.0 }
+         delta_time: { type: "1f", value: 0.0 }
          transition_time: { type: "1f", value: 0.0 }
-    @default_material=new THREE.MeshBasicMaterial(map: @tex2)
+    @default_material or= new THREE.MeshBasicMaterial(map: @tex_empty)
     
     @mesh = new THREE.Mesh( geometry, @default_material )
     @scene.add( @mesh )
@@ -72,6 +72,7 @@ class IskDisplayRenderer
 
 
   animate: (t) =>
+    requestAnimationFrame @animate
     @stats?.begin()
 
     if not @start_t?
@@ -81,14 +82,13 @@ class IskDisplayRenderer
 
     @cu.time.value += 0.001 * dt
     #@cu.delta_time.value = 0.001 * dt
-    @cu.delta_time.value = (0.0001 * dt + @cu.delta_time.value * 0.9)
+    @cu.delta_time.value = (0.00001 * dt + @cu.delta_time.value * 0.99)
     if @transition_active()
       @transition_progress(dt)
 
     @renderer.render @scene, @camera
 
     @stats?.end()
-    requestAnimationFrame @animate
 
   init_observer: (target) ->
     @observer = new MutationObserver (mutations) =>
@@ -129,19 +129,30 @@ class IskDisplayRenderer
     @cu.transition_time.value = 0
 
   transition_progress: (dt) ->
-    @cu.transition_time.value += 0.001 * dt
+    delta=Math.min(dt, 50)
+    @cu.transition_time.value += 0.001 * delta
     if @cu.transition_time.value >= 1
       @change_slide_end()
 
   transition_active: ->
-    @cu.transition_time.value != 0
+    @cu.transition_time.value > 0
 
   change_slide: (slide, update) ->
+    @texstore or= {}
     console.debug 'renderer: change_slide', slide, update
-    d=$(slide).data()
+    d=slide?.iskSlide
+    @texstore[d?.id] or= new THREE.Texture(slide)
+    if not d?.uptodate
+      d.uptodate = true
+      @texstore[d?.id].minFilter=THREE.LinearFilter
+      @texstore[d?.id].needsUpdate = true
+      t=performance.now()
+      @renderer.uploadTexture @texstore[d?.id]
+      t-=performance.now()
+      console.log "Loaded texture in ", (-t).toFixed(2), Date()
+
     if @transition_active()
       @change_slide_end()
-    @tex2.image = slide
 
     effect_id=d?.slide?.effect_id or ""
     effect_name=undefined
@@ -150,14 +161,11 @@ class IskDisplayRenderer
     else
       effect_name = effectname['c'+effect_id]
 
-    @tex2.onUpdate = =>
-      @tex2.onUpdate = undefined
-      @transition_start effect_name
-    @tex2.needsUpdate = true
+    @transition_start effect_name
+    @cu.to.value=@texstore[d?.id]
 
   change_slide_end: ->
-    @tex1.image = @tex2.image
-    @tex1.needsUpdate = true
+    @cu.from.value = @cu.to.value
     @transition_stop()
 
 renderer=new IskDisplayRenderer()
