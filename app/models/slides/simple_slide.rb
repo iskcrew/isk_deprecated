@@ -230,6 +230,7 @@ class SimpleSlide < SvgSlide
 				row['fill-opacity'] = 0
 				row['stroke-opacity'] = 0
 				row.content = 'a'
+				element.add_child row
 				next
 			else
 				row['dy'] = '1em'
