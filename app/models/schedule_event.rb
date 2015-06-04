@@ -13,7 +13,7 @@ class ScheduleEvent < ActiveRecord::Base
 	validates :linecount, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1}
 	validates :schedule, presence: true
 	
-	before_save do |event|
+	before_validation do |event|
 		if event.name.length > 35
 			new_name = String.new
 			line = String.new
