@@ -154,7 +154,7 @@ class IskDisplayRenderer
     if @transition_active()
       @change_slide_end()
 
-    effect_id=d?.slide?.effect_id or ""
+    effect_id=d?.effect_id or ""
     effect_name=undefined
     if update
       effect_name = effectname['u'+effect_id]
