@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
 
 	# This filter requires that a user has been logged in, if not redirect to the login page
 	def require_login
-		redirect_to login_path unless current_user
+		redirect_to login_path unless (current_user || session[:display_id])
 	end
 
 	# Require edit priviledges on obj, raises PermissionDenied if not permitted
