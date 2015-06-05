@@ -3,4 +3,4 @@
 		span.handle.fa.fa-arrows-v
 		= link_to group.master_group.name, group_path(group.master_group_id)
 		div.remove_group.btn-group.btn-group-sm
-			= link_to icon('times-circle','Remove'), remove_group_presentation_path(group.id), class: 'btn btn-danger'
+			= link_to icon('times-circle','Remove'), remove_group_presentation_path(group.id), class: 'btn btn-danger', method: :post
