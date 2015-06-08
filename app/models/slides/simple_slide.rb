@@ -241,7 +241,7 @@ class SimpleSlide < SvgSlide
 				if color && (i%2 == 1)
 					ts['fill'] = color
 				end
-				ts.content = parts[i]
+				ts.content = parts[i].chomp
 				row.add_child ts
 			end
 			element.add_child row
