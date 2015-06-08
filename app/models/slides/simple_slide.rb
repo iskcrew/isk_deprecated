@@ -221,19 +221,19 @@ class SimpleSlide < SvgSlide
 			row['sodipodi:role'] = "line"
 			row["xml:space"] = "preserve"
 			
-			#First line requires little different attributes
+			# Set the line spacing. First line has no spacing, others have 1em spacing.
 			if first_line
 				first_line = false
-			elsif l.strip.empty?
-				row['font-size'] = (size.to_i * 0.4).to_i
+			else
 				row['dy'] = '1em'
+			end
+			if l.strip.empty?
+				row['font-size'] = (size.to_i * 0.4).to_i
 				row['fill-opacity'] = 0
 				row['stroke-opacity'] = 0
 				row.content = 'a'
 				element.add_child row
 				next
-			else
-				row['dy'] = '1em'
 			end
 			parts = l.split(/<([^>]*)>/)
 			parts.each_index do |i|
