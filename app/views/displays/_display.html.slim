@@ -16,7 +16,7 @@ div.panel-display.panel class=display_class(display) id="display_#{display.id}"
 				- if display.current_group.present?
 					li
 						| Current group:
-						=< link_to display.current_group.name, group_path(display.current_group)
+						=< link_to display.current_group.name, group_path(display.current_group.master_group)
 				- else
 					li Current group: Unknown
 				li 
