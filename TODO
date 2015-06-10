@@ -1,37 +1,24 @@
 BUGS / INCONSISTENCIES:
-	- Shoud showing a override change the slide image in _display.html.slim partial?
+	- Should showing a override change the slide image in _display.html.slim partial?
 	- Cloning of TemplateSlides
 		- Write more universal cloning system!
 	- Cloning adds slides to the front of a group!
-	- The CSS fails with big number of groups
-	- The css fails on narrow windows
 	- need to do proper template selection for prizegroups
 	- fix template initialization and creating new prizegroups properly
 	- add a running number on all generated slides, like prize ceremonies etc
-	- create a proper backup rake-task
-
+	- check http_slides and write tests for them
 
 - Rails 4.1 migration
-	- Rewrite the cache and websocket stuff as concerns and include where needed
-		- Remove the dependency on activerecord_observers gem
-		- Only cache observer left!
 	- Use http://edgeguides.rubyonrails.org/active_support_instrumentation.html
-		- Better websocket logging
 		- Performance metrics?
-		- Display action log and metrics
 	
 - Create nested controllers to split code from other massive controllers:
 	- SvgController for slide svg, singular resource
 	- OverrideController for displays
 	- Group controller for presentations
 
-- Inkscape plugins
-	- Better error handling
-	- Convert them to python for native inkscape support?
-		- Test the converted plugins
-		- Add json-responses to http calls for cleaner plugin code
-
 - Websockets
+	- Rewrite the websocket api on top of tubesocks, ditch the unmaintained websocket-rails gem!
 	- Chat / better notification system for web users
 		- We have the new html5 speaker monitor!
 	- websocket-rails 0.7.0 bugs:
@@ -75,24 +62,5 @@ BUGS / INCONSISTENCIES:
 
 - rdoc!
 
-- admincontroller
-	- clear cache action: cache_store.clear
-
 - config control
 	- Move all magic constants to web editable place
-
-TODO: organize the rest of this and translate...
-
-- Inkscape forkki:
-http://bazaar.launchpad.net/~inkscape.dev/inkscape/trunk/view/head:/src/sp-image.cpp#L1140
- tuolta relatiiviset sidotuksi inkscapen työhakemistoon
- iski työkalupalkkiin?
--inkscape tukee sodipodi:absolutepathia tjsp, tällä hirtetty taustakuvan paikka edit-koneille?
-
-- inkscape muistilappu:
-  -inkscape tahtoo multilineä varten vähän eri juttuja:
-    -sodipodi: -attribuutit
-      -sodipodi:linespacing="125%" <text> elementtiin
-      -sodipodi:role="line" <tspan> elementteihin
-    -svg:space='preserve' attribuutit vittuun
-    -sodipodi xlmns -esittely
