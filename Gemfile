@@ -87,9 +87,6 @@ git 'https://github.com/depili/websocket-rails.git', branch: 'channel_token_fix'
 	gem 'websocket-rails'
 end
 
-# Alternative websocket gem, we are moving to this in steps as websocket-rails isn't maintained
-gem 'tubesock'
-
 # For background stuff
 gem 'delayed_job_active_record'
 gem 'daemons'
