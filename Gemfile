@@ -72,6 +72,9 @@ gem 'ranked-model'
 # Use thin as the webserver
 gem 'thin'
 
+# tubesock needs a threaded server, like puma
+gem 'puma'
+
 # f.error_messages
 gem 'dynamic_form'
 

@@ -55,6 +55,9 @@ module WebsocketMessages
 		end
 		Rails.logger.debug "Sending #{data.to_s}"
 		trigger event, data
+		tubedata = [get_channel(), data]
+		Redis.new.publish "isk", tubedata.to_json
+		
 		
 		# If we have associated displays resend their data
 		if self.respond_to? :displays
