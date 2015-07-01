@@ -5,9 +5,7 @@
 @import "jquery-ui";
 @import "font-awesome-sprockets";
 @import "font-awesome";
-// FIXME: bootstrap-sprokets doesn't work with updated stack
-// https://github.com/twbs/bootstrap-sass/issues/930
-//@import "bootstrap-sprockets";
+@import "bootstrap-sprockets";
 @import "bootstrap_custom";
 @import "variables";
 @import "isk";
