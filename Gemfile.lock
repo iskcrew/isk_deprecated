@@ -6,11 +6,12 @@ GIT
       ruby-prof
 
 GIT
-  remote: https://github.com/depili/websocket-rails.git
-  revision: 4c2ae6e90ec98228e7af0e7553cfb6946686ba89
-  branch: channel_token_fix
+  remote: git://github.com/moaa/websocket-rails.git
+  revision: cf5d59b671c5b72caa7d3de91444063152ac6bb1
+  branch: sync_fixes
   specs:
     websocket-rails (0.7.0)
+      connection_pool
       em-synchrony
       faye-websocket
       hiredis
@@ -82,6 +83,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     colorize (0.7.7)
+    connection_pool (2.2.0)
     daemon (1.2.0)
     daemons (1.2.3)
     dalli (2.7.4)
