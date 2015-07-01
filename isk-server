@@ -15,17 +15,17 @@
 case "$1" in
   start)
        echo "Starting ISK-server..."
-       bin/delayed_job start > /dev/null
-       script/background_jobs.rb start > /dev/null
-			 script/rrd_monitoring.rb start > /dev/null
+       TERM_CHILD=1 BACKGROUND=yes PIDFILE=tmp/pids/resque.pid QUEUE=* rake resque:work
+	   script/background_jobs.rb start > /dev/null
+	   script/rrd_monitoring.rb start > /dev/null
        rails s thin -d -p 12765 > /dev/null
        ;;
   stop)
        echo "Stopping ISK-server..."
-       kill $(cat tmp/pids/delayed_job.pid) &>/dev/null
+       kill $(cat tmp/pids/resque.pid) &>/dev/null
        kill $(cat tmp/pids/background_jobs.pid) &>/dev/null
        kill $(cat tmp/pids/server.pid) &>/dev/null
-			 kill $(cat tmp/pids/rrd_monitoring.pid) &>/dev/null
+	   kill $(cat tmp/pids/rrd_monitoring.pid) &>/dev/null
        ;;
 
   restart|force-reload)
@@ -35,11 +35,12 @@ case "$1" in
        #       just the same as "restart".
        #
        echo "Restarting ISK-server..."
-       bin/delayed_job restart > /dev/null
-       script/background_jobs.rb restart > /dev/null
+       kill $(cat tmp/pids/resque.pid) &>/dev/null
+       TERM_CHILD=1 BACKGROUND=yes PIDFILE=tmp/pids/resque.pid QUEUE=* rake resque:work
+	   script/background_jobs.rb restart > /dev/null
        kill $(cat tmp/pids/server.pid) &>/dev/null
        rails s thin -d -p 12765 > /dev/null
-			 script/rrd_monitoring.rb restart
+	   script/rrd_monitoring.rb restart
        ;;
   pull)
        echo "Updating sources..."
