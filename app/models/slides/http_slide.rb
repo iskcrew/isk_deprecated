@@ -21,7 +21,7 @@ class HttpSlide < Slide
 	
 	after_create do |s|
 		s.send(:write_slidedata)
-		s.delay.fetch!
+		s.fetch_later
 	end
 	
 	after_initialize do 
@@ -77,12 +77,16 @@ class HttpSlide < Slide
 			self.is_svg = false
 			self.ready = false
 			self.save!
-			self.delay.generate_images
+			self.generate_images_later
 		else
 			logger.error "Error fetching slide data, http request didn't return OK status"
 			logger.error resp
 			logger.error uri
 		end
+	end
+	
+	def fetch_later
+		FetchJob.perform_later self
 	end
 	
 	private

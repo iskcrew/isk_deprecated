@@ -44,7 +44,7 @@ class InkscapeSlide < SvgSlide
 		ink.ready = false
 		ink.svg_data = simple_slide.svg_data
 		ink.save!
-		ink.delay.generate_images
+		ink.generate_images_later
 		return ink
 	end
 

@@ -87,7 +87,7 @@ class Schedule < ActiveRecord::Base
 				@items = s.last
 				# Generate the slide SVG
 				slide.create_svg(@header, @items)
-				slide.delay.generate_images
+				slide.generate_images_later
 			
 				current_slide += 1
 			end # slides.each
@@ -101,6 +101,10 @@ class Schedule < ActiveRecord::Base
 		
 		end # Transaction
 		return true
+	end
+	
+	def generate_slides_later
+		GenerateSlidesJob.perform_later self
 	end
 	
 	private
@@ -138,7 +142,7 @@ class Schedule < ActiveRecord::Base
 			@items = slide
 			nus.create_svg @header, @items
 			nus.save!
-			nus.delay.generate_images
+			nus.generate_images_later
 			break
 		end
 		return true

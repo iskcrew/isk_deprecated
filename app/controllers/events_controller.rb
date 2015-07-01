@@ -76,7 +76,7 @@ class EventsController < ApplicationController
 	# (re)generate all slide images for this event
 	def generate_images
 		@event = Event.find(params[:id])
-		@event.delay.generate_images!
+		@event.generate_images_later
 		flash[:notice] = "Regenerating slide images, this will take a while.."
 		redirect_to event_path(@event)
 	end

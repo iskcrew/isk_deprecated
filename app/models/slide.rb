@@ -219,6 +219,10 @@ class Slide < ActiveRecord::Base
 		self.ready = true
 		self.save!
 	end
+	
+	def generate_images_later
+		UpdateSlideImagesJob.perform_later self
+	end
 
 	# Filenames of different sized slide images
 	def thumb_filename

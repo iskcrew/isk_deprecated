@@ -50,7 +50,7 @@ class SchedulesController < ApplicationController
 		@schedule = Schedule.find(params[:id])
 
 		if @schedule.update_attributes(schedule_params)
-			@schedule.delay.generate_slides
+			@schedule.generate_slides_later
 			respond_to do |format|
 				format.html {
 					flash[:notice] = 'Schedule updated'

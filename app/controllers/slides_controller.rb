@@ -117,9 +117,9 @@ class SlidesController < ApplicationController
 			end # Transaction
 			
 			if @slide.is_a? HttpSlide
-				@slide.delay.fetch!
+				@slide.fetch_later
 			else
-				@slide.delay.generate_images
+				@slide.generate_images_later
 			end
 			
 			respond_to do |format|
@@ -150,9 +150,9 @@ class SlidesController < ApplicationController
 			if @slide.update_attributes(slide_params)
 				# Generate images as needed
 				# FIXME: This needs to be more universal...
-				@slide.delay.generate_images if !@slide.is_a?(HttpSlide) && !@slide.ready
+				@slide.generate_images_later if !@slide.is_a?(HttpSlide) && !@slide.ready
 				# Fetch the http slide image if needed
-				@slide.delay.fetch! if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
+				@slide.fetch_later if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
 				
 				respond_to do |format|
 					format.html {
@@ -197,7 +197,7 @@ class SlidesController < ApplicationController
 	def clone
 		old_slide = Slide.find(params[:id])
 		slide = old_slide.clone!
-		slide.delay.generate_images unless slide.ready
+		slide.generate_images_later unless slide.ready
 		flash[:notice] = "Slide cloned."
 		redirect_to slide_path(slide)
 	end
@@ -288,7 +288,7 @@ class SlidesController < ApplicationController
 		
 		@slide.svg_data = params[:svg]
 		@slide.save!
-		@slide.delay.generate_images
+		@slide.generate_images_later
 		render nothing: true
 	end
 

@@ -51,4 +51,9 @@ Isk::Application.configure do
   ActiveSupport::Deprecation.behavior = Proc.new { |message, callstack|
     raise message + "\n" + callstack.join("\n  ")
   }
+	
+	# Use inline queue adapter during tests for now.
+	# FIXME: test the sync behaviour in model tests and then just veryfy queueing in controller tests
+	# Will save time.
+	Rails.application.config.active_job.queue_adapter = :inline
 end

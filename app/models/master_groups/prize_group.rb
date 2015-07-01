@@ -92,7 +92,7 @@ class	PrizeGroup < MasterGroup
 		s = slides.shift
 		s.slidedata = empty_template_data
 		s.save!
-		s.delay.generate_images
+		s.generate_images_later
 		
 		# Create the slides revealing the awards in ascending order
 		total_awards = awards.size
@@ -112,7 +112,7 @@ class	PrizeGroup < MasterGroup
 			end
 			s.slidedata = d
 			s.save!
-			s.delay.generate_images
+			s.generate_images_later
 			
 			# remove the highest award place remaining
 			awards.shift
