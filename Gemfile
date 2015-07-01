@@ -88,7 +88,7 @@ git 'https://github.com/depili/websocket-rails.git', branch: 'channel_token_fix'
 end
 
 # For background stuff
-gem 'delayed_job_active_record'
+gem 'resque'
 gem 'daemons'
 gem 'daemon'
 

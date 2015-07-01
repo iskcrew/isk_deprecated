@@ -76,5 +76,8 @@ module Isk
 		
 		# Log display websocket actions on log/displays.log
 		require 'display_logging'
+		
+		# Use sidekiq for background jobs
+		config.active_job.queue_adapter = :resque
 	end
 end
