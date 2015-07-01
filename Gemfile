@@ -83,7 +83,7 @@ gem 'slim'
 # Generators for slim templates instead of erb
 gem 'slim-rails'
 
-gem 'websocket-rails', github: 'moaa/websocket-rails', branch: 'sync_fixes'
+gem 'websocket-rails', github: 'depili/websocket-rails', branch: 'channel_token_fix'
 
 # For background stuff
 gem 'resque'

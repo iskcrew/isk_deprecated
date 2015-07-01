@@ -6,9 +6,9 @@ GIT
       ruby-prof
 
 GIT
-  remote: git://github.com/moaa/websocket-rails.git
-  revision: cf5d59b671c5b72caa7d3de91444063152ac6bb1
-  branch: sync_fixes
+  remote: git://github.com/depili/websocket-rails.git
+  revision: 938964e115830e4c95dfc8c02834c03804a19b5d
+  branch: channel_token_fix
   specs:
     websocket-rails (0.7.0)
       connection_pool
