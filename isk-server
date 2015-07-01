@@ -26,6 +26,7 @@ case "$1" in
        kill $(cat tmp/pids/background_jobs.pid) &>/dev/null
        kill $(cat tmp/pids/server.pid) &>/dev/null
 	   kill $(cat tmp/pids/rrd_monitoring.pid) &>/dev/null
+	   bin/spring stop
        ;;
 
   restart|force-reload)
