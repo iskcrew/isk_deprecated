@@ -204,7 +204,6 @@ class SimpleSlide < SvgSlide
 	
 	def self.set_text(element, text, text_x, color = nil,size = nil, align = nil)
 		# Set default attributes
-		element['sodipodi:linespacing'] = '125%'
 		element['x'] = text_x
 		
 		if size
