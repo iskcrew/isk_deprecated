@@ -112,14 +112,16 @@ class IskDisplayRenderer
     @stats?.end()
 
   init_observer: (target) ->
-    @observer = new MutationObserver (mutations) =>
-      mutations.forEach (mutation) =>
+    @observer = new MutationObserver (mutations) ->
+      mutations.forEach (mutation) ->
         if mutation?.attributeName =='class'
           if mutation.target.classList.contains('updated')
             mutation.target.classList.remove('updated')
-            @change_slide mutation.target, true
+            isk.renderer.change_slide mutation.target, true
           else if mutation.target.classList.contains('current')
-            @change_slide mutation.target
+            isk.renderer.change_slide mutation.target
+        return null
+      return null
  
     config = {subtree: true, attributes: true}
     @observer.observe(target, config)
