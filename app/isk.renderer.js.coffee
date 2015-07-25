@@ -39,6 +39,50 @@ my_getJSON= (uri, cb) ->
     data = JSON.parse(json) if json
     cb data
 
+class QueuePool
+  constructor: (@maxlen=5) ->
+    @_order = []
+    @_data = {}
+
+  contains: (name) ->
+    @_data[name]?
+
+  full: () ->
+    @_order.length >= @maxlen
+
+  _push_name: (name) ->
+    @_order.unshift(name)
+    name
+
+  _pop_name: (name) ->
+    i = @_order.indexOf(name)
+    if i >= 0
+      @_order.splice(i, 1)
+    else if @full()
+      name=@_order.pop()
+    else
+      name=undefined
+    name
+
+  release: (name, item) ->
+    @_push_name(name)
+    @_data[name]=item
+    console.log "QueuePool: RELEASE", @_order, name, item
+    item
+
+  take: (name, no_delete=false) ->
+    tempname=@_pop_name(name)
+    item=@_data[tempname]
+    delete @_data[tempname] if not no_delete or name != tempname
+    item
+
+  loan: (name) ->
+    item=@take(name, true)
+    console.log "QueuePool: LOAN", @_order, name, item
+    @release(name, item) if item?
+    item
+
+
 class IskDisplayRenderer
   init_shaders: (uri)->
     my_getJSON uri+'/index.json', (@shaders) =>
@@ -161,16 +205,23 @@ class IskDisplayRenderer
     @cu.transition_time.value > 0
 
   change_slide: (slide, update) ->
-    @texstore or= {}
+    @texpool or= new QueuePool(25)
+
     console.debug 'renderer: change_slide', slide, update
     d=slide?.iskSlide
-    @texstore[d?.id] or= new THREE.Texture(slide)
-    if not d?.uptodate
+    tex=@texpool.loan(d.id)
+    if not tex
+      console.log "Creating new texture"
+      tex = new THREE.Texture()
+      @texpool.release(d.id, tex)
+    if not d?.uptodate or tex.image != slide
       d.uptodate = true
-      @texstore[d?.id].minFilter=THREE.LinearFilter
-      @texstore[d?.id].needsUpdate = true
+      tex.image=slide
+      tex.minFilter=THREE.LinearFilter
+      tex.needsUpdate = true
+
       t=performance.now()
-      @renderer.uploadTexture @texstore[d?.id]
+      @renderer.uploadTexture tex
       t-=performance.now()
       console.log "Loaded texture in ", (-t).toFixed(2), Date()
 
@@ -185,7 +236,7 @@ class IskDisplayRenderer
       effect_name = effectname['c'+effect_id]
 
     @transition_start effect_name
-    @cu.to.value=@texstore[d?.id]
+    @cu.to.value=tex
 
   change_slide_end: ->
     @cu.from.value = @cu.to.value
