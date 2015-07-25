@@ -18,15 +18,36 @@ effectname=
   c4: 'benchmark'
   u4: 'benchmark'
 
+my_get= (uri, cb) ->
+  request = new XMLHttpRequest()
+  request.open('GET', uri, true)
+
+  request.onload = () ->
+    if (this.status >= 200 && this.status < 400)
+      cb this.response
+    else
+      cb null
+
+  request.onerror = () ->
+    cb null
+
+  request.send()
+
+my_getJSON= (uri, cb) ->
+  my_get uri, (json) ->
+    data = null
+    data = JSON.parse(json) if json
+    cb data
+
 class IskDisplayRenderer
   init_shaders: (uri)->
-    $.getJSON uri+'/index.json', (@shaders) =>
+    my_getJSON uri+'/index.json', (@shaders) =>
       for name, value of @shaders
         do (name, value) =>
           value.material = new THREE.ShaderMaterial(uniforms: @cu)
           for type in ['fs', 'vs']
             do (type) ->
-              $.get uri + '/' + value.name + '.' + type, (code) ->
+              my_get uri + '/' + value.name + '.' + type, (code) ->
                 value[type]=code
                 value.material[shadername[type]]=code
                 if value.fs? and value.vs?
@@ -53,7 +74,7 @@ class IskDisplayRenderer
     #geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
     geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
     #geometry = new THREE.PlaneGeometry( 192, 108,0,0 )
-    @tex_empty=new THREE.Texture( $('#empty')[0] )
+    @tex_empty=new THREE.Texture(document.getElementById('empty'))
     @tex_empty.minFilter=THREE.LinearFilter
     @tex_empty.needsUpdate=true
     @cu=
@@ -109,10 +130,10 @@ class IskDisplayRenderer
     @init_observer document.querySelector('#pres')
     requestAnimationFrame @animate
 
-    $('#stats').append(@stats?.domElement) if stats and @stats?
+    if stats and @stats?
+      document.getElementById('stats').appendChild(@stats?.domElement)
 
-    $(@renderer.domElement).hide().fadeIn(2000)
-    $('#canvas').append(@renderer?.domElement)
+    document.getElementById('canvas').appendChild(@renderer?.domElement)
 
     # Add window size event and run it once (to set initial values)
     window.addEventListener('resize', @handle_window_size, false)
@@ -170,7 +191,8 @@ class IskDisplayRenderer
 
 renderer=new IskDisplayRenderer()
 
-$ -> renderer.run()
+# TODO better alternative for $ -> renderer.run()
+renderer.run()
 
 #EXPORTS:
 @isk.renderer = renderer
