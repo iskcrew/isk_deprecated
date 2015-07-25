@@ -1,49 +1,52 @@
 @isk or= {}
 
 elem = undefined
-svg = undefined
 time = undefined
 shown = true
 old_t = ""
 
 init = ->
-  elem=$('<object type="image/svg+xml" data="clock.svg"></object>')
-  elem[0]?.addEventListener 'load', ->
-    svg=$(elem[0]?.getSVGDocument())
-    svg.find('svg')[0]?.setAttribute('viewBox', "0 0 1920 1080")
-    time=svg.find('#clock')
+  elem=document.createElement('object')
+  elem.type="image/svg+xml"
+  elem.data="clock.svg"
+  elem?.addEventListener 'load', ->
+    svg=elem?.getSVGDocument()
+    svg.querySelector('svg')?.setAttribute('viewBox', "0 0 1920 1080")
+    clock=svg.querySelector('#clock')
+    time=clock?.children[0]?.childNodes[0]
     run()
-  elem.appendTo $('#ISKDPY #clock')
+  document.querySelector('#ISKDPY div#clock').appendChild elem
 
 show = ->
-  elem.animate {top: "0%"},
-    start: ->
-      elem.show()
-      shown=true
+  elem.style='transition: 1s ease-in-out;transform: translateY(0)'
+  shown=true
 
 hide = ->
-  elem.animate {top: "15%"},
-    done: ->
-      elem.hide()
-      shown=false
+  elem.style='transition: 1s ease-in-out;transform: translateY(15%)'
+  shown='hiding'
+  setTimeout ->
+    shown=false if shown == 'hiding'
+  , 2000
+  false
 
-set_current_time = ->
+set_current_time = () ->
   if time? and shown
-    t=Date()
+    t=Math.floor(Date.now()/1000)
     if t != old_t
       old_t = t
-      s = t.split(' ')
+      s = Date().split(' ')
       ts = [s[0], s[4]].join ' '
-      time?.text ts
+      time?.nodeValue=ts
 
-run = ->
+run = (t) ->
   requestAnimationFrame run
   set_current_time()
 
-$ ->
+setTimeout ->
   init()
 
 #EXPORTS:
 isk.clock =
   show: show
   hide: hide
+  elem: elem
