@@ -328,6 +328,7 @@ class Slide < ActiveRecord::Base
 	def compare_new_image(tmp_file)
 		if File.exist?(self.full_filename) && FileUtils.compare_file(tmp_file.path, self.full_filename)
 			# Generated image is the same as the previous one
+			tmp_file.unlink
 			return false
 		else
 			FileUtils.mv tmp_file.path, self.full_filename
