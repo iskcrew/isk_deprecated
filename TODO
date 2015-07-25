@@ -7,6 +7,10 @@ BUGS / INCONSISTENCIES:
 	- fix template initialization and creating new prizegroups properly
 	- add a running number on all generated slides, like prize ceremonies etc
 	- check http_slides and write tests for them
+	- Move group deletion into a background task, websocket-rails doesn't like it otherwise...
+	- Add "defer multiple" functionality into schedules
+	- Add delete to schedules
+	
 
 - Rails 4.1 migration
 	- Use http://edgeguides.rubyonrails.org/active_support_instrumentation.html
