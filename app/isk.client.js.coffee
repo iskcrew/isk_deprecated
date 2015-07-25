@@ -8,7 +8,9 @@ timer=undefined
 display_id=undefined
 
 current=root.getElementsByClassName('current')
- 
+presentation=root.getElementsByClassName('presentation_slide')
+overrides=root.getElementsByClassName('override_slide')
+
 class ChangeNotifier
   constructor: (initial, callback) ->
     @state = initial
@@ -49,9 +51,13 @@ handle_display = (display) ->
   slide = (slide) ->
     if slide?.group?
       gs_id="slide_G#{slide.group}S#{slide.id}"
-    else gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
+      gs_class="presentation_slide"
+    else
+      gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
+      gs_class="override_slide"
     img=document.createElement('img')
     img.id=gs_id
+    img.classList.add(gs_class)
     img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
     img.iskSlide = slide
     img
@@ -134,7 +140,7 @@ send_error = (msg) ->
   console.debug 'sending error', data
   isk.dispatcher.trigger 'iskdpy.error', data
   
-
+# TODO remove jquery
 when_ready = (elem, f) ->
   $(elem).one 'load', f
   .each -> $(@).load() if @complete
@@ -186,15 +192,17 @@ set_current_updated = (elem) ->
 prev_slide = ->
   prev=current?[0]?.previousElementSibling
   if (not prev?)
-    prev=root.lastElementChild
+    [..., last] = presentation
+    prev=last
   set_current(prev)
 
 next_slide = ->
-  next=root.firstElementChild.firstElementChild
+  next=overrides?[0]
   if (not next?)
     next=current?[0]?.nextElementSibling
   if (not next?)
-    next=root.lastElementChild.firstElementChild
+    [first, ...] = presentation
+    next=first
   set_current(next)
 
 timed_next_slide = ->
@@ -210,12 +218,12 @@ stop_client = ->
     isk.dispatcher.unsubscribe "display_"+display_id
     send_shutdown display_id
     display_id=undefined
-  root?.html ""
+  root?.innerHtml = ""
 
 #EXPORTS:
 @isk.client=
   start: start_client
   stop: stop_client
-  prev_slid: prev_slide
+  prev_slide: prev_slide
   next_slide: next_slide
 
