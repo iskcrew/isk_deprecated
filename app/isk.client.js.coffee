@@ -100,9 +100,7 @@ handle_goto_slide = (d) ->
   console.debug "received goto_slide", d
   if d?.slide == "next" then next_slide()
   else if d?.slide == "previous" then prev_slide()
-  else
-    elem=root.children["slide_G#{d?.group_id}S#{d?.slide_id}"]
-    if elem? then set_current(elem)
+  else goto_slide "slide_G#{d?.group_id}S#{d?.slide_id}"
   true
 
 send_hello = (name) ->
@@ -205,6 +203,10 @@ next_slide = ->
     next=first
   set_current(next)
 
+goto_slide = (id) ->
+  next=presentation?[id]
+  set_current(next)
+
 timed_next_slide = ->
   next_slide()
 
@@ -226,4 +228,5 @@ stop_client = ->
   stop: stop_client
   prev_slide: prev_slide
   next_slide: next_slide
+  goto_slide: goto_slide
 
