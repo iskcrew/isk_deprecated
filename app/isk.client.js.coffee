@@ -11,6 +11,9 @@ current=root.getElementsByClassName('current')
 presentation=root.getElementsByClassName('presentation_slide')
 overrides=root.getElementsByClassName('override_slide')
 
+#TODO fix this hack later
+showing_override=false
+
 class ChangeNotifier
   constructor: (initial, callback) ->
     @state = initial
@@ -63,9 +66,9 @@ handle_display = (display) ->
     img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
     img
     
-  overrides=document.createElement('div')
-  overrides.id='overrides'
-  overrides.append slide s for s in display?.override_queue
+  overs=document.createElement('div')
+  overs.id='overrides'
+  overs.appendChild slide s for s in display?.override_queue
 
   elems=document.createElement('div')
   elems.id='presentation'
@@ -78,21 +81,22 @@ handle_display = (display) ->
     empty.dataset.error_message ='Presentation empty, showing empty slide'
     empty.appendTo elems
 
-  old_slide = current?[0]
-  if old_slide?
-    id = old_slide.id
-    console.debug 'Marking current slide', id
-    new_slide = elems.children[id]
-    if new_slide?
-      new_slide.classList.add('current')
-      if (old_slide?.iskSlide?.images_updated_at <
-          new_slide?.iskSlide?.images_updated_at)
-        set_current_updated new_slide
+  [].forEach.call current, (s) ->
+    old_slide = s
+    if old_slide?
+      id = old_slide.id
+      console.debug 'Marking current slide', id
+      new_slide = elems.children[id]
+      if new_slide?
+        new_slide.classList.add('current')
+        if (not showing_override) and (old_slide?.iskSlide?.images_updated_at <
+            new_slide?.iskSlide?.images_updated_at)
+          set_current_updated new_slide
 
   while (root?.firstChild?)
     root.removeChild(root.firstChild)
 
-  root.appendChild overrides
+  root.appendChild overs
   root.appendChild elems
 
   manual_mode.set display?.manual == true
@@ -157,8 +161,10 @@ set_current = (elem) ->
     when_ready elem, ->
       if @?.width
         send_current_slide @
+        showing_override=elem?.classList?.contains('override_slide')
         [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
           e.classList.remove('current')
+          e.classList.remove('updated')
         @.classList.add('current')
         clock_mode.set @?.iskSlide?.show_clock == true
         dur=@?.iskSlide?.duration
