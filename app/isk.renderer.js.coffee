@@ -160,9 +160,10 @@ class IskDisplayRenderer
       mutations.forEach (mutation) ->
         if mutation?.attributeName =='class'
           if mutation.target.classList.contains('updated')
-            mutation.target.classList.remove('updated')
+            console.debug "Mutation observer: updated", mutation.target.classList, mutation
             isk.renderer.change_slide mutation.target, true
           else if mutation.target.classList.contains('current')
+            console.debug "Mutation observer: current", mutation.target.classList, mutation
             isk.renderer.change_slide mutation.target
         return null
       return null
@@ -209,13 +210,12 @@ class IskDisplayRenderer
 
     console.debug 'renderer: change_slide', slide, update
     d=slide?.iskSlide
-    tex=@texpool.loan(d.id)
+    tex=@texpool.loan(d.uid)
     if not tex
       console.log "Creating new texture"
       tex = new THREE.Texture()
-      @texpool.release(d.id, tex)
-    if not d?.uptodate or tex.image != slide
-      d.uptodate = true
+      @texpool.release(d.uid, tex)
+    if tex?.image?.iskSlide?.uid != d.uid
       tex.image=slide
       tex.minFilter=THREE.LinearFilter
       tex.needsUpdate = true

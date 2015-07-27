@@ -60,6 +60,7 @@ handle_display = (display) ->
     img.classList.add(gs_class)
     img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
     img.iskSlide = slide
+    img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
     img
     
   overrides=document.createElement('div')
@@ -178,6 +179,7 @@ set_current_updated = (elem) ->
         send_current_slide @
         [].forEach.call @.parentElement.getElementsByClassName('updated'), (e) ->
           e.classList.remove('updated')
+        @.classList.add('updated')
         clock_mode.set @?.iskSlide?.show_clock == true
         dur=@?.iskSlide?.duration
         if dur
