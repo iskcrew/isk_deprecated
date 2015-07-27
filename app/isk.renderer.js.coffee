@@ -133,7 +133,7 @@ class IskDisplayRenderer
     @mesh = new THREE.Mesh( geometry, @default_material )
     @scene.add( @mesh )
 
-    #@stats = new Stats()
+    @stats = new Stats?()
 
 
   animate: (t) =>
