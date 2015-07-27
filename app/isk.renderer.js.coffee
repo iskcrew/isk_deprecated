@@ -67,7 +67,7 @@ class QueuePool
   release: (name, item) ->
     @_push_name(name)
     @_data[name]=item
-    console.log "QueuePool: RELEASE", @_order, name, item
+    console.debug "QueuePool: RELEASE", @_order, name, item
     item
 
   take: (name, no_delete=false) ->
@@ -78,7 +78,7 @@ class QueuePool
 
   loan: (name) ->
     item=@take(name, true)
-    console.log "QueuePool: LOAN", @_order, name, item
+    console.debug "QueuePool: LOAN", @_order, name, item
     @release(name, item) if item?
     item
 
@@ -212,7 +212,7 @@ class IskDisplayRenderer
     d=slide?.iskSlide
     tex=@texpool.loan(d.uid)
     if not tex
-      console.log "Creating new texture"
+      console.debug "Creating new texture"
       tex = new THREE.Texture()
       @texpool.release(d.uid, tex)
     if tex?.image?.iskSlide?.uid != d.uid
@@ -223,7 +223,7 @@ class IskDisplayRenderer
       t=performance.now()
       @renderer.uploadTexture tex
       t-=performance.now()
-      console.log "Loaded texture in ", (-t).toFixed(2), Date()
+      console.debug "Loaded texture in ", (-t).toFixed(2), Date()
 
     if @transition_active()
       @change_slide_end()
