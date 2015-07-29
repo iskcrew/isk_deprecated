@@ -16,6 +16,9 @@ class TicketsController < ApplicationController
 			format.js {
 				@open_tickets = Ticket.current.open.count
 			}
+			format.json {
+				render json: Ticket.current.open.all
+			}
 		end
 	end
 	
