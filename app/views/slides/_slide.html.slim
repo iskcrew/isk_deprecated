@@ -4,7 +4,7 @@ div.slide.panel.panel-primary class=(slide.public ? 'slide-public' : 'slide-hidd
 			= link_to slide.name, slide_path(slide)
 		div.slide_type class=(slide.type_str) = slide.type_str
 	div.panel-body
-		- if defined?(to_full) || (controller.controller_name == 'slides' && controller.action_name == 'show')
+		- if defined?(to_full)
 			= slide_preview_to_full_tag(slide)
 		- else
 			= slide_preview_to_show_tag(slide)
