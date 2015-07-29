@@ -181,7 +181,10 @@ class SlidesController < ApplicationController
 		require_edit @slide
 		@slide.destroy
 		@slide.save!
-		redirect_to slide_path(@slide)
+		respond_to do |format|
+			format.html {redirect_to slide_path(@slide)}
+			format.js {render :show}
+		end
 	end
 
 	# Remove the deleted flag and move the slide from thrash to ungrouped.

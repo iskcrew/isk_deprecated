@@ -165,14 +165,14 @@ module SlidesHelper
 	
 	# Generate the slide delete button setting the tooltip and confirm message
 	def slide_delete_button(slide)
-		slide_delete_link(slide, 'btn btn-danger')
+		slide_delete_link(slide, 'btn btn-danger', true)
 	end
 	
 	# Delete link for dropdowns
-	def slide_delete_link(slide, html_class=nil)
+	def slide_delete_link(slide, html_class=nil, remote=false)
 		link_to delete_link_text, slide_path(slide),
 							data: {confirm: "Are you sure?"}, title: 'Mark this slide as deleted, you can undo later',
-							method: :delete, class: html_class
+							method: :delete, class: html_class, remote: remote
 	end
 	
 	# Ungroup slide button

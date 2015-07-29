@@ -32,7 +32,7 @@ div.slide.panel.panel-primary class=(slide.public ? 'slide-public' : 'slide-hidd
 								- if slide.master_group_id != current_event.ungrouped_id
 									li = slide_ungroup_link(slide)
 								li = slide_clone_link(slide)
-								li = slide_delete_link(slide)
+								li = slide_delete_link(slide, nil, true)
 			- else
 				/ can't edit
 				=< slide_hide_button_or_status(slide)
