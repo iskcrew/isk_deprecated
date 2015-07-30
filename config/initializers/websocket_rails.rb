@@ -29,6 +29,8 @@ WebsocketRails.setup do |config|
   # is enabled.
   config.redis_options = Rails.configuration.x.redis
 
+
+	config.synchronize_pool_size = 200
   # By default, all subscribers in to a channel will be removed
   # when that channel is made private. If you don't wish active
   # subscribers to be removed from a previously public channel
