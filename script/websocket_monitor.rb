@@ -86,18 +86,18 @@ EM.run {
 			say 'FIXME: channel tokens!'.red
 		
 		when 'update'
-			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
+			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}".yellow
 		
 		when 'updated_image'
-			say "Update image notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
+			say "Update image notification: #{msg_channel} with id=#{msg_hash['data']['id']}".blue
 			
 		when 'data'
 			d = msg_hash['data']
-			say "Display data for display id=#{d['id']}"
+			say "Display data for display id=#{d['id']}".light_blue
 		
 		when 'current_slide'
 			d = msg_hash['data']
-			say "Display current slide update, display: #{d['display_id']}, slide: #{d['slide_id']}, group: #{d['group_id']}"
+			say "Display current slide update, display: #{d['display_id']}, slide: #{d['slide_id']}, group: #{d['group_id']}".cyan
 		when 'error'
 			d = msg_hash['data']
 			say "ERROR: Channel: \"#{msg_channel}\" Display: #{d['display_id']}, message #{d['message']}".red
