@@ -17,7 +17,7 @@ class TicketsController < ApplicationController
 				@open_tickets = Ticket.current.open.count
 			}
 			format.json {
-				render json: Ticket.current.open.all
+				render json: Ticket.current.open.order(created_at: :desc).all
 			}
 		end
 	end
