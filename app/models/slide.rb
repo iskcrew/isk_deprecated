@@ -22,6 +22,8 @@ class Slide < ActiveRecord::Base
 
 	# Touch associated displays
 	after_save :update_timestamps
+	# If slide is moved to a new group add it to the end of the group
+	before_save :check_position
 
 	# Relations
 	belongs_to :replacement, class_name: "Slide", foreign_key: "replacement_id"
@@ -336,6 +338,13 @@ class Slide < ActiveRecord::Base
 			# Tmpfile has 700 mode, we need to give other read permissions (mainly the web server)
 			FileUtils.chmod 0644, self.full_filename
 			return true
+		end
+	end
+	
+	# If slides group has been changed move it to the end of the new group
+	def check_position
+		if changed.include? 'master_group_id'
+			self.position_position = :last
 		end
 	end
 
