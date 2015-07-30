@@ -116,6 +116,7 @@ class Slide < ActiveRecord::Base
 		elsif new_slide.name.include?('(mushroom) (mushroom)')
 			new_slide.name = new_slide.name.gsub('(clone)', '')
 		end
+		new_slide.position_position = self.group_position + 1
 		new_slide.save!
 		FileUtils.copy(self.data_filename, new_slide.data_filename) if self.respond_to? :data_filename
 		FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
