@@ -34,6 +34,10 @@ Daemons.run_proc('background_jobs', options) do
 	Rails.logger = Logger.new(STDOUT)
 	Rails.logger.level = Logger::WARN
 	
+	Resque.logger = Logger.new(STDOUT)
+	ActiveJob::Base.logger = Logger.new(STDOUT)
+	ActiveJob::Base.logger.level = Logger::WARN
+	
 	ActiveRecord::Base.connection.reconnect!
 	
 	loop do
