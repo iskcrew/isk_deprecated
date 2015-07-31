@@ -380,6 +380,7 @@ class SlidesController < ApplicationController
 	def slide_params
 		params.required(:slide).permit(
 			:name, :description, :show_clock, :public, :duration, :foreign_object_id,
+			:master_group_id,
 			{slidedata: params[:slide][:slidedata].try(:keys)}
 		)
 	end

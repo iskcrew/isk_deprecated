@@ -182,7 +182,7 @@ module SlidesHelper
 	
 	# Ungroup link for dropdowns
 	def slide_ungroup_link(slide, html_class=nil)
-		link_to (icon 'chain-broken', 'Ungroup'), ungroup_slide_path(slide), method: :post, class: html_class
+		link_to (icon 'chain-broken', 'Ungroup'), slide_path(slide, slide: {master_group_id: current_event.ungrouped_id}), method: :put, class: html_class
 	end
 	
 	# Link to next slide in the same group as this slide
