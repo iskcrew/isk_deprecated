@@ -11,6 +11,7 @@
 class	PrizeGroup < MasterGroup
 	DefaultData = HashWithIndifferentAccess.new(
 		title: 'Competiton Compo',
+		template: nil,
 		awards: [
 			{:name => '', :by => '', :pts => ''},
 			{:name => '', :by => '', :pts => ''},
@@ -69,6 +70,7 @@ class	PrizeGroup < MasterGroup
 				awards << a
 			end
 		end
+		template = SlideTemplate.find(data[:template])
 		# Find the PrizeSlides for this group
 		slides = self.slides.where(type: PrizeSlide.sti_name).to_a
 		# Destroy excess slides, we need awards + 1 slides because first slide
@@ -81,9 +83,15 @@ class	PrizeGroup < MasterGroup
 		# We need awards.size +1 slides, because first slide doesn't show any awards
 		((awards.size + 1) - slides.size).times do
 			s = PrizeSlide.new(name: "Prizes for: #{data[:title]}")
+			s.template = template
 			s.master_group = self
 			s.save!
 			slides << s
+		end
+		
+		self.slides.where(type: PrizeSlide.sti_name).each do |s|
+			s.template = template
+			s.save!
 		end
 		
 		self.reload

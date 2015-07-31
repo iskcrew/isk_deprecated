@@ -9,8 +9,4 @@
 class PrizeSlide < TemplateSlide
 	TypeString = "prize"
 	
-	# FIXME: PROPER CONFIGURATION
-	after_initialize do
-		self.template = SlideTemplate.last
-	end
 end

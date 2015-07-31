@@ -3,6 +3,7 @@ div.col-md-4
 
 	- data = (@group.is_a?(PrizeGroup) ? @group.data : PrizeGroup::DefaultData)
 	= f.fields_for :data do |ff|
+		= ff.collection_select(:template, current_templates, :id, :name)
 		= ff.text_field :title, value: data[:title], label: 'Subheading for generated slides'
 
 	table.awards.table
