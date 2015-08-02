@@ -2,8 +2,9 @@ doctype 5
 html
 	head
 		title 
-			| ISK @ #{request.host} : #{controller.controller_name.capitalize}
-			=< controller.action_name.capitalize
+			| #{controller.controller_name.capitalize}
+			=< controller.action_name.capitalize 
+			=< "- ISK @ #{request.host}" 
 		= stylesheet_link_tag :application, media: :all
 		= javascript_include_tag :application
 		= csrf_meta_tags
