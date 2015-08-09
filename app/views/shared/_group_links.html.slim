@@ -10,7 +10,7 @@
 							a.dropdown-toggle data-toggle="dropdown" href="#" role="button"
 								= ch.chr
 								span.caret
-							ul.dropdown-menu
+							ul.dropdown-menu.dropdown-menu-right
 								- groups.each do |group|
 									li: a.group_link href=("\#anchor_group_#{group.id}") #{group.name}
 					- else
