@@ -39,6 +39,21 @@ clock_mode = new ChangeNotifier true, (clock) ->
   else
     isk.clock.hide()
 
+create_slide = (slide) ->
+  if slide?.group?
+    gs_id="slide_G#{slide.group}S#{slide.id}"
+    gs_class="presentation_slide"
+  else
+    gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
+    gs_class="override_slide"
+  img=document.createElement('img')
+  img.id=gs_id
+  img.classList.add(gs_class)
+  img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
+  img.iskSlide = slide
+  img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
+  img
+
 handle_hello = (display) ->
   display_id=display?.id
   if display_id?
@@ -51,28 +66,14 @@ handle_hello = (display) ->
 
 handle_display = (display) ->
   console.debug "received display",  display
-  slide = (slide) ->
-    if slide?.group?
-      gs_id="slide_G#{slide.group}S#{slide.id}"
-      gs_class="presentation_slide"
-    else
-      gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
-      gs_class="override_slide"
-    img=document.createElement('img')
-    img.id=gs_id
-    img.classList.add(gs_class)
-    img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
-    img.iskSlide = slide
-    img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
-    img
     
   overs=document.createElement('div')
   overs.id='overrides'
-  overs.appendChild slide s for s in display?.override_queue
+  overs.appendChild create_slide s for s in display?.override_queue
 
   elems=document.createElement('div')
   elems.id='presentation'
-  elems.appendChild slide s for s in display?.presentation?.slides
+  elems.appendChild create_slide s for s in display?.presentation?.slides
 
   if display?.presentation?.slides?.length == 0
     console.log "Presentation is empty"
