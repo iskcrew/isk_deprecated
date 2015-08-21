@@ -10,6 +10,8 @@
 require 'mkmf' # We use this to check for external dependecies
 require 'colorize'
 require "timeout"
+require 'redis'
+require 'dalli'
 
 
 WebServer = 'thin'
@@ -21,9 +23,13 @@ Services = [
 	'background_jobs',
 	'rrd_monitoring'
 ]
+RedisOptions = {host: 'localhost', port: 6379}
+MemcachedIP = 'localhost:11211'
+MemcachedOptions = {namespace: 'ISK', compress: true} 
 
 # Check that all the needed external binaries are present
 def check_deps
+	puts "Checking that needed external dependencies are met..."
 	unless find_executable 'inkscape'
 		abort 'ERROR: ISK needs inkscape to function'.red
 	end
@@ -125,11 +131,24 @@ when 'restart'
 	check_deps()
 	services.each {|s| stop_service(s) && start_service(s)}
 	exit
+when 'force-restart'
+	check_deps()
+	Services.each {|s| stop_service(s)}
+	puts 'Flushing redis databases...'
+	redis = Redis.new(RedisOptions)
+	redis.flushall
+	puts 'Flushing memcached'
+	dc = Dalli::Client.new MemcachedIP, MemcachedOptions
+	dc.flush_all
+	puts 'Precompiling assets'
+	system 'rake assets:precompile'
+	Services.each {|s| start_service(s)}
 else
-	puts "Usage    isk-server.rb {start|stop|restart} [process name]"
-	puts "start:   start all or a specified process"
-	puts "stop:    stop all or specified process"
-	puts "restart: restart all or specified process"
+	puts "Usage          isk-server.rb {start|stop|restart} [process name]"
+	puts "start:         start all or a specified process"
+	puts "stop:          stop all or specified process"
+	puts "restart:       restart all or specified process"
+	puts "force-restart: stop all services, flush redis and memcached, regenerate assets and restart"
 	puts "process name can be any of the following:"
 	Services.each {|s| puts s}
 	exit 1
