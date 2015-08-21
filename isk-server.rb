@@ -16,10 +16,10 @@ WebServer = 'thin'
 WebServerPort = 12765
 PidDirectory = File.join(File.dirname(__FILE__),'tmp','pids')
 Services = [
-	:server,
-	:resque,
-	:background_jobs,
-	:rrd_monitoring
+	'server',
+	'resque',
+	'background_jobs',
+	'rrd_monitoring'
 ]
 
 # Check that all the needed external binaries are present
@@ -39,16 +39,16 @@ end
 
 def start_service(process)
 	case process
-	when :server
+	when 'server'
 		print 'Starting the web server process...'.ljust(45)
 		command = "rails s #{WebServer} -d -p #{WebServerPort} > /dev/null"
-	when :resque
+	when 'resque'
 		print 'Starting the Resque worker...'.ljust(45)
 		command = "TERM_CHILD=1 BACKGROUND=yes PIDFILE=tmp/pids/resque.pid QUEUE=* rake resque:work"
-	when :background_jobs
+	when 'background_jobs'
 		print 'Starting the timed background jobs worker...'.ljust(45)
 		command = "script/background_jobs.rb start > /dev/null"
-	when :rrd_monitoring
+	when 'rrd_monitoring'
 		print 'Starting the RRD data logger process...'.ljust(45)
 		command = "script/rrd_monitoring.rb start > /dev/null"
 	else
@@ -64,16 +64,16 @@ end
 
 def stop_service(process)
 	case process
-	when :server
+	when 'server'
 		print 'Stopping the web server process'.ljust(45)
 		pid_file = 'server.pid'
-	when :resque
+	when 'resque'
 		print 'Stopping the Resque worker'.ljust(45)
 		pid_file = 'resque.pid'
-	when :background_jobs
+	when 'background_jobs'
 		print 'Stopping the timed background jobs worker'.ljust(45)
 		pid_file = 'background_jobs.pid'
-	when :rrd_monitoring
+	when 'rrd_monitoring'
 		print 'Stopping the RRD data logger process'.ljust(45)
 		pid_file = 'rrd_monitoring.pid'
 	else
@@ -108,20 +108,29 @@ def stop_service(process)
 	end
 end
 
-
-case ARGV.first
+if ARGV[1]
+	services = [ARGV[1]]
+else
+	services = Services
+end
+case ARGV[0]
 when 'start'
 	check_deps()
-	Services.each {|s| start_service(s)}
+	services.each {|s| start_service(s)}
 	exit
 when 'stop'
-	Services.each {|s| stop_service(s)}
+	services.each {|s| stop_service(s)}
 	exit
 when 'restart'
 	check_deps()
-	Services.each {|s| stop_service(s) && start_service(s)}
+	services.each {|s| stop_service(s) && start_service(s)}
 	exit
 else
-	puts "Usage isk-server.rb {start|stop|restart}"
+	puts "Usage    isk-server.rb {start|stop|restart} [process name]"
+	puts "start:   start all or a specified process"
+	puts "stop:    stop all or specified process"
+	puts "restart: restart all or specified process"
+	puts "process name can be any of the following:"
+	Services.each {|s| puts s}
 	exit 1
 end
