@@ -55,7 +55,7 @@ def start_service(process)
 		pid_file = File.join(PidDirectory, 'resque.pid')
 		if File.exists? pid_file
 			pid = File.read(pid_file).to_i
-			if `ps -p #{pid}`.match "resque"
+			if `ps -o args -p #{pid}`.match "resque"
 				puts "FAILED".red
 				puts "Resque worker already running with pid #{pid}"
 				abort
