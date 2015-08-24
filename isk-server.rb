@@ -37,9 +37,9 @@ def check_deps
 	inkscape_version = `inkscape --version`.split[1].split('.')[1].to_i
 	if inkscape_version == 91
 		puts 'WARNING: Inkscape 0.91 may produce artifacts when scaling bitmaps'.yellow
-		unless find_executable('convert') && find_executable('identify')
-			abort 'ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)'.red
-		end
+	end
+	unless find_executable('convert') && find_executable('identify')
+		abort 'ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)'.red
 	end
 end
 
