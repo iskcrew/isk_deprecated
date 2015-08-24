@@ -50,6 +50,17 @@ def start_service(process)
 		command = "rails s #{WebServer} -d -p #{WebServerPort} > /dev/null"
 	when 'resque'
 		print 'Starting the Resque worker...'.ljust(45)
+		# Resque doesn't check its pid file and refuse to start if already running
+		# So we need to do that...
+		pid_file = File.join(PidDirectory, 'resque.pid')
+		if File.exists? pid_file
+			pid = File.read(pid_file).to_i
+			if `ps -p #{pid}`.match "resque"
+				puts "FAILED".red
+				puts "Resque worker already running with pid #{pid}"
+				abort
+			end
+		end
 		command = "TERM_CHILD=1 BACKGROUND=yes PIDFILE=tmp/pids/resque.pid QUEUE=* rake resque:work"
 	when 'background_jobs'
 		print 'Starting the timed background jobs worker...'.ljust(45)
