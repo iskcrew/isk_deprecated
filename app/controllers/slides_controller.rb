@@ -107,8 +107,6 @@ class SlidesController < ApplicationController
 				case params[:create_type]
 				when 'empty_file', 'inkscape'
 					@slide.svg_data = SimpleSlide.create_svg(SimpleSlide::DefaultSlidedata)
-				when 'image'
-					@slide.image = params[:image]
 				end
 
 				unless @slide.can_edit? current_user
@@ -380,7 +378,7 @@ class SlidesController < ApplicationController
 	def slide_params
 		params.required(:slide).permit(
 			:name, :description, :show_clock, :public, :duration, :foreign_object_id,
-			:master_group_id,
+			:master_group_id, :image,
 			{slidedata: params[:slide][:slidedata].try(:keys)}
 		)
 	end

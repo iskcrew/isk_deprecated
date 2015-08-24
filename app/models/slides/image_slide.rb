@@ -22,27 +22,40 @@ class	ImageSlide < Slide
 	)
 	include HasSlidedata
 	
-	# Validate and store a new image for the slide
-	# image should be a IO-object
+	after_save :save_image
+	validate :check_image
+
+	# Receive a new slide image.
+	# Since we might not have a ID yet just store it in a temp file for now.
 	def image=(image)
 		file = Tempfile.new('isk-image', encoding: 'binary')
-		
-		file.write image.read
+		file.write(image.read)
 		file.close
-		
-		# Verify image integrity
-		command = "identify #{file.path} &> /dev/null"
-		if system command
-			FileUtils.copy file.path, self.original_filename
-		else
-			raise Slide::ImageError, "Invalid image received"
-		end
-		
-	ensure
-		file.unlink
+		@_image_file = file
 	end
 		
 	private
+	
+	# A after save hook to move the possible new image into its place
+	def save_image
+		if @_image_file
+			FileUtils.move @_image_file.path, self.original_filename
+			@_image_file = nil
+		end
+	end
+	
+	# Validate the uploaded image.
+	def check_image
+		if @_image_file
+			# Verify image integrity
+			command = "identify #{@_image_file.path} &> /dev/null"
+			unless system command
+				@_image_file.unlink
+				@_image_file = nil
+				errors.add :image, "wasn't a valid image file."
+			end
+		end
+	end
 	
 	# Generate the full size slide preview
 	def generate_full_image
@@ -78,6 +91,7 @@ class	ImageSlide < Slide
 		if system command
 			return compare_new_image(tmp_file)
 		else
+			tmp_file.unlink
 			raise Slide::ImageError, 'Error generating full size slide image!'
 		end
 	end

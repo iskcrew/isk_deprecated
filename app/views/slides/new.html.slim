@@ -56,11 +56,9 @@ div.tab-content
 		p 
 			| You can upload a image in any format understood by imagemagick library.
 			|  The image will be shown centered on a black background and resized down if needed.
-		= bootstrap_form_for @slide, html: {multipart: true, id: 'new_image_slide'} do |f|
+		= bootstrap_form_for @slide, html: {id: 'new_image_slide'} do |f|
 			= f.error_messages
 			= hidden_field_tag :create_type, 'image'
 			= render partial: 'form', locals: {f: f}
 			= render partial: 'image_slide_form', locals: {f: f}
-			p: b Choose the image to upload:
-			= file_field_tag :image
 			p = f.primary

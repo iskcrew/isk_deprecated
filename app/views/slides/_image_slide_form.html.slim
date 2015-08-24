@@ -27,3 +27,5 @@ h3 Image scaling options
 		| Background color. When the (scaled) slide image is smaller than the slide it will be centered on
 		   the slide and rest of the slide will be filled with solid color background.
 	= ff.color_field :background, value: slidedata[:background]
+p: b Choose the image to upload:
+= f.file_field :image
