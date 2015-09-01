@@ -18,7 +18,7 @@ inkscape plugin for creating more complex slides.
  * inkscape ( for external editing and converting some of the slides from .svg to .png)
  * postgresql (9.1)
  * rrdtool (1.4.7) for statistic collection and graph generation
- * iskdpy ( http://github.com/deram/iskdpy/ ) for running the slideshows
+ * iskdpy ( http://github.com/iskcrew/iskdpy/ ) for running the slideshows
 
 ## Installation
 
