@@ -4,6 +4,10 @@ System for centrally managing multiple screens running multiple presentation,
 possibly sharing slides / groups of slides. Has simple online-editor and a
 inkscape plugin for creating more complex slides.
 
+## Known issues
+
+ * Something might break the websocket-rails cross process syncronization resulting in the server not responding at all and requiring that the redis syncronization data is flushed. ./isk-server.rb force-restart does this for you. There are plans to migrate away from the websocket-rails library in the future.
+
 ## Runtime dependencies for production
 
  * Unix environment (linux or os x)
@@ -82,7 +86,7 @@ It is highly recomended that you first generate new session cookie encryption ke
 
 For performance you will want to have nginx in front of ISK for serving static files (slide images mostly). Example configuration for nginx is available at config/nginx/isk-server. Consult that file and update as needed.
 
-To run the ISK rails application in production mode set the RAILS_ENV environmental variable to 'production'. The script /isk-server gives a example for starting/stopping all the needed components.
+To run the ISK rails application in production mode set the RAILS_ENV environmental variable to 'production'. The script /isk-server.rb gives an example for starting/stopping all the needed components.
 
 For the default production configuration the server will expect precompiled javascript/css files, to generate them you need to run "rake assets:precompile" on the production environment.
 
