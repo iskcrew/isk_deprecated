@@ -76,9 +76,9 @@ This will initialize the database.
 
 Now you can start the local isk server instance with "rails s" and then navigate to http://localhost:3000/ with a browser. The default login for a new installation is username: admin password: admin.
 
-You also need to start the background process for isk to generate the slide images. This is done by running "bin/delayed_job start".
+You also need to start the background process for isk to generate the slide images. This is done by running "./isk-server.rb start resque" or "TERM_CHILD=1 BACKGROUND=yes PIDFILE=tmp/pids/resque.pid QUEUE=* rake resque:work".
 
-For periodic tasks, like updating schedule slides there is a another background daemon you can start it with, "script/background_jobs.rb start".
+For periodic tasks, like updating schedule slides there is a another background daemon you can start it with "./isk-server.rb start background_jobs" or "script/background_jobs.rb start".
 
 ### Production environment
 
