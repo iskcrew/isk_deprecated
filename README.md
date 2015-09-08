@@ -36,11 +36,13 @@ To get the dev environment running you need to do the following:
 1. redis (debian pkg: redis-server)
 2. memcached
 2. Imagemagick (we use 'convert' and 'identify' imagemagick CLI tools)
-3. postgresql + dev headers (postgresql postgresql-client libpg-dev)
+3. postgresql + dev headers (postgresql postgresql-client libpq-dev)
 4. inkscape
 5. rrdtool, librrd + dev headers (rrdtool, librrd4, librrd-dev)
 5. git
 6. curl
+
+The command "apt-get install redis-server memcached imagemagick postgresql postgresql-client libpq-dev inkscape rrdtool librrd4 librrd-dev git curl" should install all of the above in a debian based linux distribution.
 
 ### Rvm and rubies
 
