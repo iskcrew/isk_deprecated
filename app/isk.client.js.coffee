@@ -66,7 +66,9 @@ handle_hello = (display) ->
 
 handle_display = (display) ->
   console.debug "received display",  display
-    
+  
+  isk?.local_broker?.trigger 'presentation_changed', display
+  
   overs=document.createElement('div')
   overs.id='overrides'
   overs.appendChild create_slide s for s in display?.override_queue
