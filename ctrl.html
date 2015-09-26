@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="lib/tabs.css" media="all" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="lib/coffee-script.js"></script>
+
+<script type="text/coffeescript" src="app/isk.debug.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.local_message_broker.js.coffee"></script>
+
+<title>ISK-Display Local Controller</title>
+</head>
+<body>
+<div id="DPYCTRL">
+<div class="tabs" style="height: 650px">
+  <div id="tab1">
+    <a href="#tab1">Presentation</a>
+    <div id="presroot">
+    <h2>Display name: <span/></h1>
+    <h4>Presentation name: <span/></h1>
+    <h4>Overrides: <span/></h1>
+    <h4>Slides: <span/></h1>
+    <h4>Current: <span/></h1>
+
+    <script type="text/coffeescript">
+      isk.local_broker.register 'presentation_changed', (data) ->
+        fields= document.querySelectorAll('#presroot * span')
+        fields[0].innerHTML=data?.name
+        fields[1].innerHTML=data?.presentation?.name
+        fields[2].innerHTML=data?.override_queue?.length
+        fields[3].innerHTML=data?.presentation?.total_slides
+
+    </script>
+    </div>
+  </div>
+  <div id="tab2">
+    <a href="#tab2">Super Override</a>
+    <div>
+    </div>
+  </div>
+  <div id="tab3">
+    <a href="#tab3">Shader editor</a>
+    <div>
+      <textarea id='shadercode' rows=40 cols=80></textarea>
+      <br/>
+      <select id='sname'>
+      </select>
+      <select id='stype'>
+        <option>fs</option>
+        <option>vs</option>
+      </select>
+      <button id='load'>Load</button>
+      <button id='apply'>Apply</button>
+      <script type="text/coffeescript">
+        shaders=undefined
+        sname=document.querySelector('#sname')
+        stype=document.querySelector('#stype')
+        scode=document.querySelector('#shadercode')
+        isk.local_broker.register 'return shaders', (data) ->
+          shaders=data
+          sname.innerHTML=""
+          for name, value of shaders
+            o=document.createElement('option')
+            o.innerHTML=name
+            sname.appendChild(o)
+
+        document.querySelector('#load').addEventListener 'click', ->
+          scode.value = shaders[sname.value][stype.value]
+
+        document.querySelector('#apply').addEventListener 'click', ->
+          shaders[sname.value][stype.value] = scode.value
+          isk.local_broker.trigger 'set shaders', shaders
+
+        isk.local_broker.trigger 'get shaders'
+    </script>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

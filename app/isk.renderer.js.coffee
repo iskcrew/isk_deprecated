@@ -101,6 +101,27 @@ class IskDisplayRenderer
                 if value.fs? and value.vs?
                   value.material.needsUpdate=true
 
+  init_local_control_handlers: ->
+    isk.local_broker.register 'get shaders', @handle_get_shaders.bind(@)
+    isk.local_broker.register 'set shaders', @handle_set_shaders.bind(@)
+
+  handle_get_shaders: ->
+    shadercodes={}
+    for name, value of @shaders
+      do (name, value) =>
+        shadercodes[name]={}
+        for type in ['fs', 'vs']
+          shadercodes[name][type]=value[type]
+    isk.local_broker.trigger 'return shaders', shadercodes
+
+  handle_set_shaders: (shadercodes) ->
+    console.log "handle_set_shaders: ", shadercodes
+    for name, value of @shaders
+      do (name, value) =>
+        for type in ['fs', 'vs']
+          value.material[shadername[type]] = value[type] = shadercodes[name][type]
+        value.material.needsUpdate=true
+
   handle_window_size: =>
     elem=@renderer.domElement?.parentNode?.parentNode?.firstElementChild?.firstElementChild
     [w,h]=[elem?.clientWidth,elem?.clientHeight]
@@ -180,6 +201,7 @@ class IskDisplayRenderer
     @observer.observe(target, config)
 
   run: (stats=true) ->
+    @init_local_control_handlers()
     @init_renderer()
     @init_shaders 'effects'
     @init_observer document.querySelector('#pres')
