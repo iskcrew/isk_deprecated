@@ -116,21 +116,22 @@
   <div id="tab3">
     <a href="#tab3">Shader editor</a>
     <div>
-      <textarea id='shadercode' rows=40 cols=80></textarea>
+      <textarea id='s_code' rows=40 cols=80></textarea>
       <br/>
-      <select id='sname'>
+      <select id='s_name'>
       </select>
-      <select id='stype'>
+      <select id='s_type'>
         <option>fs</option>
         <option>vs</option>
       </select>
-      <button id='load'>Load</button>
-      <button id='apply'>Apply</button>
+      <button id='s_load'>Load</button>
+      <button id='s_apply'>Apply</button>
       <script type="text/coffeescript">
         shaders=undefined
-        sname=document.querySelector('#sname')
-        stype=document.querySelector('#stype')
-        scode=document.querySelector('#shadercode')
+        sname=document.querySelector('#s_name')
+        stype=document.querySelector('#s_type')
+        scode=document.querySelector('#s_code')
+
         isk.local_broker.register 'return shaders', (data) ->
           shaders=data
           sname.innerHTML=""
@@ -139,10 +140,10 @@
             o.innerHTML=name
             sname.appendChild(o)
 
-        document.querySelector('#load').addEventListener 'click', ->
+        document.querySelector('#s_load').addEventListener 'click', ->
           scode.value = shaders[sname.value][stype.value]
 
-        document.querySelector('#apply').addEventListener 'click', ->
+        document.querySelector('#s_apply').addEventListener 'click', ->
           shaders[sname.value][stype.value] = scode.value
           isk.local_broker.trigger 'set shaders', shaders
 
