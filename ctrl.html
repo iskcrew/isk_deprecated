@@ -7,6 +7,12 @@
 
 <script type="text/coffeescript" src="app/isk.debug.js.coffee"></script>
 <script type="text/coffeescript" src="app/isk.local_message_broker.js.coffee"></script>
+<style type='text/css'>
+  @font-face{
+     font-family: 'CustomFont';
+     src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf');
+  }
+</style>
 
 <title>ISK-Display Local Controller</title>
 </head>
@@ -36,6 +42,75 @@
   <div id="tab2">
     <a href="#tab2">Super Override</a>
     <div>
+      <div style='display:inline-block'>
+      <textarea id="o_editor" style="resize: none; font: 12pt CustomFont;" cols=30 rows=16></textarea>
+      <br />
+      <button id="o_update">Update</button>
+      <button id="o_show">Show</button>
+      <button id="o_hide">Hide</button>
+      </div>
+      <img height=240 width=380 id="o_preview"></img>
+      <script type="text/coffeescript">
+        svgNS = "http://www.w3.org/2000/svg"
+        xmlNS = "http://www.w3.org/XML/1998/namespace"
+
+        edit=document.querySelector('#o_editor')
+        preview=document.querySelector('#o_preview')
+        preview.src='/backgrounds/empty.png'
+
+        img=document.createElement('img')
+        img.src='/backgrounds/empty.png'
+
+        canvas=document.createElement('canvas')
+        ctx=canvas.getContext('2d')
+
+        [canvas.width,canvas.height]=[1920,1080]
+
+        drawStroked = (args...) ->
+          ctx.textBaseline = 'top'
+          ctx.font = "100pt CustomFont"
+          ctx.fillStyle = '#FFF'
+          ctx.strokeStyle = '#000'
+          ctx.lineWidth = 4
+          ctx.miterLimit = 2
+
+          ctx.fillText(args...)
+          ctx.strokeText(args...)
+
+        drawMultilineText = (text, x, y, h) ->
+          lines=text.split /\r\n|\n|\r/
+          for line, index in lines
+            if line == ""
+              y+=30
+            else
+              drawStroked line, x, y
+              y+=120
+
+
+        set = (text) ->
+          ctx.drawImage img, 0, 0
+          drawMultilineText text, 40, 40
+          canvas.toBlob (blob)->
+            durl=URL.createObjectURL blob
+
+            preview.ready = ->
+              URL.revokeObjectURL durl
+
+            preview.src=durl
+
+        document.querySelector('#o_update').addEventListener 'click', ->
+          console.debug 'Update Super Override'
+          set edit.value
+
+        document.querySelector('#o_show').addEventListener 'click', ->
+          console.debug 'Show Super Override'
+          isk.local_broker.trigger 'show superoverride', preview.src
+
+        document.querySelector('#o_hide').addEventListener 'click', ->
+          console.debug 'Hide Super Override'
+          isk.local_broker.trigger 'hide superoverride'
+
+      </script>
     </div>
   </div>
   <div id="tab3">
