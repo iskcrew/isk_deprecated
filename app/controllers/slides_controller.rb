@@ -106,6 +106,7 @@ class SlidesController < ApplicationController
 				# They need to be done after we know the slide id....
 				case params[:create_type]
 				when 'empty_file', 'inkscape'
+					# FIXME: Intialize the svg in the model!
 					@slide.svg_data = SimpleSlide.create_svg(SimpleSlide::DefaultSlidedata)
 				end
 
