@@ -1,3 +1,8 @@
+@font-face{
+    font-family: 'CustomFont';
+    src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf');
+}
+
 body {
     overflow: hidden;
     margin: 0px;

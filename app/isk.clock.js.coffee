@@ -1,20 +1,27 @@
 @isk or= {}
 
 elem = undefined
+ctx = undefined
 time = undefined
 shown = true
 old_t = ""
 
+t_pos = [1450, 1020]
+t_size = "70px"
+
 init = ->
-  elem=document.createElement('object')
-  elem.type="image/svg+xml"
-  elem.data="clock.svg"
-  elem?.addEventListener 'load', ->
-    svg=elem?.getSVGDocument()
-    svg.querySelector('svg')?.setAttribute('viewBox', "0 0 1920 1080")
-    clock=svg.querySelector('#clock')
-    time=clock?.children[0]?.childNodes[0]
-    run()
+  elem=document.createElement('canvas')
+  ctx=elem.getContext('2d')
+  elem.width=1920
+  elem.height=1080
+
+  ctx.font = t_size + " 'CustomFont'"
+  ctx.fillStyle = '#FFF'
+  ctx.strokeStyle = '#000'
+  ctx.lineWidth = 4
+  ctx.miterLimit = 2
+
+  run()
   document.querySelector('#ISKDPY div#clock').appendChild elem
 
 show = ->
@@ -29,14 +36,19 @@ hide = ->
   , 2000
   false
 
+drawStrokedText = (t) ->
+  ctx.clearRect(0, 0, elem.width, elem.height)
+  ctx.fillText(t, t_pos[0], t_pos[1])
+  ctx.strokeText(t, 1450, 1020)
+
 set_current_time = () ->
-  if time? and shown
+  if shown
     t=Math.floor(Date.now()/1000)
     if t != old_t
       old_t = t
       s = Date().split(' ')
       ts = [s[0], s[4]].join ' '
-      time?.nodeValue=ts
+      drawStrokedText(ts)
 
 run = (t) ->
   requestAnimationFrame run
@@ -49,4 +61,3 @@ setTimeout ->
 isk.clock =
   show: show
   hide: hide
-  elem: elem
