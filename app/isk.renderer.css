@@ -27,7 +27,7 @@ div#bgrs img {
     max-height: 100%;
 }
 
-div#clock object {
+div#clock canvas {
     display: block;
     height:unset;
     max-height: 100%;
