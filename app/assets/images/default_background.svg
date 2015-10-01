@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1920"
+   height="1080"
+   viewBox="0 0 1920.0001 1080"
+   id="svg3610"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   inkscape:export-filename="/Users/vpalmu/rails/isk/default_background.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:docname="default_background.svg">
+  <defs
+     id="defs3612" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.44166667"
+     inkscape:cx="1049.068"
+     inkscape:cy="540"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     borderlayer="true"
+     inkscape:window-width="1276"
+     inkscape:window-height="755"
+     inkscape:window-x="4"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3615">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,27.637308)">
+    <rect
+       style="fill:#ff0000"
+       id="rect3618"
+       width="1998"
+       height="1126"
+       x="-12"
+       y="-33.637367" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:90px;line-height:125%;font-family:Hack;-inkscape-font-specification:Hack;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="983.48438"
+       y="546.36261"
+       id="text3620"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3622"
+         x="983.48438"
+         y="546.36261"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle">This is the default background.</tspan><tspan
+         sodipodi:role="line"
+         x="983.48438"
+         y="646.36261"
+         id="tspan4424"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle">It is located at</tspan><tspan
+         sodipodi:role="line"
+         x="983.48438"
+         y="746.36261"
+         id="tspan4426"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle;fill:#ffff00">data/slides/backgrounds/empty.png</tspan><tspan
+         sodipodi:role="line"
+         x="983.48438"
+         y="846.36261"
+         id="tspan4428"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle">Change it and the base template</tspan><tspan
+         sodipodi:role="line"
+         x="1007.5469"
+         y="946.36267"
+         id="tspan4430"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle"><tspan
+   style="text-align:center;text-anchor:middle;fill:#ffff00"
+   id="tspan4432">data/templates/simple.svg</tspan> </tspan><tspan
+         sodipodi:role="line"
+         x="983.48438"
+         y="1046.3627"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:80.00000763px;font-family:Hack;-inkscape-font-specification:'Hack Bold';text-align:center;text-anchor:middle"
+         id="tspan4438">to suit your needs</tspan></text>
+  </g>
+</svg>
