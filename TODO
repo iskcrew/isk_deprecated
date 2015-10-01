@@ -4,18 +4,14 @@ BUGS / INCONSISTENCIES:
 		- Write more universal cloning system!
 	- Cloning adds slides to the front of a group!
 	- need to do proper template selection for prizegroups
-	- fix template initialization and creating new prizegroups properly
+		- tests need to be upgraded
 	- add a running number on all generated slides, like prize ceremonies etc
 	- check http_slides and write tests for them
 	- Move group deletion into a background task, websocket-rails doesn't like it otherwise...
 	- Add "defer multiple" functionality into schedules
 	- Add delete to schedules
-	
+	- create some bitmap tests with imagemagicks 'compare' tool
 
-- Rails 4.1 migration
-	- Use http://edgeguides.rubyonrails.org/active_support_instrumentation.html
-		- Performance metrics?
-	
 - Create nested controllers to split code from other massive controllers:
 	- SvgController for slide svg, singular resource
 	- OverrideController for displays
