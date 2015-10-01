@@ -126,7 +126,7 @@ Python plugins for Inkscape (c) Copyright 2015 Jarkko Räsänen.
 * app/assets/images/wait.gif by Jarkko Räsänen, cat photo by Vesa-Pekka Palmu
 * app/assets/images/isklogo_* by Jarkko Räsänen
 * app/assets/images/display_error.svg by Vesa-Pekka Palmu
-* data/slides/backgrounds/empty.png by Vesa-Pekka Palmu (source svg in app/assets/images/default_background.png)
+* data/slides/backgrounds/empty.png by Jarkko Räsänen
 * app/assets/images/ui-* from jquery themeroller
 * vendor/assets/javascripts/jquery-noty* from https://github.com/needim/noty with MIT license
 * vendor/assets/javascripts/jquery.timer.js from http://jchavannes.com/jquery-timer see file for license
