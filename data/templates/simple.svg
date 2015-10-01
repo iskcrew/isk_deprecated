@@ -96,7 +96,7 @@
        stroke="#000000"
        stroke-width="2"
        text-anchor="start"
-       sodipodi:linespacing="125%"
+       sodipodi:linespacing="100%"
        x="30"
        y="100">
       <tspan
@@ -112,7 +112,7 @@
        stroke="#000000"
        stroke-width="2"
        text-anchor="start"
-       sodipodi:linespacing="125%"
+       sodipodi:linespacing="100%"
        x="30"
        y="200">
       <tspan
