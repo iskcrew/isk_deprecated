@@ -8,6 +8,8 @@ varying vec2 Uv1;
 varying vec2 Uv2;
 varying vec2 Uv3;
 
+varying float diff;
+
 void main()
 {
     vec4 f1=texture2D(from, Uv1);
@@ -20,7 +22,9 @@ void main()
     vec4 e2=texture2D(empty, Uv2);
     vec4 e3=texture2D(empty, Uv3);
     
-    if ((length(f2-t2)>=0.1) && (length(t2-e2)>=0.1))
+    if (diff>=0.01) 
+        gl_FragColor = mix(f1, t1, transition_time);
+    else if ((length(f2-t2)>=0.1) && (length(t2-e2)>=0.1))
         gl_FragColor = mix(e1, t2, transition_time);
     else if ((length(f3-t3)>=0.1) && (length(f3-e3)>=0.1))
         gl_FragColor = mix(e1, f3, 1.0-transition_time);
