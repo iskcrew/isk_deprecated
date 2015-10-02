@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="9"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r"
+   sodipodi:docname="simple.svg">
+  <style
+     type="text/css"
+     id="style3">
+		@font-face{
+		font-family: 'Franklin Gothic Heavy';
+		src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf'),
+		     url('/fonts/Franklin_Gothic_Heavy-Regular.eot'); /* IE9 */
+		}
+
+		@font-face{
+		font-family: 'Franklin Gothic Heavy';
+		src: url('/fonts/Franklin_Gothic_Heavy-Italic.ttf'),
+		     url('/fonts/Franklin_Gothic_Heavy-Italic.eot'); /* IE9 */
+		font-style: italic;
+		}
+	</style>
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.76111111"
+     inkscape:cx="640"
+     inkscape:cy="360"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="true"
+     inkscape:window-width="1276"
+     inkscape:window-height="756"
+     inkscape:window-x="4"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3004"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       dotted="true" />
+    <sodipodi:guide
+       position="0,760"
+       orientation="0,240"
+       id="guide1" />
+    <sodipodi:guide
+       position="1280,760"
+       orientation="-200,0"
+       id="guide2" />
+  </sodipodi:namedview>
+  <metadata id="metadata1">178</metadata>
+  <g
+     inkscape:label="Background"
+     inkscape:groupmode="layer"
+     id="layer1"
+     sodipodi:insensitive="true">
+    <image
+       xlink:href="../../test/assets/testpattern_1080p.png"
+       id="background_picture"
+       width="16"
+       height="9"
+       x="0"
+       y="0" />
+  </g>
+</svg>
