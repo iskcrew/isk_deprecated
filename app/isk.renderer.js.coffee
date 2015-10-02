@@ -1,5 +1,9 @@
 @isk or= {}
 
+default_shader=
+  fs: 'uniform sampler2D to; varying vec2 vUv; void main() {gl_FragColor = texture2D(to, vec2(vUv));}'
+  vs: 'varying vec2 vUv; void main() {vUv=uv; gl_Position = vec4(position, 1.0);}'
+
 shadername=
   fs: 'fragmentShader'
   vs: 'vertexShader'
@@ -107,7 +111,7 @@ class IskDisplayRenderer
     @camera.updateProjectionMatrix()
 
   init_renderer: ->
-    @renderer = new THREE.WebGLRenderer({antialias: true})
+    @renderer = new THREE.WebGLRenderer({antialias: false, precision: 'lowp'})
     @renderer.setSize(window.innerWidth, window.innerHeight)
     @renderer.autoClear = false
 
@@ -128,7 +132,11 @@ class IskDisplayRenderer
          time: { type: "1f", value: 0.0 }
          delta_time: { type: "1f", value: 0.0 }
          transition_time: { type: "1f", value: 0.0 }
-    @default_material or= new THREE.MeshBasicMaterial(map: @tex_empty)
+
+    @default_material or= new THREE.ShaderMaterial(uniforms: @cu)
+    for type, code of default_shader
+      @default_material[shadername[type]]=code
+    @default_material.needsUpdate=true
     
     @mesh = new THREE.Mesh( geometry, @default_material )
     @scene.add( @mesh )
@@ -189,7 +197,7 @@ class IskDisplayRenderer
     THREEx?.FullScreen?.request()
 
   transition_start: (type) ->
-    @mesh.material=m if m=@shaders?[type]?['material']
+    @mesh.material = @shaders?[type]?['material'] or @default_material
     @cu.transition_time.value = 0.00000001
     @cu.time.value = 0
 
