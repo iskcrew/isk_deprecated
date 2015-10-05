@@ -31,6 +31,15 @@ div#clock canvas {
     display: block;
     height:unset;
     max-height: 100%;
+    transition: transform 1s ease-in-out;
+    -webkit-transition: -webkit-transform 1s ease-in-out;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+}
+
+div#clock canvas.hidden {
+    transform: translateY(15%);
+    -webkit-transform: translateY(15%);
 }
 
 div#canvas * {

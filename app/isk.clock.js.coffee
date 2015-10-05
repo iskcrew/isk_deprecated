@@ -25,11 +25,11 @@ init = ->
   document.querySelector('#ISKDPY div#clock').appendChild elem
 
 show = ->
-  elem.style='transition: 1s ease-in-out;transform: translateY(0)'
+  elem.classList.remove 'hidden'
   shown=true
 
 hide = ->
-  elem.style='transition: 1s ease-in-out;transform: translateY(15%)'
+  elem.classList.add 'hidden'
   shown='hiding'
   setTimeout ->
     shown=false if shown == 'hiding'
