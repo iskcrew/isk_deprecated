@@ -113,6 +113,136 @@
       </script>
     </div>
   </div>
+  <div id="tab_video">
+    <a href="#tab_video">Video player</a>
+    <div>
+    <div id=player>
+     <h1>Library</h1>
+     <select id=select multiple size=10>
+     <option value='videos/bunny.mp4'>bunny</option>
+     <option value='videos/sintel.mp4'>sintel</option>
+     <option value='videos/test.webm'>test</option>
+     </select>
+     <br/>
+     <input type="file" accept="video/*"/>
+     <br/>
+     </div>
+     <h1>Queue</h1>
+     <table>
+     <thead>
+      <tr>
+       <th style="min-width:10em">name</th>
+       <th style="min-width:20em">
+        buffer<br/>
+        progress
+       </th>
+       <th>state</th>
+      </tr>
+     </thead>
+     <template id="queue_line">
+      <tr class="line">
+       <td class="name">Test name</td>
+       <td align=center>
+        <progress class="buffer" max="1"></progress><br/>
+        <progress class="position" max="1"></progress><br/>
+        <span class=ctime>###</span> (-<span class=ltime>###</span>) / <span class=time>###</span>
+       </td>
+       <td class="state"></td>
+      </tr>
+     </template>
+     <tbody id="queue"></tbody>
+     </table>
+    </div>
+
+<script type="text/coffeescript">
+player=document.querySelector '#player'
+input=document.querySelector '#player input'
+selector=document.querySelector '#player select#select'
+time=document.querySelectorAll '#player #time *'
+buffer=document.querySelectorAll '#player #buffer *'
+queue=document.querySelector 'table #queue'
+template=document.querySelector 'template#queue_line'
+
+add_line_to_queue = (id, name) ->
+  l=document.importNode template.content, true
+
+  l.querySelector '.name'
+    .textContent=name
+
+  l.querySelectorAll 'span'
+    .textContent=""
+
+  l.children[0].id=id
+  queue.appendChild l
+  undefined
+
+
+isk.local_broker.register 'video canplaythrough', (id) ->
+  queue.querySelector("##{id} .state").classList.add 'canplaythrough'
+
+isk.local_broker.register 'video ended', (id) ->
+  queue.querySelector("##{id}").remove()
+  setTimeout play_next, 3000
+
+
+isk.local_broker.register 'video timeupdate', (id, ctime, dur) ->
+  if dur
+    left=dur-ctime
+    if ctime > 0.01
+      queue.querySelector("##{id} .state").classList.add 'playing'
+    if left < 0.01
+      queue.querySelector("##{id} .state").classList.add 'ended'
+    queue.querySelector("##{id} .ctime").textContent=ctime.toFixed(1)
+    queue.querySelector("##{id} .time").textContent=dur.toFixed(1)
+    queue.querySelector("##{id} .ltime").textContent=left.toFixed(1)
+    queue.querySelector("##{id} .position").value=ctime/dur
+
+isk.local_broker.register 'video progress', (id, ctime, dur) ->
+  if dur
+    left=dur-ctime
+    if left<=0.01
+      queue.querySelector("##{id} .state").classList.add 'finished'
+    queue.querySelector("##{id} .buffer").value=ctime/dur
+
+input.addEventListener 'change', ->
+  file=input.files[0]
+  if file
+    furl=URL.createObjectURL file
+    o=document.createElement 'option'
+    o.value=furl
+    o.innerHTML=file.name
+    selector.appendChild o
+
+button=(name, click) ->
+  e=document.createElement 'button'
+  e.innerHTML=name
+  e.onclick=click
+  player.appendChild e
+  e
+
+play_next= ->
+  selected=document.querySelector '#queue .line'
+  if selected?
+    isk.local_broker.trigger 'video play', selected.id
+  else
+    isk.local_broker.trigger 'hide superoverride'
+
+play= ->
+  isk.local_broker.trigger 'show superoverride', 'poster.png'
+  setTimeout play_next, 5000
+
+@b=
+  maxid: 0
+  queue: button 'queue', ->
+    selected=document.querySelectorAll '#select option:checked'
+    id="vid" + b.maxid++
+    add_line_to_queue id, selected[0].textContent
+    isk.local_broker.trigger 'video prepare', id, selected[0].value
+  play: button 'play queued', play
+  pause: button 'toggle pause', ->
+    isk.local_broker.trigger 'video pause'
+  </script>
+  </div>
   <div id="tab3">
     <a href="#tab3">Shader editor</a>
     <div>
