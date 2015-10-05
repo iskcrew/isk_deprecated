@@ -102,8 +102,8 @@ class IskDisplayRenderer
                   value.material.needsUpdate=true
 
   init_local_control_handlers: ->
-    isk.local_broker.register 'get shaders', @handle_get_shaders.bind(@)
-    isk.local_broker.register 'set shaders', @handle_set_shaders.bind(@)
+    isk?.local_broker?.register 'get shaders', @handle_get_shaders.bind(@)
+    isk?.local_broker?.register 'set shaders', @handle_set_shaders.bind(@)
 
   handle_get_shaders: ->
     shadercodes={}
@@ -112,7 +112,7 @@ class IskDisplayRenderer
         shadercodes[name]={}
         for type in ['fs', 'vs']
           shadercodes[name][type]=value[type]
-    isk.local_broker.trigger 'return shaders', shadercodes
+    isk?.local_broker?.trigger 'return shaders', shadercodes
 
   handle_set_shaders: (shadercodes) ->
     console.log "handle_set_shaders: ", shadercodes

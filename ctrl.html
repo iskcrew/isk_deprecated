@@ -29,7 +29,7 @@
     <h4>Current: <span/></h1>
 
     <script type="text/coffeescript">
-      isk.local_broker.register 'presentation_changed', (data) ->
+      isk?.local_broker?.register 'presentation_changed', (data) ->
         fields= document.querySelectorAll('#presroot * span')
         fields[0].innerHTML=data?.name
         fields[1].innerHTML=data?.presentation?.name
@@ -104,11 +104,11 @@
 
         document.querySelector('#o_show').addEventListener 'click', ->
           console.debug 'Show Super Override'
-          isk.local_broker.trigger 'show superoverride', preview.src
+          isk?.local_broker?.trigger 'show superoverride', preview.src
 
         document.querySelector('#o_hide').addEventListener 'click', ->
           console.debug 'Hide Super Override'
-          isk.local_broker.trigger 'hide superoverride'
+          isk?.local_broker?.trigger 'hide superoverride'
 
       </script>
     </div>
@@ -177,15 +177,15 @@ add_line_to_queue = (id, name) ->
   undefined
 
 
-isk.local_broker.register 'video canplaythrough', (id) ->
+isk?.local_broker?.register 'video canplaythrough', (id) ->
   queue.querySelector("##{id} .state").classList.add 'canplaythrough'
 
-isk.local_broker.register 'video ended', (id) ->
+isk?.local_broker?.register 'video ended', (id) ->
   queue.querySelector("##{id}").remove()
   setTimeout play_next, 3000
 
 
-isk.local_broker.register 'video timeupdate', (id, ctime, dur) ->
+isk?.local_broker?.register 'video timeupdate', (id, ctime, dur) ->
   if dur
     left=dur-ctime
     if ctime > 0.01
@@ -197,7 +197,7 @@ isk.local_broker.register 'video timeupdate', (id, ctime, dur) ->
     queue.querySelector("##{id} .ltime").textContent=left.toFixed(1)
     queue.querySelector("##{id} .position").value=ctime/dur
 
-isk.local_broker.register 'video progress', (id, ctime, dur) ->
+isk?.local_broker?.register 'video progress', (id, ctime, dur) ->
   if dur
     left=dur-ctime
     if left<=0.01
@@ -223,12 +223,12 @@ button=(name, click) ->
 play_next= ->
   selected=document.querySelector '#queue .line'
   if selected?
-    isk.local_broker.trigger 'video play', selected.id
+    isk?.local_broker?.trigger 'video play', selected.id
   else
-    isk.local_broker.trigger 'hide superoverride'
+    isk?.local_broker?.trigger 'hide superoverride'
 
 play= ->
-  isk.local_broker.trigger 'show superoverride', 'poster.png'
+  isk?.local_broker?.trigger 'show superoverride', 'poster.png'
   setTimeout play_next, 5000
 
 @b=
@@ -237,10 +237,10 @@ play= ->
     selected=document.querySelectorAll '#select option:checked'
     id="vid" + b.maxid++
     add_line_to_queue id, selected[0].textContent
-    isk.local_broker.trigger 'video prepare', id, selected[0].value
+    isk?.local_broker?.trigger 'video prepare', id, selected[0].value
   play: button 'play queued', play
   pause: button 'toggle pause', ->
-    isk.local_broker.trigger 'video pause'
+    isk?.local_broker?.trigger 'video pause'
   </script>
   </div>
   <div id="tab3">
@@ -262,7 +262,7 @@ play= ->
         stype=document.querySelector('#s_type')
         scode=document.querySelector('#s_code')
 
-        isk.local_broker.register 'return shaders', (data) ->
+        isk?.local_broker?.register 'return shaders', (data) ->
           shaders=data
           sname.innerHTML=""
           for name, value of shaders
@@ -275,9 +275,9 @@ play= ->
 
         document.querySelector('#s_apply').addEventListener 'click', ->
           shaders[sname.value][stype.value] = scode.value
-          isk.local_broker.trigger 'set shaders', shaders
+          isk?.local_broker?.trigger 'set shaders', shaders
 
-        isk.local_broker.trigger 'get shaders'
+        isk?.local_broker?.trigger 'get shaders'
     </script>
     </div>
   </div>

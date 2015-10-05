@@ -21,8 +21,8 @@ init = ->
     show()
   override.appendChild img
 
-  isk.local_broker.register 'show superoverride', set
-  isk.local_broker.register 'hide superoverride', hide
+  isk?.local_broker?.register 'show superoverride', set
+  isk?.local_broker?.register 'hide superoverride', hide
 
 setTimeout ->
   init()
