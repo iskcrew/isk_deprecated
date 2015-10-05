@@ -33,6 +33,16 @@ div#override * {
     max-height: 100%;
 }
 
+div#override {
+  transition: opacity 1s ease-in-out; 
+  -webkit-transition: opacity 1s ease-in-out; 
+  opacity: 0;
+}
+
+div#override.shown {
+  opacity: 1;
+}
+
 div#clock canvas {
     display: block;
     height:unset;

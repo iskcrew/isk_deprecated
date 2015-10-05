@@ -8,14 +8,13 @@ set = (url) ->
   img.src=url
 
 show = ->
-  override.style='transition: opacity 1s ease-in-out; opacity: 1'
+  override.classList.add 'shown'
 
 hide = ->
-  override.style='transition: opacity 1s ease-in-out; opacity: 0'
+  override.classList.remove 'shown'
 
 init = ->
   override = document.querySelector('#override')
-  override.style='opacity: 0'
   img = document.createElement('img')
   img.onload = ->
     show()
