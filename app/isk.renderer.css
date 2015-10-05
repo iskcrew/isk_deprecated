@@ -27,6 +27,12 @@ div#bgrs img {
     max-height: 100%;
 }
 
+div#override * {
+    display: block;
+    height:unset;
+    max-height: 100%;
+}
+
 div#clock canvas {
     display: block;
     height:unset;
