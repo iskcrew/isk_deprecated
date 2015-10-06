@@ -1,5 +1,8 @@
 @isk or= {}
 
+if not SharedWorker?
+  return
+
 worker=undefined
 port=undefined
 cbs={}
