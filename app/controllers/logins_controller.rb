@@ -23,13 +23,25 @@ class LoginsController < ApplicationController
 	def create
 		if user = User.authenticate(params[:username],params[:password])
 			# Login successful
+		  
+			# Extract the return url
+			blacklist = [login_path]
+		  last_url = session["login_return_to"]
+		  if blacklist.include?(last_url) || !last_url.present?
+		    return_url = slides_url
+		  else
+		    return_url = last_url
+		  end
+
 			reset_session # Protect from session fixation attacks
 			session[:user_id] = user.id
 			session[:username] = user.username
 			flash[:notice] = "Login successful"
 			# Either redirect to slide index or render the json response
 			respond_to do |format|
-				format.html { redirect_to slides_path }
+				format.html {
+					redirect_to return_url
+				}
 				format.json {
 					json = { message: flash[:notice], data: {username: user.username} }
 					render json: json.to_json

@@ -49,4 +49,17 @@ class LoginsControllerTest < ActionController::TestCase
 		assert_equal json['message'], 'Login invalid'
 	end
 	
+	test "return to url in session" do
+		data = @login_data
+		post :create, data, {login_return_to: slide_path(1)}
+		
+		assert_redirected_to slide_path(1)
+	end
+	
+	test "return to rul blacklist" do
+		data = @login_data
+		post :create, data, {login_return_to: login_path}
+		assert_redirected_to slides_path
+	end
+	
 end
