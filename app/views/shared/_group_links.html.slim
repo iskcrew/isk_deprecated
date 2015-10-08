@@ -5,13 +5,17 @@
 			
 			ul.nav.nav-pills.nav-stacked#group-nav
 				- @groups.chunk {|g| g.name.upcase.ord}.each do |ch, groups|
-					- if groups.size > 1
+					- if groups.size > 2
 						li.dropdown
 							a.dropdown-toggle data-toggle="dropdown" href="#" role="button"
-								= ch.chr
 								span.caret
+								=< ch.chr
+								span.number_of_groups
+									= "(#{groups.size})"
+								
 							ul.dropdown-menu.dropdown-menu-right
 								- groups.each do |group|
 									li: a.group_link href=("\#anchor_group_#{group.id}") #{group.name}
 					- else
-						li: a.group_link href=("\#anchor_group_#{groups.first.id}") #{groups.first.name}
+						- groups.each do |group|
+							li: a.group_link href=("\#anchor_group_#{group.id}") #{group.name}

@@ -11,6 +11,12 @@ div.group-list {
   margin-right: 150px;
 }
 
+div#group_links {
+	span.number_of_groups {
+		float: right;
+	}
+}
+
 // Table in add slides
 table#slide_selection {
 	max-width: 660px;
