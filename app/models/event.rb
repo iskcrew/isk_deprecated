@@ -62,7 +62,27 @@ class Event < ActiveRecord::Base
 				font_size: '72px',
 				linespacing: '100%'
 			}
+		},
+		# Simple editor settings
+		# FIXME: The default values assume 1920 x 1080 output resolution, need to make better support for 1280x720 defaultss..
+		simple: {
+			heading: {
+				# Settings for the header
+				font_size: 120,
+				# X and Y coordinates for the headings anchor
+				coordinates: [60, 130]
+			},
+			body: {
+				# Margins for the body text, they are used for centering and left/right align
+				# there is no automatic text wrap / flowing (svg doesn't have universal support for it)
+				margins: [60, 1920 - 30],
+				# The y coordinate for start of body, from the top of the slide
+				y_coordinate: 280
+			},
+			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400],
+			colors: ['Gold', 'Red', 'Orange', 'Yellow', 'PaleGreen', 'Aqua', 'LightPink']
 		}
+		
 	}.with_indifferent_access
 	
 	# Resolutions that are currently supported.
@@ -104,19 +124,9 @@ class Event < ActiveRecord::Base
 	# The configuration options for the simple editor
 	# FIXME: True dynamic settings!
 	def simple_editor_settings
-		settings = {
-			heading: {
-				font_size: 120,
-				coordinates: [500, 130]
-			},
-			body: {
-				margins: [550, picture_sizes[:full].first - 30],
-				y_coordinate: 280
-			},
-			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
-		}
+		settings = self.config[:simple]
 		if self.picture_sizes[:full] == SupportedResolutions[1]
-			settings[:font_sizes] = [80,90,100,120,160,200,300,400]
+			 settings[:font_sizes] = [80,90,100,120,160,200,300,400]
 		end
 		return settings
 	end
