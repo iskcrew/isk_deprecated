@@ -85,11 +85,25 @@ class EventsController < ApplicationController
 	
 	# Whitelist parameters for mass-assignment. We also deal with the resolution parameter.
 	def event_params
-		p = params.required(:event).permit(:name, :current)
-		if params[:resolution]
-			p[:picture_size] = Event::SupportedResolutions[params[:resolution].to_i]
-		end
-		return p
+		params.required(:event).permit(
+			:name,
+			:current,
+			:resolution,
+			:simple_heading_font_size,
+			:simple_heading_x,
+			:simple_heading_y,
+			:simple_body_margin_left,
+			:simple_body_margin_right,
+			:simple_body_y,
+			:schedules_per_slide,
+			:schedules_line_lenght,
+			:schedules_tolerance,
+			:schedules_subheader_fill,
+			:schedules_time_indent,
+			:schedules_event_indent,
+			:schedules_font_size,
+			:schedules_line_spacing
+		)
 	end
 	
 end
