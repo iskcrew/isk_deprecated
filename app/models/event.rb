@@ -20,6 +20,21 @@ class Event < ActiveRecord::Base
 	validates :name, uniqueness: true, presence: true
 	validates :current, inclusion: { in: [true, false] }	
 	validates :ungrouped, :thrashed, presence: true
+	validates :resolution,
+			:schedules_per_slide,
+			:schedules_line_length,
+			:schedules_tolerance,
+			:schedules_time_indent,
+			:schedules_event_indent,
+			:schedules_font_size,
+			:schedules_line_spacing,
+			:simple_heading_font_size,
+			:simple_heading_x,
+			:simple_heading_y,
+			:simple_body_margin_left,
+			:simple_body_margin_right,
+			:simple_body_y, presence: true, numericality: {only_integer: true}
+	validates :schedules_subheader_fill, presence: true
 	validate :ensure_one_current_event
 	
 	# Make sure there is only one current event
