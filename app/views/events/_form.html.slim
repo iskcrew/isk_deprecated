@@ -2,22 +2,27 @@
 	= f.error_messages
 	= f.text_field :name
 	= f.check_box :current
-	h2 Configuration
-	= f.select :resolution, Event::SupportedResolutions.collect.with_index {|r,i| ["#{r.first} x #{r.last}", i]}
-	h3 Simple editor and the base template
-	= f.number_field :simple_heading_font_size, append: "px"
-	= f.number_field :simple_heading_x
-	= f.number_field :simple_heading_y
-	= f.number_field :simple_body_margin_left
-	= f.number_field :simple_body_margin_right
-	= f.number_field :simple_body_y
-	h3 Schedule slides
-	= f.number_field :schedules_per_slide
-	= f.number_field :schedules_line_length
-	= f.number_field :schedules_tolerance, append: 'minutes'
-	= f.color_field :schedules_subheader_fill
-	= f.number_field :schedules_time_indent
-	= f.number_field :schedules_event_indent
-	= f.number_field :schedules_font_size, append: 'px'
-	= f.number_field :schedules_line_spacing, append: '%'
+	div.row
+		h2 Configuration
+		div.col-md-4
+			= f.select :resolution, Event::SupportedResolutions.collect.with_index {|r,i| ["#{r.first} x #{r.last}", i]}
+	div.row.clearfix
+		div.col-md-4
+			h3 Simple editor and the base template
+			= f.number_field :simple_heading_font_size, append: 'px'
+			= f.number_field :simple_heading_x, append: 'px'
+			= f.number_field :simple_heading_y, append: 'px'
+			= f.number_field :simple_body_margin_left, append: 'px'
+			= f.number_field :simple_body_margin_right, append: 'px'
+			= f.number_field :simple_body_y, append: 'px'
+		div.col-md-4
+			h3 Schedule slides
+			= f.number_field :schedules_per_slide
+			= f.number_field :schedules_line_length, append: 'characters'
+			= f.number_field :schedules_tolerance, append: 'minutes'
+			= f.color_field :schedules_subheader_fill
+			= f.number_field :schedules_time_indent, append: 'px'
+			= f.number_field :schedules_event_indent, append: 'px'
+			= f.number_field :schedules_font_size, append: 'px'
+			= f.number_field :schedules_line_spacing, append: '%'
 	= f.primary
