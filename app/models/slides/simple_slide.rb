@@ -24,6 +24,9 @@ class SimpleSlide < SvgSlide
 	HeadingSelector = 'text#header'
 	BodySelector = 'text#slide_content'
 	BackgroundSelector = 'image#background_picture'
+	Colors = ['Gold', 'Red', 'Orange', 'Yellow', 'PaleGreen', 'Aqua', 'LightPink']
+
+	validate :check_color
 
 	# If our slidedata chances mark the slide as not ready when saving it.
 	before_save do
@@ -129,6 +132,13 @@ class SimpleSlide < SvgSlide
 	end
 	
 	private
+	
+	# Validate that the highlight color is ok
+	def check_color
+		unless SimpleSlide::Colors.include? slidedata[:color]
+			errors.add :color, 'is not whitelisted'
+		end
+	end
 	
 	# Prepare the base template based on event config
 	def self.prepare_template(settings, size, background_image)

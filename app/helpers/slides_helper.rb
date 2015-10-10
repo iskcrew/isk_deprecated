@@ -224,7 +224,7 @@ module SlidesHelper
 	
 	# Colors for the simple editor
 	def simple_colors
-		double_array ['Gold', 'Red', 'Orange', 'Yellow', 'PaleGreen', 'Aqua', 'LightPink']
+		double_array SimpleSlide::Colors
 	end
 	
 	# Text align options for the simple editor
