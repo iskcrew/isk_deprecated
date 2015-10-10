@@ -24,6 +24,7 @@ class	ImageSlide < Slide
 	
 	after_save :save_image
 	validate :check_image
+	validate :check_bg_color
 
 	# Receive a new slide image.
 	# Since we might not have a ID yet just store it in a temp file for now.
@@ -54,6 +55,13 @@ class	ImageSlide < Slide
 				@_image_file = nil
 				errors.add :image, "wasn't a valid image file."
 			end
+		end
+	end
+	
+	# Validates that the background color is ok
+	def check_bg_color
+		unless slidedata[:background].match /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
+			errors.add :backgroud, 'must be valid css hex color'
 		end
 	end
 	
