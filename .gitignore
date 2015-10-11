@@ -61,6 +61,7 @@ Thumbs.db
 
 /config/database.yml
 /db/data.yml
+/isk_server.conf
 /.svn
 
 coverage

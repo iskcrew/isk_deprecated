@@ -1,27 +1,29 @@
 # nginx example configuration file for ISK
-# http://github.com/depili/isk
-# (c) Copyright 2013 Vesa-Pekka Palmu.
+# http://github.com/iskcrew/isk
+# (c) Copyright 2015 Vesa-Pekka Palmu.
 #
+# You need to update your servers hostname on line 15 and possibly the ssl settings if you want secure connections.
 
-# Upstream servers, eg. rails thin servers
+# Upstream servers, eg. rails thin servers. If you change the port from the default 12765 you need to update this.
 upstream isk {
-	server 127.0.0.1:12765 ;
+	server 127.0.0.1:12765;
 }
 
 # nginx server directive
 server {
+	# Update me with your hostname
+	server_name isk.example.com;
+
 	listen 80	default_server;
 	listen 443	default_server ssl;
 
-	root /var/isk/rails/isk/public;
+	# Document root, everything in this directory and above will be accessible.
+	root <%=isk_public %>;
 	index index.html index.htm;
 
-	# Update me with your hostname
-	server_name isk.example.com;
-	
 	# Rewrite the slides/123/backgrounds/foo.png to /backgrounds/foo.png
 	rewrite /backgrounds/(.*) /backgrounds/$1 break;
-	
+
 	# Disable limits on http request sizes.
 	# We are moving svg -files with possible large
 	# embedded images thru post-requests.
@@ -30,18 +32,17 @@ server {
 	# SSL certificate to use for https
 	#ssl_certificate		/etc/nginx/isk.crt;
 	#ssl_certificate_key /etc/nginx/isk.key;
-		
 	ssl_protocols		  SSLv3 TLSv1 TLSv1.1 TLSv1.2;
 	ssl_ciphers			  HIGH:!aNULL:!MD5;
 
 	# Default location directive
 	location / {
 		proxy_redirect	 	off;
-		
 		# Serve maintanance.html if it exists, then a file if it exists, then proxy to rails
 		try_files /system/maintenance.html $uri $uri/index.html $uri.html @ruby;
 	}
-	
+
+	# The static assets (javascript, css, images) that are generated with "rake assets:precompile"
 	location ~ ^/(assets)/  {
 	  root /path/to/public;
 	  gzip_static on; # to serve pre-gzipped version
@@ -60,24 +61,20 @@ server {
 		proxy_set_header Connection "upgrade";
 	}
 
-
 	# Location for the proxy requests to upstream server
 	location @ruby {
-		# Make sure to update this mapping for x-accel to work
-		proxy_set_header X-Accel-Mapping /var/isk/rails/isk/data/=/isk_data/;
-		
+		# The rails stack needs to know where to map the x-accel requests to for faster file serving.
+		proxy_set_header X-Accel-Mapping <%=isk_data %>=/isk_data/;
 		proxy_set_header	X-Real-IP  $remote_addr;
 		proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
 		proxy_set_header	Host $http_host;
-		
 		proxy_pass http://isk;
 	}
 
 	# Internal location for x-accel requests
 	location /isk_data/ {
-		alias /var/isk/rails/isk/data/;
+		alias <%=isk_data %>;
 		internal;
 	}
-
 }
 

@@ -87,11 +87,11 @@ For periodic tasks, like updating schedule slides there is a another background 
 
 It is highly recomended that you first generate new session cookie encryption keys ("rake secret") and update config/initializers/secret_token.rb, otherwise you will be vulnerable to session forgery.
 
-For performance you will want to have nginx in front of ISK for serving static files (slide images mostly) for performance reasons. Example configuration for nginx is available at config/nginx/isk-server. Consult that file and update as needed. If you can't use nginx as a front-end you need to edit config/environments/production.rb and enable serving of static assets and disable x-sendfile support.
+For performance you will want to have nginx in front of ISK for serving static files (slide images mostly) for performance reasons. Example configuration for nginx can be created by "rake isk:nginx". The file will have correct directories, but you still need to update it with the servers hostname. If you can't use nginx as a front-end you need to edit config/environments/production.rb and enable serving of static assets and disable x-sendfile support.
 
 For the default production configuration the server will expect precompiled javascript/css files, to generate them you need to run "rake assets:precompile" on the production environment.
 
-The RAILS_ENV environmental variable controls what environment configuration rails loads, so you also need to set it to "production". You can do this in your shells initialization files or by prepending all commands with "RAILS_ENV=production".
+The RAILS\_ENV environmental variable controls what environment configuration rails loads, so you also need to set it to "production". You can do this in your shells initialization files or by prepending all commands with "RAILS_ENV=production".
 
 #### The isk-server.rb script
 

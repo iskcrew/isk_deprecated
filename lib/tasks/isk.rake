@@ -1,4 +1,20 @@
 namespace :isk do
+	desc "Create nginx site configuration file"
+	task nginx: :environment do
+		template = Rails.root.join('lib', 'nginx.erb')
+		isk_public = Rails.root.join('public')
+		isk_data = Rails.root.join('data')
+		nginx_conf = Rails.root.join('isk_server.conf')
+		puts "Writing nginx configuration fragment to isk_server.conf"
+		abort "File exists!" if File.exists? nginx_conf
+		erb = ERB.new(File.read(template))
+		result = erb.result binding
+		File.open(nginx_conf, 'w') do |f|
+			f << result
+		end
+		puts "Configuration example created, update your hostname and copy to /etc/nginx/sites-available/ and enable."
+	end
+	
 	desc "Backup the database"
 	task sql_backup: :environment do
 		backup_file = Tempfile.new 'isk-database-backup'
