@@ -21,6 +21,7 @@ class ActiveSupport::TestCase
 	def init_slide_files(slide)
 		imagefile = Rails.root.join('test', 'assets','image.png').to_s
 		svgfile = Rails.root.join('test', 'assets', 'slide.svg').to_s
+		simple_slidedatafile = Rails.root.join('test', 'assets', 'simple_slidedata').to_s
 		
 		images = Array.new
 		
@@ -42,6 +43,10 @@ class ActiveSupport::TestCase
 			FileUtils.chmod 0600, slide.svg_filename.to_s
 		end
 		
+		if slide.is_a? SimpleSlide
+			FileUtils.cp simple_slidedatafile, slide.data_filename.to_s
+			FileUtils.chmod 0600, slide.data_filename.to_s
+		end
 	end
 	
 	

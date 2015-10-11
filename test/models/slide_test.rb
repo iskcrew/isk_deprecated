@@ -38,4 +38,29 @@ class SlideTest < ActiveSupport::TestCase
 		command = "compare #{@testpattern_1080p} #{slide.full_filename} /dev/null"
 		assert system(command), "Image differs after inkscape slide processing"
 	end
+	
+	test "simple slide update without modifying slidedata" do
+		init_slide_files slides(:simple)
+		slide = Slide.find(slides(:simple).id)
+		slide.name = 'Updated'
+		assert slide.save
+		assert slide.reload
+		assert slide.ready, "Slidedata updater marked slide as not ready when slidedata didn't change!"
+	end
+	
+	test "simple slide creation" do
+		slide = SimpleSlide.new(name: 'test slide')
+		slide.slidedata = {header: 'test slide'}
+		assert slide.save
+		assert_not slide.ready
+	end
+	
+	test "simple slide slidedata update" do
+		init_slide_files slides(:simple)
+		slide = Slide.find(slides(:simple).id)
+		slide.slidedata = {header: 'updated header'}
+		assert slide.save
+		assert slide.reload
+		assert_not slide.ready, "Slide is marked as ready even after changing the svg data."
+	end
 end
