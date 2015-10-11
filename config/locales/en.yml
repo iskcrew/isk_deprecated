@@ -15,6 +15,21 @@ en:
       event:
         name: 'Event name:'
         current: 'Current event:'
+        resolution: 'Slide resolution'
+        simple_heading_font_size: 'Heading font size'
+        simple_heading_x: 'Heading anchor x coordinate'
+        simple_heading_y: 'Heading acnhor y coordinate'
+        simple_body_margin_left: 'Left margin for body'
+        simple_body_margin_right: 'Right margin for body'
+        simple_body_y: 'Body anchor y coordinate'
+        schedules_per_slide: 'Maximum number of events per generated slide'
+        schedules_line_lenght: 'Maximum schedule event name length per row'
+        schedules_tolerance: 'Maximum time since event start to still show it'
+        schedules_subheader_fill: 'Fill color for subheaders'
+        schedules_time_indent: 'Left margin for event times'
+        schedules_event_indent: 'Left margin for event names'
+        schedules_font_size: 'Font size for times, event names and subheaders'
+        schedules_line_spacing: 'Line spacing for the event list'
       presentation:
         delay: "Slide duration (seconds)"
         effect_id: "Slide transition effect"

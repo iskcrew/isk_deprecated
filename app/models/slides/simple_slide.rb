@@ -137,7 +137,7 @@ class SimpleSlide < SvgSlide
 	def check_color
 		# Do not run this validation if slidedata hasn't been changed or loaded, as doing so will mark the slide as not ready
 		return true if @_slidedata.nil?
-		unless SimpleSlide::Colors.include? slidedata[:color]
+		unless Event.current.config[:simple][:colors].include? slidedata[:color]
 			errors.add :color, 'is not whitelisted'
 		end
 	end

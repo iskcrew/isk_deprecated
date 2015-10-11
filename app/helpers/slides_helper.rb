@@ -224,7 +224,7 @@ module SlidesHelper
 	
 	# Colors for the simple editor
 	def simple_colors
-		double_array SimpleSlide::Colors
+		double_array current_event.config[:simple][:colors]
 	end
 	
 	# Text align options for the simple editor

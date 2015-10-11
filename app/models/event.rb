@@ -20,6 +20,22 @@ class Event < ActiveRecord::Base
 	validates :name, uniqueness: true, presence: true
 	validates :current, inclusion: { in: [true, false] }	
 	validates :ungrouped, :thrashed, presence: true
+	validates :resolution,
+			:schedules_per_slide,
+			:schedules_line_length,
+			:schedules_tolerance,
+			:schedules_time_indent,
+			:schedules_event_indent,
+			:schedules_font_size,
+			:schedules_line_spacing,
+			:simple_heading_font_size,
+			:simple_heading_x,
+			:simple_heading_y,
+			:simple_body_margin_left,
+			:simple_body_margin_right,
+			:simple_body_y, presence: true, numericality: {only_integer: true}
+	validates :schedules_subheader_fill, presence: true,
+		format: {with: /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/, message: "must be css hex color"}
 	validate :ensure_one_current_event
 	
 	# Make sure there is only one current event
@@ -31,10 +47,6 @@ class Event < ActiveRecord::Base
 		
 	# Default config for events
 	DefaultConfig = {
-		full: { # Full slide image size
-			width: 1920,
-			height: 1080
-		},
 		preview: { # Preview image size
 			width:  400,
 			height: 225
@@ -43,25 +55,11 @@ class Event < ActiveRecord::Base
 			width: 128,
 			height: 72
 		},
-		schedules: {
-			# How many events to typeset per slide
-			events: {
-				per_slide: 9,
-				line_length: 30
-			},
-			# Show events at most this long in the past
-			time_tolerance: 15.minutes,
-			# ScheduleSlide config
-			slides: {
-				# Date subheaders
-				subheader_fill: '#e2e534',
-				indent: {
-					time: 50,
-					name: (50 + 230)
-				},
-				font_size: '72px',
-				linespacing: '100%'
-			}
+		# Simple editor settings
+		# FIXME: The default values assume 1920 x 1080 output resolution, need to make better support for 1280x720 defaultss..
+		simple: {
+			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400],
+			colors: ['Gold', 'Red', 'Orange', 'Yellow', 'PaleGreen', 'Aqua', 'LightPink']
 		}
 	}.with_indifferent_access
 	
@@ -91,32 +89,51 @@ class Event < ActiveRecord::Base
 	
 	#### Per event configuration
 	
-	# Read the stored configuration. Use default if blank.
+	# Read the stored configuration and present it as a hash
 	def config
-		if self[:config].blank?
-			self[:config] = DefaultConfig
-			return self[:config]
-		else
-			return DefaultConfig.merge self[:config]
-		end
+		hash = DefaultConfig
+		
+		hash[:full] = {
+			width: SupportedResolutions[self[:resolution]].first,
+			height: SupportedResolutions[self[:resolution]].last
+		}.with_indifferent_access
+		
+		hash[:schedules] = {
+			time_tolerance: self[:schedules_tolerance],
+			events: {
+				line_length: self[:schedules_line_length],
+				per_slide: self[:schedules_per_slide]
+			}.with_indifferent_access,
+			slides: {
+				font_size: "#{self[:schedules_font_size]}px",
+				linespacing: "#{self[:schedules_line_spacing]}%",
+				subheader_fill: self[:schedules_subheader_fill],
+				indent: {
+					time: self[:schedules_time_indent],
+					name: self[:schedules_event_indent]
+				}.with_indifferent_access
+			}.with_indifferent_access,
+		}.with_indifferent_access
+		
+		hash[:simple][:heading] = {
+			font_size: self[:simple_heading_font_size],
+			coordinates: [self[:simple_heading_x], self[:simple_heading_y]]
+		}.with_indifferent_access
+		
+		hash[:simple][:body] = {
+			margins: [self[:simple_body_margin_left], self[:simple_body_margin_right]],
+			y_coordinate: self[:simple_body_y]
+		}.with_indifferent_access
+		
+		return hash
 	end
 	
 	# The configuration options for the simple editor
 	# FIXME: True dynamic settings!
 	def simple_editor_settings
-		settings = {
-			heading: {
-				font_size: 120,
-				coordinates: [500, 130]
-			},
-			body: {
-				margins: [550, picture_sizes[:full].first - 30],
-				y_coordinate: 280
-			},
-			font_sizes: [48,50,60,70,80,90,100,120,160,200,300,400]
-		}
+		settings = self.config[:simple]
 		if self.picture_sizes[:full] == SupportedResolutions[1]
-			settings[:font_sizes] = [80,90,100,120,160,200,300,400]
+			 settings[:font_sizes] = [80,90,100,120,160,200,300,400]
 		end
 		return settings
 	end
@@ -124,10 +141,7 @@ class Event < ActiveRecord::Base
 	# Set the size for full slide pictures. Checks that the resolution is supported.
 	def picture_size=(size)
 		if SupportedResolutions.include? size
-			cnf = config
-			cnf[:full][:width] = size.first
-			cnf[:full][:height] = size.last
-			config = cnf
+			self[:resolution] = SupprotedResolutions.index(size)
 		else
 			raise ArgumentError, 'Resolution not supported'
 		end

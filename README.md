@@ -99,6 +99,23 @@ The isk-server.rb script is a easy way of starting/stopping all required process
 
 By default the script starts the rails web server on port 12765. You can change it by changing the WebServerPort constant in the start of the script.
 
+# Configuration
+
+Unfortunately a full web UI for all configuration of ISK is still work in progress. This means that you need to manage the slide background image and the base template by hand. Other configutation is managed from the web ui (admin->events->edit).
+
+## The background image
+
+The slide background image is located at data/slides/backgrounds/empty.png. This file should be a 1920x1080 or 1280x720 resolution PNG image that will serve as the background for all slides.
+
+## The base svg template
+
+ISK uses data/templates/simple.svg as the base for generating all slide svg files. This svg needs to have following elements:
+ * \<text\> element with id=header, this will be used for the slide heading
+ * \<text\> element with id=slide\_content, this will be use for the body of the slide
+ * \<image\> element with id=background\_picture, this will be used for the slide background
+
+The positioning and fill color of the text elements will be overridden by the per event configuration, but other attributes such as stroke color and width will remain. All other elements in the base template will be transfered to created slides as is.
+
 # Inkscape integration
 
 For more complex slides the best (and just about only) tool available is inkscape (http://inkscape.org). ISK includes two plugins for inkscape at inkscape/, the isk-new and isk-output. You need to place them in the inkscape extensions directory.
