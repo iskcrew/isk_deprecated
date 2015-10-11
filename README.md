@@ -53,8 +53,8 @@ To install rvm and the ruby version used by ISK:
 1. \curl -sSL https://get.rvm.io | bash -s stable
 2. source the rvm script file as instructed post-install
 3. run "rvm requirements" and install packages as needed
-4. "rvm install 2.1.1" to install ruby 2.1.1
-5. "rvm use 2.1.1" and "rvm gemset create isk" to initialize the gemset for isk 
+4. "rvm install 2.2.0" to install ruby 2.2.0
+5. "rvm use 2.2.0" and "rvm gemset create isk" to initialize the gemset for isk 
 
 ### Clone isk git repository
 
