@@ -320,7 +320,7 @@ class Slide < ActiveRecord::Base
 		# Export to file
 		command << " -e #{tmp_file.path} #{self.svg_filename}"
 		# Supress std-out reporting
-		command << ' >/dev/null'
+		command << ' 2>&1'
 
 		return command
 	end
