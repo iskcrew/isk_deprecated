@@ -56,8 +56,9 @@ Thumbs.db
 /tmp
 
 /data
-!/data/slides/schedule.svg.erb
-!/data/slides/simple.svg
+!/data/templates/simple.svg
+!/data/slides/backgrounds/empty.png
+!/data/no_image.jpg
 
 /config/database.yml
 /db/data.yml
