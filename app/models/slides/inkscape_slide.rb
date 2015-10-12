@@ -77,3 +77,6 @@ class InkscapeSlide < SvgSlide
 
 	private
 end
+
+# Require all STI children, this needs to be done so that InkscapeSlide.count et al select all inherited types
+require_dependency 'template_slide'

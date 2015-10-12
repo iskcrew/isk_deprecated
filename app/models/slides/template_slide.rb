@@ -33,5 +33,7 @@ class TemplateSlide < InkscapeSlide
 		end
 		return default
 	end
-
 end
+
+# Require all STI children, this needs to be done so that TemplateSlide.count et al select all inherited types
+require_dependency 'prize_slide'
