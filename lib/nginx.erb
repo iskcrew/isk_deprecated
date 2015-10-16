@@ -37,6 +37,9 @@ server {
 
 	# Default location directive
 	location / {
+		proxy_set_header  X-Real-IP  $remote_addr;
+		proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header  Host $http_host;
 		proxy_redirect	 	off;
 		# Serve maintanance.html if it exists, then a file if it exists, then proxy to rails
 		try_files /system/maintenance.html $uri $uri/index.html $uri.html @ruby;
@@ -44,19 +47,24 @@ server {
 
 	# The static assets (javascript, css, images) that are generated with "rake assets:precompile"
 	location ~ ^/(assets)/  {
-	  root /path/to/public;
-	  gzip_static on; # to serve pre-gzipped version
-	  expires max;
-	  add_header Cache-Control public;
+		gzip_static on;
+		add_header Cache-Control public;
+		expires 4w;
+		gzip on;
+		gzip_vary on;
+		gzip_proxied any;
+		gzip_disable "MSIE [1-6]\.";
+		gzip_comp_level 6;
+		gzip_types application/x-javascript text/css text/html image/x-icon image/png image/jpeg image/gif;
 	}
 
 	# proxy websocket connections to websocket-rails
 	location /websocket {
 		proxy_pass http://isk;
 		proxy_http_version 1.1;
-		proxy_set_header	X-Real-IP  $remote_addr;
-		proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header	Host $http_host;
+		proxy_set_header X-Real-IP  $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $http_host;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection "upgrade";
 	}
@@ -65,14 +73,17 @@ server {
 	location @ruby {
 		# The rails stack needs to know where to map the x-accel requests to for faster file serving.
 		proxy_set_header X-Accel-Mapping <%=isk_data %>=/isk_data/;
-		proxy_set_header	X-Real-IP  $remote_addr;
-		proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header	Host $http_host;
+		proxy_set_header X-Real-IP  $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $http_host;
 		proxy_pass http://isk;
 	}
 
 	# Internal location for x-accel requests
 	location /isk_data/ {
+		add_header Access-Control-Allow-Origin  "*";
+		add_header Access-Control-Allow-Methods: "GET, OPTIONS";
+		add_header Access-Control-Allow-Headers: "Content-Type, Authorization, X-Requested-With";
 		alias <%=isk_data %>;
 		internal;
 	}
