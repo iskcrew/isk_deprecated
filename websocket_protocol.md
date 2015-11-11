@@ -15,7 +15,7 @@ Commands are sent with a json serialized message in the following format
 ```JSON
 [
 	"command",
-	{"arg_1_":1}
+	{"arg_1":1}
 ]
 ```
 The command-string is the name of the command and the hash contains the command specific parameters.
