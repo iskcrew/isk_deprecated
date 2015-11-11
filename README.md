@@ -1,3 +1,6 @@
+# tubesock branch
+This is a **highly** experimental branch for swapping out the websocket-rails gem in favor of tubesock gem. Not suitable for production!
+
 # ISK - A web controlled slideshow system
 
 System for centrally managing multiple screens running multiple presentation,
