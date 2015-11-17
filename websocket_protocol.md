@@ -8,7 +8,15 @@ There are two kinds of websocket endpoints, one for the interface between the se
 The display interface is located at url /displays/:id/websocket where :id is the numeric id of the display. This connection will send updated display serializations as needed, receives updates from the display and handles the communication between the display remote control view and the display.
 
 #### Message format
-TBD, probably just the display serialization as is?
+The messages for updated display serializations will be in this json serialized format:
+```JSON
+[
+	"display",
+	"data",
+	{"id": 1}
+]
+```
+where the first two fields are constant and the third and final field contains a hash of the serialized display data.
 
 #### Commands
 Commands are sent with a json serialized message in the following format
@@ -40,7 +48,7 @@ The messages are json serialized arrays. Their content is as follows:
 ```JSON
 [
 	"object",
-	12,
+	"message_type",
 	{"key":1}
 ]
 ```
@@ -55,4 +63,10 @@ Where first element "object" is the class of object that this message is about a
 * slide
 * ticket
 
-The next element is the numeric id of the object. Last field is a list of the changed attributes and their new values as a hash.
+The next element is the type of the action that triggered the message. It is one of the following:
+* create, the object was created
+* update, the object was updated somehow
+* destroy, the object was deleted
+* updated_image, the image associated with the object was updated
+
+The last field is a hash representing the object that triggered the message. It will contain at least the key 'id' that contains the database id of the object. More comprehensive documentation of the different serializations TBW.
