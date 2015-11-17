@@ -36,8 +36,9 @@ class DisplayState < ActiveRecord::Base
 				message: msg
 			}
 			Rails.logger.error "Error has occured on display #{self.display_id} with message: '#{msg}'"
-			WebsocketRails[self.display.websocket_channel].trigger('error', data)
-			WebsocketRails['display'].trigger('error', data)
+			msg = IskMessage.new('display', 'error', data)
+			msg.send
+			msg.send(self.websocket_channel)
 		end
 	end
 	
