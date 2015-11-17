@@ -15,10 +15,20 @@ class TubesockController < ApplicationController
 			end
 
 			tubesock.onmessage do |m|
-				# TODO: handle incoming messages
-				# pub the message when we get one
-				# note: this echoes through the sub above
-				Rails.logger.debug "Got websocket message: #{m}"
+				begin
+					Rails.logger.debug "Got websocket message: #{m}"
+					msg = JSON.parse(m)
+					case msg[0]
+					when 'simple'
+						svg = SimpleSlide.create_svg(msg[1].symbolize_keys)
+						tubesock.send_data ["simple", svg].to_json
+					when 'template'
+					end
+				rescue
+					Rails.logger.error "Error handling websocket message #{m}"
+					redis_thread.kill
+					tubesock.close
+				end
 			end
       
 			tubesock.onclose do
