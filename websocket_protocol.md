@@ -40,7 +40,7 @@ The supported commands are
 * start, display tells the server that it is starting
 
 ### General notification interface
-The second websocket endpoint is at /websocket/general and it is used for updating all html views for users when the various objects are updated.
+The second websocket endpoint is at /isk-general and it is used for updating all html views for users when the various objects are updated.
 
 #### Message format
 The messages are json serialized arrays. Their content is as follows:
