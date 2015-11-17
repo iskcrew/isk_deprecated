@@ -64,7 +64,12 @@ $ ->
 		timer = setTimeout( confirm_reconnect, 5000 )
 	
 	initialize_websocket = ->
-		window.socket = new WebSocket "ws://#{window.location.host}/isk_general"
+		url = "#{window.location.host}/isk_general"
+		if window.location.protocol == 'https:'
+			url = "wss://#{url}"
+		else
+			url = "ws://#{url}"
+		window.socket = new WebSocket url
 		window.socket.onclose = (event) -> 
 			popup_connection_lost()
 		window.socket.onmessage = (event) ->
