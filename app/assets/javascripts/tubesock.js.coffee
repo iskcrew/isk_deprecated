@@ -63,6 +63,11 @@ $ ->
 		$('#svg_container').html(svg)
 		$('.updating_preview').hide()
 	
+	update_template_svg = (svg) ->
+		console.log "Got new SVG for template slide"
+		$('#template_svg').html(svg)
+		$('.updating_preview').hide()
+	
 	popup_connection_lost = ->
 		confirm_reconnect = ->
 			if confirm("Websocket connection lost. Try to reconnect?") then initialize_websocket()
@@ -90,5 +95,7 @@ $ ->
 						update_display_state(message[2])
 					when 'simple'
 						update_simple_svg(message[1])
+					when "template"
+						update_template_svg(message[1])
 	
 	initialize_websocket()

@@ -23,6 +23,9 @@ class TubesockController < ApplicationController
 						svg = SimpleSlide.create_svg(msg[1].symbolize_keys)
 						tubesock.send_data ["simple", svg].to_json
 					when 'template'
+						data = msg[1].symbolize_keys
+						svg = SlideTemplate.find(data[:template_id]).generate_svg(data)
+						tubesock.send_data ["template", svg].to_json
 					end
 				rescue
 					Rails.logger.error "Error handling websocket message #{m}"

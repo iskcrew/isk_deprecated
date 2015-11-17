@@ -27,22 +27,14 @@ $ ->
 			timer = setTimeout( callback, interval )
 		
 	update_preview = ->
-		got_template_svg = (task) ->
-			console.log("Got new svg")
-			$('#template_svg').html(task)
-			$('.updating_preview').hide()
-	
-		ws_error = (task) ->
-			alert('Error getting new SVG for preview')
-		
 		console.log("updating preview...")
-		msg = {}
-		msg["template_id"] = $('input#template_id').first().val()
+		data = {}
+		data["template_id"] = $('input#template_id').first().val()
 		$('.template_field').each ->
 			f = $(@)
-			msg[f.data('elementId')] = f.val()
-		console.log msg
-		window.dispatcher.trigger('svg.template', msg, got_template_svg, ws_error)
+			data[f.data('elementId')] = f.val()
+		msg = ['template', data]
+		window.socket.send(JSON.stringify(msg))
 	
 	delayed_sender = expire(update_preview, 500)
 	

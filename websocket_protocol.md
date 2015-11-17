@@ -104,3 +104,25 @@ If the command is successfull the server will respond by sending the following m
 ]
 ```
 the SVG_DATA is the whole svg DOM as one string.
+
+#### "template" command
+
+This command is for updating the svg preview when editing template slides. The format of the command is
+```JSON
+[
+	'template',
+	{
+		"template_id": 1,
+		"field_id1": "contents",
+		"field_id2": "contents2"
+	}
+]
+```
+Where template_id is the database id number of the template to use and the "field_id": "value" pairs are template specific text field identifiers and contents. The server will reply with:
+```JSON
+[
+	"template",
+	SVG_DATA
+]
+```
+Where SVG_DATA is the generated SVG DOM as a single string.
