@@ -17,8 +17,7 @@
 //= require bootstrap-sprockets
 //= require jquery.timer
 //= require jquery-noty.main
-// Websocket javascript client and instance bound to window
-//= require websocket_rails/main
+//= require tubesock
 // All javascript in the "main" directory
 //= require_tree ./main
 
