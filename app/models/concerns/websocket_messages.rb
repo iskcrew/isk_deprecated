@@ -54,10 +54,8 @@ module WebsocketMessages
 			data[:changes][k] = v.last unless (k == 'password') || (k == 'salt')
 		end
 		Rails.logger.debug "Sending #{data.to_s}"
-		trigger event, data
-		tubedata = [get_channel(), data]
-		Redis.new.publish "isk", tubedata.to_json
-		
+		msg = IskMessage.new(get_channel, event, data)
+		msg.send('isk_general')
 		
 		# If we have associated displays resend their data
 		if self.respond_to? :displays
@@ -70,10 +68,6 @@ module WebsocketMessages
 		end
 	end
 
-	def trigger(event, data)
-		WebsocketRails[get_channel].trigger(event, data)
-	end
-
 	def get_channel
 		return self.class.base_class.name.downcase
 	end
@@ -81,7 +75,8 @@ module WebsocketMessages
 	def display_datas
 		self.displays.each do |d|
 			data = d.to_hash
-			WebsocketRails[d.websocket_channel].trigger(:data, data)
+			msg = IskMessage.new('display', 'data', data)
+			msg.send(d.websocket_channel)
 		end
 	end
 

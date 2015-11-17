@@ -19,7 +19,6 @@
 //= require jquery-noty.main
 // Websocket javascript client and instance bound to window
 //= require websocket_rails/main
-//= require init_dispatcher
 // All javascript in the "main" directory
 //= require_tree ./main
 

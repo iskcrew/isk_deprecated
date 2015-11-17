@@ -59,7 +59,7 @@ Isk::Application.routes.draw do
 	root :to => 'slides#index'
 
 	get 'monitor', to: 'monitor#index'
-	get '/tubesock' => 'tubesock#chat'
+	get '/isk_general' => 'tubesock#general'
 
 	# Common acl grant / deny nesting
 	concern :acl do

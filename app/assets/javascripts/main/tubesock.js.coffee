@@ -1,14 +1,14 @@
 #
-#  websocket_updates.js.coffee
-#  isk
+# tubesock.js.coffee
+#  
+# Update the html views via websocket messages
 #
-#  Created by Vesa-Pekka Palmu on 2014-06-29.
-#  Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
+# Created by Vesa-Pekka Palmu on 2014-07-06.
+# Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
 #
 
 $ ->
-	
-	replace_slideitem = (slide) ->
+	update_slide = (slide) ->
 		# Check if the page contains this slide
 		if ($('div#slide_' + slide.id).length == 0) then return
 		
@@ -21,7 +21,7 @@ $ ->
 			dataType: 'script'
 		})
 	
-	replace_slide_image = (slide) ->
+	update_slide_image = (slide) ->
 		console.log('Updating slide images for slide id: ' + slide.id);
 		$('img#slide_full_' + slide.id).each (index, element) ->
 			console.log(' >Found full size images..')
@@ -58,21 +58,25 @@ $ ->
 			dataType: 'script'
 		})
 	
+	popup_connection_lost = ->
+		confirm_reconnect = ->
+			if confirm("Websocket connection lost. Try to reconnect?") then initialize_websocket()
+		timer = setTimeout( confirm_reconnect, 5000 )
 	
-	# Bind to websocket events
-	displays = window.dispatcher.subscribe('display');
-	displays.bind('update', update_display);
+	initialize_websocket = ->
+		window.socket = new WebSocket "ws://#{window.location.host}/isk_general"
+		window.socket.onclose = (event) -> 
+			popup_connection_lost()
+		window.socket.onmessage = (event) ->
+			if event.data.length
+				message = JSON.parse(event.data)
+				switch message[0]
+					when 'slide'
+						update_slide_image(message[2])
+						update_slide(message[2])
+					when 'display'
+						update_display(message[2])
+					when 'display_state'
+						update_display_state(message[2])
 	
-	display_states = window.dispatcher.subscribe('displaystate');
-	display_states.bind('update', update_display_state);
-	
-	slidelist = window.dispatcher.subscribe('slide');
-	slidelist.bind('update', replace_slideitem);
-	slidelist.bind('updated_image', replace_slide_image);
-	
-	tickets = window.dispatcher.subscribe('ticket');
-	tickets.bind('update', update_tickets)
-	tickets.bind('create', update_tickets)
-	
-	# Get the initial ticket states
-	update_tickets()
+	initialize_websocket()

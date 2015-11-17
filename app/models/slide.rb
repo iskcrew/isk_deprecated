@@ -260,7 +260,8 @@ class Slide < ActiveRecord::Base
 
 	# Send websocket-messages when a slides images have been updated
 	def updated_image_notifications
-		WebsocketRails['slide'].trigger(:updated_image, self.to_hash)
+		msg = IskMessage.new('slide', 'updated_image', self.to_hash)
+		msg.send
 	end
 
 	# Cache tag for all fragments depending on this slide
