@@ -8,7 +8,7 @@
 
 class IskMessage
 	attr_accessor :object, :type, :payload
-
+	
 	def initialize(object, type, payload)
 		@object = object
 		@type = type
@@ -28,5 +28,15 @@ class IskMessage
 	
 	def to_s
 		"#{@object}: #{@type} -> payload: #{@payload}"
+	end
+	
+	def send(channel = 'isk_general', redis_settings = {})
+		if $redis_pool
+			$redis_pool.with do |conn|
+			  conn.publish channel, self.encode
+			end
+		else
+			Redis.new(redis_settings).publish channel, self.encode
+		end
 	end
 end
