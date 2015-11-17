@@ -42,7 +42,7 @@ The supported commands are
 ### General notification interface
 The second websocket endpoint is at /isk-general and it is used for updating all html views for users when the various objects are updated.
 
-#### Message format
+### Message format
 The messages are json serialized arrays. Their content is as follows:
 
 ```JSON
@@ -70,3 +70,37 @@ The next element is the type of the action that triggered the message. It is one
 * updated_image, the image associated with the object was updated
 
 The last field is a hash representing the object that triggered the message. It will contain at least the key 'id' that contains the database id of the object. More comprehensive documentation of the different serializations TBW.
+
+### Commands
+The general endpoint supports two commands that generate svg previews. The commands are invoked by sending a message in the following format:
+```JSON
+[
+	'command',
+	{"data": value}
+]
+```
+The first element of the array is the name of the command ("simple" or "template") and the second element is a hash of all the command specific parameters.
+
+#### "simple" command
+
+This command generates a svg preview for the simple editor. The command is
+```JSON
+[
+	'simple',
+	{
+		"heading": "Slide heading",
+		"text": "Slide contents\n<with highlight>",
+		"text_size": 80,
+		"text_aling": 'left',
+		color: 'red'
+	}
+]
+```
+If the command is successfull the server will respond by sending the following message back:
+```JSON
+[
+	"simple",
+	SVG_DATA
+]
+```
+the SVG_DATA is the whole svg DOM as one string.
