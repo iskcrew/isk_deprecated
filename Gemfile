@@ -78,6 +78,9 @@ gem 'tubesock'
 # tubesock needs a threaded server, like puma
 gem 'puma'
 
+# ConnectionPool for sharing redis connections
+gem 'connection_pool'
+
 # f.error_messages
 gem 'dynamic_form'
 
