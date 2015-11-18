@@ -7,7 +7,7 @@ class TubesockController < ApplicationController
 			redis_thread = Thread.new do
 				# Needs its own redis connection to pub
 				# and sub at the same time
-				Redis.new.subscribe "isk_general" do |on|
+				Redis.new(Rails.configuration.x.redis).subscribe "isk_general" do |on|
 					on.message do |channel, message|
 						tubesock.send_data message
 					end
