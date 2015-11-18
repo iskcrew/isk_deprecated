@@ -17,32 +17,6 @@ WebsocketRails::EventMap.describe do
 
 	# Check user permissions on :client_connected
 	subscribe :client_connected, to: AuthorizationController, with_method: :new_connection
-
-
-	# Events for creating various svg previews for slide editors
-	namespace :svg do
-		# Create a new svg from suplied data using the SimpeSlide.create_svg method
-		# data = {
-		#		simple: {
-		#			heading: 'Slide heading',
-		#			text: 'Slide contents...',
-		#			color: Red,		# hilight color
-		#			text_size: 72,
-		#			text_align: 'left' # left, right or centered
-		#		}
-		# }
-		subscribe :simple,				to: SvgController, with_method: :simple
-		
-		# Create a svg based on a SlideTemplate
-		# data = {
-		# 	template_id: id of the SlideTemplate to use
-		#   field_id: 'text to insert'
-		#   field_id2: 'text to insert'
-		#   .... for all editable fields in the template
-		# }
-		# return the created svg as the data payload on success message
-		subscribe :template,			to: SvgController, with_method: :template
-	end
 	
 	# Handle disconnecting displays
 	subscribe :client_disconnected, to: IskdpyController, :with_method => :client_disconnect
