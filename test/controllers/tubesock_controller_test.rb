@@ -11,16 +11,19 @@ class TubesockControllerTest < ActionController::TestCase
 	def teardown
 	end
 	
-	test "hello?" do
+	test "invalid message" do
 		tube :general, nil, @adminsession, ['asd'].to_json
+		assert tubesock_output.empty?
 	end
 	
-	test "data collection" do
+	test "simple svg generation" do
 		msg = IskMessage.new('simple','svg', {
 			heading: 'Websocket test',
 			text: 'Houston, we have <connection>!'
 		})
+		
 		tube :general, nil, @adminsession, msg.encode
+		
 		assert_not tubesock_output.empty?
 		msg = IskMessage.from_json tubesock_output.first
 		assert msg.object == 'simple'
@@ -28,5 +31,4 @@ class TubesockControllerTest < ActionController::TestCase
 		assert msg.payload.include? 'Houston, we have'
 		assert_not msg.payload.include? '<connection>'
 	end
-	
 end
