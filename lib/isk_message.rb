@@ -12,7 +12,11 @@ class IskMessage
 	def initialize(object, type, payload)
 		@object = object
 		@type = type
-		@payload = HashWithIndifferentAccess.new(payload)
+		if payload.is_a? Hash
+			@payload = HashWithIndifferentAccess.new(payload)
+		else
+			@payload = payload
+		end
 	end
 	
 	# Parse a new IskMessage instance from json string
