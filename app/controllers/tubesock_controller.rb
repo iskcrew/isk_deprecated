@@ -17,15 +17,16 @@ class TubesockController < ApplicationController
 			tubesock.onmessage do |m|
 				begin
 					Rails.logger.debug "Got websocket message: #{m}"
-					msg = JSON.parse(m)
-					case msg[0]
+					msg = IskMessage.from_json(m)
+					case msg.object
 					when 'simple'
-						svg = SimpleSlide.create_svg(msg[1].symbolize_keys)
-						tubesock.send_data ["simple", svg].to_json
+						msg.payload = SimpleSlide.create_svg(msg.payload)
+						Rails.logger.debug "Sending data: #{msg}"
+						tubesock.send_data msg.encode
 					when 'template'
-						data = msg[1].symbolize_keys
-						svg = SlideTemplate.find(data[:template_id]).generate_svg(data)
-						tubesock.send_data ["template", svg].to_json
+						data = msg.payload
+						msg.payload = SlideTemplate.find(data[:template_id]).generate_svg(data)
+						tubesock.send_data msg.encode
 					end
 				rescue
 					Rails.logger.error "Error handling websocket message #{m}"

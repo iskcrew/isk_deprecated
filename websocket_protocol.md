@@ -23,6 +23,7 @@ Commands are sent with a json serialized message in the following format
 ```JSON
 [
 	"command",
+	"reserved",
 	{"arg_1":1}
 ]
 ```
@@ -75,24 +76,26 @@ The last field is a hash representing the object that triggered the message. It 
 The general endpoint supports two commands that generate svg previews. The commands are invoked by sending a message in the following format:
 ```JSON
 [
-	'command',
+	"command",
+	"reserved"
 	{"data": value}
 ]
 ```
-The first element of the array is the name of the command ("simple" or "template") and the second element is a hash of all the command specific parameters.
+The first element of the array is the name of the command ("simple" or "template") and the second element is ignored for now. Last element is a hash of all the command specific parameters.
 
 #### "simple" command
 
 This command generates a svg preview for the simple editor. The command is
 ```JSON
 [
-	'simple',
+	"simple",
+	"svg"
 	{
 		"heading": "Slide heading",
 		"text": "Slide contents\n<with highlight>",
 		"text_size": 80,
-		"text_aling": 'left',
-		color: 'red'
+		"text_aling": "left",
+		"color": "red"
 	}
 ]
 ```
@@ -100,6 +103,7 @@ If the command is successfull the server will respond by sending the following m
 ```JSON
 [
 	"simple",
+	"svg",
 	SVG_DATA
 ]
 ```
@@ -110,7 +114,8 @@ the SVG_DATA is the whole svg DOM as one string.
 This command is for updating the svg preview when editing template slides. The format of the command is
 ```JSON
 [
-	'template',
+	"template",
+	"svg",
 	{
 		"template_id": 1,
 		"field_id1": "contents",
@@ -122,6 +127,7 @@ Where template_id is the database id number of the template to use and the "fiel
 ```JSON
 [
 	"template",
+	"svg",
 	SVG_DATA
 ]
 ```

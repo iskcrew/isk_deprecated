@@ -18,7 +18,7 @@ $ ->
 			text_align: $("#simple_text_align").val(),
 			color: $("#simple_color").val(),
 		}
-		msg = ['simple', data]
+		msg = ['simple', 'svg',data]
 		window.socket.send(JSON.stringify(msg))
 	
 	delayed_update = ->

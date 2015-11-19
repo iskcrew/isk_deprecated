@@ -85,6 +85,7 @@ $ ->
 		window.socket.onmessage = (event) ->
 			if event.data.length
 				message = JSON.parse(event.data)
+				console.log "incoming data: #{message[0]}"
 				switch message[0]
 					when 'slide'
 						update_slide_image(message[2])
@@ -94,8 +95,8 @@ $ ->
 					when 'display_state'
 						update_display_state(message[2])
 					when 'simple'
-						update_simple_svg(message[1])
+						update_simple_svg(message[2])
 					when "template"
-						update_template_svg(message[1])
+						update_template_svg(message[2])
 	
 	initialize_websocket()
