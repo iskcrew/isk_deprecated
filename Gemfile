@@ -73,7 +73,7 @@ gem 'ranked-model'
 gem 'thin'
 
 # Tubesock websocket library
-gem 'tubesock'
+gem 'tubesock', github: 'ngauthier/tubesock', ref: '3074cef'
 
 # tubesock needs a threaded server, like puma
 gem 'puma'
