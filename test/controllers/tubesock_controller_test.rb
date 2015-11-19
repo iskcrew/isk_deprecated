@@ -31,4 +31,20 @@ class TubesockControllerTest < ActionController::TestCase
 		assert msg.payload.include? 'Houston, we have'
 		assert_not msg.payload.include? '<connection>'
 	end
+	
+	test "slide template svg generation" do
+		skip "Needs SlideTemplate fixtures"
+		
+		msg = IskMessage.new('simple','svg', {
+			template_id: 1,
+			field1: 'Test string'
+		})
+		
+		tube :general, nil, @adminsession, msg.encode
+		
+		assert_not tubesock_output.empty
+		msg = IskMessage.from_json tubesock_output.first
+		assert msg.object == 'template'
+		assert msg.payload.include? 'Test string'
+	end
 end
