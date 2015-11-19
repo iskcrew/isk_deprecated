@@ -21,7 +21,6 @@ class TubesockController < ApplicationController
 					case msg.object
 					when 'simple'
 						msg.payload = SimpleSlide.create_svg(msg.payload)
-						Rails.logger.debug "Sending data: #{msg}"
 						tubesock.send_data msg.encode
 					when 'template'
 						data = msg.payload
