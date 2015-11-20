@@ -111,5 +111,13 @@ module TestTubesock
 		def tubesock_output
 			@controller.tubesock_output
 		end
+		
+		def assert_one_sent_message(object, type)
+			assert_equal 1, tubesock_output.count, "Should have replied with one message"
+			assert msg = IskMessage.from_json(tubesock_output.first), "Message should be in proper format"
+			assert_equal object, msg.object, "Message should be about #{object}"
+			assert_equal type, msg.type, "Message type should be #{type}"
+			return msg
+		end
 	end
 end
