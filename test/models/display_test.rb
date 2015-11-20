@@ -112,11 +112,6 @@ class DisplayTest < ActiveSupport::TestCase
 			d.add_to_override(s, 30)
 		end
 
-		messages = redis_messages.collect {|m| IskMessage.from_json(m)}
-		messages.each do |m|
-			assert messages.first.payload == m.payload
-		end
-		
 		assert_one_isk_message('display', 'data')
 	end
 	
