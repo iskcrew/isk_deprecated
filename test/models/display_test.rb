@@ -101,10 +101,8 @@ class DisplayTest < ActiveSupport::TestCase
 			d.presentation = nil
 			assert d.save
 		end
-		assert_equal 1, redis_messages.count, "Should trigger websocket notification"
-		msg = IskMessage.from_json redis_messages.first
-		assert_equal 'display', msg.object, "Should get a message about a display"
-		assert_equal 'data', msg.type, "Should get a message with the display data"
+		
+		assert_one_isk_message('display', 'data')
 	end
 	
 	test "notifications on new override" do
@@ -113,9 +111,22 @@ class DisplayTest < ActiveSupport::TestCase
 		with_redis(d.websocket_channel) do
 			d.add_to_override(s, 30)
 		end
-		assert_equal 1, redis_messages.count, "Should trigger one websocket notification"
-		msg = IskMessage.from_json redis_message.first
-		assert_equal 'display', msg.object, 'Should get a message about a display'
+
+		messages = redis_messages.collect {|m| IskMessage.from_json(m)}
+		messages.each do |m|
+			assert messages.first.payload == m.payload
+		end
+		
+		assert_one_isk_message('display', 'data')
+	end
+	
+	test "notifications on override shown" do
+		d = displays(:with_overrides)
+		with_redis(d.websocket_channel) do
+			d.override_shown 1
+		end
+		
+		assert_one_isk_message('display', 'data')
 	end
 
 end
