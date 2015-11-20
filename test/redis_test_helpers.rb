@@ -44,4 +44,12 @@ module	RedisTestHelpers
 	def redis_messages
 		@subscriber[:messages]
 	end
+	
+	def assert_one_isk_message(object, type)
+		assert_equal 1, redis_messages.count, "Should have received one message"
+		assert msg = IskMessage.from_json(redis_messages.first), "Message should be in proper format"
+		assert_equal object, msg.object, "Message should be about #{object}"
+		assert_equal type, msg.type, "Message should have type #{type}"
+		return msg
+	end
 end
