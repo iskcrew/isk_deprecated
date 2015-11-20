@@ -4,8 +4,7 @@ class DisplayTest < ActiveSupport::TestCase
   test "hello on existing display" do
 		d = Display.hello 'Normal', '127.0.0.1'
 		
-		assert_equal d.id, displays(:normal).id, "Got wrong display"
-		
+		assert_equal d.id, displays(:normal).id, "Got wrong display"		
 	end
 	
 	test "hello on new display" do
@@ -65,7 +64,6 @@ class DisplayTest < ActiveSupport::TestCase
 		assert_equal 1, d.override_queues.count
 		assert_equal 60, d.override_queues.first!.duration
 		assert_equal s.id, d.override_queues.first!.slide_id
-		
 	end
 	
 	test "late?" do
@@ -81,7 +79,6 @@ class DisplayTest < ActiveSupport::TestCase
 		h = displays(:no_presentation).to_hash
 		assert h[:id] = displays(:no_presentation).id, "Hash had wrong display id"
 		assert h[:presentation].empty?, "Hash contained a presentation"
-		
 	end
 	
 	test "destroy a display" do
@@ -93,8 +90,6 @@ class DisplayTest < ActiveSupport::TestCase
 				assert d.destroy, "Failed to destroy the display"
 			end
 		end
-		
 	end
-
 	
 end
