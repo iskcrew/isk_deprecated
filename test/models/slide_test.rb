@@ -58,11 +58,10 @@ class SlideTest < ActiveSupport::TestCase
 			assert slide.save
 			assert_not slide.ready
 		end
-		assert_equal 1,redis_messages.count
+		assert_equal 1,redis_messages.count, "Creating new slide should send one websocket notification"
 		msg = IskMessage.from_json(redis_messages.first)
-		assert_equal 'slide', msg.object
-		assert_equal 'create', msg.type
-		
+		assert_equal 'slide', msg.object, "The message should be about slides"
+		assert_equal 'create', msg.type, "Message should be of type create"
 	end
 	
 	test "simple slide slidedata update" do
