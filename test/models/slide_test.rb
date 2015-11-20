@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'redis_test_helpers'
 
 class SlideTest < ActiveSupport::TestCase
+	include RedisTestHelpers
+	
 	def setup
 		Slide.send(:remove_const, :FilePath)
 		Slide.const_set(:FilePath, Rails.root.join('tmp','test'))
@@ -49,10 +52,17 @@ class SlideTest < ActiveSupport::TestCase
 	end
 	
 	test "simple slide creation" do
-		slide = SimpleSlide.new(name: 'test slide')
-		slide.slidedata = {header: 'test slide'}
-		assert slide.save
-		assert_not slide.ready
+		with_redis do
+			slide = SimpleSlide.new(name: 'test slide')
+			slide.slidedata = {header: 'test slide'}
+			assert slide.save
+			assert_not slide.ready
+		end
+		assert_equal 1,redis_messages.count
+		msg = IskMessage.from_json(redis_messages.first)
+		assert_equal 'slide', msg.object
+		assert_equal 'create', msg.type
+		
 	end
 	
 	test "simple slide slidedata update" do
