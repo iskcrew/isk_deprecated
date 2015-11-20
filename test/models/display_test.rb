@@ -1,7 +1,10 @@
 require 'test_helper'
+require 'redis_test_helpers'
 
 class DisplayTest < ActiveSupport::TestCase
-  test "hello on existing display" do
+	include RedisTestHelpers
+	
+	test "hello on existing display" do
 		d = Display.hello 'Normal', '127.0.0.1'
 		
 		assert_equal d.id, displays(:normal).id, "Got wrong display"		
@@ -92,4 +95,16 @@ class DisplayTest < ActiveSupport::TestCase
 		end
 	end
 	
+	test "notifications on presentation change" do
+		d = displays(:normal)
+		with_redis(d.websocket_channel) do 
+			d.presentation = nil
+			assert d.save
+		end
+		assert_equal 1, redis_messages.count, "Should trigger websocket notifications"
+		msg = IskMessage.from_json redis_messages.first
+		assert_equal 'display', msg.object, "Should get a message about a display"
+		assert_equal 'data', msg.type, "Should get a message with the display data"
+	end
+
 end
