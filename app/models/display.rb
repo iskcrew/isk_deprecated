@@ -64,7 +64,6 @@ class Display < ActiveRecord::Base
 		oq.duration = duration
 		oq.effect = effect
 		oq.slide = slide
-		self.touch
 		oq.save!
 	end
 	
