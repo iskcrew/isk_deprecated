@@ -24,9 +24,7 @@ class TubesockControllerTest < ActionController::TestCase
 		
 		tube :general, nil, @adminsession, msg.encode
 		
-		assert_not tubesock_output.empty?
-		msg = IskMessage.from_json tubesock_output.first
-		assert msg.object == 'simple'
+		msg = assert_one_sent_message('simple', 'svg')
 		assert msg.payload.include? 'Websocket test'
 		assert msg.payload.include? 'Houston, we have'
 		assert_not msg.payload.include? '<connection>'
@@ -42,8 +40,7 @@ class TubesockControllerTest < ActionController::TestCase
 		
 		tube :general, nil, @adminsession, msg.encode
 		
-		assert_not tubesock_output.empty
-		msg = IskMessage.from_json tubesock_output.first
+		msg = assert_one_sent_message('template', 'svg')
 		assert msg.object == 'template'
 		assert msg.payload.include? 'Test string'
 	end
