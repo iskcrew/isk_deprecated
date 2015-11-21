@@ -24,14 +24,7 @@ class Presentation < ActiveRecord::Base
 	before_create do |p|
 		p.event = Event.current
 	end
-	
-	# Touch associated displays
-	after_save do |p|
-		p.displays.each do |d|
-			d.touch
-		end
-	end
-	
+		
 	# Module that contains our ACL logic.
 	include ModelAuthorization
 	# Send websocket messages on create and update
