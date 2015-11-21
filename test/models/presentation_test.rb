@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'redis_test_helpers'
 
 class PresentationTest < ActiveSupport::TestCase
+	include RedisTestHelpers
+	
 	test 'create presentation' do
 		p = Presentation.new
 		p.name = "Test presentation"
@@ -31,8 +34,7 @@ class PresentationTest < ActiveSupport::TestCase
 		
 		assert_equal 2, p.groups.count
 		assert_equal 2, p.total_slides
-		assert_equal 2, p.public_slides.count
-		
+		assert_equal 2, p.public_slides.count	
 	end
 	
 	test "slide order" do
@@ -48,9 +50,7 @@ class PresentationTest < ActiveSupport::TestCase
 	
 	test "duration" do
 		assert_equal 0, presentations(:empty).duration
-		
 		assert_equal 13 * 20, presentations(:with_slides).duration
-		
 		assert_equal 10 * 50 + 10, presentations(:with_special_duration).duration
 	end
 	
@@ -108,4 +108,13 @@ class PresentationTest < ActiveSupport::TestCase
 		end
 	end
 	
+	test "notifications to displays" do
+		p = presentations(:with_slides)
+		d = p.displays.sample
+		with_redis(d.websocket_channel) do
+			p.delay = 200
+			assert p.save
+		end
+		assert_one_isk_message('display', 'data')
+	end
 end
