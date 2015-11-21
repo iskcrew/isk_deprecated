@@ -117,4 +117,15 @@ class SlideTest < ActiveSupport::TestCase
 		end
 		assert_one_isk_message('slide', 'update')
 	end
+	
+	test "notifications on group change" do
+		s = slides(:ungrouped)
+		mg = master_groups(:one_slide)
+		d = mg.displays.sample
+		with_redis(d.websocket_channel) do
+			s.master_group = mg
+			assert s.save
+		end
+		assert_one_isk_message('display', 'data')
+	end
 end
