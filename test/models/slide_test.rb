@@ -72,4 +72,49 @@ class SlideTest < ActiveSupport::TestCase
 		assert slide.reload
 		assert_not slide.ready, "Slide is marked as ready even after changing the svg data."
 	end
+	
+	test "notifications to associated displays" do
+		s = slides(:slide_1)
+		d = s.displays.sample
+		with_redis(d.websocket_channel) do
+			s.ready = false
+			s.save!
+		end
+		assert_one_isk_message('display', 'data')
+	end
+	
+	test "notifications via override queue" do
+		s = slides(:slide_1)
+		d = displays(:with_overrides)
+		with_redis(d.websocket_channel) do
+			s.ready = false
+			assert s.save
+		end
+		assert_one_isk_message('display', 'data')
+	end
+	
+	test "notifications on create" do
+		s = Slide.new(name: 'test slide')
+		with_redis do
+			assert s.save
+		end
+		assert_one_isk_message('slide', 'create')
+	end
+	
+	test "notifications on update" do
+		s = slides(:simple)
+		with_redis do
+			s.ready = false
+			assert s.save
+		end
+		assert_one_isk_message('slide', 'update')
+	end
+	
+	test "notifications on destroy" do
+		s = slides(:simple)
+		with_redis do
+			s.destroy
+		end
+		assert_one_isk_message('slide', 'update')
+	end
 end
