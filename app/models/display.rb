@@ -105,15 +105,17 @@ class Display < ActiveRecord::Base
 		begin
 			if group_id != -1
 				self.current_group = self.presentation.groups.find(group_id)
+				s = self.current_group.slides.find(slide_id)
+				self.current_slide = s
 			else
+				# Slide is from override
 				self.current_group_id = -1
+				self.current_slide = Slide.find(slide_id)
 			end
-			s = self.current_group.slides.find(slide_id)
-			self.current_slide = s
 			self.last_contact_at = Time.now
 			self.websocket_connection_id = connection_id
 			self.status = 'running'
-			s.shown_on(self.id)
+			self.current_slide.shown_on(self.id)
 			self.state.save!
 			return true
 		rescue ActiveRecord::RecordNotFound

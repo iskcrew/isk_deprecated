@@ -8,6 +8,9 @@
 
 
 class DisplaysController < ApplicationController
+	# Tubesock websockets
+	include Tubesock::Hijack
+	
 	# ACL filters
 	before_action :require_create, only: [:new, :create]
 	
@@ -141,7 +144,99 @@ class DisplaysController < ApplicationController
 			render text: "Invalid request, try refreshing", status: :bad_request
 		end				
 	end
+	
+	# Websocket connection for communication with displays
+	# TODO: ACL on various actions
+	def websocket
+		@display = Display.find(params[:id])
 		
+		hijack do |tubesock|
+			# Listen on its own thread
+			redis_thread = Thread.new do
+				# Needs its own redis connection to pub
+				# and sub at the same time
+				Redis.new(Rails.configuration.x.redis).subscribe @display.websocket_channel do |on|
+					on.message do |channel, message|
+						tubesock.send_data message
+					end
+				end
+			end
+			
+			tubesock.onmessage do |m|
+					ActiveRecord::Base.connection.clear_query_cache
+					@display.reload
+					Rails.logger.debug "Got websocket message: #{m}"
+					msg = IskMessage.from_json(m)
+					case msg.object
+					when 'get_data'
+						msg = IskMessage.new('display', 'data', @display.to_hash)
+						tubesock.send_data msg.encode
+					when 'goto_slide'
+						msg.object = 'display'
+						msg.type = 'goto_slide'
+						msg.send @display.websocket_channel
+					when 'current_slide'
+						if msg.payload[:override_queue_id]
+							group = -1
+							slide = @display.override_queues.find(msg.payload[:override_queue_id]).slide.id
+						else
+							group = msg.payload[:group_id]
+							slide = msg.payload[:slide_id]
+						end
+						if @display.set_current_slide(group, slide)
+							msg.object = 'display'
+							msg.type = 'current_slide'
+							msg.send @display.websocket_channel
+						else
+							msg.object = 'display'
+							msg.type = 'error'
+							msg.payload = {error: 'Invalid slide specified'}
+							tubesock.send_data msg.encode
+						end
+					when 'slide_shown'
+						if msg.payload[:override_queue_id]
+							@display.override_shown(msg.payload[:override_queue_id])
+						end
+						msg.object = 'display'
+						msg.type = 'slide_shown'
+						msg.send @display.websocket_channel
+					when 'shutdown'
+						#FIXME: proper connection tracking!
+						@display.status = 'disconnected'
+						@display.save!
+						msg = IskMessage.new 'display', 'shutdown', {}
+						msg.send @display.websocket_channel
+					when 'error'
+						@display.add_error msg.payload[:error]
+						@display.save!
+					when 'start'
+						#FIXME: proper connection tracking
+						@display_connection = true
+						@display.status = 'running'
+						@display.ip = request.remote_ip
+						@display.save!
+						msg = IskMessage.new('display', 'start', {})
+						msg.send @display.websocket_channel
+					end
+			end
+			
+			tubesock.onerror do |e, data|
+				Rails.logger.error "Error handling websocket message #{data}"
+				redis_thread.kill
+				tubesock.close
+				if @display_connection
+					@display.status = 'error'
+					@display.save!
+				end
+			end
+			
+			tubesock.onclose do
+				# stop listening when client leaves
+				redis_thread.kill
+			end
+		end
+	end
+	
 	private
 	
 	# Whitelist the parameters for updating displays

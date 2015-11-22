@@ -1,6 +1,11 @@
 require 'test_helper'
+require 'redis_test_helpers'
+require 'test_tubesock'
 
 class DisplaysControllerTest < ActionController::TestCase
+	include RedisTestHelpers
+	include TestTubesock::TestHelpers
+	
 	#TODO: test sorting overrides
 	
   def setup
@@ -90,6 +95,115 @@ class DisplaysControllerTest < ActionController::TestCase
 				delete :destroy, {id: d.id}, @adminsession
 				assert_redirected_to displays_path
 			end
+		end
+	end
+	
+	test "websocket start" do
+		d = displays(:normal)
+		msg = IskMessage.new('start', 'reserved', {})
+		with_redis(d.websocket_channel) do 
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_messages(2, ['data', 'start'])
+		assert d.reload
+		assert_equal 'running', d.status
+	end
+	
+	test "websocket shutdown" do
+		d = displays(:normal)
+		msg = IskMessage.new('shutdown', 'reserved', {})
+		with_redis(d.websocket_channel) do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_messages(2, ['data', 'shutdown'])
+		assert d.reload
+		assert_equal 'disconnected', d.status
+	end
+	
+	test "websocket error" do
+		d = displays(:normal)
+		msg = IskMessage.new('error', 'reserved', {error: 'Test error'})
+		with_redis(d.websocket_channel) do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_messages(2, ['data', 'error'])
+		assert d.reload
+		assert_equal 'error', d.status
+	end
+	
+	test "websocket slide_shown" do
+		d = displays(:normal)
+		msg = IskMessage.new('slide_shown', 'reserved', {group_id: d.presentation.groups.first.id, slide_id: d.presentation.slides.first.id})
+		with_redis d.websocket_channel do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_one_isk_message('display', 'slide_shown')
+	end
+	
+	test "websocket override shown" do
+		d = displays(:with_overrides)
+		msg = IskMessage.new('slide_shown', 'reserved', {
+			override_queue_id: d.override_queues.first.id,
+			slide_id: d.override_queues.first.slide.id,
+			group_id: -1
+			})
+		assert_difference "displays(:with_overrides).override_queues.count", -1 do
+			with_redis d.websocket_channel do
+				tube :websocket, {id: d.id}, @adminsession, msg.encode
+			end
+		end
+		assert_messages 2, ['data', 'slide_shown']
+	end
+	
+	test "websocket current_slide" do
+		d = displays(:normal)
+		msg = IskMessage.new('current_slide', 'reserved', {
+			slide_id: d.presentation.slides.first.id,
+			group_id: d.presentation.groups.first.id
+		})
+		with_redis d.websocket_channel do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_one_isk_message 'display', 'current_slide'
+	end
+	
+	test "websocket current_slide with override" do
+		d = displays(:with_overrides)
+		msg = IskMessage.new('current_slide', 'reserved', {
+			slide_id: d.override_queues.first.slide.id,
+			override_queue_id: d.override_queues.first.id
+		})
+		with_redis d.websocket_channel do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_one_isk_message 'display', 'current_slide'
+	end
+	
+	test "websocket goto_slide" do
+		d = displays(:normal)
+		msg = IskMessage.new('goto_slide', 'reserved', {
+			slide_id: d.presentation.slides.last.id,
+			group_id: d.presentation.groups.last.id
+			})
+		with_redis d.websocket_channel do
+			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		end
+		assert_one_isk_message 'display', 'goto_slide'
+	end
+	
+	test "websocket get_data" do
+		d = displays(:normal)
+		msg = IskMessage.new('get_data', 'reserved', {})
+		tube :websocket, {id: d.id}, @adminsession, msg.encode
+		assert_one_sent_message 'display', 'data'
+	end
+	
+	def assert_messages(count, types)
+		assert_equal count, redis_messages.count, "Should have triggered #{count} messages"
+		redis_messages.each do |m|
+			assert msg = IskMessage.from_json(m), "Should be valid message, data: #{m}"
+			assert_equal 'display', msg.object, "Should be about a display"
+			assert_includes types, msg.type, "Should have a type in: #{types.join ", "}"
 		end
 	end
 end
