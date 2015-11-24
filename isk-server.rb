@@ -14,8 +14,6 @@ require 'redis'
 require 'dalli'
 
 
-WebServer = 'thin'
-WebServerPort = 12765
 PidDirectory = File.join(File.dirname(__FILE__),'tmp','pids')
 Services = [
 	'server',
@@ -47,7 +45,7 @@ def start_service(process)
 	case process
 	when 'server'
 		print 'Starting the web server process...'.ljust(45)
-		command = "rails s #{WebServer} -d -p #{WebServerPort} > /dev/null"
+		command = "puma -C config/puma.rb > /dev/null"
 	when 'resque'
 		print 'Starting the Resque worker...'.ljust(45)
 		# Resque doesn't check its pid file and refuse to start if already running
@@ -77,6 +75,7 @@ def start_service(process)
 		puts 'FAILED'.red
 		abort
 	end
+	return true
 end
 
 def stop_service(process)
@@ -100,13 +99,13 @@ def stop_service(process)
 	pid_file = File.join(PidDirectory, pid_file)
 	unless File.exists?(pid_file)
 		puts 'Not running'.yellow
-		return
+		return true
 	end
 	pid = File.read(pid_file).to_i
 	
 	unless !!(`ps -p #{pid}`.match pid.to_s)
 		puts 'Not running'.yellow
-		return
+		return true
 	end
 	
 	begin
@@ -123,6 +122,7 @@ def stop_service(process)
 		puts 'Sending SIGKILL'.yellow
 		Process.kill("KILL", pid)
 	end
+	return true
 end
 
 if ARGV[1]
