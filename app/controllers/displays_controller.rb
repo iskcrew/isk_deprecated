@@ -230,6 +230,7 @@ class DisplaysController < ApplicationController
 							# Display is performing a controlled shutdown
 							raise PermissionDenied unless require_display_control(@display)
 							#FIXME: proper connection tracking!
+							@display_connection = false
 							@display.status = 'disconnected'
 							@display.save!
 							msg = IskMessage.new 'display', 'shutdown', {}
@@ -258,6 +259,10 @@ class DisplaysController < ApplicationController
 				tubesock.onclose do
 					# stop listening when client leaves
 					redis_thread.kill
+					if @display_connection
+						@display.status = 'error'
+						@display.save!
+					end
 				end
 			end
 		end
