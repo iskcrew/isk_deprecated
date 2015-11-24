@@ -146,7 +146,6 @@ class DisplaysController < ApplicationController
 		end
 	
 		# Websocket connection for communication with displays
-		# TODO: ACL on various actions
 		def websocket
 			@display = Display.find(params[:id])
 		
@@ -163,21 +162,42 @@ class DisplaysController < ApplicationController
 				end
 			
 				tubesock.onmessage do |m|
+					# Clear the query cache before each action
+					# Since this is a persistent thread the cache doesn't get reset automatically.
 					ActiveRecord::Base.connection.clear_query_cache
 					@display.reload
+					
 					Rails.logger.debug "Got websocket message: #{m}"
+					# Parse the message
 					msg = IskMessage.from_json(m)
 					# Instument the action for logging
 					instrument_action(msg) do
 						case msg.object
 						when 'get_data'
+							# Request to get the serialization of a display
+							# We only reply to the requestor
 							msg = IskMessage.new('display', 'data', @display.to_hash)
 							tubesock.send_data msg.encode
 						when 'goto_slide'
+							# Command that tells the display to change to a specified slide
+							raise PermissionDenied unless require_display_control(@display)
 							msg.object = 'display'
 							msg.type = 'goto_slide'
 							msg.send @display.websocket_channel
+						when 'start'
+							# Display tells that it is starting up
+							raise PermissionDenied unless require_display_control(@display)
+							#FIXME: proper connection tracking
+							@display_connection = true
+							@display.status = 'running'
+							@display.ip = request.remote_ip
+							@display.save!
+							msg = IskMessage.new('display', 'start', {})
+							msg.send @display.websocket_channel
 						when 'current_slide'
+							# Display informs us that it has changed to a specified slide
+							raise PermissionDenied unless require_display_control(@display)
+							# Check if the display changed to a slide from override queue
 							if msg.payload[:override_queue_id]
 								group = -1
 								slide = @display.override_queues.find(msg.payload[:override_queue_id]).slide.id
@@ -185,6 +205,7 @@ class DisplaysController < ApplicationController
 								group = msg.payload[:group_id]
 								slide = msg.payload[:slide_id]
 							end
+							# Validate that the slide was part of the displays slideset
 							if @display.set_current_slide(group, slide)
 								msg.object = 'display'
 								msg.type = 'current_slide'
@@ -196,6 +217,9 @@ class DisplaysController < ApplicationController
 								tubesock.send_data msg.encode
 							end
 						when 'slide_shown'
+							# Display has finished showing a slide
+							# We only care about this if the slide was from the override queue
+							raise PermissionDenied unless require_display_control(@display)
 							if msg.payload[:override_queue_id]
 								@display.override_shown(msg.payload[:override_queue_id])
 							end
@@ -203,26 +227,24 @@ class DisplaysController < ApplicationController
 							msg.type = 'slide_shown'
 							msg.send @display.websocket_channel
 						when 'shutdown'
+							# Display is performing a controlled shutdown
+							raise PermissionDenied unless require_display_control(@display)
 							#FIXME: proper connection tracking!
 							@display.status = 'disconnected'
 							@display.save!
 							msg = IskMessage.new 'display', 'shutdown', {}
 							msg.send @display.websocket_channel
 						when 'error'
+							# Display reports that it has encountered an error
 							@display.add_error msg.payload[:error]
 							@display.save!
-						when 'start'
-							#FIXME: proper connection tracking
-							@display_connection = true
-							@display.status = 'running'
-							@display.ip = request.remote_ip
-							@display.save!
-							msg = IskMessage.new('display', 'start', {})
-							msg.send @display.websocket_channel
 						end
 					end
 				end
-			
+				
+				# Error handlers
+				# We just close the socket on all errors and if this connection was
+				# from a display we mark its state as invalid.
 				tubesock.onerror do |e, data|
 					Rails.logger.error "Error handling websocket message #{data}"
 					redis_thread.kill
@@ -250,7 +272,11 @@ class DisplaysController < ApplicationController
 				yield
 			end
 		end
-	
+		
+		# Require permissions to alter the running state of a display
+		def require_display_control(display)
+			current_user.has_role?('display-client') or display.can_edit?(current_user)
+		end
 	
 		# Whitelist the parameters for updating displays
 		def display_params
