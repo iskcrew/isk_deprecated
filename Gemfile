@@ -69,9 +69,6 @@ gem 'dalli'
 # Sorting slides in groups etc
 gem 'ranked-model'
 
-# Use thin as the webserver
-gem 'thin'
-
 # Tubesock websocket library
 gem 'tubesock', github: 'ngauthier/tubesock', ref: '3074cef'
 
@@ -91,8 +88,6 @@ gem 'time_diff', '~> 0.3'
 gem 'slim'
 # Generators for slim templates instead of erb
 gem 'slim-rails'
-
-gem 'websocket-rails', github: 'depili/websocket-rails', branch: 'channel_token_fix'
 
 # For background stuff
 gem 'resque'

@@ -65,9 +65,6 @@ module Isk
     # after_commit callbacks raise errors now
     config.active_record.raise_in_transactional_callbacks = true
     
-		# Make websocket-rails ping-pong update the last_contact_at on associated displays
-		require 'websocket_pong_updates_displays'
-		
 		# Log display websocket actions on log/displays.log
 		require 'display_logging'
 		
