@@ -10,12 +10,13 @@ module TestTubesock
 	
 	# Class to yield after the controller hijacks the connection
 	class TestSocket
+		attr_accessor :test_error_handlers
 		@open_handlers		= []
 		@message_handlers = []
 		@close_handlers		= []
 		@error_handlers		= []
 		
-		def initialize(message, data)
+		def initialize(message, data, error_handlers = false)
 			@message = message
 			@open_handlers		= []
 			@message_handlers = []
@@ -23,6 +24,7 @@ module TestTubesock
 			@error_handlers		= []
 			@data_sent = []
 			@closed = false
+			@test_error_handlers = error_handlers
 		end
 		
 		# Register the various handlers
@@ -69,7 +71,8 @@ module TestTubesock
 				begin
 					h.call(@message)
 				rescue => e
-					@error_handlers.each{|eh| eh.call(e,data)}
+					raise unless @test_error_handlers
+					@error_handlers.each{|eh| eh.call(e,msg)}
 				end
 			end
 		end
@@ -90,21 +93,28 @@ module TestTubesock
 		# Instead of hijacking the rack connection just simulate it
 		# We yield a TestSocket instance and then just run all registered callbacks.
 		def hijack
-			socket = TestSocket.new(@_tubesock_message, @_tubesock_output)
+			socket = TestSocket.new(@_tubesock_message, @_tubesock_output, @_tubesock_test_error_handlers)
 			yield socket
 			socket.run
 			@_tubesock_output = socket.data_sent
 			render text: nil, status: -1
 		end
+		
+		# Boolean to control if the tubesock handler should rescue exceptions and run error handlers.
+		# If false any exceptions are just re-raised.
+		def tubesock_test_error_handlers=(value)
+			@_tubesock_test_error_handlers = value
+		end
 	end
 	
 	# Methods for easier testing
 	module TestHelpers
-		def tube(action, params, session, message)
+		def tube(action, params, session, message, test_error_handlers = false)
 			unless @controller.respond_to? :tubesock_output
 				@controller.extend(TestTubesock::ControllerExtensions)
 			end
 			@controller.tubesock_message = message
+			@controller.tubesock_test_error_handlers = test_error_handlers
 			get action, params, session
 		end
 		
