@@ -33,21 +33,10 @@ class DisplayLogging
 		time = finish - start
 		msg = payload[:message]
 		log_msg = []
-		if payload[:action] == :client_disconnect
-			log_msg << "Client disconnected!".red
-		else
-			log_msg << "#{payload[:action]}"
-		end
-		log_msg << "From #{payload[:ip]} client #{payload[:client]}"
+		log_msg << "#{payload[:action]}"
+		log_msg << "From #{payload[:ip]}"
 		log_msg << "Time taken: #{(time*1000).round(2)}ms"
-		
-		# Action specific logging, default logs the whole event message
-		case payload[:action]
-		when :hello
-			log_msg << "Parameters: display_name: #{msg[:display_name]}"
-		else
-			log_msg << "Parameters: #{msg.to_s}"
-		end
+		log_msg << "Parameters: #{msg.payload}"
 		
 		if payload[:exception].present?
 			log_msg << "EXCEPTION: #{payload[:exception].first}"
