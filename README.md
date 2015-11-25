@@ -94,6 +94,8 @@ For performance you will want to have nginx in front of ISK for serving static f
 
 For the default production configuration the server will expect precompiled javascript/css files, to generate them you need to run "rake assets:precompile" on the production environment.
 
+By default the puma webserver will be run with 2 worker processes that will have at most 16 threads. It is recommended that you run one worker per processor in your production environment for maximum performance. You can modify the settings in config/puma.rb
+
 The RAILS\_ENV environmental variable controls what environment configuration rails loads, so you also need to set it to "production". You can do this in your shells initialization files or by prepending all commands with "RAILS_ENV=production".
 
 #### The isk-server.rb script
