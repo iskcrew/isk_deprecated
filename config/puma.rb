@@ -1,3 +1,7 @@
+rackup      DefaultRackup
+port        ENV['PORT']     || 12765
+environment ENV['RAILS_ENV'] || 'development'
+
 # Number of forked workers
 workers Integer(ENV['WEB_CONCURRENCY'] || 2)
 # Ruby threads per worker [initial, max]
@@ -9,10 +13,10 @@ preload_app!
 # Run as daemon
 daemonize true
 pidfile "tmp/pids/server.pid"
+state_path 'tmp/pids/puma.state'
 
-rackup      DefaultRackup
-port        ENV['PORT']     || 12765
-environment ENV['RAILS_ENV'] || 'development'
+# Log puma startup etc.
+stdout_redirect 'log/puma.log', 'log/puma_error.log', true
 
 on_worker_boot do
   # Worker specific setup for Rails 4.1+
