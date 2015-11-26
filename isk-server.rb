@@ -45,7 +45,7 @@ def start_service(process)
 	case process
 	when 'server'
 		print 'Starting the web server process...'.ljust(45)
-		command = "puma -C config/puma.rb > /dev/null"
+		command = "bundle exec puma -C config/puma.rb > /dev/null"
 	when 'resque'
 		print 'Starting the Resque worker...'.ljust(45)
 		# Resque doesn't check its pid file and refuse to start if already running
