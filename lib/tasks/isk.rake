@@ -1,4 +1,8 @@
 namespace :isk do
+	desc "Runs all installation tasks; sets up the database, secrets and creates nginx config file"
+	task setup: ['db:setup', 'isk:secrets', 'isk:nginx', 'assets:precompile'] do
+	end
+	
 	desc "Create nginx site configuration file"
 	task nginx: :environment do
 		template = Rails.root.join('lib', 'nginx.erb')
