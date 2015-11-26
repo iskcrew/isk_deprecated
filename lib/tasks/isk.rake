@@ -36,6 +36,29 @@ namespace :isk do
 		tmp_file.unlink
 	end
 	
+	desc "Generate session encryption keys"
+	task secrets: :environment do
+		file = Rails.root.join('config', 'secrets.yml')
+		if File.exists? file
+			abort "#{file.to_s} exists, aborting"
+		end
+		puts "Generating #{file}"
+		secrets = {
+			'development' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			},
+			'production' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			},
+			'test' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			}
+		}
+		File.open(file, 'w') do |f|
+			f.puts secrets.to_yaml
+		end
+	end
+	
 	private
 	
 	def sql_backup(backup_file)

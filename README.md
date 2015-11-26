@@ -75,6 +75,10 @@ After the database exists and the database.yml file points to it you can run:
 
 This will initialize the database.
 
+### Generate the session cookie secret tokens
+
+ISK needs to have the cookie encryption tokens in 'config/secrets.yml'. Easiest way to generate the tokens is to use the 'rake isk:secrets' command.
+
 ### Development: Start the server
 
 Now you can start the local isk server instance with "rails s" and then navigate to http://localhost:3000/ with a browser. The default login for a new installation is username: admin password: admin.
@@ -84,8 +88,6 @@ You also need to start the background process for isk to generate the slide imag
 For periodic tasks, like updating schedule slides there is a another background daemon you can start it with "./isk-server.rb start background_jobs" or "script/background_jobs.rb start".
 
 ### Production environment
-
-It is highly recomended that you first generate new session cookie encryption keys ("rake secret") and update config/initializers/secret_token.rb, otherwise you will be vulnerable to session forgery.
 
 For performance you will want to have nginx in front of ISK for serving static files (slide images mostly) for performance reasons. Example configuration for nginx can be created by "rake isk:nginx". The file will have correct directories, but you still need to update it with the servers hostname. If you can't use nginx as a front-end you need to edit config/environments/production.rb and enable serving of static assets and disable x-sendfile support.
 
