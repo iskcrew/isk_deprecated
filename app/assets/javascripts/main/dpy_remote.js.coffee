@@ -84,8 +84,9 @@ $ ->
 			slide: 'previous',
 			display_id: d.id
 			}
-		window.dispatcher.trigger 'iskdpy.goto_slide', data
 		console.log 'Sending iskdpy.goto_slide slide=previous, display_id=' + data.display_id
+		msg = ['goto_slide', 'reserved', data]
+		window.display_socket.send(JSON.stringify(msg))
 	
 	# Send a websocket message instructing the display to go to next slide
 	send_next_slide = (event) ->
@@ -96,13 +97,13 @@ $ ->
 			display_id: d.id
 			}
 		console.log 'Sending iskdpy.goto_slide slide=next, display_id=' + data.display_id
-		window.dispatcher.trigger 'iskdpy.goto_slide', data
+		msg = ['goto_slide', 'reserved', data]
+		window.display_socket.send(JSON.stringify(msg))
 	
 	# Key listener, we bind the left curson key to previous slide and right cursor to next slide
 	handle_keydown = (event) ->
 		console.log "Got keydown: " + event.which
-		if (event.which == 37) then send_previous_slide event
-		
+		if (event.which == 37) then send_previous_slide event		
 		if (event.which == 39) then send_next_slide event
 		
 	# Send a websocket message instructing the display to go directly to a given slide.
@@ -114,17 +115,38 @@ $ ->
 			group_id: d.group
 			}
 		console.log "sending goto_slide display_id:#{data.display_id}, slide_id:#{data.slide_id}, group_id:#{data.group_id}"
-		window.dispatcher.trigger 'iskdpy.goto_slide', data
+		msg = ['goto_slide', 'reserved', data]
+		window.display_socket.send(JSON.stringify(msg))
 	
-	# Get initial state
-	window.dispatcher.trigger 'iskdpy.display_data', {display_id: display_id}
-		, success = (d) -> handle_display d
-		, failure = (d) -> alert 'Websocket failed'
+	popup_connection_lost = ->
+		confirm_reconnect = ->
+			if confirm("Websocket connection lost. Try to reconnect?") then initialize_websocket()
+		timer = setTimeout( confirm_reconnect, 5000 )
 	
-	# Subscribe to this displays broadcast channel
-	channel=window.dispatcher.subscribe 'display_'+display_id
-	channel.bind 'data', handle_display
-	channel.bind 'current_slide', handle_current_slide
+	initialize_websocket = ->
+		url = root.attr('data-websocket-url')
+		if window.location.protocol == 'https:'
+			url = "wss://#{window.location.host}#{url}}"
+		else
+			url = "ws://#{window.location.host}#{url}"
+		window.display_socket = new WebSocket url
+		window.display_socket.onclose = (event) -> 
+			popup_connection_lost()
+		window.display_socket.onmessage = (event) ->
+			if event.data.length
+				message = JSON.parse(event.data)
+				console.log "incoming data: #{message[0]}"
+				switch message[1]
+					when 'data'
+						handle_display(message[2])
+					when 'current_slide'
+						handle_current_slide(message[2])
+		window.display_socket.onopen = (event) ->
+			msg = ['get_data', 'reserved', {}]
+			window.display_socket.send(JSON.stringify(msg))
+		
+	# Initialize the websocket
+	initialize_websocket()
 	
 	# Bind the clicks on buttons to our functions
 	$('#previous').bind 'click', send_previous_slide

@@ -13,4 +13,4 @@ div.row
 			a.btn.btn-primary#previous data-id=@display.id href='#top' #{icon 'backward'} Previous
 			a.btn.btn-primary#next data-id=@display.id href='#top' Next #{icon 'forward'}
 	
-	div.display-control#display-control data-id=@display.id
+	div.display-control#display-control data-id=@display.id data-websocket-url=websocket_display_path(@display)
