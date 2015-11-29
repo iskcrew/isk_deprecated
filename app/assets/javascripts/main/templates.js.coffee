@@ -49,4 +49,5 @@ $ ->
 	$('div#template_slide_form').on "input", delayed_send_update
 	$('div#template_slide_form').on "change", delayed_send_update
 	if $('div#template_slide_form .template_field').length
-		update_preview()
+		window.socket.addEventListener "open", (e) =>
+			update_preview()

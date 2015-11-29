@@ -36,4 +36,5 @@ $ ->
 	
 	if $("[data-simple-field]").length
 		$(".updating_preview").show()
-		delayed_update()
+		window.socket.addEventListener "open", (e) =>
+			delayed_update()
