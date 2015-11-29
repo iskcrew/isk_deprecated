@@ -11,10 +11,6 @@ System for centrally managing multiple screens running multiple presentation,
 possibly sharing slides / groups of slides. Has simple online-editor and a
 inkscape plugin for creating more complex slides.
 
-## Known issues
-
- * Something might break the websocket-rails cross process syncronization resulting in the server not responding at all and requiring that the redis syncronization data is flushed. ./isk-server.rb force-restart does this for you. There are plans to migrate away from the websocket-rails library in the future.
-
 ## Runtime dependencies for production
 Versions listed are known good ones, other versions are probably fine.
 
