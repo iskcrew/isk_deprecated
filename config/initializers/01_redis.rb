@@ -1,4 +1,4 @@
-# We have several libraris (cashier,websocket-rails,resque) using redis
+# We have several gems (cashier, resque) using redis
 # So set the redis for all of them here
 unless Rails.env.test?
 	Rails.application.config.x.redis = {host: 'localhost', port: 6379}
