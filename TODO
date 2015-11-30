@@ -1,5 +1,4 @@
 BUGS / INCONSISTENCIES:
-	- Should showing a override change the slide image in _display.html.slim partial?
 	- Cloning of TemplateSlides
 		- Write more universal cloning system!
 	- Cloning adds slides to the front of a group!
@@ -7,10 +6,8 @@ BUGS / INCONSISTENCIES:
 		- tests need to be upgraded
 	- add a running number on all generated slides, like prize ceremonies etc
 	- check http_slides and write tests for them
-	- Move group deletion into a background task, websocket-rails doesn't like it otherwise...
 	- Add "defer multiple" functionality into schedules
 	- Add delete to schedules
-	- create some bitmap tests with imagemagicks 'compare' tool
 
 - Create nested controllers to split code from other massive controllers:
 	- SvgController for slide svg, singular resource
@@ -18,12 +15,8 @@ BUGS / INCONSISTENCIES:
 	- Group controller for presentations
 
 - Websockets
-	- Rewrite the websocket api on top of tubesocks, ditch the unmaintained websocket-rails gem!
-	- Chat / better notification system for web users
+	- Chat / better notification system for web users?
 		- We have the new html5 speaker monitor!
-	- websocket-rails 0.7.0 bugs:
-		- We are using our own custom fix currently, change to mainline when this is fixed
-		- We have a custom fix in place for the query cache bug also
 
 - MasterGroups
 	- Deep clone for mastergroups, cloning all slides inside them
