@@ -7,8 +7,7 @@
 # 
 # Handles the logging of iskdpy communications to a separate file.
 #
-# Since websocket-rails does so poor job on this we instrument all
-# actions with around_filter and subscribe to the events here.
+# The events come from DisplaysController#websocket
 
 class DisplayLogging
 
