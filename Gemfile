@@ -96,6 +96,7 @@ gem 'daemon'
 
 # For monitorin scripts
 gem 'highline'
+gem 'faye-websocket'
 
 # Better caching
 gem 'cashier'
