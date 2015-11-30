@@ -16,106 +16,108 @@ require 'highline/import'
 require 'colorize'
 require 'faye/websocket'
 require 'json'
+require 'time_diff'
 
+require_relative '../lib/isk_message.rb'
 require_relative '../lib/cli_helpers.rb'
 
-host = ARGV[0]
-port = ARGV[1]
-port ||= 80
+@host = ARGV[0]
+@port = ARGV[1]
+@port ||= 80
 
-username = ask('Username:  ')
-password = ask("Password:  ") { |q| q.echo = 'x' }
+#username = ask('Username:  ')
+#password = ask("Password:  ") { |q| q.echo = 'x' }
 
-@connection_id = nil
-@channels = [
-	'slide',
-	'master_group',
-	'group',
-	'presentation',
-	'display',
-	'override_queue',
-	'display_state'
-]
+username = 'admin'
+password = 'eiaavistustakaan'
 
-http, headers = isk_login(host, port, username, password)
+http, @headers = isk_login(@host, @port, username, password)
 
 # Get list of displays
-resp, data = http.get('/displays?format=json', headers)
-displays = JSON.parse resp.body
- 
-displays.each do |d|
-	@channels << "display_#{d['id']}"
-end
+resp, data = http.get('/displays?format=json', @headers)
+@displays = JSON.parse resp.body
 
 @connection_opened = Time.now
+@ws = nil
 
-EM.run {
-	ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
+def init_general_socket
+	@ws = Faye::WebSocket::Client.new("ws://#{@host}:#{@port}/isk_general", nil, headers: @headers)
 
-	ws.on :open do |event|
-		say 'Connection opened'
+	@ws.on :open do |event|
+		say 'General connection opened'
 		@connection_opened = Time.now
 	end
 
-	ws.on :message do |event|
-		msg = JSON.parse(event.data).first
-		msg_name = msg.first
-		msg_hash = msg.last
-		msg_channel = msg_hash['channel']
-		case msg_name
-		when 'client_connected'
-			@connection_id = msg_hash['data']['connection_id']
-			say "Connection set: #{msg_hash['data']['connection_id']}"
-			
-			@pong = WsMessage.new 'websocket_rails.pong', nil, @connection_id
-			
-			say 'Subscribing to channels:'
-			@channels.each do |c|
-				sub = WsMessage.new 'websocket_rails.subscribe', {channel: c}
-				say " -> #{c}"
-				ws.send sub.to_a.to_json
-			end
-			
-		when 'websocket_rails.subscribe'
-			
-			
-		when 'websocket_rails.ping'
-			ws.send @pong.to_a.to_json
-		
-		when 'websocket_rails.channel_token'
-			say 'FIXME: channel tokens!'.red
-		
+	@ws.on :message do |event|
+		msg = IskMessage.from_json(event.data)
+		case msg.type
 		when 'update'
-			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}".yellow
-		
+			say "Update notification: #{msg.object} with id=#{msg.payload[:id]}".yellow
+			say " -> Changes: #{msg.payload[:changes]}"
 		when 'updated_image'
-			say "Update image notification: #{msg_channel} with id=#{msg_hash['data']['id']}".blue
-			
+			say "Updated image notification: #{msg.object} with id=#{msg.payload[:id]}".blue
 		when 'data'
-			d = msg_hash['data']
-			say "Display data for display id=#{d['id']}".light_blue
-		
-		when 'current_slide'
-			d = msg_hash['data']
-			say "Display current slide update, display: #{d['display_id']}, slide: #{d['slide_id']}, group: #{d['group_id']}".cyan
-		when 'error'
-			d = msg_hash['data']
-			say "ERROR: Channel: \"#{msg_channel}\" Display: #{d['display_id']}, message #{d['message']}".red
+			say "Display data for #{msg.object} id=#{msg.payload[:id]}".light_blue
+		when 'create'
+			say "Create notification: #{msg.object} with id=#{msg.payload[:id]}".white
 		else
-			say 'Got unhandled message: '
-			if msg_channel
-				say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}".yellow
-			else
-				say " -> Message: #{msg_name} success: #{msg_hash['success']} data: #{msg_hash['data']}".yellow
-			end
+			say "Got unhandled message: #{msg.to_s}".red
 		end
-	
 	end
 
-	ws.on :close do |event|
-		say 'Connection closed!'.red
+	@ws.on :close do |event|
+		say 'General connection closed!'.red
 		say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
 		say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
-		abort
+		say "Reconnecting in 10 seconds"
+		sleep(10)
+		init_general_socket
+	end
+end
+
+def init_display_socket(id)
+	dws = Faye::WebSocket::Client.new("ws://#{@host}:#{@port}/displays/#{id}/websocket", nil, headers: @headers)
+	
+	opened = Time.now
+	
+	dws.on :open do |event|
+		say "Display #{id} connection opened"
+		opened = Time.now
+	end
+	
+	dws.on :message do |event|
+		msg = IskMessage.from_json(event.data)
+		case msg.type
+		when 'data'
+			say "Display data for display id=#{msg.payload[:id]} name=#{msg.payload[:name]}"
+		when 'current_slide'
+			say "Current slide on display: id=#{id}\tslide_id=#{msg.payload[:slide_id]}"
+		when 'slide_shown'
+			say "Slide shown on display:   id=#{id}\tslide_id=#{msg.payload[:slide_id]}"
+		when 'error'
+			say "Error on display: #{id} error=#{msg.payload[:error]}".red
+		when 'start'
+			say "Display #{id} is starting".yellow
+		when 'shutdown'
+			say "Display #{id} is shutting down".yellow
+		else
+			say "Got unhandled message: #{msg.to_s}".red
+		end
+	end
+	
+	dws.on :close do |event|
+		say "Display #{id} connection closed!".red
+		say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
+		say "Connection was up for #{Time.diff(Time.now, opened, "%h:%m:%s")[:diff]}".red
+		say "Reconnecting in 10 seconds"
+		sleep(10)
+		init_display_socket(id)
+	end
+end
+
+EM.run {
+	init_general_socket
+	@displays.each do |d|
+		init_display_socket(d['id'])
 	end
 }
