@@ -19,9 +19,6 @@
 //= require jquery.timer
 //= require jquery-noty.main
 //
-// Websocket javascript client and instance bound to window
-//= require websocket_rails/main
-//
 // three.js and others
 //= require ./display/three.js
 //= require ./display/THREEx.WindowResize.js
