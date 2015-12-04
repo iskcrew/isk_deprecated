@@ -35,9 +35,9 @@ manual_mode = new ChangeNotifier false, (manual) ->
 
 clock_mode = new ChangeNotifier true, (clock) ->
   if clock
-    isk.clock.show()
+    isk.clock?.show()
   else
-    isk.clock.hide()
+    isk.clock?.hide()
 
 create_slide = (slide) ->
   if slide?.group?
@@ -57,7 +57,7 @@ create_slide = (slide) ->
 handle_hello = (display) ->
   display_id=display?.id
   if display_id?
-    channel=isk.dispatcher.subscribe 'display_'+display_id
+    channel=isk.dispatcher?.subscribe 'display_'+display_id
     channel.bind 'data', callback=handle_display
     channel.bind 'goto_slide', callback=handle_goto_slide
 
@@ -67,7 +67,7 @@ handle_hello = (display) ->
 handle_display = (display) ->
   console.debug "received display",  display
   
-  isk?.local_broker?.trigger 'presentation_changed', display
+  isk.local_broker?.trigger 'presentation_changed', display
   
   overs=document.createElement('div')
   overs.id='overrides'
@@ -113,14 +113,14 @@ handle_goto_slide = (d) ->
 
 send_hello = (name) ->
   console.debug "sending_hello", name
-  isk.dispatcher.trigger 'iskdpy.hello', {display_name: name},
+  isk.dispatcher?.trigger 'iskdpy.hello', {display_name: name},
     success = (d) -> handle_hello d,
     failure = (d) -> alert 'Websocket failed'
 
 send_shutdown = (display_id) ->
   data = { display_id: display_id }
   console.debug 'sending shutdown', data
-  isk.dispatcher.trigger 'iskdpy.shutdown', data
+  isk.dispatcher?.trigger 'iskdpy.shutdown', data
 
 send_current_slide = (slide) ->
   s=slide.iskSlide
@@ -132,11 +132,11 @@ send_current_slide = (slide) ->
     }
   if data?.slide_id and (data?.group_id or data?.override_queue_id)
     console.debug 'sending current_slide', data
-    isk.dispatcher.trigger 'iskdpy.current_slide', data
+    isk.dispatcher?.trigger 'iskdpy.current_slide', data
   else
     data.error = slide.dataset?.error_message or "Unknown slide shown"
     console.debug 'sending error', data
-    isk.dispatcher.trigger 'iskdpy.error', data
+    isk.dispatcher?.trigger 'iskdpy.error', data
 
 send_error = (msg) ->
   data = {
@@ -144,10 +144,11 @@ send_error = (msg) ->
     error: msg
   }
   console.debug 'sending error', data
-  isk.dispatcher.trigger 'iskdpy.error', data
+  isk.dispatcher?.trigger 'iskdpy.error', data
   
 # TODO remove jquery
 when_ready = (elem, f) ->
+  console.debug 'when_ready', elem, f
   $(elem).one 'load', f
   .each -> $(@).load() if @complete
 
@@ -158,9 +159,9 @@ when_ready = (elem, f) ->
 #  f.apply(elem) if elem.complete
 
 set_current = (elem) ->
+  console.debug 'CURRENT', elem
   clearTimeout(timer)
   if elem? and elem?.iskSlide?.ready
-    console.debug 'CURRENT', elem
     when_ready elem, ->
       if @?.width
         send_current_slide @
@@ -228,7 +229,7 @@ start_client = (name) ->
 stop_client = ->
   $('#ISKDPY #renderer').fadeOut()
   if display_id?
-    isk.dispatcher.unsubscribe "display_"+display_id
+    isk.dispatcher?.unsubscribe "display_"+display_id
     send_shutdown display_id
     display_id=undefined
   root?.innerHtml = ""
