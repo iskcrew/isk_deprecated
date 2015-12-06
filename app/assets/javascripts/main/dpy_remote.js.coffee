@@ -126,7 +126,7 @@ $ ->
 	initialize_websocket = ->
 		url = root.attr('data-websocket-url')
 		if window.location.protocol == 'https:'
-			url = "wss://#{window.location.host}#{url}}"
+			url = "wss://#{window.location.host}#{url}"
 		else
 			url = "ws://#{window.location.host}#{url}"
 		window.display_socket = new WebSocket url
