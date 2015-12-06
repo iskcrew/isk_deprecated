@@ -56,7 +56,7 @@ The messages are json serialized arrays. Their content is as follows:
 
 Where first element "object" is the class of object that this message is about and it is one of the following:
 * display
-* display_state
+* displaystate
 * group
 * master_group
 * override_queue

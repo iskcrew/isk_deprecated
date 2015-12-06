@@ -92,7 +92,7 @@ $ ->
 						update_slide(message[2])
 					when 'display'
 						update_display(message[2])
-					when 'display_state'
+					when 'displaystate'
 						update_display_state(message[2])
 					when 'simple'
 						update_simple_svg(message[2])
