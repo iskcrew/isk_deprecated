@@ -23,7 +23,7 @@ connection = StateMachine.create
     
     onOUT: ->
       isk.show_login()
-      isk.dispatcher.disconnect()
+      isk.remote.disconnect()
       isk.menu.displays.hide()
       app.normal() if app.can('normal')
 
@@ -43,7 +43,7 @@ connection = StateMachine.create
           setTimeout(job, 5000)
       setTimeout(job, 1000)
 
-    onreconnect: -> isk.dispatcher.reconnect()
+    onreconnect: -> isk.remote.reconnect()
 
 app = StateMachine.create
   initial: 'INIT'

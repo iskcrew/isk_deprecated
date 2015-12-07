@@ -5,7 +5,7 @@ if not (root?) then return
 
 debug=false
 timer=undefined
-display_id=undefined
+running=undefined
 
 current=root.getElementsByClassName('current')
 presentation=root.getElementsByClassName('presentation_slide')
@@ -54,15 +54,10 @@ create_slide = (slide) ->
   img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
   img
 
-handle_hello = (display) ->
-  display_id=display?.id
-  if display_id?
-    channel=isk.dispatcher?.subscribe 'display_'+display_id
-    channel.bind 'data', callback=handle_display
-    channel.bind 'goto_slide', callback=handle_goto_slide
-
-    handle_display display
-    timed_next_slide()
+handle_start = (data) ->
+  console.debug "received start",  data
+  running=true
+  timed_next_slide()
 
 handle_display = (display) ->
   console.debug "received display",  display
@@ -111,40 +106,32 @@ handle_goto_slide = (d) ->
   else goto_slide "slide_G#{d?.group_id}S#{d?.slide_id}"
   true
 
-send_hello = (name) ->
-  console.debug "sending_hello", name
-  isk.dispatcher?.trigger 'iskdpy.hello', {display_name: name},
-    success = (d) -> handle_hello d,
-    failure = (d) -> alert 'Websocket failed'
+send_start = ->
+  console.debug "sending_start"
+  isk.remote.trigger 'start'
 
-send_shutdown = (display_id) ->
-  data = { display_id: display_id }
-  console.debug 'sending shutdown', data
-  isk.dispatcher?.trigger 'iskdpy.shutdown', data
+send_shutdown = ->
+  console.debug 'sending shutdown'
+  isk.remote.trigger 'shutdown'
 
 send_current_slide = (slide) ->
   s=slide.iskSlide
   data = {
-    display_id: display_id,
     group_id: s?.group
     slide_id: s?.id,
     override_queue_id: s?.override_queue_id
     }
   if data?.slide_id and (data?.group_id or data?.override_queue_id)
     console.debug 'sending current_slide', data
-    isk.dispatcher?.trigger 'iskdpy.current_slide', data
+    isk.remote.trigger 'current_slide', data
   else
     data.error = slide.dataset?.error_message or "Unknown slide shown"
     console.debug 'sending error', data
-    isk.dispatcher?.trigger 'iskdpy.error', data
+    isk.remote.trigger 'error', data
 
 send_error = (msg) ->
-  data = {
-    display_id: display_id,
-    error: msg
-  }
-  console.debug 'sending error', data
-  isk.dispatcher?.trigger 'iskdpy.error', data
+  console.debug 'sending error', msg
+  isk.remote.trigger 'error', error: msg
   
 # TODO remove jquery
 when_ready = (elem, f) ->
@@ -222,16 +209,18 @@ goto_slide = (id) ->
 timed_next_slide = ->
   next_slide()
 
-start_client = (name) ->
+start_client = ->
   $('#ISKDPY #renderer').fadeIn()
-  send_hello name
+  isk.remote.register object:'display', method:'start', handle_start
+  isk.remote.register object:'display', method:'data', handle_display
+  isk.remote.register object:'display', method:'goto_slide', handle_goto_slide
+  send_start()
 
 stop_client = ->
   $('#ISKDPY #renderer').fadeOut()
-  if display_id?
-    isk.dispatcher?.unsubscribe "display_"+display_id
-    send_shutdown display_id
-    display_id=undefined
+  if running?
+    send_shutdown()
+    running=undefined
   root?.innerHtml = ""
 
 #EXPORTS:
