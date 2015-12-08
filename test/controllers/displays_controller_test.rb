@@ -100,7 +100,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket start" do
 		d = displays(:normal)
-		msg = IskMessage.new('start', 'reserved', {})
+		msg = IskMessage.new('command', 'start', {})
 		with_redis(d.websocket_channel) do 
 			tube :websocket, {id: d.id}, @adminsession, msg.encode
 		end
@@ -111,7 +111,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket shutdown" do
 		d = displays(:normal)
-		msg = IskMessage.new('shutdown', 'reserved', {})
+		msg = IskMessage.new('command', 'shutdown', {})
 		with_redis(d.websocket_channel) do
 			tube :websocket, {id: d.id}, @adminsession, msg.encode
 		end
@@ -122,7 +122,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket error" do
 		d = displays(:normal)
-		msg = IskMessage.new('error', 'reserved', {error: 'Test error'})
+		msg = IskMessage.new('command', 'error', {error: 'Test error'})
 		with_redis(d.websocket_channel) do
 			tube :websocket, {id: d.id}, @adminsession, msg.encode
 		end
@@ -133,7 +133,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket slide_shown" do
 		d = displays(:normal)
-		msg = IskMessage.new('slide_shown', 'reserved', {group_id: d.presentation.groups.first.id, slide_id: d.presentation.slides.first.id})
+		msg = IskMessage.new('command', 'slide_shown', {group_id: d.presentation.groups.first.id, slide_id: d.presentation.slides.first.id})
 		with_redis d.websocket_channel do
 			tube :websocket, {id: d.id}, @adminsession, msg.encode
 		end
@@ -142,7 +142,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket override shown" do
 		d = displays(:with_overrides)
-		msg = IskMessage.new('slide_shown', 'reserved', {
+		msg = IskMessage.new('command', 'slide_shown', {
 			override_queue_id: d.override_queues.first.id,
 			slide_id: d.override_queues.first.slide.id,
 			group_id: -1
@@ -157,7 +157,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket current_slide" do
 		d = displays(:normal)
-		msg = IskMessage.new('current_slide', 'reserved', {
+		msg = IskMessage.new('command', 'current_slide', {
 			slide_id: d.presentation.slides.first.id,
 			group_id: d.presentation.groups.first.id
 		})
@@ -169,7 +169,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket current_slide with override" do
 		d = displays(:with_overrides)
-		msg = IskMessage.new('current_slide', 'reserved', {
+		msg = IskMessage.new('command', 'current_slide', {
 			slide_id: d.override_queues.first.slide.id,
 			override_queue_id: d.override_queues.first.id
 		})
@@ -181,7 +181,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket goto_slide" do
 		d = displays(:normal)
-		msg = IskMessage.new('goto_slide', 'reserved', {
+		msg = IskMessage.new('command', 'goto_slide', {
 			slide_id: d.presentation.slides.last.id,
 			group_id: d.presentation.groups.last.id
 			})
@@ -193,7 +193,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket get_data" do
 		d = displays(:normal)
-		msg = IskMessage.new('get_data', 'reserved', {})
+		msg = IskMessage.new('command', 'get_data', {})
 		tube :websocket, {id: d.id}, @adminsession, msg.encode
 		assert_one_sent_message 'display', 'data'
 	end

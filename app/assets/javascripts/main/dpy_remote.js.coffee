@@ -85,7 +85,7 @@ $ ->
 			display_id: d.id
 			}
 		console.log 'Sending iskdpy.goto_slide slide=previous, display_id=' + data.display_id
-		msg = ['goto_slide', 'reserved', data]
+		msg = ['command', 'goto_slide', data]
 		window.display_socket.send(JSON.stringify(msg))
 	
 	# Send a websocket message instructing the display to go to next slide
@@ -97,7 +97,7 @@ $ ->
 			display_id: d.id
 			}
 		console.log 'Sending iskdpy.goto_slide slide=next, display_id=' + data.display_id
-		msg = ['goto_slide', 'reserved', data]
+		msg = ['command', 'goto_slide', data]
 		window.display_socket.send(JSON.stringify(msg))
 	
 	# Key listener, we bind the left curson key to previous slide and right cursor to next slide
@@ -115,7 +115,7 @@ $ ->
 			group_id: d.group
 			}
 		console.log "sending goto_slide display_id:#{data.display_id}, slide_id:#{data.slide_id}, group_id:#{data.group_id}"
-		msg = ['goto_slide', 'reserved', data]
+		msg = ['command', 'goto_slide', data]
 		window.display_socket.send(JSON.stringify(msg))
 	
 	popup_connection_lost = ->
@@ -142,7 +142,7 @@ $ ->
 					when 'current_slide'
 						handle_current_slide(message[2])
 		window.display_socket.onopen = (event) ->
-			msg = ['get_data', 'reserved', {}]
+			msg = ['command', 'get_data', {}]
 			window.display_socket.send(JSON.stringify(msg))
 		
 	# Initialize the websocket

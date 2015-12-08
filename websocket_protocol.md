@@ -23,11 +23,11 @@ Commands are sent with a json serialized message in the following format
 ```JSON
 [
 	"command",
-	"reserved",
+	#command_name,
 	{"arg_1":1}
 ]
 ```
-The command-string is the name of the command and the hash contains the command specific parameters.
+The #command_name-string is the name of the command and the hash contains the command specific parameters.
 
 Results are returned in the same format with the hash containing the command specific results.
 
@@ -77,19 +77,19 @@ The general endpoint supports two commands that generate svg previews. The comma
 ```JSON
 [
 	"command",
-	"reserved"
+	#command_name
 	{"data": value}
 ]
 ```
-The first element of the array is the name of the command ("simple" or "template") and the second element is ignored for now. Last element is a hash of all the command specific parameters.
+The second element of the array is the name of the command ("simple" or "template"). Last element is a hash of all the command specific parameters.
 
 #### "simple" command
 
 This command generates a svg preview for the simple editor. The command is
 ```JSON
 [
-	"simple",
-	"svg"
+	"command",
+	"simple_svg"
 	{
 		"heading": "Slide heading",
 		"text": "Slide contents\n<with highlight>",
@@ -114,8 +114,8 @@ the SVG_DATA is the whole svg DOM as one string.
 This command is for updating the svg preview when editing template slides. The format of the command is
 ```JSON
 [
-	"template",
-	"svg",
+	"command",
+	"template_svg",
 	{
 		"template_id": 1,
 		"field_id1": "contents",

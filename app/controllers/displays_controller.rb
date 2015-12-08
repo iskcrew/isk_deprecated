@@ -172,7 +172,9 @@ class DisplaysController < ApplicationController
 					msg = IskMessage.from_json(m)
 					# Instument the action for logging
 					instrument_action(msg) do
-						case msg.object
+						# we only care about commands
+						return unless msg.object == 'command'
+						case msg.type
 						when 'get_data'
 							# Request to get the serialization of a display
 							# We only reply to the requestor

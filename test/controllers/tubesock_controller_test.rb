@@ -17,7 +17,7 @@ class TubesockControllerTest < ActionController::TestCase
 	end
 	
 	test "simple svg generation" do
-		msg = IskMessage.new('simple','svg', {
+		msg = IskMessage.new('command','simple_svg', {
 			heading: 'Websocket test',
 			text: 'Houston, we have <connection>!'
 		})
@@ -40,7 +40,7 @@ class TubesockControllerTest < ActionController::TestCase
 		
 		tube :general, nil, @adminsession, msg.encode
 		
-		msg = assert_one_sent_message('template', 'svg')
+		msg = assert_one_sent_message('command', 'template_svg')
 		assert msg.object == 'template'
 		assert msg.payload.include? 'Test string'
 	end

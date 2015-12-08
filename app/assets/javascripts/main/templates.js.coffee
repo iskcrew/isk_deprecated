@@ -33,7 +33,7 @@ $ ->
 		$('.template_field').each ->
 			f = $(@)
 			data[f.data('elementId')] = f.val()
-		msg = ['template', 'svg',data]
+		msg = ['command', 'template_svg',data]
 		window.socket.send(JSON.stringify(msg))
 	
 	delayed_sender = expire(update_preview, 500)

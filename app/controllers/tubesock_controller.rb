@@ -24,13 +24,15 @@ class TubesockController < ApplicationController
 				begin
 					Rails.logger.debug "Got websocket message: #{m}"
 					msg = IskMessage.from_json(m)
-					case msg.object
-					when 'simple'
-						msg.payload = SimpleSlide.create_svg(msg.payload)
+					# we only care about commands
+					return unless msg.object == 'command'
+					case msg.type
+					when 'simple_svg'
+						msg = IskMessage.new 'simple', 'svg', SimpleSlide.create_svg(msg.payload)
 						tubesock.send_data msg.encode
-					when 'template'
+					when 'template_svg'
 						data = msg.payload
-						msg.payload = SlideTemplate.find(data[:template_id]).generate_svg(data)
+						msg = IskMessage.new 'template', 'svg', SlideTemplate.find(data[:template_id]).generate_svg(data)
 						tubesock.send_data msg.encode
 					end
 				rescue
