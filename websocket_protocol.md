@@ -39,6 +39,7 @@ The supported commands are
 * shutdown, display tells that it is performing a requested shutdown
 * error, display informs the server that a error has occured
 * start, display tells the server that it is starting
+* ping, replies with ['display', 'pong', {}]
 
 ### General notification interface
 The second websocket endpoint is at /isk-general and it is used for updating all html views for users when the various objects are updated.
