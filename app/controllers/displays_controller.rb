@@ -243,7 +243,8 @@ class DisplaysController < ApplicationController
 							@display.save!
 						when 'ping'
 							# Simple ping-pong so the display can test that the connection is up
-							msg = IskMessage.new 'display', 'pong', {}
+							msg.object = 'display'
+							msg.type = 'pong'
 							tubesock.send_data msg.encode
 						end
 					end

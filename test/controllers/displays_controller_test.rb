@@ -200,7 +200,7 @@ class DisplaysControllerTest < ActionController::TestCase
 	
 	test "websocket ping" do
 		d = displays(:normal)
-		msg = IskMessage.new('command', 'ping', {})
+		msg = IskMessage.new('command', 'ping', {asd: 'fooo'})
 		tube :websocket, {id: d.id}, @adminsession, msg.encode
 		assert_one_sent_message 'display', 'pong'
 	end
