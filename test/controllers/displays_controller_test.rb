@@ -198,6 +198,13 @@ class DisplaysControllerTest < ActionController::TestCase
 		assert_one_sent_message 'display', 'data'
 	end
 	
+	test "websocket ping" do
+		d = displays(:normal)
+		msg = IskMessage.new('command', 'ping', {})
+		tube :websocket, {id: d.id}, @adminsession, msg.encode
+		assert_one_sent_message 'display', 'pong'
+	end
+	
 	def assert_messages(count, types)
 		assert_equal count, redis_messages.count, "Should have triggered #{count} messages"
 		redis_messages.each do |m|
