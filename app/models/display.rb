@@ -72,7 +72,7 @@ class Display < ActiveRecord::Base
 		display = Display.where(:name => display_name).first_or_create
 		display.ip = display_ip
 		display.websocket_connection_id = connection_id 
-		display.last_contact_at = Time.now
+		display.ping
 		display.last_hello = Time.now
 		display.save!
 		display.status = 'running'
@@ -84,7 +84,7 @@ class Display < ActiveRecord::Base
 	def override_shown(override_id, connection_id = nil)
 		begin
 			oq = self.override_queues.find(override_id)
-			self.last_contact_at = Time.now
+			self.ping
 			self.websocket_connection_id = connection_id
 			self.current_slide = oq.slide
 			self.current_group_id = -1
@@ -112,7 +112,7 @@ class Display < ActiveRecord::Base
 				self.current_group_id = -1
 				self.current_slide = Slide.find(slide_id)
 			end
-			self.last_contact_at = Time.now
+			self.ping
 			self.websocket_connection_id = connection_id
 			self.status = 'running'
 			self.current_slide.shown_on(self.id)
@@ -160,7 +160,7 @@ class Display < ActiveRecord::Base
 		else
 			self.add_error_ticket "#{I18n.l(Time.now, format: :iso)} #{message}"
 		end
-		
+		self.ping
 		self.state.status = 'error'
 		self.state.save!
 	end
@@ -203,6 +203,10 @@ class Display < ActiveRecord::Base
 		end
 		h[:override_queue] = q
 		return h
+	end
+	
+	def ping
+		self.last_contact_at = Time.now
 	end
 	
 	private
