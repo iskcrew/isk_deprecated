@@ -199,10 +199,12 @@ class DisplaysControllerTest < ActionController::TestCase
 	end
 	
 	test "websocket ping" do
-		d = displays(:normal)
+		d = displays(:late)
 		msg = IskMessage.new('command', 'ping', {asd: 'fooo'})
 		tube :websocket, {id: d.id}, @adminsession, msg.encode
 		assert_one_sent_message 'display', 'pong'
+		d.reload
+		assert_in_delta Time.now, d.last_contact_at, 1, "Display last contact didn't update"
 	end
 	
 	def assert_messages(count, types)

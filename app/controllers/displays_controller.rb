@@ -245,6 +245,8 @@ class DisplaysController < ApplicationController
 							# Simple ping-pong so the display can test that the connection is up
 							msg.object = 'display'
 							msg.type = 'pong'
+							@display.ping
+							@display.state.save!
 							tubesock.send_data msg.encode
 						end
 					end
