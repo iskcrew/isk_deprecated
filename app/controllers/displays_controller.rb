@@ -241,6 +241,10 @@ class DisplaysController < ApplicationController
 							# Display reports that it has encountered an error
 							@display.add_error msg.payload[:error]
 							@display.save!
+						when 'ping'
+							# Simple ping-pong so the display can test that the connection is up
+							msg = IskMessage.new 'display', 'pong', {}
+							tubesock.send_data msg.encode
 						end
 					end
 				end
