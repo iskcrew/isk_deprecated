@@ -51,7 +51,8 @@ tubesock_remote =
     cbs._set(object, method, cb)
 
   trigger: (command, data) ->
-    @socket.send(JSON.stringify([command, 'reserved', data or {} ]))
+    if @socket? and @socket.readyState == @socket.OPEN
+      @socket?.send?(JSON.stringify(['command', command, data or {} ]))
 
 #EXPORTS:
 @isk.remote = tubesock_remote
