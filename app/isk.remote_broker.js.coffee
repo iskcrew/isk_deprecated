@@ -18,17 +18,15 @@ cbs =
     delete @[name] if cb==undefined or @[name]==cb
 
 tubesock_remote =
-  connect: (@id) ->
+  connect: ({onopen, onerror, onclose}) ->
     url = "#{window.location.protocol.replace('http', 'ws')}//#{window.location.host}#{window.location.pathname.replace('/dpy', '/websocket')}"
     @socket = new WebSocket url
 
-    @socket.onerror = ->
-      console.log "websocket error"
-      isk.fsm.websocket_error()
-
-    @socket.onopen = ->
-      console.log "websocket opened"
-      isk.fsm.websocket_connected()
+    @socket.onerror = onerror
+    @socket.onopen = onopen
+    @socket.onclose = ->
+      delete tubesock_remote.socket
+      onclose()
 
     @socket.onmessage = (event) ->
       if event.data.length
@@ -38,11 +36,6 @@ tubesock_remote =
 
   disconnect: ->
     @socket?.close()
-
-  reconnect: (id) ->
-    @id=id if id
-    @disconnect()
-    @connect(@id)
 
   unregister: ({object, method}, cb) ->
     cbs._del(object, method, cb)

@@ -1,83 +1,75 @@
 @isk or= {}
 
 connection = StateMachine.create
-  initial: 'CONN'
+  initial: 'INIT'
   error: (msg...) ->
     console.log 'CONNECTION fsm-error ', msg
   events: [
-    { name: 'conn_failed', from: 'CONN',  to: 'OUT' }
-    { name: 'conn_success', from: 'CONN',  to: 'IN' }
-    
-    { name: 'login', from: 'OUT',  to: 'CONN' }
-    { name: 'logout', from: '*',  to: 'OUT' }
-    
-    { name: 'websocket_error',  from: 'READY', to: 'IN' }
-    { name: 'websocket_connected',  from: 'IN', to: 'READY' }
-    { name: 'reconnect',  from: 'IN', to: 'IN' }
+    { name: 'websocket_error', from: 'INIT',  to: 'OUT' }
+    { name: 'websocket_connected', from: 'INIT',  to: 'READY' }
+
+    { name: 'close', from: ['READY', 'RECON', 'ERR'],  to: 'CLOSING' }
+    { name: 'websocket_closed', from: ['READY', 'CLOSING'],  to: 'CLOSED' }
+    { name: 'open', from: 'CLOSED',  to: 'RECON' }
+
+    { name: 'websocket_error',  from: ['READY', 'RECON'], to: 'ERR' }
+    { name: 'websocket_closed',  from: 'ERR', to: 'RECON' }
+
+    { name: 'websocket_connected',  from: 'RECON', to: 'READY' }
    
   ]
   callbacks:
     onenterstate: (msg...) -> console.log "CONNECTION: State: ", msg
     
-    onCONN: -> isk.menu.displays.show()
-    
-    onOUT: ->
-      isk.show_login()
-      isk.remote.disconnect()
-      isk.menu.displays.hide()
-      app.normal() if app.can('normal')
+    onINIT: ->
+      isk.remote.connect
+        onopen:  @websocket_connected.bind @
+        onclose: @websocket_closed.bind @
+        onerror: @websocket_error.bind @
 
-    onleaveCONN: -> isk.show_logout()
+    onRECON: ->
+      isk.remote.connect
+        onopen:  @websocket_connected.bind @
+        onclose: @websocket_closed.bind @
+        onerror: @websocket_error.bind @
+
+    onOUT: ->
+      # TODO: BIG ERROR
+      isk.remote.disconnect()
+      app.stop() if app.can('exit')
 
     onREADY: ->
-      app.autostart() if app.can('autostart')
+      app.connection_ready() if app.can('connection_ready')
       isk.errors.connection(false)
 
     onleaveREADY: ->
       isk.errors.connection(true)
 
-    onIN: ->
-      job = =>
-        if @can 'reconnect'
-          @reconnect()
-          setTimeout(job, 5000)
-      setTimeout(job, 1000)
-
-    onreconnect: -> isk.remote.reconnect()
+    onCLOSING: ->
+      isk.remote.disconnect()
+    onERR: ->
+      isk.remote.disconnect()
 
 app = StateMachine.create
-  initial: 'INIT'
+  initial: 'STOPPED'
   error: (msg...) ->
     console.log 'APP fsm-error ', msg
   events: [
-    { name: 'autostart', from: 'INIT', to: 'RUNNING' }
-    { name: 'normal', from: 'INIT', to: 'MENU' }
-
-    { name: 'exit', from: 'RUNNING', to: 'MENU'  }
-    { name: 'run',  from: 'MENU',    to: 'RUNNING' }
+    { name: 'exit', from: 'RUNNING', to: 'STOPPED'  }
+    { name: 'run',  from: 'STOPPED',    to: 'STOPPED' }
+    { name: 'connection_ready',  from: 'STOPPED',    to: 'RUNNING' }
   ]
   callbacks:
     onenterstate: (msg...) -> console.log "APP: State: ", msg
-    onINIT: ->
-      if not isk.display_name.get()?
-        isk.client.stop()
-        @normal()
-
-
-    onenterMENU: -> isk.menu.show()
-    onleaveMENU: -> isk.menu.hide()
-
     onenterRUNNING: ->
-      isk.client.start(isk.display_name.get())
+      isk.client.start()
       isk.errors.stopped(false)
     onleaveRUNNING: ->
       isk.client.stop()
       isk.errors.stopped(true)
+      connection.close()
       
-    onbeforeexit: -> isk.display_name.clear()
-    
-    onbeforeautostart: -> return false if not isk.display_name.get()
-    onbeforerun: -> return false if not isk.display_name.get()
+    onrun: -> connection.open()
 
 
 #EXPORTS:
@@ -86,10 +78,4 @@ app = StateMachine.create
   app: app
   run: -> app.run()
   exit: -> app.exit()
-  login: -> connection.login()
-  logout: -> connection.logout()
-  conn_failed: -> connection.conn_failed() #if connection.can('conn_failed')
-  conn_success: -> connection.conn_success() #if connection.can('conn_success')
-  websocket_error: -> connection.websocket_error() #if connection.can('websocket_error')
-  websocket_connected: -> connection.websocket_connected() #if connection.can('websocket_connected')
 
