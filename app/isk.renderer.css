@@ -90,6 +90,9 @@ div#errors *.active{
    display: block;
 }
 
+div#errors #stopped{
+}
+
 div#pres{
     display: none !important;
 }

@@ -24,3 +24,7 @@ $('#renderer').click (e) ->
     isk.fsm.exit()
     return false
   return true
+
+$('#stopped').click (e) ->
+  isk.fsm.run()
+  return false

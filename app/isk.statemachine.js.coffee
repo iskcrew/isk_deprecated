@@ -67,8 +67,12 @@ app = StateMachine.create
     onenterMENU: -> isk.menu.show()
     onleaveMENU: -> isk.menu.hide()
 
-    onenterRUNNING: -> isk.client.start(isk.display_name.get())
-    onleaveRUNNING: -> isk.client.stop()
+    onenterRUNNING: ->
+      isk.client.start(isk.display_name.get())
+      isk.errors.stopped(false)
+    onleaveRUNNING: ->
+      isk.client.stop()
+      isk.errors.stopped(true)
       
     onbeforeexit: -> isk.display_name.clear()
     
