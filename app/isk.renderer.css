@@ -62,18 +62,6 @@ div#canvas * {
     display: block !important;
 }
 
-div#stats {
-    display:inline-block;
-    position: absolute;
-    height: unset;
-    width: unset;
-    right: 0px;
-    bottom: 0px;
-}
-div#stats * {
-    position: relative;
-}
-
 div#errors {
     display:inline-block;
     position: absolute;
