@@ -162,12 +162,8 @@ class IskDisplayRenderer
     @mesh = new THREE.Mesh( geometry, @default_material )
     @scene.add( @mesh )
 
-    @stats = new Stats?()
-
-
   animate: (t) =>
-    requestAnimationFrame @animate
-    @stats?.begin()
+    @_animation = requestAnimationFrame @animate
 
     if not @start_t?
         @start_t = t
@@ -181,8 +177,6 @@ class IskDisplayRenderer
       @transition_progress(dt)
 
     @renderer.render @scene, @camera
-
-    @stats?.end()
 
   init_observer: (target) ->
     @observer = new MutationObserver (mutations) ->
@@ -200,15 +194,11 @@ class IskDisplayRenderer
     config = {subtree: true, attributes: true}
     @observer.observe(target, config)
 
-  run: (stats=true) ->
+  constructor: ->
     @init_local_control_handlers()
     @init_renderer()
     @init_shaders 'effects'
     @init_observer document.querySelector('#pres')
-    requestAnimationFrame @animate
-
-    if stats and @stats?
-      document.getElementById('stats').appendChild(@stats?.domElement)
 
     document.getElementById('canvas').appendChild(@renderer?.domElement)
 
@@ -217,6 +207,13 @@ class IskDisplayRenderer
     @handle_window_size()
 
     THREEx?.FullScreen?.request()
+
+  pause: ->
+    cancelAnimationFrame @_animation
+    @_animation = undefined
+  run: ->
+    if not @_animation?
+      @_animation = requestAnimationFrame @animate
 
   transition_start: (type) ->
     @mesh.material = @shaders?[type]?['material'] or @default_material
@@ -273,9 +270,6 @@ class IskDisplayRenderer
     @transition_stop()
 
 renderer=new IskDisplayRenderer()
-
-# TODO better alternative for $ -> renderer.run()
-renderer.run()
 
 #EXPORTS:
 @isk.renderer = renderer

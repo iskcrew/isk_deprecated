@@ -36,7 +36,7 @@ connection = StateMachine.create
     onOUT: ->
       # TODO: BIG ERROR
       isk.remote.disconnect()
-      app.stop() if app.can('exit')
+      app.exit() if app.can('exit')
 
     onREADY: ->
       app.connection_ready() if app.can('connection_ready')
@@ -64,12 +64,14 @@ app = StateMachine.create
     onenterRUNNING: ->
       isk.client.start()
       isk.errors.stopped(false)
+      isk.renderer.run()
     onleaveRUNNING: ->
       isk.client.stop()
       isk.errors.stopped(true)
       connection.close()
+      isk.renderer.pause()
       
-    onrun: -> connection.open()
+    onrun: -> connection.open() if connection.can('open')
 
 
 #EXPORTS:
