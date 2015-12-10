@@ -6,6 +6,7 @@ connection = StateMachine.create
     console.log 'CONNECTION fsm-error ', msg
   events: [
     { name: 'websocket_error', from: 'INIT',  to: 'OUT' }
+    { name: 'websocket_closed',  from: 'OUT', to: 'OUT' }
     { name: 'websocket_connected', from: 'INIT',  to: 'READY' }
 
     { name: 'close', from: ['READY', 'RECON', 'ERR'],  to: 'CLOSING' }
@@ -37,6 +38,7 @@ connection = StateMachine.create
       # TODO: BIG ERROR
       isk.remote.disconnect()
       app.exit() if app.can('exit')
+      isk.errors.loggedout(true)
 
     onREADY: ->
       app.connection_ready() if app.can('connection_ready')

@@ -2,21 +2,15 @@
 
 errors = $('#errors')
 
-connection = (active) ->
-  console.log "ERR connection:", active
+error = (id, name, active) ->
+  console.log "ERR #{name}:", active
   if active
-    errors.find('#connection').addClass('active')
+    errors.find("##{id}").addClass('active')
   else
-    errors.find('#connection').removeClass('active')
-
-stopped = (active) ->
-  console.log "ERR connection:", active
-  if active
-    errors.find('#stopped').addClass('active')
-  else
-    errors.find('#stopped').removeClass('active')
+    errors.find("##{id}").removeClass('active')
 
 #EXPORTS:
 @isk.errors =
-  connection: connection
-  stopped: stopped
+  connection: error.bind(this, 'connection', 'Connection')
+  stopped: error.bind(this, 'stopped', 'Display stopped')
+  loggedout: error.bind(this, 'loggedout', 'Login Failed')

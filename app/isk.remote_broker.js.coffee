@@ -24,9 +24,7 @@ tubesock_remote =
 
     @socket.onerror = onerror
     @socket.onopen = onopen
-    @socket.onclose = ->
-      delete tubesock_remote.socket
-      onclose()
+    @socket.onclose = onclose
 
     @socket.onmessage = (event) ->
       if event.data.length

@@ -221,6 +221,7 @@ stop_client = ->
   if running?
     send_shutdown()
     running=undefined
+  clearTimeout(timer)
   root?.innerHtml = ""
 
 #EXPORTS:
