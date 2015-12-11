@@ -67,6 +67,7 @@ module TestTubesock
 		# If any errors are raised we pass them onto the error_handlers
 		def run
 			@open_handlers.each(&:call)
+			return if closed?
 			@message_handlers.each do |h|
 				begin
 					h.call(@message)
