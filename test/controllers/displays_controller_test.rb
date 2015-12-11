@@ -207,6 +207,13 @@ class DisplaysControllerTest < ActionController::TestCase
 		assert_in_delta Time.now, d.last_contact_at, 1, "Display last contact didn't update"
 	end
 	
+	test "websocket without session" do
+		d = displays(:normal)
+		msg = IskMessage.new('command', 'ping', {asd: 'fooo'})
+		tube :websocket, {id: d.id}, nil, msg.encode, true
+		assert_one_sent_message 'error', 'forbidden'
+	end
+	
 	def assert_messages(count, types)
 		assert_equal count, redis_messages.count, "Should have triggered #{count} messages"
 		redis_messages.each do |m|

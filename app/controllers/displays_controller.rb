@@ -13,6 +13,8 @@ class DisplaysController < ApplicationController
 	
 	# ACL filters
 	before_action :require_create, only: [:new, :create]
+	# We send error messages on ACL violations via the websocket
+	skip_before_action :require_login, only: :websocket
 	
 	# List all displays
 	# We support html or json for the whole list and
@@ -160,6 +162,14 @@ class DisplaysController < ApplicationController
 						end
 					end
 				end
+				
+				tubesock.onopen do
+					unless current_user
+						tubesock.send_data ['error', 'forbidden', {}].to_json
+						redis_thread.kill
+						tubesock.close
+					end
+				end
 			
 				tubesock.onmessage do |m|
 					# Clear the query cache before each action
@@ -256,7 +266,11 @@ class DisplaysController < ApplicationController
 				# We just close the socket on all errors and if this connection was
 				# from a display we mark its state as invalid.
 				tubesock.onerror do |e, data|
-					Rails.logger.error "Error handling websocket message #{data}"
+					if e.is_a? PermissionDenied
+						tubesock.send_data ['error', 'forbidden', {}].to_json
+					else
+						Rails.logger.error "Error handling websocket message #{data}"
+					end
 					redis_thread.kill
 					tubesock.close
 					if @display_connection
