@@ -332,17 +332,22 @@ class SlidesController < ApplicationController
 		send_slide_image(:thumb)
 	end
 
+	# Send the full sized slide image
+	# We will always send the last rendered image if it exists
+	# If not we will issue 404 status
 	def full
-		begin
+		if stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
 			slide = Slide.find(params[:id])
-			if slide.ready
+			if File.exists? slide.full_filename
+				response.headers['Access-Control-Allow-Origin'] = '*'
+				response.headers['Access-Control-Request-Method'] = 'GET'
 				send_file(slide.full_filename, {disposition: 'inline'})
 			else
-				render nothing: true, status: 503
+				render nothing: true, status: 404
 			end
-		rescue ActiveRecord::RecordNotFound, ActionController::MissingFile
-			render nothing: true, status: 404
 		end
+	rescue ActiveRecord::RecordNotFound
+		render nothing: true, status: 404
 	end
 
 	private
