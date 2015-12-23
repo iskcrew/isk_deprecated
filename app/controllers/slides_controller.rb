@@ -336,8 +336,8 @@ class SlidesController < ApplicationController
 	# We will always send the last rendered image if it exists
 	# If not we will issue 404 status
 	def full
-		if stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
-			slide = Slide.find(params[:id])
+		slide = Slide.find(params[:id])
+		if stale?(last_modified: slide.images_updated_at.utc, etag: slide)
 			if File.exists? slide.full_filename
 				response.headers['Access-Control-Allow-Origin'] = '*'
 				response.headers['Access-Control-Request-Method'] = 'GET'
