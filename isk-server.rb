@@ -36,7 +36,7 @@ def check_deps
 	# Get the inkscape version, as the new 0.91 release still has some kinks with bitmaps
 	inkscape_version = `inkscape --version`.split[1]
 	if inkscape_version == "0.48.5"
-		puts 'ERROR: Inkscape version 0.48.5 (in debian Jessie) has non-sane text element postioning, use 0.91 from jessie-backports instead'.red
+		abort 'ERROR: Inkscape version 0.48.5 (in debian Jessie) has non-sane text element postioning, use 0.91 from jessie-backports instead'.red
 	end
 	unless find_executable('convert') && find_executable('identify')
 		abort 'ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)'.red
