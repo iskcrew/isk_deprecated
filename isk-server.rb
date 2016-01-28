@@ -32,9 +32,9 @@ def check_deps
 		abort 'ERROR: ISK needs inkscape to function'.red
 	end
 	# Get the inkscape version, as the new 0.91 release still has some kinks with bitmaps
-	inkscape_version = `inkscape --version`.split[1].split('.')[1].to_i
-	if inkscape_version == 91
-		puts 'WARNING: Inkscape 0.91 may produce artifacts when scaling bitmaps'.yellow
+	inkscape_version = `inkscape --version`.split[1]
+	if inkscape_version == "0.48.5"
+		puts 'ERROR: Inkscape version 0.48.5 (in debian Jessie) has non-sane text element postioning, use 0.91 from jessie-backports instead'.red
 	end
 	unless find_executable('convert') && find_executable('identify')
 		abort 'ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)'.red
