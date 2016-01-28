@@ -16,7 +16,7 @@ Versions listed are known good ones, other versions are probably fine.
  * Nginx (version >1.3 or some other front-end webserver capable of proxying websocket connections)
  * memcached (1.4.5)
  * redis (2.6.10)
- * inkscape ( for external editing and converting some of the slides from .svg to .png)
+ * inkscape (for debian either 0.48.3.1-1.3 from Wheezy or 0.91-5~bpo8+1 from jessie-backports, 0.48.5-3 from Jessi DOES NOT WORK)
  * postgresql (9.1)
  * rrdtool (1.4.7) for statistic collection and graph generation
  * iskdpy ( http://github.com/iskcrew/iskdpy/ ) for running the slideshows
