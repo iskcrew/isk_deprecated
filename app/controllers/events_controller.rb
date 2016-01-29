@@ -96,7 +96,7 @@ class EventsController < ApplicationController
 			:simple_body_margin_right,
 			:simple_body_y,
 			:schedules_per_slide,
-			:schedules_line_lenght,
+			:schedules_line_length,
 			:schedules_tolerance,
 			:schedules_subheader_fill,
 			:schedules_time_indent,
