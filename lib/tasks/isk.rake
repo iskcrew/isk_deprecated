@@ -1,4 +1,8 @@
 namespace :isk do
+	desc "Runs all installation tasks; sets up the database, secrets and creates nginx config file"
+	task setup: ['db:setup', 'isk:secrets', 'isk:nginx', 'assets:precompile'] do
+	end
+	
 	desc "Create nginx site configuration file"
 	task nginx: :environment do
 		template = Rails.root.join('lib', 'nginx.erb')
@@ -34,6 +38,29 @@ namespace :isk do
 		FileUtils.mv tmp_file.path, backup_file
 		puts "Created full backup: #{backup_file}"
 		tmp_file.unlink
+	end
+	
+	desc "Generate session encryption keys"
+	task secrets: :environment do
+		file = Rails.root.join('config', 'secrets.yml')
+		if File.exists? file
+			abort "#{file.to_s} exists, aborting"
+		end
+		puts "Generating #{file}"
+		secrets = {
+			'development' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			},
+			'production' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			},
+			'test' => {
+				'secret_key_base' => SecureRandom.hex(64)
+			}
+		}
+		File.open(file, 'w') do |f|
+			f.puts secrets.to_yaml
+		end
 	end
 	
 	private
