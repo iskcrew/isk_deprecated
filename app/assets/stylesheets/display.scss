@@ -104,3 +104,26 @@ div#pres img {
     height: 1px;
     width: 1px;
 }
+
+div#connection {
+	color: blue;
+}
+
+div#loggedout {
+	color: red;
+}
+
+div#stopped {
+	color: white;
+}
+
+/* example 6 from https://css-tricks.com/examples/CSSTabs/ */
+
+.tabs { min-height: 500px; position: relative; width: 100%; }
+.tabs > div { display: inline; }
+.tabs > div > a { margin-left: -1px; position: relative; left: 1px; text-decoration: none; color: black; background: white; display: block; float: left; padding: 5px 10px; border: 1px solid #ccc; border-bottom: 1px solid white; }
+.tabs > div:not(:target) > a { border-bottom: 0; background: -moz-linear-gradient(top, white, #eee); }	
+.tabs > div:target > a { background: white; }	
+.tabs > div > div { background: white; z-index: -2; left: 0; top: 30px; bottom: 0; right: 0; padding: 20px; border: 1px solid #ccc; }	
+.tabs > div:not(:target) > div { position: absolute }
+.tabs > div:target > div { position: absolute; z-index: 0; }
