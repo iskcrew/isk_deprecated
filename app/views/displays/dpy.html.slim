@@ -1,0 +1,22 @@
+doctype 5
+html
+	head
+		title ISK-Display
+		= stylesheet_link_tag :display, media: :all
+		= javascript_include_tag :display
+		= csrf_meta_tags
+		link rel="icon" type="image/gif" href="/favicon.gif"
+		link rel="icon" type="image/x-icon" href="/favicon.ico"
+	body
+		div#ISKDPY
+			div#bgrs
+				img#empty src="/backgrounds/empty.png"
+			div#render
+				div#canvas
+				div#override
+				div#clock
+			div#pres
+			div#errors
+				div#connection
+				div#loggedout title="Access denied or other critical connection error"
+				div#stopped Display stopped, click to restart...

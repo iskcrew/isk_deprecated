@@ -146,6 +146,11 @@ class DisplaysController < ApplicationController
 				render text: "Invalid request, try refreshing", status: :bad_request
 			end				
 		end
+		
+		# The webgl display
+		def dpy
+			render layout: false
+		end
 	
 		# Websocket connection for communication with displays
 		def websocket

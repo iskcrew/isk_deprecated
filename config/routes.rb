@@ -82,6 +82,7 @@ Isk::Application.routes.draw do
 			put 'update_override'
 			get 'dpy_control'
 			get 'websocket'
+			get 'dpy'
 		end
 
 		collection do
