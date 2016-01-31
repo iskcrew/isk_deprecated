@@ -17,6 +17,10 @@ $(document).keypress (e) ->
     reset_escape()
   return true
 
+$('body').click (e) ->
+  THREEx?.FullScreen?.request?()
+  return false
+
 $('#renderer').click (e) ->
   clearTimeout(escapetimeout)
   escapetimeout=setTimeout(reset_escape, 300)
