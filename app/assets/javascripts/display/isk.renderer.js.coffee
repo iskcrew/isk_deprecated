@@ -139,6 +139,7 @@ class IskDisplayRenderer
     @scene = new THREE.Scene()
     @camera = new THREE.PerspectiveCamera( 90.0, window.innerWidth/window.innerHeight, 1.0, 10000.0 )
     @camera.position.z = 108.0/2
+    THREEx.WindowResize(@renderer, @camera);
 
     #geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
     geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
