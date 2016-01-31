@@ -198,7 +198,7 @@ class IskDisplayRenderer
   constructor: ->
     @init_local_control_handlers()
     @init_renderer()
-    @init_shaders 'effects'
+    @init_shaders '/effects'
     @init_observer document.querySelector('#pres')
 
     document.getElementById('canvas').appendChild(@renderer?.domElement)
