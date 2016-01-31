@@ -6,19 +6,28 @@ time = undefined
 shown = true
 old_t = ""
 
-t_pos = [1450, 1020]
-t_size = "70px"
+t_pos = [1650, 90]
+t_size = "60px"
+
+longday =
+  Mon: "Monday"
+  Tue: "Tueday"
+  Wed: "Wedday"
+  Thu: "Thursday"
+  Fri: "Friday"
+  Sat: "Saturday"
+  Sun: "Sunday"
 
 init = ->
   elem=document.createElement('canvas')
   ctx=elem.getContext('2d')
   elem.width=1920
-  elem.height=1080
+  elem.height=128
 
   ctx.font = t_size + " 'CustomFont'"
   ctx.fillStyle = '#FFF'
   ctx.strokeStyle = '#000'
-  ctx.lineWidth = 4
+  ctx.lineWidth = 3
   ctx.miterLimit = 2
 
   run()
@@ -36,10 +45,9 @@ hide = ->
   , 2000
   false
 
-drawStrokedText = (t) ->
-  ctx.clearRect(0, 0, elem.width, elem.height)
-  ctx.fillText(t, t_pos[0], t_pos[1])
-  ctx.strokeText(t, 1450, 1020)
+drawStrokedText = (t, pos...) ->
+  ctx.fillText(t, pos...)
+  ctx.strokeText(t, pos...)
 
 set_current_time = () ->
   if shown
@@ -48,7 +56,10 @@ set_current_time = () ->
       old_t = t
       s = Date().split(' ')
       ts = [s[0], s[4]].join ' '
-      drawStrokedText(ts)
+      #drawStrokedText(ts)
+      ctx.clearRect(0, 0, elem.width, elem.height)
+      drawStrokedText(longday[s[0]], t_pos[0], 60 )
+      drawStrokedText(s[4], t_pos[0], 115)
 
 run = (t) ->
   requestAnimationFrame run
