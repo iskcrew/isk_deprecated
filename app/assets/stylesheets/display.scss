@@ -56,6 +56,7 @@ div#canvas {
 }
 
 div#clock canvas {
+	position: absolute;
     display: block;
     height:unset;
     max-height:12%;
