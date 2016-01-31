@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base href="/iskdpy/" />
+<link href="app/isk.renderer.css" media="all" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/assets/display-7029797139a9354086e826e3fc756379.js"></script>
+
+<script type="text/coffeescript" src="app/isk.debug.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.renderer.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.clock.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.client.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.remote_broker.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.errors.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.events.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.localoverride.js.coffee"></script>
+<script type="text/coffeescript" src="app/isk.statemachine.js.coffee"></script>
+
+<title>ISK-Display</title>
+</head>
+<body>
+<div id="ISKDPY">
+<div id="renderer">
+  <div id="bgrs"><img id="empty" src="/backgrounds/empty.png" /></div>
+  <div id="canvas"></div>
+  <div id="override"></div>
+  <div id="clock"></div>
+</div>
+<div id="pres"></div>
+<div id="errors">
+  <div id="connection" style="color: blue;">*</div>
+  <div id="loggedout" title="Access denied or other critical connection error" style="color: red;">*</div>
+  <div id="stopped" style="color: white;">Display stopped, click to restart...</div>
+</div>
+</div>
+</body>
+</html>
