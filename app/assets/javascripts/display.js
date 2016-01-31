@@ -16,12 +16,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require bootstrap-sprockets
 //= require jquery.timer
 //= require jquery-noty.main
+//= require tubesock
 //
 // three.js and others
 //= require ./display/three.js
 //= require ./display/THREEx.WindowResize.js
 //= require ./display/THREEx.FullScreen.js
-//= require ./display/stats.min.js
 //= require_tree ./display
