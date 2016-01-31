@@ -144,7 +144,8 @@ class IskDisplayRenderer
     geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
     #geometry = new THREE.PlaneGeometry( 192, 108,0,0 )
     @tex_empty=new THREE.Texture(document.getElementById('empty'))
-    @tex_empty.minFilter=THREE.LinearFilter
+    @tex_empty.minFilter=THREE.NearestFilter
+    @tex_empty.premultiplyAlpha=true
     @tex_empty.needsUpdate=true
     @cu=
          from: { type: "t", value: @tex_empty}
@@ -206,8 +207,6 @@ class IskDisplayRenderer
     window.addEventListener('resize', @handle_window_size, false)
     @handle_window_size()
 
-    THREEx?.FullScreen?.request()
-
   pause: ->
     cancelAnimationFrame @_animation
     @_animation = undefined
@@ -244,13 +243,11 @@ class IskDisplayRenderer
       @texpool.release(d.uid, tex)
     if tex?.image?.iskSlide?.uid != d.uid
       tex.image=slide
-      tex.minFilter=THREE.LinearFilter
+      tex.minFilter=THREE.NearestFilter
+      tex.magFilter=THREE.NearestFilter
+      tex.premultiplyAlpha=false
+      tex.generateMipmaps=false
       tex.needsUpdate = true
-
-      t=performance.now()
-      @renderer.uploadTexture tex
-      t-=performance.now()
-      console.debug "Loaded texture in ", (-t).toFixed(2), Date()
 
     if @transition_active()
       @change_slide_end()
