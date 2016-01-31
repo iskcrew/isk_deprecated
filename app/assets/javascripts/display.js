@@ -12,17 +12,22 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-// Jquery and plugins
+// Jquery
 //= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require bootstrap-sprockets
-//= require jquery.timer
-//= require jquery-noty.main
-//= require tubesock
 //
-// three.js and others
+// Display javascripts, they care about the order
 //= require ./display/three.js
 //= require ./display/THREEx.WindowResize.js
 //= require ./display/THREEx.FullScreen.js
-//= require_tree ./display
+//= require ./display/state-machine.js
+//= require ./display/isk.debug.js.coffee
+//= require ./display/isk.local_message_broker.js.coffee
+//= require ./display/isk.renderer.js.coffee
+//= require ./display/isk.clock.js.coffee
+//= require ./display/isk.client.js.coffee
+//= require ./display/isk.remote_broker.js.coffee
+//= require ./display/isk.errors.js.coffee
+//= require ./display/isk.events.js.coffee
+//= require ./display/isk.localoverride.js.coffee
+//= require ./display/isk.videoplayer.js.coffee
+//= require ./display/isk.statemachine.js.coffee
