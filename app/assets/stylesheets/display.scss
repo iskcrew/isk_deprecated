@@ -14,19 +14,29 @@ body {
 
 div#renderer {
 	cursor: none;
+	height: auto;
+	width: auto;
 	
-	* {
+	div#canvas {
+		height: auto;
+		width: auto;
+		* {
+			display: block !important;
+		}
+	}
+	
+	div#override {
 		position: absolute;
 		height:100%;
 		width:100%;
 	}
 	
-	div#canvas {
-		* {
-			display: block !important;
-		}
+	div#clock {
+		position: absolute;
+		height:100%;
+		width:100%;
 	}
-
+	
 	div#clock canvas {
 		display: block;
 		height:unset;
@@ -79,6 +89,18 @@ div#errors {
 	font-size: 50px;
 	right: 0px;
 	top: 0px;
+	
+	div#connection {
+		color: blue;
+	}
+	
+	div#loggedout {
+		color: red;
+	}
+	
+	div#stopped {
+		color: white;
+	}
 	
 	* {
 		position: relative;
