@@ -1,121 +1,120 @@
 @font-face{
-    font-family: 'CustomFont';
-    src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf');
+	font-family: 'CustomFont';
+	src: url('/fonts/Franklin_Gothic_Heavy-Regular.ttf');
 }
 
 body {
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px;
-    height: 100%;
-    width: 100%;
-    background: black;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+	width: 100%;
+	background: black;
 }
 
 div#renderer {
-    cursor: none;
-    height:100%;
-    width:100%;
-}
-
-div#renderer * {
-    position: absolute;
-    height:100%;
-    width:100%;
+	cursor: none;
+	height: unset;
+	position: absolute;
+	width: 100%;
+	
+	div#canvas {
+		display: block;
+		z-index: 2;
+	}
+	
+	div#override {
+		transition: opacity 1s ease-in-out; 
+		-webkit-transition: opacity 1s ease-in-out; 
+		opacity: 0;
+		z-index: 5;
+	  
+		* {
+			display: block;
+			height:unset;
+			max-height: 100%;
+		}
+	  
+		&.shown {
+			opacity: 1;
+		}
+	  
+	}
+	
+	div#clock {
+		position: absolute;
+		bottom: 0px;
+		
+		canvas {
+			display: block;
+			height:unset;
+			max-height:12%;
+			width: 100%;
+			bottom: 0px;
+			transition: transform 1s ease-in-out;
+			-webkit-transition: -webkit-transform 1s ease-in-out;
+			transform: translateY(0);
+			-webkit-transform: translateY(0);
+			z-index: 3;	
+			
+			&.hidden {
+				transform: translateY(100%);
+				-webkit-transform: translateY(100%);
+			}
+		}
+	}
 }
 
 div#bgrs {
-    z-index: 1;
-    display: none;
-}
-
-div#bgrs img {
-    height:unset;
-    max-height: 100%;
-}
-
-div#override * {
-    display: block;
-    height:unset;
-    max-height: 100%;
-}
-
-div#override {
-  transition: opacity 1s ease-in-out; 
-  -webkit-transition: opacity 1s ease-in-out; 
-  opacity: 0;
-  z-index: 5;
-}
-
-div#override.shown {
-  opacity: 1;
-}
-
-div#canvas {
-  z-index: 2;
-}
-
-div#clock canvas {
 	position: absolute;
-    display: block;
-    height:unset;
-    max-height:12%;
-    width: 100%;
-    bottom: 0px;
-    transition: transform 1s ease-in-out;
-    -webkit-transition: -webkit-transform 1s ease-in-out;
-    transform: translateY(0);
-    -webkit-transform: translateY(0);
-    z-index: 3;
-}
-
-div#clock canvas.hidden {
-    transform: translateY(100%);
-    -webkit-transform: translateY(100%);
-}
-
-div#canvas * {
-    display: block !important;
+	top: 0px;
+	z-index: 1;
+	opacity: 0;
+	
+	img {
+		max-height: 100%;
+		width: 100%;
+	}
 }
 
 div#errors {
-    display:inline-block;
-    position: absolute;
-    font-size: 50px;
-    right: 0px;
-    top: 0px;
+	display:inline-block;
+	position: absolute;
+	font-size: 50px;
+	right: 0px;
+	top: 0px;
+	
+	div#connection {
+		color: blue;
+	}
+
+	div#loggedout {
+		color: red;
+	}
+
+	div#stopped {
+		color: white;
+	}
 }
 div#errors * {
-    position: relative;
-    display: none;
+	position: relative;
+	display: none;
 }
 
 div#errors *.active{
-   display: block;
+	display: block;
 }
 
 div#errors #stopped{
 }
 
 div#pres{
-    display: none !important;
+	display: none !important;
 }
 
 div#pres img {
-    height: 1px;
-    width: 1px;
-}
-
-div#connection {
-	color: blue;
-}
-
-div#loggedout {
-	color: red;
-}
-
-div#stopped {
-	color: white;
+	height: 1px;
+	width: 1px;
 }
 
 /* example 6 from https://css-tricks.com/examples/CSSTabs/ */
