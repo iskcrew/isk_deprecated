@@ -8,7 +8,7 @@ port=undefined
 cbs={}
 
 open_port = () ->
-  worker = new SharedWorker('app/isk.local_message_broker_worker.js')
+  worker = new SharedWorker($('#ISKDPY').attr('data-local-worker'))
   worker.port.start()
   worker.port
 
