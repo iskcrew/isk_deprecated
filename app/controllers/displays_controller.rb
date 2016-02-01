@@ -136,6 +136,13 @@ class DisplaysController < ApplicationController
 			raise PermissionDenied unless require_display_control(@display)
 			render layout: false
 		end
+		
+		# Local control interface for the running display
+		def dpy_local_control
+			@display = Display.find(params[:id])
+			raise PermissionDenied unless require_display_control(@display)
+			render layout: false
+		end
 					
 		#FIXME: this logic needs to go to the model
 		def sort_queue
