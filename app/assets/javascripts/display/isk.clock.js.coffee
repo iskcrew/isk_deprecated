@@ -51,7 +51,7 @@ drawStrokedText = (t, pos...) ->
 
 set_current_time = () ->
   if shown
-    t=Math.floor(Date.now()/1000)
+    t=Math.floor(Date.now() / 1000)
     if t != old_t
       old_t = t
       s = Date().split(' ')
