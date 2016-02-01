@@ -123,10 +123,11 @@ class IskDisplayRenderer
 				value.material.needsUpdate=true
 
 	handle_window_size: =>
-		elem=document.querySelector('img#empty')
-		[w,h]=[elem?.clientWidth,elem?.clientHeight]
-		if not w? and h?
-			[w,h]=[window?.innerWidth,window?.innerHeight]
+		w = window.innerWidth
+		h = w * 9 / 16
+		if h > window.innerHeight
+			h = window.innerHeight
+			w = h * 16 / 9
 		@renderer.setSize( w,h )
 		@camera.aspect = w / h
 		@camera.updateProjectionMatrix()

@@ -29,6 +29,7 @@ div#renderer {
 	
 	div#override {
 		position: absolute;
+		display: none;
 		top: 0px;
 		transition: opacity 1s ease-in-out; 
 		-webkit-transition: opacity 1s ease-in-out; 
@@ -45,6 +46,7 @@ div#renderer {
 		}
 	  
 		&.shown {
+			display: block;
 			opacity: 1;
 		}
 	  
@@ -79,6 +81,7 @@ div#bgrs {
 	position: absolute;
 	top: 0px;
 	z-index: 1;
+	display: none;
 	
 	img {
 		position: relative;
