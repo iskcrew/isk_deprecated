@@ -129,6 +129,13 @@ class DisplaysController < ApplicationController
 		def dpy_control
 			@display = Display.find(params[:id])
 		end
+		
+		# The webgl display
+		def dpy
+			@display = Display.find(params[:id])
+			raise PermissionDenied unless require_display_control(@display)
+			render layout: false
+		end
 					
 		#FIXME: this logic needs to go to the model
 		def sort_queue
@@ -146,12 +153,7 @@ class DisplaysController < ApplicationController
 				render text: "Invalid request, try refreshing", status: :bad_request
 			end				
 		end
-		
-		# The webgl display
-		def dpy
-			render layout: false
-		end
-	
+			
 		# Websocket connection for communication with displays
 		def websocket
 			@display = Display.find(params[:id])
