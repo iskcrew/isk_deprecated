@@ -8,7 +8,7 @@ port=undefined
 cbs={}
 
 open_port = () ->
-  worker = new SharedWorker($('#ISKDPY').attr('data-local-worker'))
+  worker = new SharedWorker($('.iskdpy_local_broker').attr('data-local-worker'))
   worker.port.start()
   worker.port
 

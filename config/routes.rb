@@ -83,6 +83,7 @@ Isk::Application.routes.draw do
 			get 'dpy_control'
 			get 'websocket'
 			get 'dpy'
+			get 'dpy_local_control'
 		end
 
 		collection do
