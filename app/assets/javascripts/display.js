@@ -22,8 +22,8 @@
 //= require ./display/state-machine.js
 //= require ./display/isk.debug.js.coffee
 //= require ./display/isk.local_message_broker.js.coffee
-//= require ./display/isk.renderer.js.coffee
 //= require ./display/isk.clock.js.coffee
+//= require ./display/isk.renderer.js.coffee
 //= require ./display/isk.client.js.coffee
 //= require ./display/isk.remote_broker.js.coffee
 //= require ./display/isk.errors.js.coffee

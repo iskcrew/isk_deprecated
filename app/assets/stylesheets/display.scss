@@ -20,7 +20,7 @@ div#renderer {
 	div#canvas {
 		height: auto;
 		width: auto;
-		* {
+		canvas {
 			display: block !important;
 		}
 	}
@@ -29,29 +29,31 @@ div#renderer {
 		position: absolute;
 		height:100%;
 		width:100%;
+		
+		img {
+			height: auto;
+			width: 100%;
+		}
 	}
 	
 	div#clock {
-		position: absolute;
-		height:100%;
-		width:100%;
-	}
-	
-	div#clock canvas {
-		display: block;
-		height:unset;
-		max-height:12%;
-		width: 100%;
+		position: relative;
 		bottom: 0px;
-		transition: transform 1s ease-in-out;
-		-webkit-transition: -webkit-transform 1s ease-in-out;
-		transform: translateY(0);
-		-webkit-transform: translateY(0);
-		z-index: 3;
+		
+		canvas {
+				display: block;
+				height:unset;
+				max-height:12%;
+				width: 100%;
+				transition: transform 1s ease-in-out;
+				-webkit-transition: -webkit-transform 1s ease-in-out;
+				transform: translateY(0);
+				-webkit-transform: translateY(0);
 	
-		&.hidden {
-			transform: translateY(100%);
-			-webkit-transform: translateY(100%);
+				&.hidden {
+					transform: translateY(100%);
+					-webkit-transform: translateY(100%);
+				}
 		}
 	}
 	

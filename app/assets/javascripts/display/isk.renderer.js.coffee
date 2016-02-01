@@ -131,6 +131,8 @@ class IskDisplayRenderer
 		@renderer.setSize( w,h )
 		@camera.aspect = w / h
 		@camera.updateProjectionMatrix()
+		clock = $('div#clock')
+		clock.css('bottom', "#{clock.height()}px")
 
 	init_renderer: ->
 		@renderer = new THREE.WebGLRenderer({antialias: false, precision: 'lowp'})
