@@ -60,7 +60,11 @@ set_current_time = () ->
 			ctx.clearRect(0, 0, elem.width, elem.height)
 			drawStrokedText(longday[s[0]], t_pos[0], 60 )
 			drawStrokedText(s[4], t_pos[0], 115)
-
+			clock = $('div#clock')
+			canvas = $('div#canvas canvas')
+			height = window.innerHeight - canvas.height()
+			clock.css('bottom', "#{height}px")
+			clock.width($('div#canvas canvas').width())
 run = (t) ->
 	requestAnimationFrame run
 	set_current_time()

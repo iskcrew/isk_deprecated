@@ -37,8 +37,8 @@ div#renderer {
 	}
 	
 	div#clock {
-		position: relative;
-		bottom: 0px;
+		position: absolute;
+		display: block;
 		
 		canvas {
 				display: block;
