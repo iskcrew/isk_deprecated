@@ -128,7 +128,7 @@ class IskDisplayRenderer
 		if not w? and h?
 			[w,h]=[window?.innerWidth,window?.innerHeight]
 		@renderer.setSize( w,h )
-		@camera.aspect = w/h
+		@camera.aspect = w / h
 		@camera.updateProjectionMatrix()
 
 	init_renderer: ->
@@ -138,7 +138,7 @@ class IskDisplayRenderer
 
 		@scene = new THREE.Scene()
 		@camera = new THREE.PerspectiveCamera( 90.0, window.innerWidth/window.innerHeight, 1.0, 10000.0 )
-		@camera.position.z = 108.0/2
+		@camera.position.z = 108.0 / 2
 
 		#geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
 		geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
