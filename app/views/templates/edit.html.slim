@@ -23,7 +23,7 @@ h1 Editing slide template #{@template.name}
 		dt Default value
 		dd The default value for this field in the slide editor. 
 	
-	ul#fields.sortable data-sortable=sort_template_url(@template)
+	ul#fields.sortable data-sortable=sort_template_path(@template)
 		= render partial: 'template_fields', locals: {f: f}
 	= f.primary 'Update template'
 			

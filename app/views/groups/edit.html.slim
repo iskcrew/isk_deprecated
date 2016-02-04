@@ -18,5 +18,5 @@ div.row
 		div.sortable-container.panel.panel-primary
 			div.panel-heading Slides in this group
 			div.panel-body
-				ul#slides.sortable.panel-group.list-group data-sortable=sort_group_url(@group)
+				ul#slides.sortable.panel-group.list-group data-sortable=sort_group_path(@group)
 					= render partial: 'sortable_slides', locals: {group: @group}
