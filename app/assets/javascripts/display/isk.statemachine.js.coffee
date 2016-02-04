@@ -10,11 +10,11 @@ connection = StateMachine.create
     { name: 'websocket_connected', from: 'INIT',  to: 'READY' }
 
     { name: 'close', from: ['READY', 'RECON', 'ERR'],  to: 'CLOSING' }
-    { name: 'websocket_closed', from: ['READY', 'CLOSING'],  to: 'CLOSED' }
+    { name: 'websocket_closed', from: ['CLOSING'],  to: 'CLOSED' }
     { name: 'open', from: 'CLOSED',  to: 'RECON' }
 
     { name: 'websocket_error',  from: ['READY', 'RECON'], to: 'ERR' }
-    { name: 'websocket_closed',  from: 'ERR', to: 'RECON' }
+    { name: 'websocket_closed',  from: ['READY', 'ERR'], to: 'RECON' }
 
     { name: 'websocket_connected',  from: 'RECON', to: 'READY' }
    
