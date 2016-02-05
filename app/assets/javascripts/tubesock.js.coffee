@@ -70,7 +70,7 @@ $ ->
 	
 	popup_connection_lost = ->
 		confirm_reconnect = ->
-			if confirm("Websocket connection lost. Try to reconnect?") then initialize_websocket()
+			initialize_websocket()
 		timer = setTimeout( confirm_reconnect, 5000 )
 	
 	initialize_websocket = ->
