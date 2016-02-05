@@ -10,4 +10,4 @@
 				= bootstrap_form_for o, url: update_override_display_path(o.id), layout: :inline do |f|
 					= f.text_field :duration, size: 3, class: 'duration_spinner', label: 'Duration'
 					= f.primary 'Change'
-					= link_to icon('minus', 'Remove'), remove_override_display_path(o.id), class: 'btn btn-danger'
+					= link_to icon('minus', 'Remove'), remove_override_display_path(o.id), class: 'btn btn-danger', method: :post
