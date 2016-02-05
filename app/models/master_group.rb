@@ -7,7 +7,7 @@
 
 class MasterGroup < ActiveRecord::Base
 	
-	has_many :slides, -> {order('position ASC').where(deleted: false) }, dependent: :destroy
+	has_many :slides, -> {where(deleted: false).order(position: :asc) }, dependent: :destroy
 	has_many :groups, dependent: :destroy
 	has_many :presentations, -> { uniq }, through: :groups
 	has_many :displays, -> {uniq}, through: :presentations
