@@ -20,7 +20,7 @@ class SlidesController < ApplicationController
 		else
 			@groups = Array.new
 			@groups << current_event.ungrouped
-			@groups += MasterGroup.current.order("LOWER(master_groups.name)").includes(:slides).joins(:slides).to_a
+			@groups += MasterGroup.current.order("LOWER(master_groups.name)").all
 		end
 		
 		respond_to do |format|
