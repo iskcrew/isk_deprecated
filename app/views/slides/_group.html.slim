@@ -1,5 +1,5 @@
 = cache group_cache_key(group), tag: [group.cache_tag, current_user.cache_tag] do
-	- unless group.slides.empty?
+	- if group.slides.present?
 		div.compact-slidelist.panel.panel-default id="anchor_group_#{group.id}"
 			div.panel-heading
 				-if group.is_a? UnGroup
