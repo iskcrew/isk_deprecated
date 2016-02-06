@@ -32,7 +32,7 @@ class DisplayLogging
 		time = finish - start
 		msg = payload[:message]
 		log_msg = []
-		log_msg << "#{payload[:action]}"
+		log_msg << "#{payload[:type]}"
 		log_msg << "From #{payload[:ip]}"
 		log_msg << "Time taken: #{(time*1000).round(2)}ms"
 		log_msg << "Parameters: #{msg.payload}"
