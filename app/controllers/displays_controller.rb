@@ -217,6 +217,7 @@ class DisplaysController < ApplicationController
 							@display_connection = true
 							@display.status = 'running'
 							@display.ip = request.remote_ip
+							@display.last_hello = Time.now
 							@display.save!
 							msg = IskMessage.new('display', 'start', {})
 							msg.send @display.websocket_channel
