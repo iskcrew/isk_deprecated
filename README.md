@@ -1,10 +1,3 @@
-# tubesock branch
-This is a **highly** experimental branch for swapping out the websocket-rails gem in favor of tubesock gem. Not suitable for production!
-
-Currently all needed functionality is inplemented and tests have been written on the ISK server side, the iskdpy display package still needs to be updated.
-
-This is mainly done because websocket-rails is not maintained anymore and that library has many critical bugs that need to be worked around. It's owner is even closing bugs without any fixes available. See https://github.com/websocket-rails/websocket-rails/issues/191 for example.
-
 # ISK - A web controlled slideshow system
 
 System for centrally managing multiple screens running multiple presentation,
@@ -22,7 +15,6 @@ Versions listed are known good ones, other versions are probably fine.
  * inkscape (for debian either 0.48.3.1-1.3 from Wheezy or 0.91-5~bpo8+1 from jessie-backports, 0.48.5-3 from Jessi DOES NOT WORK)
  * postgresql (9.1)
  * rrdtool (1.4.7) for statistic collection and graph generation
- * iskdpy ( http://github.com/iskcrew/iskdpy/ ) for running the slideshows
 
 ## Installation
 
@@ -140,6 +132,10 @@ This extension can be found in the extensions -> isk -> new menu item. Activatin
 ## isk-output extension
 
 This extension is for sending the modifications made to a slide in inkscape back to the ISK server. It can be found at extensions -> publish to -> isk menu item. It has similiar fields for the servers url and login details as the isk-new extension. Activating the extension will read the slide id from the svg metadata and then push it to the ISK server replacing the existing slides image.
+
+# Running displays
+
+We have now integrated the previously separate iskdpy repository. This means that to run the slideshow in a browser using webgl you simply need to point your browser to http://iskhost.example/displays/1/dpy just replace the '1' in the url with the numerical id of the display you want to run.
 
 # Copyright
 
