@@ -75,9 +75,10 @@ handle_display = (display) ->
   if display?.presentation?.slides?.length == 0
     console.log "Presentation is empty"
     empty=document.querySelector('#empty').cloneNode()
-    empty.iskSlide = {duration: 1, ready: true}
+    empty.iskSlide = {duration: 1, ready: true, effect_id: 1}
     empty.dataset.error_message ='Presentation empty, showing empty slide'
-    empty.appendTo elems
+    empty.classList.add "presentation_slide"
+    elems.appendChild empty
 
   [].forEach.call current, (s) ->
     old_slide = s
