@@ -75,9 +75,10 @@ handle_display = (display) ->
   if display?.presentation?.slides?.length == 0
     console.log "Presentation is empty"
     empty=document.querySelector('#empty').cloneNode()
-    empty.iskSlide = {duration: 1, ready: true}
+    empty.iskSlide = {duration: 1, ready: true, effect_id: 1}
     empty.dataset.error_message ='Presentation empty, showing empty slide'
-    empty.appendTo elems
+    empty.classList.add "presentation_slide"
+    elems.appendChild empty
 
   [].forEach.call current, (s) ->
     old_slide = s
@@ -114,20 +115,27 @@ send_shutdown = ->
   console.debug 'sending shutdown'
   isk.remote.trigger 'shutdown'
 
-send_current_slide = (slide) ->
-  s=slide.iskSlide
+_send_slide_info = (method, slide) ->
+  s=slide?.iskSlide
   data = {
     group_id: s?.group
     slide_id: s?.id,
     override_queue_id: s?.override_queue_id
     }
   if data?.slide_id and (data?.group_id or data?.override_queue_id)
-    console.debug 'sending current_slide', data
-    isk.remote.trigger 'current_slide', data
+    console.debug 'sending', method, data
+    isk.remote.trigger method, data
   else
-    data.error = slide.dataset?.error_message or "Unknown slide shown"
+    data.error = slide?.dataset?.error_message or "Unknown slide shown"
     console.debug 'sending error', data
     isk.remote.trigger 'error', data
+
+send_current_slide = (slide) ->
+  _send_slide_info 'current_slide', slide
+
+send_slide_shown = (slide) ->
+  if slide?
+    _send_slide_info 'slide_shown', slide
 
 send_error = (msg) ->
   console.debug 'sending error', msg
@@ -148,15 +156,16 @@ when_ready = (elem, f) ->
 set_current = (elem) ->
   console.debug 'CURRENT', elem
   clearTimeout(timer)
+  send_slide_shown current[0]
   if elem? and elem?.iskSlide?.ready
     when_ready elem, ->
       if @?.width
-        send_current_slide @
         showing_override=elem?.classList?.contains('override_slide')
         [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
           e.classList.remove('current')
           e.classList.remove('updated')
         @.classList.add('current')
+        send_current_slide current[0]
         clock_mode.set @?.iskSlide?.show_clock == true
         dur=@?.iskSlide?.duration
         if dur
@@ -173,10 +182,10 @@ set_current_updated = (elem) ->
     clearTimeout(timer)
     when_ready elem, ->
       if @?.width
-        send_current_slide @
         [].forEach.call @.parentElement.getElementsByClassName('updated'), (e) ->
           e.classList.remove('updated')
         @.classList.add('updated')
+        send_current_slide current[0]
         clock_mode.set @?.iskSlide?.show_clock == true
         dur=@?.iskSlide?.duration
         if dur
