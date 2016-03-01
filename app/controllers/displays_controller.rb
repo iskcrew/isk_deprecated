@@ -323,7 +323,7 @@ class DisplaysController < ApplicationController
 	
 		# Whitelist the parameters for updating displays
 		def display_params
-			params.required(:display).permit(:name, :presentation_id, :manual, :monitor, :do_overrides)
+			params.required(:display).permit(:name, :presentation_id, :manual, :monitor, :do_overrides, :live)
 		end
 	
 		# Require display admin priviledges or raise PermissionDenied

@@ -27,14 +27,19 @@ module DisplaysHelper
 		case display.status
 		when 'running'
 			if display.late?
-				'panel-warning'
+				panel = 'panel-warning'
 			else
-				'panel-success'
+				panel = 'panel-success'
 			end
 		when 'disconnected'
-			'panel-default'
+			panel = 'panel-default'
 		else
-			'panel-danger'
+			panel = 'panel-danger'
+		end
+		if display.live?
+			return "#{panel} display-live"
+		else
+			return panel
 		end
 	end
 	

@@ -12,6 +12,7 @@ en:
       display:
         monitor: 'Monitor this display'
         manual: 'Manual control only'
+        live: 'Live display'
       event:
         name: 'Event name:'
         current: 'Current event:'
