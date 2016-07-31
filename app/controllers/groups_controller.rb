@@ -93,8 +93,10 @@ class GroupsController < ApplicationController
 		@group = MasterGroup.find(params[:id])
 		require_edit @group
 		@group.destroy
-		
-		redirect_to groups_path
+		respond_to do |format|
+			format.html {redirect_to groups_path}
+			format.js
+		end
 	end
 	
 	# Add multiple slides to group, render the selection form for all ungrouped slides
