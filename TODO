@@ -1,7 +1,13 @@
+BIG items:
+ - Advertisement blocks with round-robin
+ - Timers for slides
+ - Rewrite caching, cashier blocks rails5 migration
+
 - Assembly winter 2016
  - webfont? the metrological browser miss-renders the display list
  - dpy -> slide_shown message needs to be implemented
  - tally! we have E2 data to parse and use!
+ - show a warning message on screen if websocket connection is lost (hide on connect, show on disconnect)
 
 BUGS / INCONSISTENCIES:
 	- Cloning of TemplateSlides
