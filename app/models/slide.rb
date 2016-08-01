@@ -102,8 +102,8 @@ class Slide < ActiveRecord::Base
 	end
 
 	# Log that the slide has been shown on display_id just now.
-	def shown_on(display_id)
-		self.display_counts.create(display_id: display_id)
+	def shown_on(display_id, live)
+		self.display_counts.create(display_id: display_id, live: live)
 	end
 
 	# Create new ungrouped hidden clone of the slide

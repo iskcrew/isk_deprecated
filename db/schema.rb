@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301090306) do
+ActiveRecord::Schema.define(version: 20160801173318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,12 +36,14 @@ ActiveRecord::Schema.define(version: 20160301090306) do
     t.integer  "count",      default: 0
     t.integer  "slide_id"
     t.integer  "display_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "live",       default: false
   end
 
   add_index "display_counts", ["display_id", "slide_id"], name: "index_display_counts_on_display_id_and_slide_id", using: :btree
   add_index "display_counts", ["display_id"], name: "index_display_counts_on_display_id", using: :btree
+  add_index "display_counts", ["live"], name: "index_display_counts_on_live", using: :btree
   add_index "display_counts", ["slide_id"], name: "index_display_counts_on_slide_id", using: :btree
 
   create_table "display_states", force: :cascade do |t|

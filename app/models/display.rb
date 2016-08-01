@@ -88,7 +88,7 @@ class Display < ActiveRecord::Base
 			self.websocket_connection_id = connection_id
 			self.current_slide = oq.slide
 			self.current_group_id = -1
-			oq.slide.shown_on self.id
+			oq.slide.shown_on self.id, self.live
 			oq.destroy
 			self.status = 'running'
 			self.state.save!
@@ -115,7 +115,7 @@ class Display < ActiveRecord::Base
 			self.ping
 			self.websocket_connection_id = connection_id
 			self.status = 'running'
-			self.current_slide.shown_on(self.id)
+			self.current_slide.shown_on(self.id, self.live)
 			self.state.save!
 			return true
 		rescue ActiveRecord::RecordNotFound

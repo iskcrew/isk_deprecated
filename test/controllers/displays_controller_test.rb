@@ -147,9 +147,11 @@ class DisplaysControllerTest < ActionController::TestCase
 			slide_id: d.override_queues.first.slide.id,
 			group_id: -1
 			})
-		assert_difference "displays(:with_overrides).override_queues.count", -1 do
-			with_redis d.websocket_channel do
-				tube :websocket, {id: d.id}, @adminsession, msg.encode
+		assert_difference "DisplayCount.where(display_id: #{d.id}).count"	do
+			assert_difference "displays(:with_overrides).override_queues.count", -1 do
+				with_redis d.websocket_channel do
+					tube :websocket, {id: d.id}, @adminsession, msg.encode
+				end
 			end
 		end
 		assert_messages 2, ['data', 'slide_shown']
@@ -161,8 +163,10 @@ class DisplaysControllerTest < ActionController::TestCase
 			slide_id: d.presentation.slides.first.id,
 			group_id: d.presentation.groups.first.id
 		})
-		with_redis d.websocket_channel do
-			tube :websocket, {id: d.id}, @adminsession, msg.encode
+		assert_difference "DisplayCount.where(display_id: #{d.id}).count" do
+			with_redis d.websocket_channel do
+				tube :websocket, {id: d.id}, @adminsession, msg.encode
+			end
 		end
 		assert_one_isk_message 'display', 'current_slide'
 	end

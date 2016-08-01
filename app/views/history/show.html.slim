@@ -8,4 +8,4 @@ div.row
 		'The slide has been shown at:
 		ol.display_counts
 			- @display_counts.each do |dc|
-				li = I18n.l(dc.updated_at, :format => :short)
+				li class=(dc.live ? 'live' : 'not_live') = I18n.l(dc.updated_at, :format => :short)
