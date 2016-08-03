@@ -5,7 +5,7 @@
 # Author::    Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
-
+require 'rest-client'
 
 def say(msg)
 	puts "#{Time.now.strftime('%FT%T%z')}: #{msg}"
@@ -45,27 +45,20 @@ end
 def isk_login(host, port, username, password)
 	puts "Logging in to ISK at #{host}:#{port}...".green
 
+	base_url = String.new
 	# Send a POST request to ISK and collect cookies
-	http = Net::HTTP.new(host, port)
-	resp, data = http.post('/login', "username=#{username}&password=#{password}&format=json")
+	if port.to_i == 443
+		base_url = "https://#{host}/"
+	else
+		base_url = "http://#{host}:#{port}/"
+	end
+	puts base_url
+	r = RestClient.post "#{base_url}/login", {username: username, password: password}, accept: :json
 
 	#Check the return code from the POST request
-	if resp.is_a? Net::HTTPForbidden
+	if r.code != 200
 		abort "Error loggin into ISK, aborting".red
 	end
-
-	# Extract cookies
-	all_cookies = resp.get_fields('set-cookie')
-	cookies_array = Array.new
-	all_cookies.each { | cookie |
-		cookies_array.push(cookie.split('; ')[0])
-	}
-	cookies = cookies_array.join('; ')
-
-	# Store the session cookie
-	headers = {
-		'Cookie' => cookies
-	}
 	
-	return http, headers
+	return base_url, r.cookie_jar
 end

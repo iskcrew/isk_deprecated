@@ -6,17 +6,16 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-require 'rubygems'
-
 # Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+# ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+# require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
 
 require 'highline/import'
 require 'colorize'
 require 'faye/websocket'
 require 'json'
 require 'time_diff'
+require 'rest-client'
 
 require_relative '../lib/isk_message.rb'
 require_relative '../lib/cli_helpers.rb'
@@ -25,23 +24,26 @@ require_relative '../lib/cli_helpers.rb'
 @port = ARGV[1]
 @port ||= 80
 
-#username = ask('Username:  ')
-#password = ask("Password:  ") { |q| q.echo = 'x' }
+username = ask('Username:  ')
+password = ask("Password:  ") { |q| q.echo = 'x' }
 
-username = 'admin'
-password = 'eiaavistustakaan'
-
-http, @headers = isk_login(@host, @port, username, password)
-
+@base_url, @cookies = isk_login(@host, @port, username, password)
+@headers = {'Cookie' => "#{@cookies.cookies.first.name}=#{@cookies.cookies.first.value};"}
 # Get list of displays
-resp, data = http.get('/displays?format=json', @headers)
+
+resp = RestClient.get("#{@base_url}displays", {cookies: @cookies, accept: :json})
 @displays = JSON.parse resp.body
 
 @connection_opened = Time.now
 @ws = nil
 
+@ws_base_url = "ws://#{@host}:#{@port}/"
+if @port.to_i == 443
+	@ws_base_url = "wss://#{@host}/"
+end
+
 def init_general_socket
-	@ws = Faye::WebSocket::Client.new("ws://#{@host}:#{@port}/isk_general", nil, headers: @headers)
+	@ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: @headers)
 
 	@ws.on :open do |event|
 		say 'General connection opened'
@@ -76,7 +78,7 @@ def init_general_socket
 end
 
 def init_display_socket(id)
-	dws = Faye::WebSocket::Client.new("ws://#{@host}:#{@port}/displays/#{id}/websocket", nil, headers: @headers)
+	dws = Faye::WebSocket::Client.new("#{@ws_base_url}/displays/#{id}/websocket", nil, headers: @headers)
 	
 	opened = Time.now
 	
