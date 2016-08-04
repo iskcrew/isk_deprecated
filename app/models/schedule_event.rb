@@ -14,7 +14,7 @@ class ScheduleEvent < ActiveRecord::Base
 	validates :schedule, presence: true
 	
 	before_validation do |event|
-		if event.name.length > 35
+		if event.name.length > self.schedule.settings[:events][:line_length]
 			new_name = String.new
 			line = String.new
 			event.name.split.each do |word|
