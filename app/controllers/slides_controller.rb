@@ -279,7 +279,7 @@ class SlidesController < ApplicationController
 	def svg_data
 		@slide = Slide.find(params[:id])
 		@slide.update_metadata! if @slide.is_a? InkscapeSlide
-		send_file @slide.svg_filename, disposition: 'attachment'
+		send_file @slide.svg_filename, disposition: 'attachment', type: 'image/svg+xml'
 	end
 
 	# Save the submitted svg to a slide. Used by the inkscape plugins
