@@ -2,6 +2,9 @@
 defaults: &defaults
   adapter: postgresql
   pool: 5
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: postgres
 
 production:
   <<: *defaults

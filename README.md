@@ -141,6 +141,21 @@ This extension is for sending the modifications made to a slide in inkscape back
 
 We have now integrated the previously separate iskdpy repository. This means that to run the slideshow in a browser using webgl you simply need to point your browser to http://iskhost.example/displays/1/dpy just replace the '1' in the url with the numerical id of the display you want to run.
 
+# Docker
+
+This branch contains initial docker compatible setup. The minimal steps needed for having ISK running.
+
+* git clone https://github.com/iskcrew/isk
+* git checkout wip/docker
+* cp config/database.yml.example config/database.yml
+* docker-compose up --build
+
+* docker-compose run website rake db:create
+* docker-compose run website rake db:schema:load
+* docker-compose run website rake db:seed
+
+After all commands have been run, point your browser to http://localhost:8080/
+
 # Copyright
 
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.

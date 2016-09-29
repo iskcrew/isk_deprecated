@@ -20,7 +20,7 @@ Isk::Application.configure do
   config.action_controller.perform_caching = true
 
   #Memcached using dalli_store
-  config.cache_store = :mem_cache_store, "localhost",
+  config.cache_store = :mem_cache_store, ENV["MEMCACHED_HOST"] || "localhost",
     { namespace: "ISK", expires_in: 5.minutes, compress: true }
 
   # Don't log served assets
