@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "debian/jessie64"
+  config.vm.box = "debian/contrib-jessie64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,7 +22,9 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  
+  # forward the default rails development port
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -65,18 +67,37 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-     apt-get update
-     apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev inkscape rrdtool librrd4 librrd-dev git curl
-     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-     curl -sSL https://get.rvm.io | bash -s stable --ruby
-     source /usr/local/rvm/scripts/rvm
-     rvm requirements
-     rvm install 2.3.0
-     rvm use 2.3.0
-     rvm gemset create isk
-     rvm gemset use isk
-     gem install bundler
-     cd /vagrant
-     bundle install
+    # Add jessie-backports for inkscape
+    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+    apt-get update
+    apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl
+    apt-get -t jessie-backports install -y inkscape
+    # Create postgresql user and database 
+    su postgres -c "psql -c \"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\" "
+    su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_development"
+    su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_test"
+  SHELL
+  
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    # Install rvm and ruby
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    curl -sSL https://get.rvm.io | bash -s stable --ruby
+    source ~/.rvm/scripts/rvm
+    rvm requirements
+    rvm install 2.3.0
+    rvm use 2.3.0
+    rvm gemset create isk
+    rvm gemset use isk
+    gem install bundler
+  
+    # Install rubygems for ISK
+    cd /vagrant
+    bundle install
+  
+    # Setup the database
+    cp /vagrant/config/database.yml.example /vagrant/config/database.yml
+    rake db:schema:load
+    rake db:seed
+    rake isk:secrets
   SHELL
 end
