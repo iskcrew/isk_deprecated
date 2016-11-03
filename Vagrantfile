@@ -45,13 +45,14 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "isk-dev"
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
-  # end
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -73,7 +74,7 @@ Vagrant.configure("2") do |config|
     apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl
     apt-get -t jessie-backports install -y inkscape
     # Create postgresql user and database 
-    su postgres -c "psql -c \"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\" "
+    su postgres -c "psql -c \\"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\\" "
     su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_development"
     su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_test"
   SHELL
