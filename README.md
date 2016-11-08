@@ -16,6 +16,10 @@ Versions listed are known good ones, other versions are probably fine.
  * postgresql (9.1)
  * rrdtool (1.4.7) for statistic collection and graph generation
 
+## Vagrant: Development environment the easy way
+
+The easiest way to get the development environment up and running is to use Vagrant, a system for creating virtual machines. Install vagrant from https://www.vagrantup.com/downloads.html and then just use "vagrant up" command in the cloned ISK directory and soon you will have a virtual machine with all dependencies installed. Then just use "vagrant ssh" to connect to the virtual machine.
+
 ## Installation
 
 To get the dev environment running you need to do the following:
