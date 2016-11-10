@@ -44,7 +44,7 @@ Daemons.run_proc('background_jobs', options) do
 		say 'Fetching http-slides..'
 		realtime = Benchmark.realtime do
 			@slides = Event.current.slides.where(type: 'HttpSlide').all.each do |slide|
-				slide.delay.fetch!
+				slide.fetch!
 			end
 		end
 		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
