@@ -42,21 +42,33 @@ Daemons.run_proc('background_jobs', options) do
 	
 	loop do
 		say 'Fetching http-slides..'
-		realtime = Benchmark.realtime do
-			@slides = Event.current.slides.where(type: 'HttpSlide').all.each do |slide|
-				slide.fetch!
+		begin
+			realtime = Benchmark.realtime do
+				@slides = Event.current.slides.where(type: 'HttpSlide').all.each do |slide|
+					slide.fetch!
+				end
 			end
+			say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
+		rescue Exception => e
+			say "Error fetching http-slides"
+			puts e.message
+			puts e.backtrace.inspect
 		end
-		say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
 		@slides = nil
 	
 		say 'Generating schedule slides..'
-		realtime = Benchmark.realtime do
-			@schedules = Event.current.schedules.all.each do |schedule|
-				schedule.generate_slides
+		begin
+			realtime = Benchmark.realtime do
+				@schedules = Event.current.schedules.all.each do |schedule|
+					schedule.generate_slides
+				end
 			end
+			say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
+		rescue Exception => e
+			say "Error generating schedule slides"
+			puts e.message
+			puts e.backtrace.inspect
 		end
-		say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
 		@schedules = nil
 		
 		say "Sleeping for #{Sleep} seconds"
