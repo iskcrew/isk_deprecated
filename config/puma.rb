@@ -7,11 +7,16 @@ workers Integer(ENV['WEB_CONCURRENCY'] || 2)
 # Ruby threads per worker [initial, max]
 threads 4,16
 
-# Preload the application
-preload_app!
+if (ENV['RAILS_ENV'] || 'development') != 'development'
+	# Preload the application
+	preload_app!
 
-# Run as daemon
-daemonize true
+	# Run as daemon
+	daemonize true
+else
+	daemonize false
+	quiet false
+end
 pidfile "tmp/pids/server.pid"
 state_path 'tmp/pids/puma.state'
 
