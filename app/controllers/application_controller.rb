@@ -35,9 +35,20 @@ class ApplicationController < ActionController::Base
 
 	# Memoize the current user
 	def current_user
+		# Bypass authentication in profile environment
 		return @_current_user ||= User.first if Rails.env.profile?
-		@_current_user ||= session[:user_id] &&
-			User.includes(:permissions).find_by_id(session[:user_id])
+		
+		return @_current_user if @_current_user.present?
+		
+		if session[:user_id]
+			return @_current_user = User.includes(:permissions).find_by_id(session[:user_id])
+		elsif params[:token]
+			@_current_user = AuthToken.authenticate(params[:token])
+			session[:user_id] = @_current_user.id
+			return @_current_user
+		else
+			return nil
+		end
 	end
 
 	# Memoize the current event
