@@ -19,6 +19,8 @@ class User < ActiveRecord::Base
 	has_many :master_groups, -> {order 'master_groups.name'},		through: :permissions, source: :target, source_type: 'MasterGroup'
 	has_many :presentations, -> {order 'presentations.name'},		through: :permissions, source: :target, source_type: 'Presentation'
 	has_many :displays, -> {order 'displays.name'},							through: :permissions, source: :target, source_type: 'Display'
+	
+	has_many :auth_tokens
 
 	# Cache sweeper
 	include CacheSweeper
@@ -79,7 +81,7 @@ class User < ActiveRecord::Base
 			return nil
 		end
 	end
-
+	
 	def cache_tag
 		"user_" + self.id.to_s
 	end
