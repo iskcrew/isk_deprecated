@@ -28,16 +28,13 @@ namespace :isk do
 
 	desc "Create zip with all slide data and the database dump"
 	task full_backup: :sql_backup do
-		tmp_file = Tempfile.new 'isk-full-backup'
 		backup_file = Rails.root.join("isk_backup-#{Time.now.strftime("%F-%H%M")}.tar.gz").to_s
 		# We need relative location for the sql file
 		sql_file = sql_backup_location.to_s.partition(Rails.root.to_s).last[1..-1]
-		cmd = "tar -czf #{tmp_file.path} -C #{Rails.root.to_s} data #{sql_file}"
+		cmd = "tar -czf #{backup_file} -C #{Rails.root.to_s} data #{sql_file}"
 		puts "Creating the archive..."
 		system cmd
-		FileUtils.mv tmp_file.path, backup_file
 		puts "Created full backup: #{backup_file}"
-		tmp_file.unlink
 	end
 	
 	desc "Generate session encryption keys"
