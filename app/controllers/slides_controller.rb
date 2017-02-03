@@ -45,12 +45,6 @@ class SlidesController < ApplicationController
 	def new
 		@slide = Slide.new
 		
-		unless Slide.admin? current_user
-			#sallitaan vain yksinkertaisten ryhmättömien kelmujen luonti
-			render :new_simple
-			return
-		end
-		
 		respond_to do |format|
 			format.html
 			format.js {
@@ -67,10 +61,6 @@ class SlidesController < ApplicationController
 		begin
 			# We need to use a transaction to catch potential errors on processing submitted image data
 			Slide.transaction do
-				
-				unless params[:create_type] == 'simple' || Slide.admin?(current_user)
-					raise ApplicationController::PermissionDenied
-				end
 				
 				# Create the requested type of slide
 				case params[:create_type]
