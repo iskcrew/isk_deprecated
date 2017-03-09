@@ -133,6 +133,9 @@ gem 'rrd-ffi', group: :stats
 # Websocket monitoring script uses rest-client for easy https
 gem 'rest-client'
 
+# Rubocop linter
+gem 'rubocop', require: false
+
 group :test do
 	# Color for minitest output
 	gem 'minitest-reporters'
