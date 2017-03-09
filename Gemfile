@@ -27,6 +27,9 @@ gem "therubyracer", require: "v8"
 gem "jquery-rails"
 gem "jquery-ui-rails"
 
+# Three.js Library
+gem "threejs-rails", git: "git://github.com/marvindanig/threejs-rails.git"
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem "turbolinks"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

@@ -15,11 +15,15 @@
 // Jquery
 //= require jquery
 //
+// Three + plugins
+//= require three
+//= require THREEx.WindowResize
+//= require THREEx.FullScreen
+//
+// State-machine
+//= require state-machine
+//
 // Display javascripts, they care about the order
-//= require ./display/three.js
-//= require ./display/THREEx.WindowResize.js
-//= require ./display/THREEx.FullScreen.js
-//= require ./display/state-machine.js
 //= require ./display/isk.debug.js.coffee
 //= require ./display/isk.local_message_broker.js.coffee
 //= require ./display/isk.clock.js.coffee

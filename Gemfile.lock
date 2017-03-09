@@ -6,6 +6,13 @@ GIT
       ruby-prof
 
 GIT
+  remote: git://github.com/marvindanig/threejs-rails.git
+  revision: 1b495c8d11fecadc0b786b550591730546518bd4
+  specs:
+    threejs-rails (0.0.3)
+      railties (>= 3.0.0)
+
+GIT
   remote: git://github.com/ngauthier/tubesock.git
   revision: 3074cef201abd130a28ae3bcf43b140f92224d58
   ref: 3074cef
@@ -331,6 +338,7 @@ DEPENDENCIES
   spring
   test_after_commit
   therubyracer
+  threejs-rails!
   time_diff (~> 0.3)
   tubesock!
   turbolinks
@@ -338,4 +346,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.12.5
+   1.14.6
