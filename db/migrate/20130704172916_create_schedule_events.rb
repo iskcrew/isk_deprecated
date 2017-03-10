@@ -6,7 +6,7 @@ class CreateScheduleEvents < ActiveRecord::Migration
       t.string :name
       t.string :description
       t.string :location
-      t.boolean :major, :default => false
+      t.boolean :major, default: false
       t.timestamps
     end
   end
