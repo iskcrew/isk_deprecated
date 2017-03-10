@@ -14,21 +14,20 @@
 # Example:
 # ws_hello_test.rb localhost:3000 test_display
 
-require 'rubygems'
+require "rubygems"
 
 # Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
-require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
+require "bundler/setup" if File.exists?(ENV["BUNDLE_GEMFILE"])
+require "highline/import"
+require "colorize"
+require "faye/websocket"
+require "json"
 
-require 'highline/import'
-require 'colorize'
-require 'faye/websocket'
-require 'json'
-
-require_relative '../lib/cli_helpers.rb'
+require_relative "../lib/cli_helpers.rb"
 
 unless ARGV.size >= 2
-	abort "Usage: <display_name> <host> [port]"
+  abort "Usage: <display_name> <host> [port]"
 end
 
 display_name = ARGV[0]
@@ -36,82 +35,81 @@ host = ARGV[1]
 port = ARGV[2]
 port ||= 80
 
-username = ask('Username:  ')
-password = ask("Password:  ") { |q| q.echo = 'x' }
+username = ask("Username:  ")
+password = ask("Password:  ") { |q| q.echo = "x" }
 
 http, headers = isk_login(host, port, username, password)
 
-EM.run {
+EM.run do
   ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
   ws.on :open do |event|
-    say 'Connection opened'
+    say "Connection opened"
   end
 
   ws.on :message do |event|
     msg = JSON.parse(event.data).first
-		msg_name = msg.first
-		msg_hash = msg.last
-		msg_channel = msg_hash['channel']
-		case msg_name
-		when 'client_connected'
-			@connection_id = msg_hash['data']['connection_id']
-			say msg
-			say "Connection set: #{msg_hash['data']['connection_id']}"
-			
-			# Build the pong reply message
-			@pong = WsMessage.new 'websocket_rails.pong', nil, @connection_id
-			
-			# Start the display handshake by sending iskdpy.hello message
-			hello = WsMessage.new 'iskdpy.hello', {display_name: display_name}, @connection_id
-			say "Sending: #{hello.to_a.to_json}" 
-			ws.send hello.to_a.to_json 
-			
-		when 'iskdpy.hello'
-			# The iskdpy.hello should return success and the display data
-			if msg_hash['success'] == true
-				say 'iskdpy.hello succesful'
-				data = msg_hash['data']
-				say 'Display state:'
-				say "Name: #{data['name']} ID: #{data['id']}"
-				say "Manual mode: #{data['manual'] ? 'Yes' : 'No'}"
-				say "Presentation: #{data['presentation']['name']}"
-				say " -> id: #{data['presentation']['id']}"
-				say "Current group id: #{data['current_group_id']}"
-				say "Current slide id: #{data['current_slide_id']}"
-				say "Slides in override queue: #{data['override_queue'].size}"				
-			else
-				say 'iskdpy.hello unsuccesful, got reply:'
-				puts JSON.pretty_generate JSON.parse(event.data)
-				abort 'exiting'
-			end
-			
-		when 'websocket_rails.subscribe'
-			
-			
-		when 'websocket_rails.ping'
-			ws.send @pong.to_a.to_json
-		
-		when 'update'
-			say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
-			
-		when 'data'
-			d = msg_hash['data']
-			say "Display data for display id=#{d['id']}"
-		
-		else
-			say 'Got unhandled message: '
-			say event.data
-			if msg_channel
-				say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
-			else
-			end
-		end
-	
+    msg_name = msg.first
+    msg_hash = msg.last
+    msg_channel = msg_hash["channel"]
+    case msg_name
+    when "client_connected"
+      @connection_id = msg_hash["data"]["connection_id"]
+      say msg
+      say "Connection set: #{msg_hash['data']['connection_id']}"
+
+      # Build the pong reply message
+      @pong = WsMessage.new "websocket_rails.pong", nil, @connection_id
+
+      # Start the display handshake by sending iskdpy.hello message
+      hello = WsMessage.new "iskdpy.hello", { display_name: display_name }, @connection_id
+      say "Sending: #{hello.to_a.to_json}"
+      ws.send hello.to_a.to_json
+
+    when "iskdpy.hello"
+      # The iskdpy.hello should return success and the display data
+      if msg_hash["success"] == true
+        say "iskdpy.hello succesful"
+        data = msg_hash["data"]
+        say "Display state:"
+        say "Name: #{data['name']} ID: #{data['id']}"
+        say "Manual mode: #{data['manual'] ? 'Yes' : 'No'}"
+        say "Presentation: #{data['presentation']['name']}"
+        say " -> id: #{data['presentation']['id']}"
+        say "Current group id: #{data['current_group_id']}"
+        say "Current slide id: #{data['current_slide_id']}"
+        say "Slides in override queue: #{data['override_queue'].size}"
+      else
+        say "iskdpy.hello unsuccesful, got reply:"
+        puts JSON.pretty_generate JSON.parse(event.data)
+        abort "exiting"
+      end
+
+    when "websocket_rails.subscribe"
+
+    when "websocket_rails.ping"
+      ws.send @pong.to_a.to_json
+
+    when "update"
+      say "Update notification: #{msg_channel} with id=#{msg_hash['data']['id']}"
+
+    when "data"
+      d = msg_hash["data"]
+      say "Display data for display id=#{d['id']}"
+
+    else
+      say "Got unhandled message: "
+      say event.data
+      if msg_channel
+        say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
+      else
+      end
+    end
+
   end
 
   ws.on :close do |event|
     say [:close, event.code, event.reason]
     ws = nil
   end
-}
+end
