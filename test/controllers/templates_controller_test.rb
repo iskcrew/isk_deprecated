@@ -1,7 +1,7 @@
 require "test_helper"
 
 class TemplatesControllerTest < ActionController::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "TemplateController needs tests"
+  end
 end

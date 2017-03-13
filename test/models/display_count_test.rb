@@ -1,7 +1,7 @@
 require "test_helper"
 
 class DisplayCountTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "DisplayCount needs tests"
+  end
 end

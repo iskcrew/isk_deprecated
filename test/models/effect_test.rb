@@ -1,7 +1,7 @@
 require "test_helper"
 
 class EffectTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "Effect needs tests"
+  end
 end

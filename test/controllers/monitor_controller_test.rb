@@ -1,7 +1,7 @@
 require "test_helper"
 
 class MonitorControllerTest < ActionController::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "MonitorController lacks tests"
+  end
 end

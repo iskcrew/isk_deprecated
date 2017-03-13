@@ -1,7 +1,7 @@
 require "test_helper"
 
 class TemplateFieldsTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "TemplateField needs tests"
+  end
 end

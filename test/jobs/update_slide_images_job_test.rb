@@ -1,7 +1,7 @@
 require "test_helper"
 
 class UpdateSlideImagesJobTest < ActiveJob::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "needs tests" do
+    skip "UpdateSlideImagesJob needs tests"
+  end
 end
