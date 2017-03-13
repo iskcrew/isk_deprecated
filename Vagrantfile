@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  
+
   # forward the default rails development port
   config.vm.network "forwarded_port", guest: 3000, host: 3000
 
@@ -47,11 +47,11 @@ Vagrant.configure("2") do |config|
   #
   config.vm.provider "virtualbox" do |vb|
     vb.name = "isk-dev"
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
+    # Display the VirtualBox GUI when booting the machine
+    # vb.gui = true
+    #
+    # Customize the amount of memory on the VM:
+    # vb.memory = "1024"
   end
   #
   # View the documentation for the provider you are using for more
@@ -73,12 +73,12 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl
     apt-get -t jessie-backports install -y inkscape
-    # Create postgresql user and database 
+    # Create postgresql user and database
     su postgres -c "psql -c \\"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\\" "
     su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_development"
     su postgres -c "createdb -E UTF8 --locale=en_US.UTF-8 -O vagrant isk_test"
   SHELL
-  
+
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     # Install rvm and ruby
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
@@ -90,11 +90,11 @@ Vagrant.configure("2") do |config|
     rvm gemset create isk
     rvm gemset use isk
     gem install bundler
-  
+
     # Install rubygems for ISK
     cd /vagrant
     bundle install
-  
+
     # Setup the database
     cp /vagrant/config/database.yml.example /vagrant/config/database.yml
     rake db:schema:load

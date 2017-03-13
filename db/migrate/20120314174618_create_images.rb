@@ -8,6 +8,5 @@ class CreateImages < ActiveRecord::Migration
     end
 
     add_index :images, :name, unique: true
-
   end
 end
