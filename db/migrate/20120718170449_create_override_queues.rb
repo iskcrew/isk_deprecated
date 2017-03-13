@@ -5,8 +5,6 @@ class CreateOverrideQueues < ActiveRecord::Migration
       t.integer :position
       t.integer :duration
       t.integer :slide_id
-      
-
       t.timestamps
     end
   end

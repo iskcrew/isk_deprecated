@@ -1,12 +1,9 @@
+# ISK - A web controllable slideshow system
 #
-#  prize_slide.rb
-#  isk
-#
-#  Created by Vesa-Pekka Palmu on 2014-08-02.
-#  Copyright 2014 Vesa-Pekka Palmu. All rights reserved.
-#
+# Author::    Vesa-Pekka Palmu
+# Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
+# License::   Licensed under GPL v3, see LICENSE.md
 
 class PrizeSlide < TemplateSlide
-	TypeString = "prize"
-	
+  TypeString = "prize"
 end

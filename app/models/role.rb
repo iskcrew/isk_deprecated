@@ -5,7 +5,6 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class Role < ActiveRecord::Base
-	has_many :permissions, as: :target
-	has_many :users, through: :permissions, source: :user
-	
+  has_many :permissions, as: :target
+  has_many :users, through: :permissions, source: :user
 end
