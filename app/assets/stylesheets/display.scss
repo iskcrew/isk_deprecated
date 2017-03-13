@@ -104,13 +104,14 @@ div#errors {
                 color: white;
         }
 
-        * {
-                position: relative;
+        .active ~ .active, :not(.active) {
                 display: none;
         }
 
         *.active{
                 display: block;
+                position: relative;
+                text-align: right;
         }
 }
 
