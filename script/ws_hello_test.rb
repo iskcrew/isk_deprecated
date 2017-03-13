@@ -102,7 +102,6 @@ EM.run do
       say event.data
       if msg_channel
         say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
-      else
       end
     end
 

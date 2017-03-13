@@ -35,8 +35,6 @@ module EventsHelper
   def event_current_class(event)
     if event.current
       "success"
-    else
-      nil
     end
   end
 

@@ -135,3 +135,13 @@ Style/AlignParameters:
   Enabled: true
   EnforcedStyle: with_first_parameter
   
+Style/CommentAnnotation:
+  Enabled: true
+  
+Style/DotPosition:
+  Enabled: true
+  EnforcedStyle: leading
+  
+Style/EmptyElse:
+  Enabled: true
+  EnforcedStyle: both
