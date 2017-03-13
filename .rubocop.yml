@@ -125,3 +125,13 @@ Lint/EndAlignment:
 # Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
 Lint/RequireParentheses:
   Enabled: true
+  
+Style/AlignHash:
+  Enabled: true
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: key
+  
+Style/AlignParameters:
+  Enabled: true
+  EnforcedStyle: with_first_parameter
+  

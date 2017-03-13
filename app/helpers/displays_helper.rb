@@ -15,9 +15,12 @@ module DisplaysHelper
   def display_destroy_button(d)
     if d.admin?(current_user)
       link_to icon("times-circle", "Delete"), display_path(d),
-      data: { confirm: "Are you sure you want to delete the display \"#{d.name}\", this cannot be undone?" },
-      title: "Delete this display premanently",
-      method: :delete, class: "button warning"
+              data: {
+                      confirm: "Are you sure you want to delete the display"\
+                               " \"#{d.name}\", this cannot be undone?"
+                    },
+              title: "Delete this display premanently",
+              method: :delete, class: "button warning"
     end
   end
 

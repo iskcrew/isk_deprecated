@@ -32,11 +32,11 @@ class Event < ActiveRecord::Base
             :simple_body_margin_left,
             :simple_body_margin_right,
             :simple_body_y, presence: true, numericality: { only_integer: true }
-  validates :schedules_subheader_fill, presence: true,
+  validates :schedules_subheader_fill,
+            presence: true,
             format: {
-                      with: /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/,
-                      message: "must be css hex color"
-                    }
+              with: /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/,
+              message: "must be css hex color" }
   validate :ensure_one_current_event
 
   # Make sure there is only one current event

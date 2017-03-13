@@ -122,8 +122,11 @@ module SlidesHelper
       return slide_toggle_button("Public", s, :public)
     elsif s.can_hide?(current_user) && s.public == true
       return toggle_link_to "Public", s.public, hide_slide_path(s),
-        method: :post, remote: true,
-        data: { confirm: "Are you sure you want to hide this slide? You cannot publish it later!" }
+                            method: :post,
+                            remote: true,
+                            data: {
+                              confirm: "Are you sure you want to hide this"\
+                                       " slide? You cannot publish it later!" }
     else
       return inactive_toggle("Public", s.public)
     end

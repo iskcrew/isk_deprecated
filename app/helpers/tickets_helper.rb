@@ -82,8 +82,11 @@ module TicketsHelper
   def ticket_close_link(ticket, html_class = nil)
     if ticket.can_close? current_user
       link_to icon("check-square-o", "Close"),
-      ticket_path(ticket, ticket: { status: Ticket::StatusClosed }),
-      method: :put, class: html_class
+              ticket_path(ticket,
+                          ticket: {
+                            status: Ticket::StatusClosed }),
+              method: :put,
+              class: html_class
     end
   end
 
@@ -94,7 +97,9 @@ module TicketsHelper
   def ticket_destroy_link(ticket, html_class = nil)
     if ticket.admin? current_user
       link_to icon("times-circle", "Delete"),
-              ticket_path(ticket), class: html_class, method: :delete,
+              ticket_path(ticket),
+              class: html_class,
+              method: :delete,
               data: { confirm: "Are you sure you want to permanently delete this ticket?" }
     end
   end

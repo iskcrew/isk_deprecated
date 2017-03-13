@@ -24,7 +24,8 @@ module GroupsHelper
   end
 
   def group_edit_link(group)
-    link_to edit_link_text, edit_group_path(group), class: "btn btn-primary",
-    title: "Edit slide order and group metadata."
+    link_to edit_link_text, edit_group_path(group),
+            class: "btn btn-primary",
+            title: "Edit slide order and group metadata."
   end
 end
