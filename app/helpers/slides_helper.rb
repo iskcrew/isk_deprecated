@@ -125,7 +125,7 @@ module SlidesHelper
   # FIXME OLD STYLE LINK PARAMETERS
   def slide_toggle_button(name, slide, attrib)
     toggle_link_to name, slide.send(attrib),
-                   edit_slide_path(slide, slide: { attrib => !slide.send(attrib) }),
+                   slide_path(slide, slide: { attrib => !slide.send(attrib) }),
                    method: :patch, remote: true
   end
 
