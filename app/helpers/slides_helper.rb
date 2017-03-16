@@ -7,11 +7,8 @@
 module SlidesHelper
   # Extract value for a input for a template slide
   def template_slide_value(slide, field)
-    if slide.respond_to? :slidedata
-      return slide.slidedata[field.element_id]
-    else
-      return field.default_value
-    end
+    return field.default_value unless slide.respond_to? :slidedata
+    return slide.slidedata[field.element_id]
   end
 
   # Cache key for user-dependant slide info block
@@ -21,13 +18,9 @@ module SlidesHelper
 
   # Render the slide duration as text
   def slide_duration(slide)
-    if slide.duration == -1
-      return "Using presentation default"
-    elsif slide.duration == 0
-      return "Infinite"
-    else
-      return slide.duration.to_s + " seconds"
-    end
+    return "Using presentation default" if slide.duration == -1
+    return "Infinite" if slide.duration == 0
+    return "#{slide.duration} seconds"
   end
 
   # <img> tag for the slide preview image
@@ -118,18 +111,14 @@ module SlidesHelper
 
   # A button to hide the slide or just inactive toggle, depending on user permissions
   def slide_hide_button_or_status(s, remote = false)
-    if s.can_edit? current_user
-      return slide_toggle_button("Public", s, :public)
-    elsif s.can_hide?(current_user) && s.public == true
-      return toggle_link_to "Public", s.public, hide_slide_path(s),
-                            method: :post,
-                            remote: true,
-                            data: {
-                              confirm: "Are you sure you want to hide this"\
-                                       " slide? You cannot publish it later!" }
-    else
-      return inactive_toggle("Public", s.public)
-    end
+    return slide_toggle_button("Public", s, :public) if s.can_edit? current_user
+    return inactive_toggle("Public", s.public) unless s.can_hide?(current_user) && s.public == true
+    return toggle_link_to "Public", s.public, hide_slide_path(s),
+                          method: :post,
+                          remote: true,
+                          data: {
+                            confirm: "Are you sure you want to hide this"\
+                                     " slide? You cannot publish it later!" }
   end
 
   # Generic toggle button to toggle some boolean on the slide
@@ -149,13 +138,12 @@ module SlidesHelper
 
   # Generate the download svg link for the slide with consistent confirm message
   def slide_svg_link(slide)
-    if [InkscapeSlide].include? slide.class
-      link_text = icon "download", "SVG"
-      link_to link_text, svg_data_slide_path(slide),
-              class: "btn btn-primary", title: "Download slide in SVG format",
-              data: { confirm: (
-              slide.public ? "This is a public slide, are you sure you want to edit it?" : nil) }
-    end
+    return unless [InkscapeSlide].include? slide.class
+    link_text = icon "download", "SVG"
+    link_to link_text, svg_data_slide_path(slide),
+            class: "btn btn-primary", title: "Download slide in SVG format",
+            data: { confirm: (
+            slide.public ? "This is a public slide, are you sure you want to edit it?" : nil) }
   end
 
   # Generate the slide clone button with tooltip
@@ -195,10 +183,10 @@ module SlidesHelper
 
   # Link to next slide in the same group as this slide
   def slide_next_in_group_link(slide)
-    if s = slide.master_group.slides.where("position > #{slide.position}").first
-      link_to ("Next slide #{icon('forward')}").html_safe,
-              slide_path(s), class: "btn btn-primary btn-xs"
-    end
+    s = slide.master_group.slides.where("position > #{slide.position}").first
+    return unless s
+    link_to ("Next slide #{icon('forward')}").html_safe,
+            slide_path(s), class: "btn btn-primary btn-xs"
   end
 
   # Link to previous slide in the same group as this slide
