@@ -8,11 +8,10 @@ timer=undefined
 running=undefined
 
 current=root.getElementsByClassName('current')
+current_pres=root.getElementsByClassName('presentation_slide current')
+current_over=root.getElementsByClassName('override_slide current')
 presentation=root.getElementsByClassName('presentation_slide')
 overrides=root.getElementsByClassName('override_slide')
-
-#TODO fix this hack later
-showing_override=false
 
 class ChangeNotifier
   constructor: (initial, callback) ->
@@ -80,16 +79,14 @@ handle_display = (display) ->
     empty.classList.add "presentation_slide"
     elems.appendChild empty
 
-  [].forEach.call current, (s) ->
-    old_slide = s
+  [].forEach.call current, (old_slide, index) ->
     if old_slide?
       id = old_slide.id
       console.debug 'Marking current slide', id
-      new_slide = elems.children[id]
+      new_slide = elems.children[id] or overs.children[id]
       if new_slide?
         new_slide.classList.add('current')
-        if (not showing_override) and (old_slide?.iskSlide?.images_updated_at <
-            new_slide?.iskSlide?.images_updated_at)
+        if (index == 0) and (old_slide?.iskSlide?.images_updated_at < new_slide?.iskSlide?.images_updated_at)
           set_current_updated new_slide
 
   while (root?.firstChild?)
@@ -153,27 +150,34 @@ when_ready = (elem, f) ->
 #    cb(e)
 #  f.apply(elem) if elem.complete
 
+_set_slide_timeout = (dur) ->
+  if dur and not manual_mode.get()
+    timer=setTimeout(timed_next_slide, dur*1000)
+
+_set_current = (elem, cname='current') ->
+  elem.classList.add(cname)
+  send_current_slide elem
+  clock_mode.set elem?.iskSlide?.show_clock == true
+  _set_slide_timeout elem?.iskSlide?.duration
+  elem
+
 set_current = (elem) ->
   console.debug 'CURRENT', elem
   clearTimeout(timer)
-  send_slide_shown current[0]
+  current?[0]?.classList?.remove('override_slide')
+  send_slide_shown current?[0]
+
   if elem? and elem?.iskSlide?.ready
     when_ready elem, ->
       if @?.width
-        showing_override=elem?.classList?.contains('override_slide')
         [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
           e.classList.remove('current')
           e.classList.remove('updated')
-        @.classList.add('current')
-        send_current_slide current[0]
-        clock_mode.set @?.iskSlide?.show_clock == true
-        dur=@?.iskSlide?.duration
-        if dur
-          timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
+        _set_current @
       else
         send_error "Unknown error in slide image (#{@.id})"
-        timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
-  else timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
+        _set_slide_timeout 1000
+  else _set_slide_timeout 1000
   undefined
 
 set_current_updated = (elem) ->
@@ -184,28 +188,26 @@ set_current_updated = (elem) ->
       if @?.width
         [].forEach.call @.parentElement.getElementsByClassName('updated'), (e) ->
           e.classList.remove('updated')
-        @.classList.add('updated')
-        send_current_slide current[0]
-        clock_mode.set @?.iskSlide?.show_clock == true
-        dur=@?.iskSlide?.duration
-        if dur
-          timer=setTimeout(timed_next_slide, dur*1000) if not manual_mode.get()
+        _set_current @, 'updated'
       else
         send_error "Unknown error in slide image (#{@.id})"
-        timer=setTimeout(timed_next_slide, 1000) if not manual_mode.get()
+        _set_slide_timeout 1000
   undefined
 
 prev_slide = ->
-  prev=current?[0]?.previousElementSibling
+  prev=current_pres?[0]?.previousElementSibling
   if (not prev?)
     [..., last] = presentation
     prev=last
   set_current(prev)
 
 next_slide = ->
-  next=overrides?[0]
+  if (current_over?.length == 0)
+    next=overrides?[0]
   if (not next?)
-    next=current?[0]?.nextElementSibling
+    next=overrides?[1]
+  if (not next?)
+    next=current_pres?[0]?.nextElementSibling
   if (not next?)
     [first, ...] = presentation
     next=first
