@@ -80,6 +80,10 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    coffeelint (1.14.0)
+      coffee-script
+      execjs
+      json
     colorize (0.8.1)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
@@ -300,6 +304,7 @@ DEPENDENCIES
   bootstrap_form
   cashier
   coffee-rails (~> 4.1.0)
+  coffeelint
   colorize
   connection_pool
   daemon

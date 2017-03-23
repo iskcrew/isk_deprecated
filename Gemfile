@@ -138,6 +138,9 @@ gem "rest-client"
 # Rubocop linter
 gem "rubocop", require: false
 
+# coffeescript linter
+gem "coffeelint", require: false
+
 group :test do
   # Color for minitest output
   gem "minitest-reporters"

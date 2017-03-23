@@ -19,7 +19,8 @@ cbs =
 
 tubesock_remote =
   connect: ({onopen, onerror, onclose}) ->
-    url = "#{window.location.protocol.replace('http', 'ws')}//#{window.location.host}#{window.location.pathname.replace('/dpy', '/websocket')}"
+    url = "#{window.location.protocol.replace('http', 'ws')}//" +
+      "#{window.location.host}#{window.location.pathname.replace('/dpy', '/websocket')}"
     @socket = new WebSocket url
 
     @socket.onerror = onerror
