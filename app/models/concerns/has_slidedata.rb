@@ -32,7 +32,7 @@ module HasSlidedata
     if !new_record? && File.exist?(data_filename.to_s)
       @_slidedata = YAML.load(File.read(data_filename))
     end
-    return @_slidedata.blank? ? default_slidedata() : @_slidedata
+    return @_slidedata.blank? ? default_slidedata : @_slidedata
   end
 
   # Write new slidedata and sanitize the keys in it.

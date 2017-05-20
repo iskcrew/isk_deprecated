@@ -130,18 +130,18 @@ else
 end
 case ARGV[0]
 when "start"
-  check_deps()
+  check_deps
   services.each { |s| start_service(s) }
   exit
 when "stop"
   services.each { |s| stop_service(s) }
   exit
 when "restart"
-  check_deps()
+  check_deps
   services.each { |s| stop_service(s) && start_service(s) }
   exit
 when "force-restart"
-  check_deps()
+  check_deps
   Services.each { |s| stop_service(s) }
   puts "Flushing redis databases..."
   redis = Redis.new(RedisOptions)
