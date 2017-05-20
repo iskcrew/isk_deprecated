@@ -30,7 +30,7 @@ module HasSlidedata
   def slidedata
     return @_slidedata if @_slidedata.present?
     if !new_record? && File.exist?(data_filename.to_s)
-      @_slidedata = YAML.load(File.read(data_filename))
+      @_slidedata = YAML.safe_load(File.read(data_filename))
     end
     return @_slidedata.blank? ? default_slidedata() : @_slidedata
   end

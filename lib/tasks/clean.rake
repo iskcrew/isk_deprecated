@@ -73,7 +73,7 @@ namespace :clean do
     # Legacy format + new code leads to both 'key' and :key values ending up in the hash.
     files = Dir[Slide::FilePath.join("slide_*_data")].collect { |f| Slide::FilePath.join(f).to_s }
     files.each do |f|
-      data = YAML.load(File.read(f))
+      data = YAML.safe_load(File.read(f))
       unless data.is_a? ActiveSupport::HashWithIndifferentAccess
         puts "Old data in #{f} migrating..."
         new_data = ActiveSupport::HashWithIndifferentAccess.new(data)
