@@ -17,7 +17,7 @@ class Ticket < ActiveRecord::Base
     StatusClosed => "closed"
   }
   ValidModels = [Slide, MasterGroup, Presentation, Display]
-  Kinds = %w(request error notice)
+  Kinds = ["request", "error", "notice"]
 
   validates :name, presence: true
   validates :status, inclusion: { in: Ticket::StatusCodes }

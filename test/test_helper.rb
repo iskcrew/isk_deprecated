@@ -106,7 +106,7 @@ class ActiveSupport::TestCase
     Rails.application.routes.routes.each do |r|
       req = r.requirements
       if req[:controller] == c
-        verb = %w[GET POST PUT PATCH DELETE].grep(r.verb).first.downcase.to_sym
+        verb = ["GET", "POST", "PUT", "PATCH", "DELETE"].grep(r.verb).first.downcase.to_sym
         routes[verb] << req[:action]
       end
     end
