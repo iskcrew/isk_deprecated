@@ -60,7 +60,7 @@ Isk::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :dalli_store, "localhost",
-    { namespace: "ISK", expires_in: 15.minutes, compress: true }
+                       { namespace: "ISK", expires_in: 15.minutes, compress: true }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"

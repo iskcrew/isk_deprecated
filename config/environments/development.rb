@@ -21,7 +21,7 @@ Isk::Application.configure do
 
   # Memcached using dalli_store
   config.cache_store = :mem_cache_store, "localhost",
-    { namespace: "ISK", expires_in: 5.minutes, compress: true }
+                       { namespace: "ISK", expires_in: 5.minutes, compress: true }
 
   # Don't log served assets
   config.assets.logger = false
