@@ -20,18 +20,11 @@ namespace :clean do
         files << s.preview_filename
         files << s.thumb_filename
 
-        if s.respond_to? :svg_filename
-          files << s.svg_filename
-        end
-
-        if s.respond_to? :data_filename
-          files << s.data_filename
-        end
+        files << s.svg_filename if s.respond_to? :svg_filename
+        files << s.data_filename if s.respond_to? :data_filename
 
         files.each do |f|
-          if File.exist? f
-            File.delete f
-          end
+          File.delete f if File.exist? f
         end
 
         s.delete
@@ -57,18 +50,9 @@ namespace :clean do
       files.delete slide.full_filename.to_s
       files.delete slide.preview_filename.to_s
       files.delete slide.thumb_filename.to_s
-
-      if slide.is_a?(ImageSlide) || slide.is_a?(HttpSlide)
-        files.delete slide.original_filename.to_s
-      end
-
-      if slide.respond_to? :data_filename
-        files.delete slide.data_filename.to_s
-      end
-
-      if slide.respond_to? :svg_filename
-        files.delete slide.svg_filename.to_s
-      end
+      files.delete slide.original_filename.to_s if slide.is_a?(ImageSlide) || slide.is_a?(HttpSlide)
+      files.delete slide.data_filename.to_s if slide.respond_to? :data_filename
+      files.delete slide.svg_filename.to_s if slide.respond_to? :svg_filename
     end
 
     puts "Keeping: #{total - files.size} files"

@@ -38,13 +38,8 @@ private
     # Basic message data to send
     data = { id: self.id }
 
-    if self.attributes.include? "display_id"
-      data[:display_id] = self.display_id
-    end
-
-    if self.respond_to? :name
-      data[:name] = self.name
-    end
+    data[:display_id] = self.display_id if self.attributes.include? "display_id"
+    data[:name] = self.name if self.respond_to? :name
 
     # Add changed attibutes
     data[:changes] = {}
@@ -56,9 +51,7 @@ private
     msg.send("isk_general")
 
     # If we have associated displays resend their data
-    if self.respond_to? :displays
-      display_datas
-    end
+    display_datas if self.respond_to? :displays
 
     return unless self.previous_changes.include?("images_updated_at") && event == :update
     Rails.logger.debug "-> Slide image has been updated, sending notifications"

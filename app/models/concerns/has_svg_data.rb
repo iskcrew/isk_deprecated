@@ -13,9 +13,7 @@ module HasSvgData
 
     # Register a after-create callback to write the svg data on new records
     after_create do
-      if @_svg_data
-        write_svg_data
-      end
+      write_svg_data if @_svg_data
     end
   end
 

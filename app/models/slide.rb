@@ -10,9 +10,7 @@ class Slide < ActiveRecord::Base
 
   # Callbacks
   after_initialize do |s|
-    if s.master_group_id == nil
-      s.master_group_id = Event.current.ungrouped.id
-    end
+    s.master_group_id = Event.current.ungrouped.id if s.master_group_id == nil
     true
   end
 
@@ -346,9 +344,7 @@ private
 
   # If slides group has been changed move it to the end of the new group
   def check_position
-    if changed.include? "master_group_id"
-      self.position_position = :last
-    end
+    self.position_position = :last if changed.include? "master_group_id"
   end
 
   # Update timestamps of all associated objects

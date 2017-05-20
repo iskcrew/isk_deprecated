@@ -14,9 +14,7 @@ class TemplateSlide < InkscapeSlide
 
   # If our slidedata chances mark the slide as not ready when saving it.
   before_save do
-    if @_slidedata.present?
-      generate_svg
-    end
+    generate_svg if @_slidedata.present?
     true
   end
 

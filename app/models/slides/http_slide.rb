@@ -128,11 +128,7 @@ private
     unless ["http", "https"].include? url.scheme
       errors.add(:slidedata, "^URL scheme is invalid, must be http or https.")
     end
-
-    if url.host.blank?
-      errors.add(:slidedata, "^URL is invalid, missing host.")
-    end
-
+    errors.add(:slidedata, "^URL is invalid, missing host.") if url.host.blank?
   rescue URI::InvalidURIError
     errors.add(:slidedata, "^URL is invalid.")
   end

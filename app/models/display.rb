@@ -222,9 +222,7 @@ private
 
   # If display is in manual control also stop accepting overrides
   def manual_control_checks
-    if self.manual
-      self.do_overrides = false
-    end
+    self.do_overrides = false if self.manual
     return true
   end
 end

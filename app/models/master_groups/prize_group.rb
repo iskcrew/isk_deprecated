@@ -43,9 +43,7 @@ class PrizeGroup < MasterGroup
   end
 
   def data=(d)
-    if d.nil?
-      d = DefaultData
-    end
+    d = DefaultData if d.nil?
 
     Rails.logger.debug d.class
     Rails.logger.debug d
@@ -65,9 +63,7 @@ class PrizeGroup < MasterGroup
     # Determinate how many places were awarded
     awards = []
     data[:awards].each do |a|
-      if a[:name].present?
-        awards << a
-      end
+      awards << a if a[:name].present?
     end
     template = SlideTemplate.find(data[:template_id])
     # Find the PrizeSlides for this group

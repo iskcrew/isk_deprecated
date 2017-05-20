@@ -63,9 +63,7 @@ private
 
   # Sanitalize the data hash, only keep keys that exist in the default hash
   def sanitalize_slidedata(d)
-    if d.nil?
-      d = default_slidedata
-    end
+    d = default_slidedata if d.nil?
 
     d.keep_if do |k, v|
       default_slidedata.key? k

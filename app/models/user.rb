@@ -50,9 +50,7 @@ class User < ActiveRecord::Base
   end
 
   def password=(str)
-    unless self[:salt]
-      self[:salt] = generate_salt
-    end
+    self[:salt] = generate_salt unless self[:salt]
     self[:password] = Digest::SHA1.hexdigest(str << self[:salt])
     return true
   end

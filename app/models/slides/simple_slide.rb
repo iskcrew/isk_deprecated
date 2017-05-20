@@ -242,9 +242,7 @@ private
       parts = l.split(/<([^>]*)>/)
       parts.each_index do |i|
         ts = Nokogiri::XML::Node.new "tspan", row
-        if color && (i % 2 == 1)
-          ts["fill"] = color
-        end
+        ts["fill"] = color if color && (i % 2 == 1)
         ts.content = parts[i].chomp
         row.add_child ts
       end

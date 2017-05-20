@@ -51,10 +51,7 @@ module DisplaysHelper
 
     if d.last_contact_at
       ping_seconds = (Time.now - d.last_contact_at).to_i
-
-      if ping_seconds > 60
-        ping_seconds = ">60"
-      end
+      ping_seconds = ">60" if ping_seconds > 60
     else
       ping_seconds = "UNKNOWN"
     end

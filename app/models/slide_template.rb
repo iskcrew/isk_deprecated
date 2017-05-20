@@ -69,9 +69,7 @@ private
 
   # Associate a new SlideTemplate to Event when it's created
   def assign_to_event
-    if self.event.nil?
-      self.event = Event.current
-    end
+    self.event = Event.current if self.event.nil?
     return true
   end
 
@@ -146,9 +144,7 @@ private
       parts = l.split(/<([^>]*)>/)
       parts.each_index do |i|
         ts = row.add_element "tspan"
-        if color && (i % 2 == 1)
-          ts.attributes["fill"] = color
-        end
+        ts.attributes["fill"] = color if color && (i % 2 == 1)
         ts.text = parts[i]
       end
     end

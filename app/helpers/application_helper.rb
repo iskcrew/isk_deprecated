@@ -17,9 +17,8 @@ module ApplicationHelper
                        class: "",
                        id: "#{c.downcase}_tab"
                      }
-      if controller.class.name.include?(c)
-        html_options[:class] =	"active"
-      end
+
+      html_options[:class] =	"active" if controller.class.name.include?(c)
       ret << content_tag("li", link_to(c, controller: c.downcase), html_options)
     end
     return ret.html_safe

@@ -51,9 +51,7 @@ private
 
   # Unless the ticket status has been set specificly we will set edited tickets as "open"
   def set_as_open
-    unless self.changes.include? :status
-      self.status = StatusOpen
-    end
+    self.status = StatusOpen unless self.changes.include? :status
   end
 
   # Validation to check that our polymorphic association is of a valid type
@@ -61,9 +59,7 @@ private
     pass = false
 
     # Having no assigned object is fine
-    if self.about.blank?
-      return
-    end
+    return if self.about.blank?
 
     # Check that the assigned object is in the ValidModels list
     ValidModels.each do |m|
@@ -74,8 +70,6 @@ private
 
   # Assign the created ticket to the current event
   def assign_to_current_event
-    if self.event.blank?
-      self.event = Event.current
-    end
+    self.event = Event.current if self.event.blank?
   end
 end

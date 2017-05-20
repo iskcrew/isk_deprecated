@@ -39,9 +39,7 @@ namespace :isk do
   desc "Generate session encryption keys"
   task secrets: :environment do
     file = Rails.root.join("config", "secrets.yml")
-    if File.exist? file
-      abort "#{file} exists, aborting"
-    end
+    abort "#{file} exists, aborting" if File.exist? file
     puts "Generating #{file}"
     secrets = {
       "development" => {

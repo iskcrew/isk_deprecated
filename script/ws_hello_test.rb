@@ -26,9 +26,7 @@ require "json"
 
 require_relative "../lib/cli_helpers.rb"
 
-unless ARGV.size >= 2
-  abort "Usage: <display_name> <host> [port]"
-end
+abort "Usage: <display_name> <host> [port]" unless ARGV.size >= 2
 
 display_name = ARGV[0]
 host = ARGV[1]

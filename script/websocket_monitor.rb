@@ -38,9 +38,7 @@ resp = RestClient.get("#{@base_url}displays", cookies: @cookies, accept: :json)
 @ws = nil
 
 @ws_base_url = "ws://#{@host}:#{@port}/"
-if @port.to_i == 443
-  @ws_base_url = "wss://#{@host}/"
-end
+@ws_base_url = "wss://#{@host}/" if @port.to_i == 443
 
 def init_general_socket
   @ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: @headers)

@@ -46,9 +46,7 @@ Isk::Application.configure do
   config.lograge.enabled = true
 
   config.lograge.custom_options = lambda do |event|
-    if event.payload[:user]
-      { user: event.payload[:user].username }
-    end
+    { user: event.payload[:user].username } if event.payload[:user]
   end
 
   # Do not log slide image requests

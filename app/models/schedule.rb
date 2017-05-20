@@ -93,9 +93,7 @@ class Schedule < ActiveRecord::Base
       self.slidegroup.publish_slides
 
       # Generate the "up next" slide if needed
-      if self.next_up && self.schedule_events.present?
-        generate_next_up_slide
-      end
+      generate_next_up_slide if self.next_up && self.schedule_events.present?
     end # Transaction
     return true
   end
@@ -113,9 +111,7 @@ private
 
     self.slidegroup = sg
     self.next_up_group = ung
-    unless self.event_id
-      self.event_id = Event.current.id
-    end
+    self.event_id = Event.current.id unless self.event_id
     self.save!
   end
 
@@ -217,9 +213,7 @@ private
         this_slide << item
       else
         if (this_slide.size + item[:linecount]) > settings[:events][:per_slide]
-          if this_slide.last[:subheader]
-            this_slide.pop
-          end
+          this_slide.pop if this_slide.last[:subheader]
           slides << this_slide
           this_slide = Array.new
           this_slide << last_subheader
