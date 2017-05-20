@@ -100,7 +100,7 @@ module SlidesHelper
   end
 
   def simple_text_size_select(f, size)
-    f.select :text_size, options_for_select(simple_text_sizes, size),  {},
+    f.select :text_size, options_for_select(simple_text_sizes, size), {},
              id: "simple_text_size", data: { simple_field: true }
   end
 

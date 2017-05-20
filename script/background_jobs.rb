@@ -57,7 +57,7 @@ Daemons.run_proc("background_jobs", options) do
       realtime = Benchmark.realtime do
         @schedules = Event.current.schedules.all.each(&:generate_slides)
       end
-      say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
+      say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, realtime / @schedules.size])
     rescue Exception => e
       say "Error generating schedule slides"
       puts e.message

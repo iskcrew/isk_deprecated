@@ -7,7 +7,7 @@
 #
 # A general module for all models that support opening tickets on them
 
-module  HasTickets
+module HasTickets
   extend ActiveSupport::Concern
 
   included do

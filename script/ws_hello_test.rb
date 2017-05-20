@@ -104,7 +104,6 @@ EM.run do
         say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
       end
     end
-
   end
 
   ws.on :close do |event|

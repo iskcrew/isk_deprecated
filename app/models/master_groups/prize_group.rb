@@ -158,7 +158,7 @@ private
 
   def write_data
     return if self.new_record?
-    File.open(data_filename,  "w") do |f|
+    File.open(data_filename, "w") do |f|
       f.write self.data.to_yaml
     end
   end

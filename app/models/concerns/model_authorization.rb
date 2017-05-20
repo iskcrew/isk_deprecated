@@ -7,7 +7,7 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-module  ModelAuthorization
+module ModelAuthorization
   # Module for dealing with user roles and permissions
   # Expects the base model to have authorized_users relation to user model
 

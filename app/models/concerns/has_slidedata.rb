@@ -7,7 +7,7 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-module  HasSlidedata
+module HasSlidedata
   # This module depends on the class setting DefaultSlidedata hash.
   # When new data is entered it's checked against the default hash and all
   # keys that are not also present in the default are dropped.
@@ -79,7 +79,7 @@ private
 
   def write_slidedata
     return if self.new_record?
-    File.open(self.data_filename,  "w") do |f|
+    File.open(self.data_filename, "w") do |f|
       f.write sanitalize_slidedata(@_slidedata).to_yaml
     end
   end

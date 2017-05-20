@@ -6,7 +6,7 @@
 # Copyright:: Copyright (c) Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-module  RedisTestHelpers
+module RedisTestHelpers
   ThreadTimeout = 0.2
 
   class RedisTestSubscriber
