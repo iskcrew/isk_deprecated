@@ -61,7 +61,7 @@ Daemons.run_proc("rrd_monitoring", options) do
   end
 
   # Collect pid files
-  while
+  loop do
     servers = Dir[@pid_path.join("server*")].collect { |f| extract_pid(f) }
     delayed_jobs =  Dir[@pid_path.join("delayed_job*")].collect { |f| extract_pid(f) }
     background_jobs = Dir[@pid_path.join("background_jobs*")].collect { |f| extract_pid(f) }
