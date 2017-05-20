@@ -37,28 +37,27 @@ private
 
   # A after save hook to move the possible new image into its place
   def save_image
-    if @_image_file
-      FileUtils.move @_image_file.path, self.original_filename
-      @_image_file = nil
-    end
+    return unless @_image_file
+    FileUtils.move @_image_file.path, self.original_filename
+    @_image_file = nil
   end
 
   # Validate the uploaded image.
   def check_image
-    if @_image_file
-      # Verify image integrity
-      command = "identify #{@_image_file.path} &> /dev/null"
-      unless system command
-        @_image_file.unlink
-        @_image_file = nil
-        errors.add :image, "wasn't a valid image file."
-      end
-    end
+    return unless @_image_file
+    # Verify image integrity
+    command = "identify #{@_image_file.path} &> /dev/null"
+    return if system command
+
+    # Verify error
+    @_image_file.unlink
+    @_image_file = nil
+    errors.add :image, "wasn't a valid image file."
   end
 
   # Validates that the background color is ok
   def check_bg_color
-    unless slidedata[:background].match /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
+    unless slidedata[:background].match(/\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/)
       errors.add :backgroud, "must be valid css hex color"
     end
   end
@@ -94,11 +93,10 @@ private
     tmp_file = Tempfile.new("isk-image")
     command = "convert #{self.original_filename} -resize #{geo_str}"
     command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
-    if system command
-      return compare_new_image(tmp_file)
-    else
-      tmp_file.unlink
-      raise Slide::ImageError, "Error generating full size slide image!"
-    end
+    return compare_new_image(tmp_file) if system command
+
+    # Image generation error
+    tmp_file.unlink
+    raise Slide::ImageError, "Error generating full size slide image!"
   end
 end

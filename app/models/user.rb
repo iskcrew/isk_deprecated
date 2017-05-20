@@ -28,14 +28,13 @@ class User < ActiveRecord::Base
 
   def has_role?(request)
     return true if self.admin?
-    if request.is_a? Array
-      request.each do |r|
-        return true if self.roles.where(role: r).count > 0
-      end
-      return false
-    else
+    unless request.is_a? Array
       return self.roles.where(role: request).count > 0
     end
+    request.each do |r|
+      return true if self.roles.where(role: r).count > 0
+    end
+    return false
   end
 
   def roles_text
@@ -63,20 +62,13 @@ class User < ActiveRecord::Base
   end
 
   def authenticate(passwd)
-    if self[:password] == Digest::SHA1.hexdigest(passwd << self[:salt])
-      return true
-    else
-      return false
-    end
+    self[:password] == Digest::SHA1.hexdigest(passwd << self[:salt])
   end
 
   def self.authenticate(username, passwd)
     user = User.where(username: username).first
-    if user && user.authenticate(passwd)
-      return user
-    else
-      return nil
-    end
+    return user if user && user.authenticate(passwd)
+    return nil
   end
 
   def cache_tag

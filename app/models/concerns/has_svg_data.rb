@@ -33,13 +33,10 @@ module HasSvgData
   # We also mark the slide as not ready because the picture isn't current anymore and needs
   # to be regenerated.
   def svg_data=(svg)
-    if self.svg_data != svg
-
-      @_svg_data = svg
-      write_svg_data
-
-      self.ready = false
-    end
+    return unless self.svg_data != svg
+    @_svg_data = svg
+    write_svg_data
+    self.ready = false
   end
 
   # Filename to store the svg in.
@@ -53,10 +50,9 @@ protected
   # We need to check if record is new, because we don't know the filename for the svg
   # before the record is saved.
   def write_svg_data
-    unless self.new_record?
-      File.open(self.svg_filename, "wb") do |f|
-        f.write @_svg_data
-      end
+    return if self.new_record?
+    File.open(self.svg_filename, "wb") do |f|
+      f.write @_svg_data
     end
   end
 

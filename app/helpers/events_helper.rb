@@ -33,9 +33,8 @@ module EventsHelper
 
   # Check if this event is current one and if it is then set the class to 'success'
   def event_current_class(event)
-    if event.current
-      "success"
-    end
+    return unless event.current
+    "success"
   end
 
   # Select box for choosing the slide resolution for the event.

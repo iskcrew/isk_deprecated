@@ -35,9 +35,8 @@ def check_deps
   if inkscape_version == "0.48.5"
     abort "ERROR: Inkscape version 0.48.5 (in debian Jessie) has non-sane text element postioning, use 0.91 from jessie-backports instead".red
   end
-  unless find_executable("convert") && find_executable("identify")
-    abort "ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)".red
-  end
+  return if find_executable("convert") && find_executable("identify")
+  abort "ERROR: ISK needs ImageMagick cmd line utilities (convert and indentify)".red
 end
 
 def start_service(process)

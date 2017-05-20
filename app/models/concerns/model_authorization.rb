@@ -61,20 +61,14 @@ module  ModelAuthorization
 
     # List of all displays a user can add overrides on
     def can_override(user)
-      if user.has_role?([self.auth_roles[:admin], self.auth_roles[:override]])
-        return relation
-      else
-        return self.joins(:authorized_users).where(users: { id: user.id })
-      end
+      return relation if user.has_role?([self.auth_roles[:admin], self.auth_roles[:override]])
+      return self.joins(:authorized_users).where(users: { id: user.id })
     end
 
     # List of all objects user can edit
     def can_edit(user)
-      if user.has_role?(self.auth_roles[:admin])
-        return relation
-      else
-        self.joins(:authorized_users).where("users.id = ?", user.id)
-      end
+      return relation if user.has_role?(self.auth_roles[:admin])
+      self.joins(:authorized_users).where("users.id = ?", user.id)
     end
 
     # Does user have admin priviledges on all objects of this type?

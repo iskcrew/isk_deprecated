@@ -60,10 +60,9 @@ private
       display_datas
     end
 
-    if self.previous_changes.include?("images_updated_at") && event == :update
-      Rails.logger.debug "-> Slide image has been updated, sending notifications"
-      self.updated_image_notifications
-    end
+    return unless self.previous_changes.include?("images_updated_at") && event == :update
+    Rails.logger.debug "-> Slide image has been updated, sending notifications"
+    self.updated_image_notifications
   end
 
   def get_channel

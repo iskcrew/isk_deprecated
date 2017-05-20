@@ -141,11 +141,8 @@ class Event < ActiveRecord::Base
 
   # Set the size for full slide pictures. Checks that the resolution is supported.
   def picture_size=(size)
-    if SupportedResolutions.include? size
-      self[:resolution] = SupprotedResolutions.index(size)
-    else
-      raise ArgumentError, "Resolution not supported"
-    end
+    raise ArgumentError, "Resolution not supported" unless SupportedResolutions.include? size
+    self[:resolution] = SupprotedResolutions.index(size)
   end
 
   # Returns a hash containing the set picture sizes.

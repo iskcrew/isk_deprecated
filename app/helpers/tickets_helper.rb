@@ -7,11 +7,9 @@
 module TicketsHelper
   # Link to the object associated to this ticket
   def ticket_concerning(ticket)
-    if ticket.about.present?
-      return "#{ticket.about_type.capitalize}: #{ticket_object_link(ticket)}".html_safe
-    else
-      return "None"
-    end
+    return "None" unless ticket.about.present?
+    return "#{ticket.about_type.capitalize}:"\
+           " #{ticket_object_link(ticket)}".html_safe
   end
 
   # Render a link to the associated object on a ticket
@@ -80,14 +78,13 @@ module TicketsHelper
   end
 
   def ticket_close_link(ticket, html_class = nil)
-    if ticket.can_close? current_user
-      link_to icon("check-square-o", "Close"),
-              ticket_path(ticket,
-                          ticket: {
-                            status: Ticket::StatusClosed }),
-              method: :put,
-              class: html_class
-    end
+    return unless ticket.can_close? current_user
+    link_to icon("check-square-o", "Close"),
+            ticket_path(ticket,
+                        ticket: {
+                          status: Ticket::StatusClosed }),
+            method: :put,
+            class: html_class
   end
 
   def ticket_close_button(ticket)
@@ -95,13 +92,12 @@ module TicketsHelper
   end
 
   def ticket_destroy_link(ticket, html_class = nil)
-    if ticket.admin? current_user
-      link_to icon("times-circle", "Delete"),
-              ticket_path(ticket),
-              class: html_class,
-              method: :delete,
-              data: { confirm: "Are you sure you want to permanently delete this ticket?" }
-    end
+    return unless ticket.admin? current_user
+    link_to icon("times-circle", "Delete"),
+            ticket_path(ticket),
+            class: html_class,
+            method: :delete,
+            data: { confirm: "Are you sure you want to permanently delete this ticket?" }
   end
 
   def ticket_destroy_button(ticket)
@@ -129,12 +125,9 @@ module TicketsHelper
 private
 
   def ticket_open_count
-    if Ticket.current.open.count > 0
-      html = icon "ticket"
-      html << Ticket.ticket.open.count.to_s
-      return html
-    else
-      return ""
-    end
+    return "" unless Ticket.current.open.count > 0
+    html = icon "ticket"
+    html << Ticket.ticket.open.count.to_s
+    return html
   end
 end

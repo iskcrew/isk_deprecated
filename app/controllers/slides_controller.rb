@@ -363,6 +363,7 @@ private
 
   # Send a given sized slide image
   def send_slide_image(size)
+    return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
     case size
     when :full
       filename = @slide.full_filename
@@ -371,22 +372,19 @@ private
     else
       filename = @slide.preview_filename
     end
-
-    if stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
-      respond_to do |format|
-        format.html do
-          # Set content headers to allow CORS
-          response.headers["Access-Control-Allow-Origin"] = "*"
-          response.headers["Access-Control-Request-Method"] = "GET"
-          if @slide.ready
-            send_file filename, disposition: "inline"
-          else
-            send_file(Rails.root.join("data", "no_image.jpg"),
-                      disposition: "inline")
-          end
+    respond_to do |format|
+      format.html do
+        # Set content headers to allow CORS
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Request-Method"] = "GET"
+        if @slide.ready
+          send_file filename, disposition: "inline"
+        else
+          send_file(Rails.root.join("data", "no_image.jpg"),
+                    disposition: "inline")
         end
-        format.js { render :show }
       end
+      format.js { render :show }
     end
   end
 
@@ -400,14 +398,12 @@ private
   end
 
   def require_create
-    unless Slide.can_create? current_user
-      fail ApplicationController::PermissionDenied
-    end
+    return if Slide.can_create? current_user
+    fail ApplicationController::PermissionDenied
   end
 
   def require_admin
-    unless Slide.admin? current_user
-      fail ApplicationController::PermissionDenied
-    end
+    return if Slide.admin? current_user
+    fail ApplicationController::PermissionDenied
   end
 end

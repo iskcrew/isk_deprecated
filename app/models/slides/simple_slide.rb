@@ -257,15 +257,13 @@ private
   end
 
   def self.row_x(align, margins)
-    if align
-      case align.strip.downcase
-      when "right"
-        return margins.last
-      when "centered"
-        return (margins.first + margins.last) / 2
-      else
-        return margins.first
-      end
+    return margins.first unless align
+
+    case align.strip.downcase
+    when "right"
+      return margins.last
+    when "centered"
+      return (margins.first + margins.last) / 2
     else
       return margins.first
     end

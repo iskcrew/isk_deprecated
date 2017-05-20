@@ -42,10 +42,10 @@ class ActiveSupport::TestCase
       FileUtils.chmod 0600, slide.svg_filename.to_s
     end
 
-    if slide.is_a? SimpleSlide
-      FileUtils.cp simple_slidedatafile, slide.data_filename.to_s
-      FileUtils.chmod 0600, slide.data_filename.to_s
-    end
+    return unless slide.is_a? SimpleSlide
+
+    FileUtils.cp simple_slidedatafile, slide.data_filename.to_s
+    FileUtils.chmod 0600, slide.data_filename.to_s
   end
 
   # During testing we will end up generating slide datafiles in a temporary location.

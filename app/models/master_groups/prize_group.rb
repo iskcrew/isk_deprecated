@@ -152,18 +152,14 @@ private
   end
 
   def data_filename
-    if self.id
-      return Rails.root.join("data", "prizes", "prize_group_#{id}")
-    else
-      return nil
-    end
+    return nill unless self.id
+    return Rails.root.join("data", "prizes", "prize_group_#{id}")
   end
 
   def write_data
-    unless self.new_record?
-      File.open(data_filename,  "w") do |f|
-        f.write self.data.to_yaml
-      end
+    return if self.new_record?
+    File.open(data_filename,  "w") do |f|
+      f.write self.data.to_yaml
     end
   end
 end

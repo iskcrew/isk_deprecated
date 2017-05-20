@@ -78,10 +78,9 @@ private
   end
 
   def write_slidedata
-    unless self.new_record?
-      File.open(self.data_filename,  "w") do |f|
-        f.write sanitalize_slidedata(@_slidedata).to_yaml
-      end
+    return if self.new_record?
+    File.open(self.data_filename,  "w") do |f|
+      f.write sanitalize_slidedata(@_slidedata).to_yaml
     end
   end
 end

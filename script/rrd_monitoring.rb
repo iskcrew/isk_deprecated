@@ -43,11 +43,8 @@ Daemons.run_proc("rrd_monitoring", options) do
     pid = File.read(@pid_path.join(f).to_s).to_i
 
     # Check if the pid is running
-    if system "ps -p #{pid} 1>/dev/null"
-      return pid
-    else
-      return nil
-    end
+    return pid if system "ps -p #{pid} 1>/dev/null"
+    return nil
   end
 
   def create_rrd_for_process(rrd_file)

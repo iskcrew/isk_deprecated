@@ -145,3 +145,10 @@ Style/DotPosition:
 Style/EmptyElse:
   Enabled: true
   EnforcedStyle: both
+  
+Style/GuardClause:
+  Enabled: true
+  MinBodyLength: 2
+  
+Performance:
+  Enabled: true

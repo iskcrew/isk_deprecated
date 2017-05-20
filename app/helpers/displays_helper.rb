@@ -13,15 +13,14 @@ module DisplaysHelper
 
   # Link to displays#destroy if user has sufficient access
   def display_destroy_button(d)
-    if d.admin?(current_user)
-      link_to icon("times-circle", "Delete"), display_path(d),
-              data: {
-                      confirm: "Are you sure you want to delete the display"\
-                               " \"#{d.name}\", this cannot be undone?"
-                    },
-              title: "Delete this display premanently",
-              method: :delete, class: "button warning"
-    end
+    return unless d.admin?(current_user)
+    link_to icon("times-circle", "Delete"), display_path(d),
+            data: {
+                    confirm: "Are you sure you want to delete the display"\
+                             " \"#{d.name}\", this cannot be undone?"
+                  },
+            title: "Delete this display premanently",
+            method: :delete, class: "button warning"
   end
 
   # Set the panel class based on display status
@@ -38,11 +37,8 @@ module DisplaysHelper
     else
       panel = "panel-danger"
     end
-    if display.live?
-      return "#{panel} display-live"
-    else
-      return panel
-    end
+    return "#{panel} display-live" if display.live?
+    return panel
   end
 
   # Render the display ping element
@@ -88,11 +84,8 @@ module DisplaysHelper
 
   # Render the last_contact_at timestamp and the diff to current time
   def display_last_contact(d)
-    if d.last_contact_at
-      delta = Time.diff(Time.now, d.last_contact_at, "%h:%m:%s")[:diff]
-      return "#{l d.last_contact_at, format: :short} (#{delta} ago)"
-    else
-      return "UNKNOWN"
-    end
+    return "UNKNOWN" unless d.last_contact_at
+    delta = Time.diff(Time.now, d.last_contact_at, "%h:%m:%s")[:diff]
+    return "#{l d.last_contact_at, format: :short} (#{delta} ago)"
   end
 end

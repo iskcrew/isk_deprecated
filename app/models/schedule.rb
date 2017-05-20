@@ -151,11 +151,10 @@ private
   def find_or_initialize_next_up_slide
     if self.next_up_group.slides.where(type: ScheduleSlide.sti_name).first.present?
       return self.next_up_group.slides.where(type: ScheduleSlide.sti_name).first!
-    else
-      slide = ScheduleSlide.new
-      self.next_up_group.slides << slide
-      return slide
     end
+    slide = ScheduleSlide.new
+    self.next_up_group.slides << slide
+    return slide
   end
 
   # Convenience method for getting the count of schedule slides in our slidegroup

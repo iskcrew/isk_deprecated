@@ -143,11 +143,8 @@ class Display < ActiveRecord::Base
 
   # Is this display more than Timeout minutes late?
   def late?
-    if self.last_contact_at
-      return Time.diff(Time.now, self.last_contact_at, "%m")[:diff].to_i > Timeout
-    else
-      return false
-    end
+    return false unless self.last_contact_at
+    return Time.diff(Time.now, self.last_contact_at, "%m")[:diff].to_i > Timeout
   end
 
   # Is the display live, ie. visible to the general audience
@@ -218,10 +215,9 @@ private
 
   # Create the associated display state as needed
   def create_state
-    if self.display_state.nil?
-      ds = DisplayState.new
-      self.display_state = ds
-    end
+    return unless self.display_state.nil?
+    ds = DisplayState.new
+    self.display_state = ds
   end
 
   # If display is in manual control also stop accepting overrides
