@@ -200,7 +200,7 @@ private
 
     slide_items.each do |item|
       if item[:subheader]
-        if (this_slide.size + min_events_on_next_day > settings[:events][:per_slide])
+        if this_slide.size + min_events_on_next_day > settings[:events][:per_slide]
           slides << this_slide
           this_slide = Array.new
         end

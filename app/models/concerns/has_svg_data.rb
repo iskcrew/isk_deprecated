@@ -20,7 +20,7 @@ module HasSvgData
   # Read the svg-data into memory on access in case we need it more than once
   # FIXME: Better handling of non-existant files?
   def svg_data
-    return @_svg_data if (@_svg_data || new_record?)
+    return @_svg_data if @_svg_data || new_record?
     @_svg_data = File.read(svg_filename) if File.exist?(svg_filename)
 
     return @_svg_data

@@ -27,7 +27,7 @@ class PrizeGroup < MasterGroup
   end
 
   def data
-    return @_data if (@_data.present? && @_data.is_a?(Hash))
+    return @_data if @_data.present? && @_data.is_a?(Hash)
     if !new_record? && File.exist?(data_filename)
       @_data = YAML.load(File.read(data_filename))
     end
@@ -70,7 +70,7 @@ class PrizeGroup < MasterGroup
     slides = self.slides.where(type: PrizeSlide.sti_name).to_a
     # Destroy excess slides, we need awards + 1 slides because first slide
     # is only for the competition name.
-    while (slides.size > (awards.size + 1))
+    while slides.size > (awards.size + 1)
       s = slides.pop
       s.destroy
     end
