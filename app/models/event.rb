@@ -171,12 +171,8 @@ private
 
   # Create the associated groups as needed
   def create_groups
-    self.ungrouped = UnGroup.create(
-      name: "Ungrouped slides for #{name}"
-    ) if ungrouped.nil?
-    self.thrashed = ThrashGroup.create(
-      name: "Thrashed slides for #{name}"
-    ) if thrashed.nil?
+    self.ungrouped = UnGroup.create(name: "Ungrouped slides for #{name}") if ungrouped.nil?
+    self.thrashed = ThrashGroup.create(name: "Thrashed slides for #{name}") if thrashed.nil?
   end
 
   # Set the event associations on special groups
