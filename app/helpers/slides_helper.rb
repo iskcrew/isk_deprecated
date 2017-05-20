@@ -19,7 +19,7 @@ module SlidesHelper
   # Render the slide duration as text
   def slide_duration(slide)
     return "Using presentation default" if slide.duration == -1
-    return "Infinite" if slide.duration == 0
+    return "Infinite" if slide.duration.zero?
     return "#{slide.duration} seconds"
   end
 

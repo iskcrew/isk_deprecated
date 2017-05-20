@@ -52,9 +52,9 @@ class Schedule < ActiveRecord::Base
       slide_description = "Automatically generated from schedule #{self.name} at #{I18n.l Time.now, format: :short}"
       # Make sure there are right amount of slides in our group
       delta = slide_data.count - schedule_slide_count
-      if delta > 0
+      if delta.positive?
         add_scheduleslides(slide_data.count - schedule_slide_count)
-      elsif delta < 0
+      elsif delta.negative?
         self.slidegroup.slides.where(type: ScheduleSlide.sti_name).limit(-delta).each do |s|
           s.destroy
         end

@@ -16,7 +16,7 @@ class SvgSlide < Slide
   def generate_full_image
     tmp_file = Tempfile.new("isk-image")
     output = `#{inkscape_command_line(tmp_file)}`
-    return compare_new_image(tmp_file) if $?.to_i == 0
+    return compare_new_image(tmp_file) if $?.to_i.zero?
     raise Slide::ImageError, "Error converting the slide svg into PNG\nInkscape output:\n#{output}"
   end
 end

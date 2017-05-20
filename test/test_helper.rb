@@ -79,7 +79,7 @@ class ActiveSupport::TestCase
     count = 0
     actions.each_value { |v| count += v.size }
 
-    assert count > 0, "No actions were found for controller #{c.to_s}, typo?"
+    assert count.positive?, "No actions were found for controller #{c.to_s}, typo?"
 
     missed = []
     actions.each_key do |verb|

@@ -29,10 +29,10 @@ class User < ActiveRecord::Base
   def has_role?(request)
     return true if self.admin?
     unless request.is_a? Array
-      return self.roles.where(role: request).count > 0
+      return self.roles.where(role: request).count.positive?
     end
     request.each do |r|
-      return true if self.roles.where(role: r).count > 0
+      return true if self.roles.where(role: r).count.positive?
     end
     return false
   end

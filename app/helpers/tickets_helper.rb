@@ -125,7 +125,7 @@ module TicketsHelper
 private
 
   def ticket_open_count
-    return "" unless Ticket.current.open.count > 0
+    return "" unless Ticket.current.open.count.positive?
     html = icon "ticket"
     html << Ticket.ticket.open.count.to_s
     return html

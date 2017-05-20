@@ -73,7 +73,7 @@ class SimpleSlide < SvgSlide
     text_nodes = svg.root.elements.to_a("//text")
 
     #The slide needs to contain some text
-    raise ApplicationController::ConvertError unless text_nodes.count > 0
+    raise ApplicationController::ConvertError unless text_nodes.count.positive?
 
     header = text_nodes[0].elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip
 
