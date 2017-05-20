@@ -117,7 +117,7 @@ private
 
   # Validates the url
   def validate_url
-    url = URI::parse slidedata[:url].strip
+    url = URI.parse slidedata[:url].strip
     unless ["http", "https"].include? url.scheme
       errors.add(:slidedata, "^URL scheme is invalid, must be http or https.")
     end

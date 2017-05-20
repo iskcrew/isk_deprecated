@@ -108,7 +108,7 @@ def stop_service(process)
 
   begin
     Process.kill("TERM", pid)
-    Timeout::timeout(20) do
+    Timeout.timeout(20) do
       begin
         print "."
         $stdout.flush
