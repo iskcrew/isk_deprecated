@@ -43,8 +43,8 @@ class Display < ActiveRecord::Base
   delegate :status, :status=,                                   to: :display_state
   delegate :updated_at,                                         to: :display_state, prefix: :state
 
-  alias_method :queue, :override_queues
-  alias_method :state, :display_state
+  alias queue override_queues
+  alias state display_state
 
   # Used for broadcasting events with callbacks to websocket clients
   def websocket_channel

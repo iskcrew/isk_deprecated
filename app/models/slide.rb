@@ -176,7 +176,7 @@ class Slide < ActiveRecord::Base
 
     return hash
   end
-  alias_method :to_h, :to_hash
+  alias to_h to_hash
 
   # Used in various views
   def type_str
