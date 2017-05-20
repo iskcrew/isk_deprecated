@@ -65,7 +65,7 @@ private
   def sanitalize_slidedata(d)
     d = default_slidedata.dup if d.nil?
 
-    d.keep_if do |k, v|
+    d.keep_if do |k|
       default_slidedata.key? k
     end
     return d

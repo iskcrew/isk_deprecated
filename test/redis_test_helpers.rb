@@ -18,7 +18,7 @@ module RedisTestHelpers
 
     def process
       Redis.new(Rails.configuration.x.redis).subscribe(@channel) do |on|
-        on.message do |channel, message|
+        on.message do |_channel, message|
           @messages.unshift message
           Thread.current[:messages] = messages
         end

@@ -41,7 +41,7 @@ _http, headers = isk_login(host, port, username, password)
 EM.run do
   ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
-  ws.on :open do |event|
+  ws.on :open do
     say "Connection opened"
   end
 

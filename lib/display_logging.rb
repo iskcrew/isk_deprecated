@@ -18,7 +18,7 @@ class DisplayLogging
     unless @@_logger.present?
       @@_logger = Logger.new(Rails.root.join("log", "displays.log"))
       @@_logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
-      @@_logger.formatter = proc do |severity, datetime, progname, msg|
+      @@_logger.formatter = proc do |severity, datetime, _progname, msg|
         "#{datetime} - #{severity}: #{msg}\n"
       end
     end
@@ -46,7 +46,7 @@ class DisplayLogging
   end
 
   # Subscribe to the iskdpy notifications
-  ActiveSupport::Notifications.subscribe("iskdpy") do |name, start, finish, id, payload|
+  ActiveSupport::Notifications.subscribe("iskdpy") do |_name, start, finish, _id, payload|
     log_display_event(start, finish, payload)
   end
 end

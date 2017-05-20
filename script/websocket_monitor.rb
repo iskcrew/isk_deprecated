@@ -43,7 +43,7 @@ resp = RestClient.get("#{@base_url}displays", cookies: @cookies, accept: :json)
 def init_general_socket
   @ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: @headers)
 
-  @ws.on :open do |event|
+  @ws.on :open do
     say "General connection opened"
     @connection_opened = Time.now
   end
@@ -65,7 +65,7 @@ def init_general_socket
     end
   end
 
-  @ws.on :close do |event|
+  @ws.on :close do
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
     say "Connection was up for #{Time.diff(Time.now, @connection_opened, '%h:%m:%s')[:diff]}".red
@@ -80,7 +80,7 @@ def init_display_socket(id)
 
   opened = Time.now
 
-  dws.on :open do |event|
+  dws.on :open do
     say "Display #{id} connection opened"
     opened = Time.now
   end
@@ -105,7 +105,7 @@ def init_display_socket(id)
     end
   end
 
-  dws.on :close do |event|
+  dws.on :close do
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
     say "Connection was up for #{Time.diff(Time.now, opened, '%h:%m:%s')[:diff]}".red

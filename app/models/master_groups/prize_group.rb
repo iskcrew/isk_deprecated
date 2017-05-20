@@ -51,7 +51,7 @@ class PrizeGroup < MasterGroup
     d[:title] = DefaultData[:title] unless d.key?(:title)
     d[:awards] = DefaultData[:awards] unless d.key?(:awards)
 
-    d.keep_if do |k, v|
+    d.keep_if do |k|
       DefaultData.key? k
     end
 

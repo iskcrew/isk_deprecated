@@ -16,7 +16,7 @@ class TubesockController < ApplicationController
         # Needs its own redis connection to pub
         # and sub at the same time
         Redis.new(Rails.configuration.x.redis).subscribe "isk_general" do |on|
-          on.message do |channel, message|
+          on.message do |_channel, message|
             tubesock.send_data message
           end
         end
