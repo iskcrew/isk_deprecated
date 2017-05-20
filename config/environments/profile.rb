@@ -32,9 +32,9 @@ Isk::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  #Websockets needs this, otherwise the websocket connection will
-  #Websockets needs this, otherwise the websocket connection will
-  #lock the server up completely.
+  # Websockets needs this, otherwise the websocket connection will
+  # Websockets needs this, otherwise the websocket connection will
+  # lock the server up completely.
   config.middleware.delete Rack::Lock
 
   # Rewrite rules so the simple editor view finds it's backgrounds
@@ -45,8 +45,8 @@ Isk::Application.configure do
   # Profile a page load when passed profile_request=true parameter in query string
   config.middleware.insert 0, "Rack::RequestProfiler", printer: ::RubyProf::CallTreePrinter
 
-  #Use cashier for better caching
-  #config.cashier.adapter = :cache_store
+  # Use cashier for better caching
+  # config.cashier.adapter = :cache_store
   config.cashier.adapter = :redis_store
   config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis)
   config.eager_load = false

@@ -53,8 +53,8 @@ class SlidesControllerTest < ActionController::TestCase
   end
 
   def teardown
-    #Remove any possible files associated with test data from
-    #the test directory
+    # Remove any possible files associated with test data from
+    # the test directory
 
     Slide.all.each do |s|
       clear_slide_files(s)

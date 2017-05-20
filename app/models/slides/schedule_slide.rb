@@ -5,7 +5,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class ScheduleSlide < SvgSlide
-  #Automatically generated schedule slide
+  # Automatically generated schedule slide
   TypeString = "schedule"
 
   # Find the schedule this slide belongs to

@@ -71,7 +71,7 @@ class Slide < ActiveRecord::Base
   Host = "http://example.com"
   TypeString = "image"
   FilePath = Rails.root.join("data", "slides")
-  UsePresentationDelay = -1 #Set duration to this to use presentation setting
+  UsePresentationDelay = -1 # Set duration to this to use presentation setting
 
   # Error to raise when image operation fails
   class ImageError < StandardError

@@ -22,7 +22,7 @@ class Display < ActiveRecord::Base
   before_validation :create_state, on: :create
 
   # Timeout before a display is considered as non-responsive
-  Timeout = 5 #minutes
+  Timeout = 5 # minutes
 
   include ModelAuthorization
 

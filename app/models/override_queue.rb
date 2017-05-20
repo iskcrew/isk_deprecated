@@ -10,7 +10,7 @@ class OverrideQueue < ActiveRecord::Base
   belongs_to :effect
 
   validates :duration, numericality: { only_integer: true }
-  #TODO: varmista että presis ja slide on olemassa
+  # TODO: varmista että presis ja slide on olemassa
 
   include RankedModel
   ranks :position, with_same: :display_id

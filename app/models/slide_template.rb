@@ -136,7 +136,7 @@ private
       row.attributes["sodipodi:role"] = "line"
       row.attributes["xml:space"] = "preserve"
 
-      #First line requires little different attributes
+      # First line requires little different attributes
       if first_line
         first_line = false
       else

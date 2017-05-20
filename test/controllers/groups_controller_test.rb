@@ -49,7 +49,7 @@ class GroupsControllerTest < ActionController::TestCase
       ]
 
     }
-    #We don't want to generate slides into the normal place
+    # We don't want to generate slides into the normal place
     Slide.send(:remove_const, :FilePath)
     Slide.const_set(:FilePath, Rails.root.join("tmp", "test"))
   end

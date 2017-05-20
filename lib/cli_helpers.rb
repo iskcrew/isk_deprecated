@@ -55,7 +55,7 @@ def isk_login(host, port, username, password)
   puts base_url
   r = RestClient.post "#{base_url}/login", { username: username, password: password }, accept: :json
 
-  #Check the return code from the POST request
+  # Check the return code from the POST request
   if r.code != 200
     abort "Error loggin into ISK, aborting".red
   end

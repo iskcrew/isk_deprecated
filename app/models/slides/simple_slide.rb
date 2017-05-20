@@ -65,14 +65,14 @@ class SimpleSlide < SvgSlide
 
     svg = REXML::Document.new(svg_slide.svg_data)
 
-    #IF slide has other images than the background we have a problem
+    # IF slide has other images than the background we have a problem
     unless svg.root.elements.to_a("//image").size == 1
       raise ApplicationController::ConvertError
     end
 
     text_nodes = svg.root.elements.to_a("//text")
 
-    #The slide needs to contain some text
+    # The slide needs to contain some text
     raise ApplicationController::ConvertError unless text_nodes.count.positive?
 
     header = text_nodes[0].elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip
@@ -101,7 +101,7 @@ class SimpleSlide < SvgSlide
   # Take in the slide data and create a svg using them
   # This is used both to save the slide and to display a preview
   # in the simple editor page via websocket calls
-  #TODO: create inkscape compliant svg!
+  # TODO: create inkscape compliant svg!
   def self.create_svg(options)
     text_align = options[:text_align] || DefaultSlidedata[:text_align]
     text_size = options[:text_size] || DefaultSlidedata[:text_size]

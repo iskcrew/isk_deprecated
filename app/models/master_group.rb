@@ -77,7 +77,7 @@ class MasterGroup < ActiveRecord::Base
     end
   end
 
-  #Tag for all cache fragments depending on this master_group
+  # Tag for all cache fragments depending on this master_group
   def cache_tag
     "master_group_#{id}"
   end

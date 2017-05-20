@@ -24,6 +24,6 @@ class VideoSlide < Slide
   end
 
   def generate_images
-    #TODO
+    # TODO
   end
 end

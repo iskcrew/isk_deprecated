@@ -81,7 +81,7 @@ Isk::Application.configure do
   config.active_support.deprecation = :notify
 
   # Cashier for better caching
-  #config.cashier.adapter = :cache_store
+  # config.cashier.adapter = :cache_store
   config.cashier.adapter = :redis_store
   config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis)
   # or Resque.redis or any existing redis connection
