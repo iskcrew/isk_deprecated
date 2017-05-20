@@ -27,9 +27,9 @@ module  RedisTestHelpers
   end
 
   def start_subscriber(channel = "isk_general")
-    @subscriber = Thread.new {
+    @subscriber = Thread.new do
       RedisTestSubscriber.new(channel).process
-    }
+    end
   end
 
   def stop_subscriber

@@ -117,9 +117,9 @@ def init_display_socket(id)
   end
 end
 
-EM.run {
+EM.run do
   init_general_socket
   @displays.each do |d|
     init_display_socket(d["id"])
   end
-}
+end
