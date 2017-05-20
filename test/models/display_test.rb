@@ -14,15 +14,15 @@ class DisplayTest < ActiveSupport::TestCase
 
     assert_equal 1, Display.where(name: "Hi, I'm new").count, "Display not found in db"
     d = Display.where(name: "Hi, I'm new").first!
-    assert d.last_contact_at != nil, "Displays last contact timestamp is missing"
-    assert d.last_hello != nil, "Displays last hello timestamp is missing"
+    assert_not d.last_contact_at.nil?, "Displays last contact timestamp is missing"
+    assert_not d.last_hello.nil?, "Displays last hello timestamp is missing"
     assert_equal "127.0.0.1", d.ip, "Displays IP address is missing"
 
     Display.hello "No IP"
     assert_equal 1, Display.where(name: "No IP").count, "Display not found in db"
     d2 = Display.where(name: "No IP").first!
-    assert d2.last_contact_at != nil, "Displays last contact timestamp is missing"
-    assert d2.last_hello != nil, "Displays last hello timestamp is missing"
+    assert_not d2.last_contact_at.nil?, "Displays last contact timestamp is missing"
+    assert_not d2.last_hello.nil?, "Displays last hello timestamp is missing"
     assert_not_equal nil, d2.ip, "Displays IP address field is nil"
     assert_equal "UNKNOWN", d2.ip, "Display's IP should report as UNKNOWN"
   end
