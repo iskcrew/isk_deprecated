@@ -10,7 +10,7 @@ class Slide < ActiveRecord::Base
 
   # Callbacks
   after_initialize do |s|
-    s.master_group_id = Event.current.ungrouped.id if s.master_group_id == nil
+    s.master_group_id = Event.current.ungrouped.id if s.master_group_id.nil?
     true
   end
 
