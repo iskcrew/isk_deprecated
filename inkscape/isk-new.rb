@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # Inkscape plugin for logging in to ISK and creating a new slide

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddDefaultDelayToPresentations < ActiveRecord::Migration
   def change
     remove_column :presentations, :delay

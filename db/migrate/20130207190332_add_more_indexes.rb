@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddMoreIndexes < ActiveRecord::Migration
   def change
     add_index :display_counts, :slide_id

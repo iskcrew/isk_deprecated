@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # ISK export plugin for inkscape, allows for one-click

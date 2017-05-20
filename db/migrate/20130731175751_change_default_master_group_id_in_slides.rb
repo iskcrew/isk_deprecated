@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ChangeDefaultMasterGroupIdInSlides < ActiveRecord::Migration
   def up
     change_column_default :slides, :master_group_id, nil

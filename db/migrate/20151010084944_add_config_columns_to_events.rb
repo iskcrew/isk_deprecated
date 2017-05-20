@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddConfigColumnsToEvents < ActiveRecord::Migration
   def change
     change_table :events do |t|

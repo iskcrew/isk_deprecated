@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ChangeDisplayIpToString < ActiveRecord::Migration
   def up
     change_column :display_states, :ip, :string

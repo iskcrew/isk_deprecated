@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateDisplayStates < ActiveRecord::Migration
   def up
     create_table :display_states do |t|

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :isk do
   desc "Runs all installation tasks; sets up the database, secrets and creates nginx config file"
   task setup: ["db:setup", "isk:secrets", "isk:nginx", "assets:precompile"] do

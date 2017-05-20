@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCancelledAndRescheduledToScheduleEvents < ActiveRecord::Migration
   def change
     add_column :schedule_events, :cancelled, :boolean, default: false

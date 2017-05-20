@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddDeletedToTemplates < ActiveRecord::Migration
   def change
     add_column :slide_templates, :deleted, :boolean, default: false, nil: false

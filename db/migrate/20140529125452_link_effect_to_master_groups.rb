@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LinkEffectToMasterGroups < ActiveRecord::Migration
   def change
     add_column :master_groups, :effect_id, :integer

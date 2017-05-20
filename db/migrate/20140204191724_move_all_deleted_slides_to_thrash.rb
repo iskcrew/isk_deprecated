@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MoveAllDeletedSlidesToThrash < ActiveRecord::Migration
   class Slide < ActiveRecord::Base
   end

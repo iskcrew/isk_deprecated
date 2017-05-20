@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateEffects < ActiveRecord::Migration
   def change
     remove_column :presentations, :effect

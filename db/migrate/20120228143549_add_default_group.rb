@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddDefaultGroup < ActiveRecord::Migration
   def change
     remove_column :slides, :master_group_id

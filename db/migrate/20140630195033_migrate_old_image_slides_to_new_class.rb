@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 #  20140630195033_migrate_old_image_slides_to_new_class.rb
 #  isk

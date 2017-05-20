@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddThrashGroupsStiModel < ActiveRecord::Migration
   class Event < ActiveRecord::Base
   end

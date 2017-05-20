@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "test_helper"
 require "redis_test_helpers"
 require "test_tubesock"

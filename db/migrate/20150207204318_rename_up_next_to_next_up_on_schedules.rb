@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameUpNextToNextUpOnSchedules < ActiveRecord::Migration
   def change
     rename_column :schedules, :up_next, :next_up

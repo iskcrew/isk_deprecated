@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AssignSchedulesToEvents < ActiveRecord::Migration
   def up
     sql = "UPDATE schedules JOIN master_groups ON"\

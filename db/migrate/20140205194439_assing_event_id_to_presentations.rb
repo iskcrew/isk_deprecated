@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AssingEventIdToPresentations < ActiveRecord::Migration
   # Assign all presentations to the event where their component groups belong
   def up

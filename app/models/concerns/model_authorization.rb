@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # model_authorization.rb - Generic support for per - object

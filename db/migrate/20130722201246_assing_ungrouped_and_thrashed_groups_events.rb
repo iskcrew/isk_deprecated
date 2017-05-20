@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AssingUngroupedAndThrashedGroupsEvents < ActiveRecord::Migration
   def up
     Event.where(ungrouped_id: nil).each do |e|

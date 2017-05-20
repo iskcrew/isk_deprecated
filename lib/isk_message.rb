@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # Class for handling the websocket messages in ISK

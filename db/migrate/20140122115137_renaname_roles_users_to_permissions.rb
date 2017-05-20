@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenanameRolesUsersToPermissions < ActiveRecord::Migration
   def up
     rename_table :roles_users, :permissions

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MoreTimestampsToDisplays < ActiveRecord::Migration
   def up
     add_column :displays, :last_contact_at, :datetime

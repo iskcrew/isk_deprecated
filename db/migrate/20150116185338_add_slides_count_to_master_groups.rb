@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddSlidesCountToMasterGroups < ActiveRecord::Migration
   def up
     add_column :master_groups, :slides_count, :integer

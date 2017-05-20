@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 #  has_tickets.rb
 #  isk

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddPublicToSlides < ActiveRecord::Migration
   def change
     add_column :slides, :public, :boolean, default: false

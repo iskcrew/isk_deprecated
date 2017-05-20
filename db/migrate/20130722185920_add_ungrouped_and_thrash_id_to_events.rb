@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddUngroupedAndThrashIdToEvents < ActiveRecord::Migration
   def change
     add_column :events, :ungrouped_id, :integer

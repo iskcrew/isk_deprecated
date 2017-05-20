@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateTemplateFields < ActiveRecord::Migration
   def change
     create_table :template_fields do |t|

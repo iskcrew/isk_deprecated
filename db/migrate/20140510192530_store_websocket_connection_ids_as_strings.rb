@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class StoreWebsocketConnectionIdsAsStrings < ActiveRecord::Migration
   def up
     change_column :display_states, :websocket_connection_id, :string

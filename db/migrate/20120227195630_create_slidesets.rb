@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSlidesets < ActiveRecord::Migration
   def change
     create_table :slidesets do |t|

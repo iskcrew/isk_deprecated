@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CurrentSlideSupportForDisplays < ActiveRecord::Migration
   def up
     add_column :displays, :current_group_id, :integer

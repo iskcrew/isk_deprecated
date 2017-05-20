@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CleanUpPermissionsTable < ActiveRecord::Migration
   def up
     remove_column :permissions, :master_group_id

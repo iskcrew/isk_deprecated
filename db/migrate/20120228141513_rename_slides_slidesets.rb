@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameSlidesSlidesets < ActiveRecord::Migration
   def change
     rename_table :slides, :masterslides

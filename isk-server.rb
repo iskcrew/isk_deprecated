@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # Script for starting and stopping all the various processes

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MakePermissionsHavePolymorphicTarget < ActiveRecord::Migration
   def change
     add_reference :permissions, :target, polymorphic: true, index: true

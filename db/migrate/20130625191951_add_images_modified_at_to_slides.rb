@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddImagesModifiedAtToSlides < ActiveRecord::Migration
   def up
     add_column :slides, :images_updated_at, :datetime

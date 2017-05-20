@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ISK - A web controllable slideshow system
 #
 # Group for storing ungrouped slides in

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSlideTemplates < ActiveRecord::Migration
   def change
     create_table :slide_templates do |t|

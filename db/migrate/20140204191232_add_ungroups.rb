@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddUngroups < ActiveRecord::Migration
   class Event < ActiveRecord::Base
   end

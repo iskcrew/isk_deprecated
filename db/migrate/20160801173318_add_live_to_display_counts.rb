@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddLiveToDisplayCounts < ActiveRecord::Migration
   def change
     add_column :display_counts, :live, :boolean, default: false, nil: false

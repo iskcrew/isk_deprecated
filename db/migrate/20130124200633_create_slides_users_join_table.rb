@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSlidesUsersJoinTable < ActiveRecord::Migration
   def change
     create_table :slides_users, id: false do |t|

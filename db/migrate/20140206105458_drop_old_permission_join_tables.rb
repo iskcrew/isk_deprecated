@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DropOldPermissionJoinTables < ActiveRecord::Migration
   def up
     connection = ActiveRecord::Base.connection

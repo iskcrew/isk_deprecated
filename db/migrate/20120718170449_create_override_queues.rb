@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateOverrideQueues < ActiveRecord::Migration
   def change
     create_table :override_queues do |t|
