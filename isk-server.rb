@@ -19,10 +19,10 @@ Services = [
   "resque",
   "background_jobs",
   "rrd_monitoring"
-]
-RedisOptions = { host: "localhost", port: 6379 }
-MemcachedIP = "localhost:11211"
-MemcachedOptions = { namespace: "ISK", compress: true }
+].freeze
+RedisOptions = { host: "localhost", port: 6379 }.freeze
+MemcachedIP = "localhost:11211".freeze
+MemcachedOptions = { namespace: "ISK", compress: true }.freeze
 
 # Check that all the needed external binaries are present
 def check_deps

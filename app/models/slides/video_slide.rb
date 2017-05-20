@@ -5,7 +5,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class VideoSlide < Slide
-  TypeString = "video"
+  TypeString = "video".freeze
   FilePath = Rails.root.join("data", "video")
   VideoThumbnail = Rails.root.join("data", "video", "no_video.png")
 

@@ -7,7 +7,7 @@
 class InkscapeSlide < SvgSlide
   # Constants
   # Slide type to report in html views
-  TypeString = "inkscape"
+  TypeString = "inkscape".freeze
 
   before_create do |slide|
     slide.is_svg = true

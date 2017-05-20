@@ -5,7 +5,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class SvgSlide < Slide
-  TypeString = "svg-edit"
+  TypeString = "svg-edit".freeze
   @_svg_data = nil
 
   before_create do |slide|

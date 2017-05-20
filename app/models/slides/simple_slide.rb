@@ -5,7 +5,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class SimpleSlide < SvgSlide
-  TypeString = "simple"
+  TypeString = "simple".freeze
 
   # Slidedata functionality
   DefaultSlidedata = {
@@ -14,15 +14,15 @@ class SimpleSlide < SvgSlide
     color: "Red",
     text_size: 48,
     text_align: "Left"
-  }.with_indifferent_access
+  }.with_indifferent_access.freeze
 
   include HasSlidedata
 
-  BaseTemplate = Rails.root.join("data", "templates", "simple.svg")
-  HeadingSelector = "text#header"
-  BodySelector = "text#slide_content"
-  BackgroundSelector = "image#background_picture"
-  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"]
+  BaseTemplate = Rails.root.join("data", "templates", "simple.svg").freeze
+  HeadingSelector = "text#header".freeze
+  BodySelector = "text#slide_content".freeze
+  BackgroundSelector = "image#background_picture".freeze
+  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"].freeze
 
   validate :check_color
 

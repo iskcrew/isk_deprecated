@@ -11,7 +11,7 @@ class HttpSlide < Slide
   require "net/http"
   require "net/https"
 
-  TypeString = "http"
+  TypeString = "http".freeze
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(url: "http://", user: nil, password: nil)
   include HasSlidedata

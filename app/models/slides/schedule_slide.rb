@@ -6,7 +6,7 @@
 
 class ScheduleSlide < SvgSlide
   # Automatically generated schedule slide
-  TypeString = "schedule"
+  TypeString = "schedule".freeze
 
   # Find the schedule this slide belongs to
   def schedule

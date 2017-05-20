@@ -65,10 +65,8 @@ class Slide < ActiveRecord::Base
   include CacheSweeper
 
   # Constants
-  # FIXME: Verify host isn't used anywhere anymore and remove it
-  Host = "http://example.com"
-  TypeString = "image"
-  FilePath = Rails.root.join("data", "slides")
+  TypeString = "image".freeze
+  FilePath = Rails.root.join("data", "slides").freeze
   UsePresentationDelay = -1 # Set duration to this to use presentation setting
 
   # Error to raise when image operation fails

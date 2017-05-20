@@ -18,7 +18,7 @@ class PrizeGroup < MasterGroup
       { name: "", by: "", pts: "" },
       { name: "", by: "", pts: "" }
     ]
-  )
+  ).freeze
   @_data = nil
 
   after_save do

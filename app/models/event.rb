@@ -69,7 +69,7 @@ class Event < ActiveRecord::Base
   SupportedResolutions = [
     [1280, 720],
     [1920, 1080]
-  ]
+  ].freeze
 
   # Finds the current event
   def self.current

@@ -7,7 +7,7 @@
 class User < ActiveRecord::Base
   require "digest/sha1"
 
-  AdminUsers = ["admin"]
+  AdminUsers = ["admin"].freeze
 
   validates_length_of :username, in: 1..50
   validates_uniqueness_of :username

@@ -15,9 +15,9 @@ class Ticket < ActiveRecord::Base
     StatusNew => "new",
     StatusOpen => "open",
     StatusClosed => "closed"
-  }
-  ValidModels = [Slide, MasterGroup, Presentation, Display]
-  Kinds = ["request", "error", "notice"]
+  }.freeze
+  ValidModels = [Slide, MasterGroup, Presentation, Display].freeze
+  Kinds = ["request", "error", "notice"].freeze
 
   validates :name, presence: true
   validates :status, inclusion: { in: Ticket::StatusCodes }

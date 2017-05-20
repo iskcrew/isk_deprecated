@@ -5,19 +5,19 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class ImageSlide < Slide
-  TypeString = "image"
+  TypeString = "image".freeze
 
   ScalingOptions = [
     ["Fit", "fit"],
     ["Down only", "down"],
     ["Up only", "up"],
     ["Stretch", "stretch"]
-  ]
+  ].freeze
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
     scale: "fit",
     background: "#000000"
-  )
+  ).freeze
   include HasSlidedata
 
   after_save :save_image
