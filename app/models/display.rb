@@ -80,47 +80,43 @@ class Display < ActiveRecord::Base
 
   # Remove shown slide from override
   def override_shown(override_id, connection_id = nil)
-    begin
-      oq = override_queues.find(override_id)
-      ping
-      self.websocket_connection_id = connection_id
-      self.current_slide = oq.slide
-      self.current_group_id = -1
-      oq.slide.shown_on id, live
-      oq.destroy
-      self.status = "running"
-      state.save!
-      return true
-    rescue ActiveRecord::RecordNotFound
-      # The override was not found
-      add_error "Invalid slide in override_shown!"
-      return false
-    end
+    oq = override_queues.find(override_id)
+    ping
+    self.websocket_connection_id = connection_id
+    self.current_slide = oq.slide
+    self.current_group_id = -1
+    oq.slide.shown_on id, live
+    oq.destroy
+    self.status = "running"
+    state.save!
+    return true
+  rescue ActiveRecord::RecordNotFound
+    # The override was not found
+    add_error "Invalid slide in override_shown!"
+    return false
   end
 
   # Set the current group and slide for the display and log the slide as shown
   def set_current_slide(group_id, slide_id, connection_id = nil)
-    begin
-      if group_id != -1
-        self.current_group = presentation.groups.find(group_id)
-        s = current_group.slides.find(slide_id)
-        self.current_slide = s
-      else
-        # Slide is from override
-        self.current_group_id = -1
-        self.current_slide = Slide.find(slide_id)
-      end
-      ping
-      self.websocket_connection_id = connection_id
-      self.status = "running"
-      current_slide.shown_on(id, live)
-      state.save!
-      return true
-    rescue ActiveRecord::RecordNotFound
-      # The slide was not found in the presentation
-      add_error "Invalid slide in set_current slide"
-      return false
+    if group_id != -1
+      self.current_group = presentation.groups.find(group_id)
+      s = current_group.slides.find(slide_id)
+      self.current_slide = s
+    else
+      # Slide is from override
+      self.current_group_id = -1
+      self.current_slide = Slide.find(slide_id)
     end
+    ping
+    self.websocket_connection_id = connection_id
+    self.status = "running"
+    current_slide.shown_on(id, live)
+    state.save!
+    return true
+  rescue ActiveRecord::RecordNotFound
+    # The slide was not found in the presentation
+    add_error "Invalid slide in set_current slide"
+    return false
   end
 
   # Mark display based on the connection id as disconnected
