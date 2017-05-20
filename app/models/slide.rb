@@ -335,7 +335,7 @@ private
     else
       FileUtils.mv tmp_file.path, full_filename
       # Tmpfile has 700 mode, we need to give other read permissions (mainly the web server)
-      FileUtils.chmod 0644, full_filename
+      FileUtils.chmod 0o0644, full_filename
       return true
     end
   end
