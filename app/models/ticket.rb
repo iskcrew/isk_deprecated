@@ -29,9 +29,9 @@ class Ticket < ActiveRecord::Base
   before_validation :assign_to_current_event, on: :create
   before_update :set_as_open
 
-  scope :current, -> { where(event_id: Event.current.id).order(status: :asc, updated_at: :asc) }
-  scope :open, -> { where.not(status: StatusClosed) }
-  scope :closed, -> { where status: StatusClosed }
+  scope :current, (-> { where(event_id: Event.current.id).order(status: :asc, updated_at: :asc) })
+  scope :open, (-> { where.not(status: StatusClosed) })
+  scope :closed, (-> { where status: StatusClosed })
 
   # Send websocket messages on create and update
   include WebsocketMessages

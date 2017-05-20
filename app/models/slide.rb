@@ -29,7 +29,7 @@ class Slide < ActiveRecord::Base
   belongs_to :master_group, counter_cache: true
   has_many :display_counts
   has_one :event, through: :master_group
-  has_many :presentations, -> { uniq }, through: :master_group
+  has_many :presentations, (-> { uniq }), through: :master_group
 
   # Attribute validations
   validates :name, presence: true, length: { maximum: 100 }
@@ -40,10 +40,10 @@ class Slide < ActiveRecord::Base
   validates :show_clock, :ready, :public, inclusion: { in: [true, false] }
 
   # Scopes for common queries
-  scope :published, -> { where(public: true) }
-  scope :hidden, -> { where(public: false) }
-  scope :current, -> { where(deleted: false).where(replacement_id: nil) }
-  scope :thrashed, -> { where("replacement_id is not null OR deleted = ?", true) }
+  scope :published, (-> { where(public: true) })
+  scope :hidden, (-> { where(public: false) })
+  scope :current, (-> { where(deleted: false).where(replacement_id: nil) })
+  scope :thrashed, (-> { where("replacement_id is not null OR deleted = ?", true) })
 
   # slide.master_group_name delegation
   delegate :name, to: :master_group, prefix: :master_group

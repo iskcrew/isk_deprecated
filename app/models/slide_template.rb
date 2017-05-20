@@ -6,7 +6,7 @@
 
 class SlideTemplate < ActiveRecord::Base
   belongs_to :event
-  has_many :fields, -> { order(field_order: :asc) }, class_name: "TemplateField"
+  has_many :fields, (-> { order(field_order: :asc) }), class_name: "TemplateField"
   has_many :slides, foreign_key: :foreign_object_id
 
   validates :name, :event, presence: true
@@ -18,7 +18,7 @@ class SlideTemplate < ActiveRecord::Base
 
   FilePath = Rails.root.join("data", "templates")
 
-  scope :current, -> { where deleted: false }
+  scope :current, (-> { where deleted: false })
 
   # Load the svg in
   def template

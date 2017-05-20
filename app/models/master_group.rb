@@ -26,7 +26,7 @@ class MasterGroup < ActiveRecord::Base
   # Cache sweeper
   include CacheSweeper
 
-  scope :defined_groups, -> { where(internal: false).order("name") }
+  scope :defined_groups, (-> { where(internal: false).order("name") })
 
   # Associate the MasterGroup to a event
   before_create :set_event_id
