@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source "https://rubygems.org"
 
 gem "rails", "~> 4.2.7.1"
@@ -84,7 +85,7 @@ gem "connection_pool"
 gem "dynamic_form"
 
 # Calculate difference between two timestamps
-gem "time_diff", "~> 0.3"
+gem "time_difference"
 
 # Slim template engine
 gem "slim"

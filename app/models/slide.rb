@@ -318,15 +318,16 @@ private
   def inkscape_command_line(tmp_file)
     size = picture_sizes[:full]
     # Chance to proper directory
-    command = "cd #{Slide::FilePath} && inkscape"
+    command = []
+    command << "cd #{Slide::FilePath} && inkscape"
     # Export size
-    command << " -w #{size.first} -h #{size.last}"
+    command << "-w #{size.first} -h #{size.last}"
     # Export to file
-    command << " -e #{tmp_file.path} #{self.svg_filename}"
+    command << "-e #{tmp_file.path} #{self.svg_filename}"
     # Supress std-out reporting
-    command << " 2>&1"
+    command << "2>&1"
 
-    return command
+    return command.join(" ")
   end
 
   # Compare the passed file against the current slide image.

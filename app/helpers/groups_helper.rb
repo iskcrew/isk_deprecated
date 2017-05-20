@@ -13,7 +13,8 @@ module GroupsHelper
 
   # Construct a link to a group with basic group infor
   def group_link_tag(g)
-    html = "Group: "
+    html = String.new
+    html << "Group: "
     html << link_to(g.name, group_path(g), name: "group_#{g.id}")
     html << " Slides: #{g.slides.published.count}/#{g.slides.count}"
     return html.html_safe

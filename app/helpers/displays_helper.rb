@@ -86,7 +86,9 @@ module DisplaysHelper
   # Render the last_contact_at timestamp and the diff to current time
   def display_last_contact(d)
     return "UNKNOWN" unless d.last_contact_at
-    delta = Time.diff(Time.now, d.last_contact_at, "%h:%m:%s")[:diff]
+    dt = TimeDifference.between(d.last_contact_at, Time.now).in_each_component
+    delta = "#{dt[:hours].floor}:#{dt[:minutes].floor % 60}:#{dt[:seconds].floor / 60}"
+
     return "#{l d.last_contact_at, format: :short} (#{delta} ago)"
   end
 end

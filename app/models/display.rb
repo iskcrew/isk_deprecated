@@ -23,7 +23,7 @@ class Display < ActiveRecord::Base
   before_validation :create_state, on: :create
 
   # Timeout before a display is considered as non-responsive
-  Timeout = 5 #minutes
+  Timeout = 5.minutes
 
   include ModelAuthorization
 
@@ -139,13 +139,13 @@ class Display < ActiveRecord::Base
 
   # Relation for all monitored displays that are more than Timeout minutes late
   def self.late
-    Display.joins(:display_state).where("display_states.monitor = ? AND display_states.last_contact_at < ?", true, Timeout.minutes.ago)
+    Display.joins(:display_state).where("display_states.monitor = ? AND display_states.last_contact_at < ?", true, Timeout.ago)
   end
 
   # Is this display more than Timeout minutes late?
   def late?
     return false unless self.last_contact_at
-    return Time.diff(Time.now, self.last_contact_at, "%m")[:diff].to_i > Timeout
+    return Time.now > last_contact_at + Timeout
   end
 
   # Is the display live, ie. visible to the general audience
@@ -174,7 +174,8 @@ class Display < ActiveRecord::Base
   def uptime
     return nil unless self.last_hello && self.last_contact_at
 
-    return Time.diff(self.last_hello, self.last_contact_at, "%h:%m:%s")[:diff]
+    d = TimeDifference.between(last_hello, last_contact_at).in_each_component
+    return "#{d[:hours].floor}:#{d[:minutes].floor % 60}:#{d[:seconds].floor / 60}"
   end
 
   # Return a hash containing all associated data, including the slides

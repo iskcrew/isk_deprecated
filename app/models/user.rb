@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def roles_text
-    text = ""
+    text = String.new
     self.roles.each do |r|
       text << r.role << ", "
     end

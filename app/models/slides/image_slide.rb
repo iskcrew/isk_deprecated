@@ -92,7 +92,8 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"
+    command = String.new
+    command << "convert #{self.original_filename} -resize #{geo_str}"
     command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
     return compare_new_image(tmp_file) if system command
 

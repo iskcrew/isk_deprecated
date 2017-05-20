@@ -69,9 +69,12 @@ def init_general_socket
   end
 
   @ws.on :close do |event|
+    d = TimeDifference.between(@connection_opened, Time.now).in_each_component
+    delta "#{d[:hours].floor}:#{d[:minutes].floor % 60}:#{d[:seconds].floor / 60}"
+
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{delta}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_general_socket
@@ -109,9 +112,12 @@ def init_display_socket(id)
   end
 
   dws.on :close do |event|
+    d = TimeDifference.between(opened, Time.now).in_each_component
+    delta "#{d[:hours].floor}:#{d[:minutes].floor % 60}:#{d[:seconds].floor / 60}"
+
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{delta}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_display_socket(id)
