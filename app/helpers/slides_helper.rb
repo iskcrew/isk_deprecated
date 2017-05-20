@@ -205,7 +205,7 @@ module SlidesHelper
     return "Online SVG-editor slide" if s.is_a? SvgSlide
     return "Video presentation" if s.is_a? VideoSlide
     return "Automatically updating Http-slide" if s.is_a? HttpSlide
-    return "Plain bitmap slide" if !s.is_svg?
+    return "Plain bitmap slide" unless s.is_svg?
     return "Unknown"
   end
 
