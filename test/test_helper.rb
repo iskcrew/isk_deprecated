@@ -34,18 +34,18 @@ class ActiveSupport::TestCase
 
     images.each do |i|
       FileUtils.cp imagefile, i
-      FileUtils.chmod 0600, i
+      FileUtils.chmod 0o0600, i
     end
 
     if slide.respond_to? :svg_filename
       FileUtils.cp svgfile, slide.svg_filename.to_s
-      FileUtils.chmod 0600, slide.svg_filename.to_s
+      FileUtils.chmod 0o0600, slide.svg_filename.to_s
     end
 
     return unless slide.is_a? SimpleSlide
 
     FileUtils.cp simple_slidedatafile, slide.data_filename.to_s
-    FileUtils.chmod 0600, slide.data_filename.to_s
+    FileUtils.chmod 0o0600, slide.data_filename.to_s
   end
 
   # During testing we will end up generating slide datafiles in a temporary location.
@@ -106,7 +106,7 @@ class ActiveSupport::TestCase
     Rails.application.routes.routes.each do |r|
       req = r.requirements
       if req[:controller] == c
-        verb = %W{ GET POST PUT PATCH DELETE }.grep(r.verb).first.downcase.to_sym
+        verb = %w[GET POST PUT PATCH DELETE].grep(r.verb).first.downcase.to_sym
         routes[verb] << req[:action]
       end
     end
