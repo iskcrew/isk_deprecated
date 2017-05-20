@@ -101,7 +101,7 @@ def stop_service(process)
   end
   pid = File.read(pid_file).to_i
 
-  unless !!(`ps -p #{pid}`.match pid.to_s)
+  unless (`ps -p #{pid}`.match pid.to_s)
     puts "Not running".yellow
     return true
   end
