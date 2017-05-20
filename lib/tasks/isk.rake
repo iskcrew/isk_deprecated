@@ -23,7 +23,7 @@ namespace :isk do
   task sql_backup: :environment do
     backup_file = Tempfile.new "isk-database-backup"
     sql_backup(sql_backup_location)
-    puts "SQL backup created: #{sql_backup_location.to_s}"
+    puts "SQL backup created: #{sql_backup_location}"
   end
 
   desc "Create zip with all slide data and the database dump"
@@ -31,7 +31,7 @@ namespace :isk do
     backup_file = Rails.root.join("isk_backup-#{Time.now.strftime("%F-%H%M")}.tar.gz").to_s
     # We need relative location for the sql file
     sql_file = sql_backup_location.to_s.partition(Rails.root.to_s).last[1..-1]
-    cmd = "tar -czf #{backup_file} -C #{Rails.root.to_s} data #{sql_file}"
+    cmd = "tar -czf #{backup_file} -C #{Rails.root} data #{sql_file}"
     puts "Creating the archive..."
     system cmd
     puts "Created full backup: #{backup_file}"
@@ -41,7 +41,7 @@ namespace :isk do
   task secrets: :environment do
     file = Rails.root.join("config", "secrets.yml")
     if File.exist? file
-      abort "#{file.to_s} exists, aborting"
+      abort "#{file} exists, aborting"
     end
     puts "Generating #{file}"
     secrets = {

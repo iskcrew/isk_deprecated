@@ -270,7 +270,7 @@ class Slide < ActiveRecord::Base
 
   # Cache tag for all fragments depending on this slide
   def cache_tag
-    "slide_#{self.id.to_s}"
+    "slide_#{self.id}"
   end
 
   # Cache key for info fragment with full edit priviledges

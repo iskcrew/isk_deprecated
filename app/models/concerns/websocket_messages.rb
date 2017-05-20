@@ -51,7 +51,7 @@ private
     self.previous_changes.each_pair do |k, v|
       data[:changes][k] = v.last unless (k == "password") || (k == "salt")
     end
-    Rails.logger.debug "Sending #{data.to_s}"
+    Rails.logger.debug "Sending #{data}"
     msg = IskMessage.new(get_channel, event, data)
     msg.send("isk_general")
 

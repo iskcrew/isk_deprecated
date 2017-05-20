@@ -55,7 +55,7 @@ class ActiveSupport::TestCase
     [".svg", "_full.png", "_preview.png", "_thumb.png", "_data", "_original"].each do |t|
       f = Rails.root.join("tmp", "test", "slide_#{s.id.to_s + t}")
       if File.exist? f
-        Rails.logger.info "Deleting temporary slide datafile: #{f.to_s}"
+        Rails.logger.info "Deleting temporary slide datafile: #{f}"
         File.delete f
       end
     end
@@ -79,7 +79,7 @@ class ActiveSupport::TestCase
     count = 0
     actions.each_value { |v| count += v.size }
 
-    assert count.positive?, "No actions were found for controller #{c.to_s}, typo?"
+    assert count.positive?, "No actions were found for controller #{c}, typo?"
 
     missed = []
     actions.each_key do |verb|

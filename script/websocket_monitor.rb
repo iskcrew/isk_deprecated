@@ -63,7 +63,7 @@ def init_general_socket
     when "create"
       say "Create notification: #{msg.object} with id=#{msg.payload[:id]}".white
     else
-      say "Got unhandled message: #{msg.to_s}".red
+      say "Got unhandled message: #{msg}".red
     end
   end
 
@@ -103,7 +103,7 @@ def init_display_socket(id)
     when "shutdown"
       say "Display #{id} is shutting down".yellow
     else
-      say "Got unhandled message: #{msg.to_s}".red
+      say "Got unhandled message: #{msg}".red
     end
   end
 
