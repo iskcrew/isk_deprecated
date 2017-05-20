@@ -38,7 +38,7 @@ private
   # A after save hook to move the possible new image into its place
   def save_image
     return unless @_image_file
-    FileUtils.move @_image_file.path, self.original_filename
+    FileUtils.move @_image_file.path, original_filename
     @_image_file = nil
   end
 
@@ -64,8 +64,8 @@ private
 
   # Generate the full size slide preview
   def generate_full_image
-    bg_color = self.slidedata[:background]
-    scale = self.slidedata[:scale]
+    bg_color = slidedata[:background]
+    scale = slidedata[:scale]
     size = picture_sizes[:full].join("x")
 
     # Build the ImageMagick geometry string
@@ -88,7 +88,7 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"
+    command = "convert #{original_filename} -resize #{geo_str}"
     command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
     return compare_new_image(tmp_file) if system command
 

@@ -48,7 +48,7 @@ class Display < ActiveRecord::Base
 
   # Used for broadcasting events with callbacks to websocket clients
   def websocket_channel
-    return "display_" + self.id.to_s
+    return "display_" + id.to_s
   end
 
   # For callback usage
@@ -58,7 +58,7 @@ class Display < ActiveRecord::Base
 
   # Adds a slide to override queue for the display
   def add_to_override(slide, duration, effect = Effect.first!)
-    oq = self.override_queues.new
+    oq = override_queues.new
     oq.duration = duration
     oq.effect = effect
     oq.slide = slide
@@ -81,19 +81,19 @@ class Display < ActiveRecord::Base
   # Remove shown slide from override
   def override_shown(override_id, connection_id = nil)
     begin
-      oq = self.override_queues.find(override_id)
-      self.ping
+      oq = override_queues.find(override_id)
+      ping
       self.websocket_connection_id = connection_id
       self.current_slide = oq.slide
       self.current_group_id = -1
-      oq.slide.shown_on self.id, self.live
+      oq.slide.shown_on id, live
       oq.destroy
       self.status = "running"
-      self.state.save!
+      state.save!
       return true
     rescue ActiveRecord::RecordNotFound
       # The override was not found
-      self.add_error "Invalid slide in override_shown!"
+      add_error "Invalid slide in override_shown!"
       return false
     end
   end
@@ -102,23 +102,23 @@ class Display < ActiveRecord::Base
   def set_current_slide(group_id, slide_id, connection_id = nil)
     begin
       if group_id != -1
-        self.current_group = self.presentation.groups.find(group_id)
-        s = self.current_group.slides.find(slide_id)
+        self.current_group = presentation.groups.find(group_id)
+        s = current_group.slides.find(slide_id)
         self.current_slide = s
       else
         # Slide is from override
         self.current_group_id = -1
         self.current_slide = Slide.find(slide_id)
       end
-      self.ping
+      ping
       self.websocket_connection_id = connection_id
       self.status = "running"
-      self.current_slide.shown_on(self.id, self.live)
-      self.state.save!
+      current_slide.shown_on(id, live)
+      state.save!
       return true
     rescue ActiveRecord::RecordNotFound
       # The slide was not found in the presentation
-      self.add_error "Invalid slide in set_current slide"
+      add_error "Invalid slide in set_current slide"
       return false
     end
   end
@@ -143,37 +143,37 @@ class Display < ActiveRecord::Base
 
   # Is this display more than Timeout minutes late?
   def late?
-    return false unless self.last_contact_at
-    return Time.diff(Time.now, self.last_contact_at, "%m")[:diff].to_i > Timeout
+    return false unless last_contact_at
+    return Time.diff(Time.now, last_contact_at, "%m")[:diff].to_i > Timeout
   end
 
   # Is the display live, ie. visible to the general audience
   def live?
-    self.live
+    live
   end
 
   # Add a error message on this display and set the error state
   # TODO: handle error messages as new error tickets
   def add_error(message)
-    if self.error_tickets.open.present?
-      t = self.error_tickets.open.last!
+    if error_tickets.open.present?
+      t = error_tickets.open.last!
       t.description = "#{t.description}\n#{I18n.l(Time.now, format: :iso)} #{message}"
       t.save!
     else
-      self.add_error_ticket "#{I18n.l(Time.now, format: :iso)} #{message}"
+      add_error_ticket "#{I18n.l(Time.now, format: :iso)} #{message}"
     end
-    self.ping
-    self.state.status = "error"
-    self.state.save!
+    ping
+    state.status = "error"
+    state.save!
   end
 
   # Returns the time between the last hello and last contact
   # Since the first thing a display does is to say hello this
   # gives the time since last display reboot
   def uptime
-    return nil unless self.last_hello && self.last_contact_at
+    return nil unless last_hello && last_contact_at
 
-    return Time.diff(self.last_hello, self.last_contact_at, "%h:%m:%s")[:diff]
+    return Time.diff(last_hello, last_contact_at, "%h:%m:%s")[:diff]
   end
 
   # Return a hash containing all associated data, including the slides
@@ -181,25 +181,25 @@ class Display < ActiveRecord::Base
   def to_hash
     h = Hash.new
     # Legacy stuff, updated_at used to get touched when anything happened
-    if self.state_updated_at > self.updated_at
-      h[:updated_at] = self.state_updated_at.to_i
+    if state_updated_at > updated_at
+      h[:updated_at] = state_updated_at.to_i
     else
-      h[:updated_at] = self.updated_at.to_i
+      h[:updated_at] = updated_at.to_i
     end
 
-    h[:metadata_updated_at] = self.updated_at.to_i
-    h[:state_updated_at] = self.state_updated_at.to_i
-    h[:id] = self.id
-    h[:name] = self.name
-    h[:last_contact_at] = self.last_contact_at.to_i
-    h[:manual] = self.manual
-    h[:current_slide_id] = self.current_slide_id
-    h[:current_group_id] = self.current_group_id
-    h[:created_at] = self.created_at.to_i
-    h[:presentation] = self.presentation ? self.presentation.to_hash : Hash.new
+    h[:metadata_updated_at] = updated_at.to_i
+    h[:state_updated_at] = state_updated_at.to_i
+    h[:id] = id
+    h[:name] = name
+    h[:last_contact_at] = last_contact_at.to_i
+    h[:manual] = manual
+    h[:current_slide_id] = current_slide_id
+    h[:current_group_id] = current_group_id
+    h[:created_at] = created_at.to_i
+    h[:presentation] = presentation ? presentation.to_hash : Hash.new
     q = Array.new
-    if self.do_overrides
-      self.override_queues.each do |oq|
+    if do_overrides
+      override_queues.each do |oq|
         q << oq.to_hash
       end
     end
@@ -215,14 +215,14 @@ private
 
   # Create the associated display state as needed
   def create_state
-    return unless self.display_state.nil?
+    return unless display_state.nil?
     ds = DisplayState.new
     self.display_state = ds
   end
 
   # If display is in manual control also stop accepting overrides
   def manual_control_checks
-    self.do_overrides = false if self.manual
+    self.do_overrides = false if manual
     return true
   end
 end

@@ -22,8 +22,8 @@ class SlideTemplate < ActiveRecord::Base
 
   # Load the svg in
   def template
-    return @_template if (@_template || self.new_record?)
-    @_template = File.read(self.filename) if File.exist?(self.filename)
+    return @_template if (@_template || new_record?)
+    @_template = File.read(filename) if File.exist?(filename)
 
     return @_template
   end
@@ -43,9 +43,9 @@ class SlideTemplate < ActiveRecord::Base
 
   # TODO: input validation
   def generate_svg(data)
-    svg = REXML::Document.new(self.template)
+    svg = REXML::Document.new(template)
 
-    self.fields.editable.each do |f|
+    fields.editable.each do |f|
       svg.root.elements.each("//text[@id='#{f.element_id}']") do |e|
         set_text(e, data[f.element_id.to_sym], f.color)
       end
@@ -56,20 +56,20 @@ class SlideTemplate < ActiveRecord::Base
 
   # Filename to store the svg template file in
   def filename
-    FilePath.join "slide_template_#{self.id}.svg"
+    FilePath.join "slide_template_#{id}.svg"
   end
 
   # We use soft-delete for templates, because hard-deleting the template will break all slides using it.
   def destroy
     self.deleted = true
-    self.save!
+    save!
   end
 
 private
 
   # Associate a new SlideTemplate to Event when it's created
   def assign_to_event
-    self.event = Event.current if self.event.nil?
+    self.event = Event.current if event.nil?
     return true
   end
 
@@ -101,7 +101,7 @@ private
   # Extract all text fields from the svg template
   def generate_settings(svg)
     svg.root.elements.each("//text") do |e|
-      f = self.fields.new
+      f = fields.new
       f.element_id = e.attributes["id"]
       f.default_value = REXML::XPath.match(e, ".//text()").join.strip
       f.save!
@@ -112,8 +112,8 @@ private
   # we use binary mode here to prevent ascii conversions..
   # FIXME: set viewBox on import, so web preview scales properly!
   def write_template
-    return if self.new_record?
-    File.open(self.filename, "wb") do |f|
+    return if new_record?
+    File.open(filename, "wb") do |f|
       f.write @_template
     end
   end

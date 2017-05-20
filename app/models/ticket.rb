@@ -39,19 +39,19 @@ class Ticket < ActiveRecord::Base
   include ModelAuthorization
 
   def status_text
-    StatusCodes[self.status]
+    StatusCodes[status]
   end
 
   # Used to determinate if a user can close this ticket
   def can_close?(user)
-    (self.status != StatusClosed) && self.admin?(user)
+    (status != StatusClosed) && admin?(user)
   end
 
 private
 
   # Unless the ticket status has been set specificly we will set edited tickets as "open"
   def set_as_open
-    self.status = StatusOpen unless self.changes.include? :status
+    self.status = StatusOpen unless changes.include? :status
   end
 
   # Validation to check that our polymorphic association is of a valid type
@@ -59,17 +59,17 @@ private
     pass = false
 
     # Having no assigned object is fine
-    return if self.about.blank?
+    return if about.blank?
 
     # Check that the assigned object is in the ValidModels list
     ValidModels.each do |m|
-      pass = pass ? true : self.about.is_a?(m)
+      pass = pass ? true : about.is_a?(m)
     end
     errors.add(:about, "must be a valid object") unless pass
   end
 
   # Assign the created ticket to the current event
   def assign_to_current_event
-    self.event = Event.current if self.event.blank?
+    self.event = Event.current if event.blank?
   end
 end

@@ -28,7 +28,7 @@ class PrizeGroup < MasterGroup
 
   def data
     return @_data if (@_data.present? && @_data.is_a?(Hash))
-    if !self.new_record? && File.exist?(data_filename)
+    if !new_record? && File.exist?(data_filename)
       @_data = YAML.load(File.read(data_filename))
     end
 
@@ -89,7 +89,7 @@ class PrizeGroup < MasterGroup
       s.save!
     end
 
-    self.reload
+    reload
     slides = self.slides.where(type: PrizeSlide.sti_name).to_a
 
     s = slides.shift
@@ -148,14 +148,14 @@ private
   end
 
   def data_filename
-    return nill unless self.id
+    return nill unless id
     return Rails.root.join("data", "prizes", "prize_group_#{id}")
   end
 
   def write_data
-    return if self.new_record?
+    return if new_record?
     File.open(data_filename, "w") do |f|
-      f.write self.data.to_yaml
+      f.write data.to_yaml
     end
   end
 end

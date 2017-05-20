@@ -47,6 +47,6 @@ class DisplayLogging
 
   # Subscribe to the iskdpy notifications
   ActiveSupport::Notifications.subscribe("iskdpy") do |name, start, finish, id, payload|
-    self.log_display_event(start, finish, payload)
+    log_display_event(start, finish, payload)
   end
 end

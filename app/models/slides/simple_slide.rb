@@ -28,8 +28,8 @@ class SimpleSlide < SvgSlide
 
   # If our slidedata chances mark the slide as not ready when saving it.
   before_save do
-    if @_slidedata.present? || !File.exist?(self.svg_filename)
-      self.svg_data = SimpleSlide.create_svg(self.slidedata)
+    if @_slidedata.present? || !File.exist?(svg_filename)
+      self.svg_data = SimpleSlide.create_svg(slidedata)
       self.ready = false
     end
     true
@@ -94,7 +94,7 @@ class SimpleSlide < SvgSlide
 
   def clone!
     new_slide = super
-    new_slide.slidedata = self.slidedata
+    new_slide.slidedata = slidedata
     return new_slide
   end
 

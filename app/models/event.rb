@@ -73,13 +73,13 @@ class Event < ActiveRecord::Base
 
   # Finds the current event
   def self.current
-    self.where(current: true).first!
+    where(current: true).first!
   end
 
   # Regenerate slide images for all slides in this event.
   # Used after changing the slide image size.
   def generate_images
-    self.slides.each(&:generate_images_later)
+    slides.each(&:generate_images_later)
   end
 
   def generate_images_later
@@ -130,8 +130,8 @@ class Event < ActiveRecord::Base
   # The configuration options for the simple editor
   # FIXME: True dynamic settings!
   def simple_editor_settings
-    settings = self.config[:simple]
-    if self.picture_sizes[:full] == SupportedResolutions[1]
+    settings = config[:simple]
+    if picture_sizes[:full] == SupportedResolutions[1]
       settings[:font_sizes] = [80, 90, 100, 120, 160, 200, 300, 400]
     end
     return settings
@@ -147,7 +147,7 @@ class Event < ActiveRecord::Base
   def picture_sizes
     h = Hash.new
     [:full, :preview, :thumb].each do |key|
-      h[key] = [self.config[key][:width], self.config[key][:height]]
+      h[key] = [config[key][:width], config[key][:height]]
     end
     return h
   end
@@ -159,7 +159,7 @@ class Event < ActiveRecord::Base
   end
 
   def prize_template
-    SlideTemplate.find(self.config[:prize_template])
+    SlideTemplate.find(config[:prize_template])
   end
 
 private
@@ -173,30 +173,30 @@ private
   def create_groups
     self.ungrouped = UnGroup.create(
       name: ("Ungrouped slides for #{name}")
-    ) if self.ungrouped.nil?
+    ) if ungrouped.nil?
     self.thrashed = ThrashGroup.create(
       name: ("Thrashed slides for #{name}")
-    ) if self.thrashed.nil?
+    ) if thrashed.nil?
   end
 
   # Set the event associations on special groups
   def set_group_event_ids
-    self.ungrouped.event_id = self.id
-    self.ungrouped.save!
-    self.thrashed.event_id = self.id
-    self.thrashed.save!
+    ungrouped.event_id = id
+    ungrouped.save!
+    thrashed.event_id = id
+    thrashed.save!
   end
 
   # Callback that resets every other event to non-current when setting another as current one
   def set_current_event
-    if self.current && self.changed.include?("current")
+    if current && changed.include?("current")
       Event.update_all current: false
     end
   end
 
   # Validation that prevents clearing the current event -bit
   def ensure_one_current_event
-    if !self.current && self.changed.include?("current")
+    if !current && changed.include?("current")
       errors.add(:current, "^Must have one current event")
     end
   end

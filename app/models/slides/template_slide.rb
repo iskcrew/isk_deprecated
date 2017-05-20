@@ -26,13 +26,13 @@ class TemplateSlide < InkscapeSlide
 private
 
   def generate_svg
-    self.svg_data = self.template.generate_svg(self.slidedata)
+    self.svg_data = template.generate_svg(slidedata)
     write_svg_data
   end
 
   def default_slidedata
     default = ActiveSupport::HashWithIndifferentAccess.new
-    self.template.fields.editable.each do |f|
+    template.fields.editable.each do |f|
       default[f.element_id.to_sym] = f.default_value
     end
     return default

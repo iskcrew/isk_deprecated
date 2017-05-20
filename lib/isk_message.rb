@@ -37,10 +37,10 @@ class IskMessage
   def send(channel = "isk_general", redis_settings = {})
     if $redis_pool
       $redis_pool.with do |conn|
-        conn.publish channel, self.encode
+        conn.publish channel, encode
       end
     else
-      Redis.new(redis_settings).publish channel, self.encode
+      Redis.new(redis_settings).publish channel, encode
     end
   end
 end

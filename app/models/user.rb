@@ -23,23 +23,23 @@ class User < ActiveRecord::Base
   include CacheSweeper
 
   def admin?
-    User::AdminUsers.include?(self.username)
+    User::AdminUsers.include?(username)
   end
 
   def has_role?(request)
-    return true if self.admin?
+    return true if admin?
     unless request.is_a? Array
-      return self.roles.where(role: request).count.positive?
+      return roles.where(role: request).count.positive?
     end
     request.each do |r|
-      return true if self.roles.where(role: r).count.positive?
+      return true if roles.where(role: r).count.positive?
     end
     return false
   end
 
   def roles_text
     text = ""
-    self.roles.each do |r|
+    roles.each do |r|
       text << r.role << ", "
     end
     return text.chomp(", ")
@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   end
 
   def cache_tag
-    "user_" + self.id.to_s
+    "user_" + id.to_s
   end
 
 private

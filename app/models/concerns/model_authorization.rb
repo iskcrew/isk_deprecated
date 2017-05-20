@@ -20,7 +20,7 @@ module ModelAuthorization
 
   # Can a given user edit this instance of a model?
   def can_edit?(user)
-    user.has_role?(self.class.auth_roles[:admin]) || self.authorized_users.include?(user)
+    user.has_role?(self.class.auth_roles[:admin]) || authorized_users.include?(user)
   end
 
   # Can a user hide this instance? (Only appropriate for slides currently)
@@ -32,7 +32,7 @@ module ModelAuthorization
   # Can a user add slides to override queue on this display? (only for displays currently)
   # FIXME: Should bind only to displays
   def can_override?(user)
-    user.has_role?([self.class.auth_roles[:admin], self.class.auth_roles[:override]]) || self.authorized_users.include?(user)
+    user.has_role?([self.class.auth_roles[:admin], self.class.auth_roles[:override]]) || authorized_users.include?(user)
   end
 
   # Does the user have full admin priviledges on this instance?
@@ -56,24 +56,24 @@ module ModelAuthorization
 
     # Can user create a new instance of this model?
     def can_create?(user)
-      user.has_role?([self.auth_roles[:admin], self.auth_roles[:create]])
+      user.has_role?([auth_roles[:admin], auth_roles[:create]])
     end
 
     # List of all displays a user can add overrides on
     def can_override(user)
-      return relation if user.has_role?([self.auth_roles[:admin], self.auth_roles[:override]])
-      return self.joins(:authorized_users).where(users: { id: user.id })
+      return relation if user.has_role?([auth_roles[:admin], auth_roles[:override]])
+      return joins(:authorized_users).where(users: { id: user.id })
     end
 
     # List of all objects user can edit
     def can_edit(user)
-      return relation if user.has_role?(self.auth_roles[:admin])
-      self.joins(:authorized_users).where("users.id = ?", user.id)
+      return relation if user.has_role?(auth_roles[:admin])
+      joins(:authorized_users).where("users.id = ?", user.id)
     end
 
     # Does user have admin priviledges on all objects of this type?
     def admin?(user)
-      user.has_role?(self.auth_roles[:admin])
+      user.has_role?(auth_roles[:admin])
     end
   end
 

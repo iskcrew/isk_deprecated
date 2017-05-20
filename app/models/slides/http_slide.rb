@@ -30,7 +30,7 @@ class HttpSlide < Slide
 
   def clone!
     new_slide = super
-    new_slide.slidedata = self.slidedata
+    new_slide.slidedata = slidedata
     return new_slide
   end
 
@@ -39,9 +39,9 @@ class HttpSlide < Slide
   end
 
   def fetch!
-    return false if self.slidedata.nil?
+    return false if slidedata.nil?
 
-    uri = URI.parse(self.slidedata[:url])
+    uri = URI.parse(slidedata[:url])
 
     http = Net::HTTP.new(uri.host, uri.port)
 
@@ -54,20 +54,20 @@ class HttpSlide < Slide
 
     request = Net::HTTP::Get.new(uri.request_uri)
 
-    unless self.slidedata[:user].blank?
-      request.basic_auth(self.slidedata[:user], self.slidedata[:password])
+    unless slidedata[:user].blank?
+      request.basic_auth(slidedata[:user], slidedata[:password])
     end
 
     resp = http.request(request)
 
     if resp.is_a? Net::HTTPOK
-      File.open(self.original_filename, "wb") do |f|
+      File.open(original_filename, "wb") do |f|
         f.write resp.body
       end
       self.is_svg = false
       self.ready = false
-      self.save!
-      self.generate_images_later
+      save!
+      generate_images_later
     else
       logger.error "Error fetching slide data, http request didn't return OK status"
       logger.error resp
@@ -107,7 +107,7 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"\
+    command = "convert #{original_filename} -resize #{geo_str}"\
               " -background #{bg_color.shellescape} -gravity center"\
               " -extent #{size} #{tmp_file.path}"
     system command

@@ -39,7 +39,7 @@ class MasterGroup < ActiveRecord::Base
   def self.inherited(child)
     child.instance_eval do
       def model_name
-        self.base_class.model_name
+        base_class.model_name
       end
     end
 
@@ -60,18 +60,18 @@ class MasterGroup < ActiveRecord::Base
   end
 
   def self.current
-    self.where(event_id: Event.current.id).where(internal: false)
+    where(event_id: Event.current.id).where(internal: false)
   end
 
   def hide_slides
-    self.slides.each do |s|
+    slides.each do |s|
       s.public = false
       s.save!
     end
   end
 
   def publish_slides
-    self.slides.each do |s|
+    slides.each do |s|
       s.public = true
       s.save!
     end
@@ -85,11 +85,11 @@ class MasterGroup < ActiveRecord::Base
 private
 
   def update_timestamps
-    touch_by_group(self.id)
+    touch_by_group(id)
   end
 
   def set_event_id
-    self.event = Event.current unless self.event.present?
+    self.event = Event.current unless event.present?
   rescue ActiveRecord::RecordNotFound
     # In case we don't yet have any events we need to rescue this
     # Otherwise creating the new default event fails.

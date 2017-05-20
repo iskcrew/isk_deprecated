@@ -33,17 +33,17 @@ private
 
   # Send the standard websocket notifications when a object gets updated or created.
   def send_messages(event)
-    Rails.logger.debug "Sending websocket messages for #{get_channel} id #{self.id}..."
+    Rails.logger.debug "Sending websocket messages for #{get_channel} id #{id}..."
 
     # Basic message data to send
-    data = { id: self.id }
+    data = { id: id }
 
-    data[:display_id] = self.display_id if self.attributes.include? "display_id"
-    data[:name] = self.name if self.respond_to? :name
+    data[:display_id] = display_id if attributes.include? "display_id"
+    data[:name] = name if respond_to? :name
 
     # Add changed attibutes
     data[:changes] = {}
-    self.previous_changes.each_pair do |k, v|
+    previous_changes.each_pair do |k, v|
       data[:changes][k] = v.last unless (k == "password") || (k == "salt")
     end
     Rails.logger.debug "Sending #{data}"
@@ -51,11 +51,11 @@ private
     msg.send("isk_general")
 
     # If we have associated displays resend their data
-    display_datas if self.respond_to? :displays
+    display_datas if respond_to? :displays
 
-    return unless self.previous_changes.include?("images_updated_at") && event == :update
+    return unless previous_changes.include?("images_updated_at") && event == :update
     Rails.logger.debug "-> Slide image has been updated, sending notifications"
-    self.updated_image_notifications
+    updated_image_notifications
   end
 
   def get_channel
@@ -63,7 +63,7 @@ private
   end
 
   def display_datas
-    self.displays.each do |d|
+    displays.each do |d|
       data = d.to_hash
       msg = IskMessage.new("display", "data", data)
       msg.send(d.websocket_channel)
