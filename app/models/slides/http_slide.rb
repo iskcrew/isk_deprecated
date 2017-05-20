@@ -45,14 +45,10 @@ class HttpSlide < Slide
 
     http = Net::HTTP.new(uri.host, uri.port)
 
-    case uri.scheme
-    when "http"
-    when "https"
-
+    if uri.scheme == "https"
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    else
+    elsif uri.scheme != "http"
       raise ArgumentError "Unknown protocol"
     end
 
@@ -101,9 +97,6 @@ private
     when "down"
       # Scale the image down if needed
       geo_str << '\>'
-    when "fit"
-      # Scale the image to fit maintaining aspect ratio
-      # Nothing to do
     when "up"
       # Only scale the image up if needed
       geo_str << '\<'

@@ -78,9 +78,6 @@ private
     when "down"
       # Scale the image down if needed
       geo_str << '\>'
-    when "fit"
-      # Scale the image to fit maintaining aspect ratio
-      # Nothing to do
     when "up"
       # Only scale the image up if needed
       geo_str << '\<'

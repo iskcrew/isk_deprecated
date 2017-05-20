@@ -83,8 +83,6 @@ EM.run do
         abort "exiting"
       end
 
-    when "websocket_rails.subscribe"
-
     when "websocket_rails.ping"
       ws.send @pong.to_a.to_json
 
