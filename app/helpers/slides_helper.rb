@@ -118,7 +118,8 @@ module SlidesHelper
                           remote: true,
                           data: {
                             confirm: "Are you sure you want to hide this"\
-                                     " slide? You cannot publish it later!" }
+                                     " slide? You cannot publish it later!"
+                          }
   end
 
   # Generic toggle button to toggle some boolean on the slide

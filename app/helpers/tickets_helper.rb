@@ -82,7 +82,8 @@ module TicketsHelper
     link_to icon("check-square-o", "Close"),
             ticket_path(ticket,
                         ticket: {
-                          status: Ticket::StatusClosed }),
+                          status: Ticket::StatusClosed
+                        }),
             method: :put,
             class: html_class
   end

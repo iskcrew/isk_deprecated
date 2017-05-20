@@ -36,7 +36,8 @@ class Event < ActiveRecord::Base
             presence: true,
             format: {
               with: /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/,
-              message: "must be css hex color" }
+              message: "must be css hex color"
+            }
   validate :ensure_one_current_event
 
   # Make sure there is only one current event

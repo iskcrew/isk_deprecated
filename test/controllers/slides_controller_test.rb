@@ -92,8 +92,8 @@ class SlidesControllerTest < ActionController::TestCase
   test "update simple slide" do
     put :update,
         { id: slides(:simple),
-          slide: { slidedata: { heading: "fooo" } }
-        }, @adminsession
+          slide: { slidedata: { heading: "fooo" } } },
+        @adminsession
 
     assert_redirected_to slide_path(assigns(:slide))
     s = Slide.find(slides(:simple).id)
