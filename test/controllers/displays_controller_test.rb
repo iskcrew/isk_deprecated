@@ -215,7 +215,7 @@ class DisplaysControllerTest < ActionController::TestCase
     redis_messages.each do |m|
       assert msg = IskMessage.from_json(m), "Should be valid message, data: #{m}"
       assert_equal "display", msg.object, "Should be about a display"
-      assert_includes types, msg.type, "Should have a type in: #{types.join ", "}"
+      assert_includes types, msg.type, "Should have a type in: #{types.join ', '}"
     end
   end
 end

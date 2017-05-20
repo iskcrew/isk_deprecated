@@ -27,7 +27,7 @@ namespace :isk do
 
   desc "Create zip with all slide data and the database dump"
   task full_backup: :sql_backup do
-    backup_file = Rails.root.join("isk_backup-#{Time.now.strftime("%F-%H%M")}.tar.gz").to_s
+    backup_file = Rails.root.join("isk_backup-#{Time.now.strftime('%F-%H%M')}.tar.gz").to_s
     # We need relative location for the sql file
     sql_file = sql_backup_location.to_s.partition(Rails.root.to_s).last[1..-1]
     cmd = "tar -czf #{backup_file} -C #{Rails.root} data #{sql_file}"
@@ -74,7 +74,7 @@ private
   end
 
   def sql_backup_location
-    @location ||= Rails.root.join("db", "isk_database_backup-#{Time.now.strftime("%F-%H%M")}.sql")
+    @location ||= Rails.root.join("db", "isk_database_backup-#{Time.now.strftime('%F-%H%M')}.sql")
   end
 
   def with_config

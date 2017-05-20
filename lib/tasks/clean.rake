@@ -39,7 +39,7 @@ namespace :clean do
     else
       puts "Would delete slides: "
       deleted_slides.each do |s|
-        puts "id: #{s.id} '#{s.name}' in group: #{s.master_group.name} deleted: #{s.deleted ? "yes" : "no"}"
+        puts "id: #{s.id} '#{s.name}' in group: #{s.master_group.name} deleted: #{s.deleted ? 'yes' : 'no'}"
       end
       puts "Run with delete=1 to really do this."
     end

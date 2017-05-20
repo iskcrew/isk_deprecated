@@ -70,7 +70,7 @@ def init_general_socket
   @ws.on :close do |event|
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{Time.diff(Time.now, @connection_opened, '%h:%m:%s')[:diff]}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_general_socket
@@ -110,7 +110,7 @@ def init_display_socket(id)
   dws.on :close do |event|
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{Time.diff(Time.now, opened, '%h:%m:%s')[:diff]}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_display_socket(id)

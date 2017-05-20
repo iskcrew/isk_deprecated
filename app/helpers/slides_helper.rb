@@ -27,7 +27,7 @@ module SlidesHelper
   # FIXME: DRY with other images
   def slide_preview_image_tag(slide)
     html_options = {
-      class: "preview #{slide.public ? "slide-public" : "slide-hidden"}",
+      class: "preview #{slide.public ? 'slide-public' : 'slide-hidden'}",
       id: "slide_preview_#{slide.id}"
     }
 
