@@ -33,9 +33,9 @@ class UsersController < ApplicationController
       if checked.to_i == 1
         # User should have this role
         user.roles << r unless user.roles.include?(r)
-      else
+      elsif user.roles.include?(r)
         # User shouldn't have this role
-        user.roles.delete(r) if user.roles.include?(r)
+        user.roles.delete(r)
       end
     end
     user.save!
