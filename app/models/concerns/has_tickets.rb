@@ -19,8 +19,8 @@ module HasTickets
     # Return all records with error tickets
     def with_error_tickets
       joins(:tickets)
-          .where(tickets: { kind: "error" })
-          .where.not(tickets: { status: Ticket::StatusClosed })
+        .where(tickets: { kind: "error" })
+        .where.not(tickets: { status: Ticket::StatusClosed })
     end
   end
 

@@ -80,8 +80,8 @@ class Presentation < ActiveRecord::Base
 
   # Calculate the duration of this presentation and return it in seconds.
   def duration
-    default_slides_time = delay * public_slides
-                                           .where(slides: { duration: Slide::UsePresentationDelay }).count
+    default_slides_time = delay *
+                          public_slides.where(slides: { duration: Slide::UsePresentationDelay }).count
     special_slides_time = public_slides.where("duration != ?", Slide::UsePresentationDelay).sum("duration")
     return default_slides_time + special_slides_time
   end
