@@ -107,12 +107,11 @@ class UsersController < ApplicationController
     # Disallow current user deleting itself
     if user.id == current_user.id
       flash[:error] = "You cannot delete your own user account!"
-      redirect_to users_path
     else
       user.destroy
       flash[:notice] = "User #{user.username} has been deleted."
-      redirect_to users_path
     end
+    redirect_to users_path
   end
 
 private
