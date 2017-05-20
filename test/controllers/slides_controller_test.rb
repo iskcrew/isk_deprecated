@@ -103,8 +103,8 @@ class SlidesControllerTest < ActionController::TestCase
     # FIXME: why this fails?
     # assert s.ready, "Slide should have had it's picture generated"
 
-    assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
-    assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+    assert File.exist?(s.svg_filename), "The slide svg file wasn't generated"
+    assert File.exist?(s.full_filename), "The full slide image wasn't generated"
     assert s.svg_data.include?(">fooo<"), "SVG didn't contain the new header"
 
     put :update, { id: slides(:simple), slide: { public: false } }, @adminsession
@@ -119,8 +119,8 @@ class SlidesControllerTest < ActionController::TestCase
 
     assert_redirected_to slide_path(assigns(:slide))
     s = assigns(:slide)
-    assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
-    assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+    assert File.exist?(s.svg_filename), "The slide svg file wasn't generated"
+    assert File.exist?(s.full_filename), "The full slide image wasn't generated"
 
     # Clear the files
     clear_slide_files(s)

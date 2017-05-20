@@ -49,7 +49,7 @@ def start_service(process)
     # Resque doesn't check its pid file and refuse to start if already running
     # So we need to do that...
     pid_file = File.join(PidDirectory, "resque.pid")
-    if File.exists? pid_file
+    if File.exist? pid_file
       pid = File.read(pid_file).to_i
       if `ps -o args -p #{pid}`.match "resque"
         puts "FAILED".red
@@ -95,7 +95,7 @@ def stop_service(process)
   end
 
   pid_file = File.join(PidDirectory, pid_file)
-  unless File.exists?(pid_file)
+  unless File.exist?(pid_file)
     puts "Not running".yellow
     return true
   end

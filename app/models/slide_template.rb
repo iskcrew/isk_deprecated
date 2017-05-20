@@ -23,7 +23,7 @@ class SlideTemplate < ActiveRecord::Base
   # Load the svg in
   def template
     return @_template if (@_template || self.new_record?)
-    @_template = File.read(self.filename) if File.exists?(self.filename)
+    @_template = File.read(self.filename) if File.exist?(self.filename)
 
     return @_template
   end

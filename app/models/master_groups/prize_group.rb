@@ -28,7 +28,7 @@ class PrizeGroup < MasterGroup
 
   def data
     return @_data if (@_data.present? && @_data.is_a?(Hash))
-    if !self.new_record? && File.exists?(data_filename)
+    if !self.new_record? && File.exist?(data_filename)
       @_data = YAML.load(File.read(data_filename))
     end
 

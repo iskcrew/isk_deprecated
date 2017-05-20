@@ -29,7 +29,7 @@ namespace :clean do
         end
 
         files.each do |f|
-          if File.exists? f
+          if File.exist? f
             File.delete f
           end
         end

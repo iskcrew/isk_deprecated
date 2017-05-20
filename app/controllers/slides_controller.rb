@@ -347,7 +347,7 @@ class SlidesController < ApplicationController
   def full
     slide = Slide.find(params[:id])
     if stale?(last_modified: slide.images_updated_at.utc, etag: slide)
-      if File.exists? slide.full_filename
+      if File.exist? slide.full_filename
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Request-Method"] = "GET"
         send_file slide.full_filename, disposition: "inline"

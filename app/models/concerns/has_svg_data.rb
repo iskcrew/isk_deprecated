@@ -24,7 +24,7 @@ module HasSvgData
   # FIXME: Better handling of non-existant files?
   def svg_data
     return @_svg_data if (@_svg_data || self.new_record?)
-    @_svg_data = File.read(self.svg_filename) if File.exists?(self.svg_filename)
+    @_svg_data = File.read(self.svg_filename) if File.exist?(self.svg_filename)
 
     return @_svg_data
   end

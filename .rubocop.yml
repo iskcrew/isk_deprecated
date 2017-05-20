@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
   # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
   # to ignore them, so only the ones explicitly set in this file are enabled.
   DisabledByDefault: true
@@ -8,8 +8,27 @@ AllCops:
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
 
-Rails:
+Lint/DeprecatedClassMethods:
   Enabled: true
+
+Metrics/LineLength:
+  Max: 120
+  Enabled: false
+  
+Style/FrozenStringLiteralComment:
+  Enabled: false
+  
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
 
 # Prefer &&/|| over and/or.
 Style/AndOr:

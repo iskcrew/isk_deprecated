@@ -10,7 +10,7 @@ namespace :isk do
     isk_data = Rails.root.join("data")
     nginx_conf = Rails.root.join("isk_server.conf")
     puts "Writing nginx configuration fragment to isk_server.conf"
-    abort "File exists!" if File.exists? nginx_conf
+    abort "File exists!" if File.exist? nginx_conf
     erb = ERB.new(File.read(template))
     result = erb.result binding
     File.open(nginx_conf, "w") do |f|
@@ -40,7 +40,7 @@ namespace :isk do
   desc "Generate session encryption keys"
   task secrets: :environment do
     file = Rails.root.join("config", "secrets.yml")
-    if File.exists? file
+    if File.exist? file
       abort "#{file.to_s} exists, aborting"
     end
     puts "Generating #{file}"

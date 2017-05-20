@@ -28,7 +28,7 @@ class SimpleSlide < SvgSlide
 
   # If our slidedata chances mark the slide as not ready when saving it.
   before_save do
-    if @_slidedata.present? || !File.exists?(self.svg_filename)
+    if @_slidedata.present? || !File.exist?(self.svg_filename)
       self.svg_data = SimpleSlide.create_svg(self.slidedata)
       self.ready = false
     end
