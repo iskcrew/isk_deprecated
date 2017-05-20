@@ -111,7 +111,7 @@ class Event < ActiveRecord::Base
           time: self[:schedules_time_indent],
           name: self[:schedules_event_indent]
         }.with_indifferent_access
-      }.with_indifferent_access,
+      }.with_indifferent_access
     }.with_indifferent_access
 
     hash[:simple][:heading] = {

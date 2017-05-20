@@ -134,7 +134,7 @@ private
   def empty_template_data
     d = {
       header: "Results",
-      subheader: data[:title],
+      subheader: data[:title]
     }
 
     (1..5).each do |i|

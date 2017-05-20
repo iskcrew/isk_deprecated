@@ -26,7 +26,7 @@ options = {
   app_name: "rrd_monitoring",
   dir_mode: :normal,
   dir: @pid_path.to_s,
-  log_dir: @log_path.to_s,
+  log_dir: @log_path.to_s
 }
 
 Daemons.run_proc("rrd_monitoring", options) do

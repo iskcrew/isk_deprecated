@@ -18,7 +18,7 @@ options = {
   app_name: "background_jobs",
   dir_mode: :normal,
   dir: @pid_path.to_s,
-  log_dir: @log_path.to_s,
+  log_dir: @log_path.to_s
 }
 
 Daemons.run_proc("background_jobs", options) do
