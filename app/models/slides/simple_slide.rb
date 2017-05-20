@@ -116,12 +116,12 @@ class SimpleSlide < SvgSlide
     svg = prepare_template(settings, size, current_event.background_image)
 
     head = svg.at_css(HeadingSelector)
-    head = set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
+    set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
 
     # Find out the text x coordinate
     text_x = row_x(text_align, settings[:body][:margins])
     body = svg.at_css(BodySelector)
-    body = set_text(body, text, text_x, color, text_size, text_align)
+    set_text(body, text, text_x, color, text_size, text_align)
 
     return svg.to_xml
   end

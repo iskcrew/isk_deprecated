@@ -10,7 +10,6 @@ module ApplicationHelper
   def navigation_links
     controllers = ["Slides", "Groups", "Presentations", "Displays", "Schedules", "Tickets"]
     ret = String.new
-    base_html_options = { class: "ui-state-default ui-corner-top" }
     # Build navigation tabs for basic controllers
     tabs = controllers
     tabs.each do |c|

@@ -21,7 +21,6 @@ namespace :isk do
 
   desc "Backup the database"
   task sql_backup: :environment do
-    backup_file = Tempfile.new "isk-database-backup"
     sql_backup(sql_backup_location)
     puts "SQL backup created: #{sql_backup_location}"
   end

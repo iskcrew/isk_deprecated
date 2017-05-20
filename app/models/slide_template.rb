@@ -100,10 +100,8 @@ private
     return svg
   end
 
-  # Extract all text fields from the svg template and
-  # generate a settings hash based on that
+  # Extract all text fields from the svg template
   def generate_settings(svg)
-    s = HashWithIndifferentAccess.new
     svg.root.elements.each("//text") do |e|
       f = self.fields.new
       f.element_id = e.attributes["id"]

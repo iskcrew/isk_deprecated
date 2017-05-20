@@ -10,7 +10,7 @@ class DisplayTest < ActiveSupport::TestCase
   end
 
   test "hello on new display" do
-    d = Display.hello "Hi, I'm new", "127.0.0.1"
+    Display.hello "Hi, I'm new", "127.0.0.1"
 
     assert_equal 1, Display.where(name: "Hi, I'm new").count, "Display not found in db"
     d = Display.where(name: "Hi, I'm new").first!
@@ -18,7 +18,7 @@ class DisplayTest < ActiveSupport::TestCase
     assert d.last_hello != nil, "Displays last hello timestamp is missing"
     assert_equal "127.0.0.1", d.ip, "Displays IP address is missing"
 
-    d2 = Display.hello "No IP"
+    Display.hello "No IP"
     assert_equal 1, Display.where(name: "No IP").count, "Display not found in db"
     d2 = Display.where(name: "No IP").first!
     assert d2.last_contact_at != nil, "Displays last contact timestamp is missing"

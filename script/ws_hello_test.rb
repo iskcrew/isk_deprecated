@@ -38,7 +38,7 @@ port ||= 80
 username = ask("Username:  ")
 password = ask("Password:  ") { |q| q.echo = "x" }
 
-http, headers = isk_login(host, port, username, password)
+_http, headers = isk_login(host, port, username, password)
 
 EM.run do
   ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)

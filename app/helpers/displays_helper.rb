@@ -66,10 +66,6 @@ module DisplaysHelper
   # FIXME: handle unknown slide little better
   def display_current_slide(d)
     if (d.status != "error") && (d.current_slide.present?)
-      html_options = {
-        title: "Click to show display details",
-        class: "slide_preview"
-      }
       image = slide_preview_image_tag d.current_slide
     else
       image = image_tag("display_error.png", class: "preview")
