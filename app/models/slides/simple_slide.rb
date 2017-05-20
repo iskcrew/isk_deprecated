@@ -66,7 +66,7 @@ class SimpleSlide < SvgSlide
     svg = REXML::Document.new(svg_slide.svg_data)
 
     #IF slide has other images than the background we have a problem
-    unless svg.root.elements.to_a("//image").count == 1
+    unless svg.root.elements.to_a("//image").size == 1
       raise ApplicationController::ConvertError
     end
 

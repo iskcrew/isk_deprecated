@@ -113,7 +113,7 @@ class Slide < ActiveRecord::Base
   def clone!
     new_slide = self.dup
     new_slide.public = false
-    new_slide.name = self.name.last.match(/\d+/) ? self.name.next : new_slide.name << " (clone)"
+    new_slide.name = self.name.last =~ /\d+/ ? self.name.next : new_slide.name << " (clone)"
     if new_slide.name.split("(clone)").size > 2
       new_slide.name = new_slide.name.gsub("(clone)", "(badger)") + " (mushroom)"
     elsif new_slide.name.include?("(badger)") && !new_slide.name.include?("(mushroom) (mushroom)")

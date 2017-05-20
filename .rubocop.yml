@@ -8,6 +8,79 @@ AllCops:
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
 
+
+# Performance cops
+Performance/CaseWhenSplat:
+  Enabled: true
+  
+Performance/Casecmp:
+  Enabled: true
+  
+Performance/CompareWithBlock:
+  Enabled: true
+
+Performance/Count:
+  Enabled: true
+  
+Performance/Detect:
+  Enabled: true
+  
+Performance/DoubleStartEndWith:
+  Enabled: true
+
+Performance/EndWith:
+  Enabled: true
+  
+Performance/FixedSize:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+
+Performance/HashEachMethods:
+  Enabled: true
+
+Performance/LstripRstrip:
+  Enabled: true
+  
+Performance/RangeInclude:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantMatch:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/RedundantSortBy:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/Sample:
+  Enabled: true
+
+Performance/Size:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/StringReplacement:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true
+
+# End performance cops
+
 Lint/DeprecatedClassMethods:
   Enabled: true
 
@@ -15,21 +88,12 @@ Metrics/LineLength:
   Max: 120
   Enabled: false
   
+Metrics/PerceivedComplexity:
+  Enabled: false
+  
 Style/FrozenStringLiteralComment:
   Enabled: false
   
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
@@ -168,6 +232,3 @@ Style/EmptyElse:
 Style/GuardClause:
   Enabled: true
   MinBodyLength: 2
-  
-Performance:
-  Enabled: true

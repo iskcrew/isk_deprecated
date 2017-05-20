@@ -57,7 +57,7 @@ private
 
   # Validates that the background color is ok
   def check_bg_color
-    unless slidedata[:background].match(/\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/)
+    unless slidedata[:background] =~ /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
       errors.add :backgroud, "must be valid css hex color"
     end
   end
