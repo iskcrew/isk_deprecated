@@ -1,7 +1,7 @@
 class AssingUngroupedAndThrashedGroupsEvents < ActiveRecord::Migration
   def up
     Event.where(ungrouped_id: nil).each do |e|
-      e.ungrouped = MasterGroup.where(name: ("Ungrouped slides for #{e.name}"))
+      e.ungrouped = MasterGroup.where(name: "Ungrouped slides for #{e.name}")
                                .first_or_create
       e.ungrouped.internal = true
       e.save!
@@ -9,7 +9,7 @@ class AssingUngroupedAndThrashedGroupsEvents < ActiveRecord::Migration
     end
 
     Event.where(thrashed_id: nil).each do |e|
-      e.thrashed = MasterGroup.where(name: ("Thrashed slides for #{e.name}"))
+      e.thrashed = MasterGroup.where(name: "Thrashed slides for #{e.name}")
                               .first_or_create
       e.thrashed.internal = true
       e.save!

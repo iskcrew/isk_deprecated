@@ -106,8 +106,8 @@ private
 
   # Create the associated groups when a new schedule is created
   def create_groups
-    sg = MasterGroup.create(name: ("Schedule: #{name} slides"), event_id: event_id)
-    ung = MasterGroup.create(name: ("Schedule: #{name} next up"), event_id: event_id)
+    sg = MasterGroup.create(name: "Schedule: #{name} slides", event_id: event_id)
+    ung = MasterGroup.create(name: "Schedule: #{name} next up", event_id: event_id)
 
     self.slidegroup = sg
     self.next_up_group = ung
@@ -178,7 +178,7 @@ private
       unless (e.at + settings[:time_tolerance]).past?
         # Insert a subheader if next event is in different day
         if do_subheaders && !(e.at.to_date === last_date)
-          slide_items << { subheader: (e.at.strftime("%A %d.%m.")), linecount: 1 }
+          slide_items << { subheader: e.at.strftime("%A %d.%m."), linecount: 1 }
         end
         slide_items << { name: e.name, time: e.at.strftime("%H:%M"), linecount: e.linecount }
         last_date = e.at.to_date
