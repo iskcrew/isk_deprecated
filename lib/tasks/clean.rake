@@ -43,7 +43,6 @@ namespace :clean do
       end
       puts "Run with delete=1 to really do this."
     end
-
   end
 
   desc "Delete orphan slide images"

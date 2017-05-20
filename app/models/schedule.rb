@@ -96,7 +96,6 @@ class Schedule < ActiveRecord::Base
       if self.next_up && self.schedule_events.present?
         generate_next_up_slide
       end
-
     end # Transaction
     return true
   end

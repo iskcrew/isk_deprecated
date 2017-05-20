@@ -10,6 +10,5 @@ class ScheduleTest < ActiveSupport::TestCase
     assert_not_nil s.slidegroup, "Schedule does not have slidegroup"
     assert_not_nil s.next_up_group, "Schedule does not have up next group"
     assert_equal s.event, Event.current, "Schedule does not have correct event"
-
   end
 end

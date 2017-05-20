@@ -17,7 +17,6 @@ module HasSvgData
         write_svg_data
       end
     end
-
   end
 
   # Read the svg-data into memory on access in case we need it more than once

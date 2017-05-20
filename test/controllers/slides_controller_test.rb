@@ -65,7 +65,6 @@ class SlidesControllerTest < ActionController::TestCase
     get :index, nil, @adminsession
 
     assert_response :success
-
   end
 
   test "get slide details" do

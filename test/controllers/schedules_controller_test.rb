@@ -79,7 +79,6 @@ class SchedulesControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to schedule_path(assigns(:schedule))
-
   end
 
   test "update schedule" do

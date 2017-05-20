@@ -95,7 +95,6 @@ Isk::Application.routes.draw do
     end
 
     collection do
-
     end
   end
 
@@ -191,8 +190,6 @@ Isk::Application.routes.draw do
     end
 
     collection do
-
     end
   end
-
 end

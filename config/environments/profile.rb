@@ -50,5 +50,4 @@ Isk::Application.configure do
   config.cashier.adapter = :redis_store
   config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis)
   config.eager_load = false
-
 end
