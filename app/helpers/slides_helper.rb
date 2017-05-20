@@ -213,7 +213,7 @@ module SlidesHelper
   def slide_filter_links(filter)
     content_tag "div", class: "btn-group" do
       link_to("All slides", slides_path, class: (filter ? "btn btn-primary" : "btn btn-primary active")) +
-      link_to("Thrashed", slides_path(filter: "thrashed"), class: (filter == :thrashed ? "btn btn-primary active" : "btn btn-primary"))
+        link_to("Thrashed", slides_path(filter: "thrashed"), class: (filter == :thrashed ? "btn btn-primary active" : "btn btn-primary"))
     end
   end
 

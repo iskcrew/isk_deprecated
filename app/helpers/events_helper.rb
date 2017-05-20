@@ -48,7 +48,7 @@ module EventsHelper
 
     content_tag "div", class: "form-group" do
       content_tag("label", "Slide resolution", class: "control-label") +
-      select_tag(:resolution, options_for_select(options, selected), class: "form-control")
+        select_tag(:resolution, options_for_select(options, selected), class: "form-control")
     end
   end
 
