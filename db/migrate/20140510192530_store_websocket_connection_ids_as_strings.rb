@@ -3,6 +3,5 @@ class StoreWebsocketConnectionIdsAsStrings < ActiveRecord::Migration
     change_column :display_states, :websocket_connection_id, :string
   end
 
-  def down
-  end
+  def down; end
 end

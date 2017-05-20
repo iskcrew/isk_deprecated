@@ -8,8 +8,7 @@ class TubesockControllerTest < ActionController::TestCase
     @adminsession = { user_id: users(:admin).id, username: users(:admin).username }
   end
 
-  def teardown
-  end
+  def teardown; end
 
   test "invalid message" do
     tube :general, nil, @adminsession, ["asd"].to_json

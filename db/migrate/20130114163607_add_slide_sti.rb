@@ -3,6 +3,5 @@ class AddSlideSti < ActiveRecord::Migration
     add_column :slides, :type, :string
   end
 
-  def down
-  end
+  def down; end
 end

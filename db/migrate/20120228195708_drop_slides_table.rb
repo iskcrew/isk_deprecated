@@ -3,6 +3,5 @@ class DropSlidesTable < ActiveRecord::Migration
     drop_table :slides
   end
 
-  def down
-  end
+  def down; end
 end

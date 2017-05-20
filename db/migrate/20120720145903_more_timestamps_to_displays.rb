@@ -5,6 +5,5 @@ class MoreTimestampsToDisplays < ActiveRecord::Migration
     Display.update_all(metadata_updated_at: Time.now)
   end
 
-  def down
-  end
+  def down; end
 end
