@@ -113,7 +113,7 @@ def stop_service(process)
         print "."
         $stdout.flush
         sleep 1
-      end while !!(`ps -p #{pid}`.match pid.to_s)
+      end while (`ps -p #{pid}`.match pid.to_s)
     end
     puts "Success".green
   rescue Timeout::Error
