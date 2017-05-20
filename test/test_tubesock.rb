@@ -10,6 +10,8 @@ module TestTubesock
   # Class to yield after the controller hijacks the connection
   class TestSocket
     attr_accessor :test_error_handlers
+    attr_reader :data_sent
+
     @open_handlers    = []
     @message_handlers = []
     @close_handlers   = []
@@ -46,10 +48,6 @@ module TestTubesock
     # Just store all messages that the action under test sends
     def send_data(msg)
       @data_sent << msg
-    end
-
-    def data_sent
-      @data_sent
     end
 
     # We don't have a real connection, just mark this as closed
