@@ -20,9 +20,7 @@ class ScheduleSlide < SvgSlide
     svg = Nokogiri::XML(SimpleSlide.create_svg(heading: header))
 
     body = svg.at_css(SimpleSlide::BodySelector)
-    body.children.each do |c|
-      c.remove
-    end
+    body.children.each(&:remove)
 
     body["sodipodi:linespacing"] = settings[:linespacing]
 

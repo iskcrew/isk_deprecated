@@ -177,9 +177,7 @@ private
 
     # Set guides
     named_view = svg.at_css("sodipodi|namedview")
-    named_view.css("sodipodi|guide").each do |e|
-      e.remove
-    end
+    named_view.css("sodipodi|guide").each(&:remove)
 
     # Vertical guides
     [
@@ -272,9 +270,7 @@ private
   # Clear child elements
   def self.clear_childs(e)
     # Clear child elements (delete_element deletes only one element)
-    e.children.each do |c|
-      c.remove
-    end
+    e.children.each(&:remove)
     e.content = ""
 
     return e

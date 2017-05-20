@@ -42,9 +42,7 @@ Daemons.run_proc("background_jobs", options) do
     say "Fetching http-slides.."
     begin
       realtime = Benchmark.realtime do
-        @slides = Event.current.slides.where(type: "HttpSlide").all.each do |slide|
-          slide.fetch!
-        end
+        @slides = Event.current.slides.where(type: "HttpSlide").all.each(&:fetch!)
       end
       say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
     rescue Exception => e
@@ -57,9 +55,7 @@ Daemons.run_proc("background_jobs", options) do
     say "Generating schedule slides.."
     begin
       realtime = Benchmark.realtime do
-        @schedules = Event.current.schedules.all.each do |schedule|
-          schedule.generate_slides
-        end
+        @schedules = Event.current.schedules.all.each(&:generate_slides)
       end
       say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
     rescue Exception => e

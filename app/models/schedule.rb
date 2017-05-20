@@ -55,9 +55,8 @@ class Schedule < ActiveRecord::Base
       if delta.positive?
         add_scheduleslides(slide_data.count - schedule_slide_count)
       elsif delta.negative?
-        self.slidegroup.slides.where(type: ScheduleSlide.sti_name).limit(-delta).each do |s|
-          s.destroy
-        end
+        self.slidegroup.slides.where(type: ScheduleSlide.sti_name)
+          .limit(-delta).each(&:destroy)
       end
 
       # Find the scheduleslides in our slidegroup

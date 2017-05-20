@@ -62,10 +62,9 @@ class InkscapeSlide < SvgSlide
 
 protected
 
+  # Update the metadata element
   def metadata_contents(svg)
-    svg.css("metadata").each do |meta|
-      meta.remove
-    end
+    svg.css("metadata").each(&:remove)
     metadata = Nokogiri::XML::Node.new "metadata", svg
     metadata["id"] = "metadata1"
     meta = "#{self.id}!depricated.invalid.com"

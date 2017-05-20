@@ -83,7 +83,7 @@ class ActiveSupport::TestCase
 
     missed = []
     actions.each_key do |verb|
-      tested = tested_actions[verb].collect { |x| x.first }
+      tested = tested_actions[verb].collect(&:first)
       actions[verb].each do |a|
         unless tested.include?(a.to_sym) || (allowed[verb] && allowed[verb].include?(a.to_sym))
           missed << "#{verb.upcase} :#{a}"

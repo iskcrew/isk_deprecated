@@ -79,9 +79,7 @@ class Event < ActiveRecord::Base
   # Regenerate slide images for all slides in this event.
   # Used after changing the slide image size.
   def generate_images
-    self.slides.each do |s|
-      s.generate_images_later
-    end
+    self.slides.each(&:generate_images_later)
   end
 
   def generate_images_later
