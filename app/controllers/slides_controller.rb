@@ -391,9 +391,9 @@ private
   # Whitelist the accepted slide parameters for update and create
   def slide_params
     params.required(:slide).permit(
-    :name, :description, :show_clock, :public, :duration, :foreign_object_id,
-    :master_group_id, :image,
-    slidedata: params[:slide][:slidedata].try(:keys)
+      :name, :description, :show_clock, :public, :duration, :foreign_object_id,
+      :master_group_id, :image,
+      slidedata: params[:slide][:slidedata].try(:keys)
     )
   end
 

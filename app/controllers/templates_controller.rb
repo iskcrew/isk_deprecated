@@ -86,9 +86,9 @@ private
   # Whitelist post parameters for update
   def update_params
     params.required(:slide_template).permit(
-    :name,
-    :upload,
-    fields_attributes: [:id, :editable, :multiline, :color, :default_value]
+      :name,
+      :upload,
+      fields_attributes: [:id, :editable, :multiline, :color, :default_value]
     )
   end
 
