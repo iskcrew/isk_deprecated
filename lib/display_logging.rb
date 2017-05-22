@@ -35,6 +35,7 @@ class DisplayLogging
     log_msg << "From #{payload[:ip]}"
     log_msg << "Display name: #{payload[:display_name]}" if payload[:display_name]
     log_msg << "Time taken: #{(time * 1000).round(2)}ms"
+    log_msg << "Command: #{msg.type}"
     log_msg << "Parameters: #{msg.payload}"
 
     if payload[:exception].present?
