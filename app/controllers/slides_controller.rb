@@ -127,7 +127,6 @@ class SlidesController < ApplicationController
                status: :created
       end
     end
-
   rescue Slide::ImageError
     # image invalid
     flash[:error] = "Error creating slide, invalid image file."
@@ -248,7 +247,7 @@ class SlidesController < ApplicationController
     display = Display.find(params[:add_to_override][:display_id])
 
     unless display.can_override? current_user
-      fail ApplicationController::PermissionDenied
+      raise ApplicationController::PermissionDenied
     end
 
     effect = Effect.find params[:add_to_override][:effect_id]
@@ -271,7 +270,7 @@ class SlidesController < ApplicationController
   def hide
     @slide = Slide.find(params[:id])
     unless @slide.can_hide? current_user
-      fail ApplicationController::PermissionDenied
+      raise ApplicationController::PermissionDenied
     end
     @slide.public = false
     @slide.save!
@@ -399,11 +398,11 @@ private
 
   def require_create
     return if Slide.can_create? current_user
-    fail ApplicationController::PermissionDenied
+    raise ApplicationController::PermissionDenied
   end
 
   def require_admin
     return if Slide.admin? current_user
-    fail ApplicationController::PermissionDenied
+    raise ApplicationController::PermissionDenied
   end
 end
