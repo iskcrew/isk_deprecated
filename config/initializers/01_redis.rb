@@ -7,4 +7,4 @@ else
 end
 
 # Create a redis connection pool for cross-process messages
-$redis_pool = ConnectionPool.new(size: 20, timeout: 5) { Redis.new(Rails.configuration.x.redis) }
+Rails.application.config.x.redis_pool = ConnectionPool.new(size: 20, timeout: 5) { Redis.new(Rails.configuration.x.redis) }

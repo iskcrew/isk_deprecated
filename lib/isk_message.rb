@@ -35,8 +35,8 @@ class IskMessage
   end
 
   def send(channel = "isk_general", redis_settings = {})
-    if $redis_pool
-      $redis_pool.with do |conn|
+    if Rails.configuration.x.redis_pool
+      Rails.configuration.x.redis_pool.with do |conn|
         conn.publish channel, encode
       end
     else
