@@ -33,7 +33,7 @@ private
 
   # Send the standard websocket notifications when a object gets updated or created.
   def send_messages(event)
-    Rails.logger.debug "Sending websocket messages for #{get_channel} id #{id}..."
+    Rails.logger.debug "Sending websocket messages for #{channel} id #{id}..."
 
     # Basic message data to send
     data = { id: id }
@@ -47,7 +47,7 @@ private
       data[:changes][k] = v.last unless (k == "password") || (k == "salt")
     end
     Rails.logger.debug "Sending #{data}"
-    msg = IskMessage.new(get_channel, event, data)
+    msg = IskMessage.new(channel, event, data)
     msg.send("isk_general")
 
     # If we have associated displays resend their data
@@ -58,7 +58,7 @@ private
     updated_image_notifications
   end
 
-  def get_channel
+  def channel
     return self.class.base_class.name.downcase
   end
 
