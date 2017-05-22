@@ -101,7 +101,7 @@ def stop_service(process)
   end
   pid = File.read(pid_file).to_i
 
-  unless (`ps -p #{pid}`.match pid.to_s)
+  unless `ps -p #{pid}`.match pid.to_s
     puts "Not running".yellow
     return true
   end
@@ -109,11 +109,12 @@ def stop_service(process)
   begin
     Process.kill("TERM", pid)
     Timeout.timeout(20) do
-      begin
+      loop do
         print "."
         $stdout.flush
         sleep 1
-      end while (`ps -p #{pid}`.match pid.to_s)
+        break unless `ps -p #{pid}`.match pid.to_s
+      end
     end
     puts "Success".green
   rescue Timeout::Error
