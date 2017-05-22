@@ -4,6 +4,10 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
+# FIXME: REXML -> nokogiri
+
+require "rexml/document"
+
 class SlideTemplate < ActiveRecord::Base
   belongs_to :event
   has_many :fields, (-> { order(field_order: :asc) }), class_name: "TemplateField"
