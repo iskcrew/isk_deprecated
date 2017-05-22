@@ -45,7 +45,7 @@ Daemons.run_proc("background_jobs", options) do
         @slides = Event.current.slides.where(type: "HttpSlide").all.each(&:fetch!)
       end
       say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
-    rescue Exception => e
+    rescue StandardError => e
       say "Error fetching http-slides"
       puts e.message
       puts e.backtrace.inspect
@@ -58,7 +58,7 @@ Daemons.run_proc("background_jobs", options) do
         @schedules = Event.current.schedules.all.each(&:generate_slides)
       end
       say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, realtime / @schedules.size])
-    rescue Exception => e
+    rescue StandardError => e
       say "Error generating schedule slides"
       puts e.message
       puts e.backtrace.inspect
