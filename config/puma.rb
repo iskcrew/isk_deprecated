@@ -7,10 +7,11 @@ workers Integer(ENV["WEB_CONCURRENCY"] || 2)
 # Ruby threads per worker [initial, max]
 threads 4, 16
 
-if (ENV["RAILS_ENV"] || "development") != "development"
-  # Preload the application
-  preload_app!
+# Preload the application, needed for STI to work properly
+preload_app!
 
+
+if (ENV["RAILS_ENV"] || "development") != "development"
   # Run as daemon
   daemonize true
 
