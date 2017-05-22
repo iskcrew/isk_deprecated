@@ -284,17 +284,17 @@ class Slide < ActiveRecord::Base
     "#{cache_tag}_ro"
   end
 
+  # Convenience method of getting the configured picture sizes of
+  # the current event.
+  def self.picture_sizes
+    Event.current.picture_sizes
+  end
+
 private
 
   # The picture dimensions
   def picture_sizes
     @_picture_sizes ||= event.picture_sizes
-  end
-
-  # Convenience method of getting the configured picture sizes of
-  # the current event.
-  def self.picture_sizes
-    Event.current.picture_sizes
   end
 
   # Create the preview images from the full size slide image
@@ -348,9 +348,7 @@ private
   # Update timestamps of all associated objects
   def update_timestamps
     touch_by_group(master_group_id)
-    if changed.include? "master_group_id"
-      touch_by_group(master_group_id_was)
-    end
+    touch_by_group(master_group_id_was) if changed.include? "master_group_id"
   end
 
   # We need to proganate timestamps down the presentation chain for
