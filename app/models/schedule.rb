@@ -15,14 +15,17 @@ class Schedule < ActiveRecord::Base
   accepts_nested_attributes_for :schedule_events, allow_destroy: true
 
   # Validations:
-  # TODO: validate slidegroup etc existance
-  validates :name, presence: true
+  validates :name, :event, presence: true
+  # Validate slide group existance on update, we create them after create
+  validates :slidegroup, :next_up_group, presence: true, on: :update
 
   # Callbacks:
   # Create groups that will contain the slides generated from this schedule
   after_create :create_groups
   # Rename the associated groups if the schedule name changes
   after_update :rename_groups
+  # By default assing to the current event
+  before_validation :set_event_id, on: :create
 
   # Return all schedules in the current event
   def self.current
@@ -235,5 +238,9 @@ private
 
     slides << this_slide unless this_slide.empty?
     return slides
+  end
+
+  def set_event_id
+    self.event = Event.current unless event.present?
   end
 end
