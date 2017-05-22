@@ -123,7 +123,6 @@ module SlidesHelper
   end
 
   # Generic toggle button to toggle some boolean on the slide
-  # FIXME OLD STYLE LINK PARAMETERS
   def slide_toggle_button(name, slide, attrib)
     toggle_link_to name, slide.send(attrib),
                    slide_path(slide, slide: { attrib => !slide.send(attrib) }),
