@@ -17,7 +17,7 @@ module TestTubesock
     @close_handlers   = []
     @error_handlers   = []
 
-    def initialize(message, data, error_handlers = false)
+    def initialize(message, _data, error_handlers = false)
       @message = message
       @open_handlers    = []
       @message_handlers = []
