@@ -110,7 +110,7 @@ module SlidesHelper
   end
 
   # A button to hide the slide or just inactive toggle, depending on user permissions
-  def slide_hide_button_or_status(s, remote = false)
+  def slide_hide_button_or_status(s)
     return slide_toggle_button("Public", s, :public) if s.can_edit? current_user
     return inactive_toggle("Public", s.public) unless s.can_hide?(current_user) && s.public == true
     return toggle_link_to "Public", s.public, hide_slide_path(s),
@@ -186,14 +186,15 @@ module SlidesHelper
   def slide_next_in_group_link(slide)
     s = slide.master_group.slides.where("position > #{slide.position}").first
     return unless s
-    link_to "Next slide #{icon('forward')}".html_safe,
+    link_to safe_join(["Next slide ", icon("forward")]),
             slide_path(s), class: "btn btn-primary btn-xs"
   end
 
   # Link to previous slide in the same group as this slide
   def slide_previous_in_group_link(slide)
-    if s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
-      link_to "#{icon('backward')} Previous slide".html_safe, slide_path(s), class: "btn btn-primary btn-xs"
+    s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
+    if s
+      link_to safe_join([icon("backward"), " Previous slide"]), slide_path(s), class: "btn btn-primary btn-xs"
     end
   end
 
@@ -239,8 +240,8 @@ private
   # this is needed for the select helpers
   def double_array(v)
     ret = Array.new
-    v.each do |v|
-      ret << [v, v]
+    v.each do |a|
+      ret << [a, a]
     end
     return ret
   end
