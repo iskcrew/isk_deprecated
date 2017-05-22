@@ -59,6 +59,6 @@ module EventsHelper
       data: { confirm: "This operation will take a long time, are you sure?" },
       title: "Regenerate all slide images, this will take a long time."
     }
-    link_to "Regenerate images", generate_images_event_path(@event), options
+    link_to "Regenerate images", generate_images_event_path(event), options
   end
 end
