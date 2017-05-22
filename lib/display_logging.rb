@@ -10,20 +10,20 @@
 # The events come from DisplaysController#websocket
 
 class DisplayLogging
-  @@_logger = nil
+  @_logger = nil
 
   # Initialize the logger for displays
   # TODO: config parameters outside of this file
   def self.logger
-    unless @@_logger.present?
-      @@_logger = Logger.new(Rails.root.join("log", "displays.log"))
-      @@_logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
-      @@_logger.formatter = proc do |severity, datetime, _progname, msg|
+    unless @_logger.present?
+      @_logger = Logger.new(Rails.root.join("log", "displays.log"))
+      @_logger.datetime_format = "%Y-%m-%dT%H:%M:%S"
+      @_logger.formatter = proc do |severity, datetime, _progname, msg|
         "#{datetime} - #{severity}: #{msg}\n"
       end
     end
 
-    return @@_logger
+    return @_logger
   end
 
   # Log a action in the display communication protocol
@@ -33,6 +33,7 @@ class DisplayLogging
     log_msg = []
     log_msg << payload[:type].to_s
     log_msg << "From #{payload[:ip]}"
+    log_msg << "Display name: #{payload[:display_name]}" if payload[:display_name]
     log_msg << "Time taken: #{(time * 1000).round(2)}ms"
     log_msg << "Parameters: #{msg.payload}"
 
