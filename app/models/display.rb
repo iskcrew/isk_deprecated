@@ -150,7 +150,6 @@ class Display < ActiveRecord::Base
   end
 
   # Add a error message on this display and set the error state
-  # TODO: handle error messages as new error tickets
   def add_error(message)
     if error_tickets.open.present?
       t = error_tickets.open.last!
