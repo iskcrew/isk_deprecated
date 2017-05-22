@@ -52,7 +52,7 @@ Isk::Application.configure do
   }
 
   # Use inline queue adapter during tests for now.
-  # FIXME: test the sync behaviour in model tests and then just veryfy queueing in controller tests
+  # FIXME: test the sync behaviour in model tests and then just verify queueing in controller tests
   # Will save time.
   Rails.application.config.active_job.queue_adapter = :inline
 end
