@@ -9,8 +9,7 @@ class User < ActiveRecord::Base
 
   AdminUsers = ["admin"].freeze
 
-  validates_length_of :username, in: 1..50
-  validates_uniqueness_of :username
+  validates :username, length: { in: 1..50 }, uniqueness: true
 
   has_many :permissions, dependent: :delete_all
   has_many :roles, -> { order "roles.role" },                 through: :permissions, source: :target, source_type: "Role"
@@ -28,9 +27,8 @@ class User < ActiveRecord::Base
 
   def has_role?(request)
     return true if admin?
-    unless request.is_a? Array
-      return roles.where(role: request).count.positive?
-    end
+    return roles.where(role: request).count.positive? unless request.is_a? Array
+
     request.each do |r|
       return true if roles.where(role: r).count.positive?
     end
@@ -64,7 +62,7 @@ class User < ActiveRecord::Base
   end
 
   def self.authenticate(username, passwd)
-    user = User.where(username: username).first
+    user = User.find_by(username: username)
     return user if user && user.authenticate(passwd)
     return nil
   end
