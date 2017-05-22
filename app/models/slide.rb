@@ -173,7 +173,8 @@ class Slide < ActiveRecord::Base
     end
     hash[:effect_id] = ef
     hash[:group] = presentation_group_id if has_attribute? :presentation_group_id
-
+    hash[:media_url] = Rails.application.routes.url_helpers.full_slide_path(self)
+    hash[:base_url] = Rails.application.routes.url_helpers.slide_path(self)
     return hash
   end
   alias to_h to_hash
