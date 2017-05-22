@@ -29,6 +29,9 @@ Security/YAMLLoad:
 Style/NumericLiterals:
   Enabled: false
 
+Metrics/ParameterLists:
+  Max: 6
+
 Metrics/ModuleLength:
   Enabled: false
 
