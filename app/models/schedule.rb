@@ -175,14 +175,14 @@ private
 
     schedule_events.each do |e|
       # Ignore events that are more than settings[:time_tolerance] in past
-      unless (e.at + settings[:time_tolerance]).past?
-        # Insert a subheader if next event is in different day
-        if do_subheaders && !(e.at.to_date === last_date)
-          slide_items << { subheader: e.at.strftime("%A %d.%m."), linecount: 1 }
-        end
-        slide_items << { name: e.name, time: e.at.strftime("%H:%M"), linecount: e.linecount }
-        last_date = e.at.to_date
+      next if (e.at + settings[:time_tolerance]).past?
+
+      # Insert a subheader if next event is in different day
+      if do_subheaders && e.at.to_date != last_date
+        slide_items << { subheader: e.at.strftime("%A %d.%m."), linecount: 1 }
       end
+      slide_items << { name: e.name, time: e.at.strftime("%H:%M"), linecount: e.linecount }
+      last_date = e.at.to_date
     end
     return slide_items
   end
