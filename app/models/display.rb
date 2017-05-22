@@ -22,7 +22,7 @@ class Display < ActiveRecord::Base
   before_validation :create_state, on: :create
 
   # Timeout before a display is considered as non-responsive
-  Timeout = 5 # minutes
+  TIMEOUT = 5 # minutes
 
   include ModelAuthorization
 
@@ -121,9 +121,10 @@ class Display < ActiveRecord::Base
 
   # Mark display based on the connection id as disconnected
   def self.disconnect(ws_id)
-    if d = Display.joins(:display_state)
-                  .where(display_states: { websocket_connection_id: ws_id })
-                  .first
+    d = Display.joins(:display_state)
+               .where(display_states: { websocket_connection_id: ws_id })
+               .first
+    if d
       d.status = "disconnected"
       d.websocket_connection_id = nil
       d.save!
@@ -134,13 +135,13 @@ class Display < ActiveRecord::Base
 
   # Relation for all monitored displays that are more than Timeout minutes late
   def self.late
-    Display.joins(:display_state).where("display_states.monitor = ? AND display_states.last_contact_at < ?", true, Timeout.minutes.ago)
+    Display.joins(:display_state).where("display_states.monitor = ? AND display_states.last_contact_at < ?", true, TIMEOUT.minutes.ago)
   end
 
   # Is this display more than Timeout minutes late?
   def late?
     return false unless last_contact_at
-    return Time.diff(Time.now, last_contact_at, "%m")[:diff].to_i > Timeout
+    return Time.now > last_contact_at + TIMEOUT.minutes
   end
 
   # Is the display live, ie. visible to the general audience
