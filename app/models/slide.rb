@@ -5,9 +5,6 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class Slide < ActiveRecord::Base
-  # FIXME: remove rexml in favor of nokogiri
-  require "rexml/document"
-
   # Callbacks
   after_initialize do |s|
     s.master_group_id = Event.current.ungrouped.id if s.master_group_id.nil?
