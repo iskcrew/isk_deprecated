@@ -39,65 +39,61 @@ class Schedule < ActiveRecord::Base
   end
 
   # Generate schedule slides
-  # FIXME: is the transaction needed?
   # FIXME: break this into smaller methods...
   def generate_slides
-    Schedule.transaction do
-      # Use the schedule name if custom slide header hasn't been defined
-      header = slide_header.present? ? slide_header : name
+    # Use the schedule name if custom slide header hasn't been defined
+    header = slide_header.present? ? slide_header : name
 
-      # Paginate the schedule events into slides
-      slide_data = paginate_events(events_array)
-      total_slides = slide_data.size
-      current_slide = 1
+    # Paginate the schedule events into slides
+    slide_data = paginate_events(events_array)
+    total_slides = slide_data.size
+    current_slide = 1
 
-      # Slide description to use on all generated slides
-      slide_description = "Automatically generated from schedule #{name} at #{I18n.l Time.now, format: :short}"
-      # Make sure there are right amount of slides in our group
-      delta = slide_data.count - schedule_slide_count
-      if delta.positive?
-        add_scheduleslides(slide_data.count - schedule_slide_count)
-      elsif delta.negative?
-        slidegroup.slides.where(type: ScheduleSlide.sti_name)
-                  .limit(-delta).each(&:destroy)
+    # Slide description to use on all generated slides
+    slide_description = "Automatically generated from schedule #{name} at #{I18n.l Time.now, format: :short}"
+    # Make sure there are right amount of slides in our group
+    delta = slide_data.count - schedule_slide_count
+    if delta.positive?
+      add_scheduleslides(slide_data.count - schedule_slide_count)
+    elsif delta.negative?
+      slidegroup.slides.where(type: ScheduleSlide.sti_name).limit(-delta).each(&:destroy)
+    end
+
+    # Find the scheduleslides in our slidegroup
+    schedule_slides = slidegroup.slides.where(type: ScheduleSlide.sti_name).to_a
+
+    # Create a array containing a slide and the data to be shown on that slide
+    # FIXME: there must be a cleaner way...
+    slides = Array.new
+    slide_data.each_index do |i|
+      slides << [schedule_slides[i], slide_data[i]]
+    end
+
+    # Set the data to each corresponding slide
+    slides.each do |s|
+      if total_slides == 1
+        @header = header
+      else
+        @header = "#{header} #{current_slide}/#{total_slides}"
       end
+      slide = s.first
+      slide.name = @header
+      slide.description = slide_description
+      slidegroup.slides << slide
+      slide.publish
+      slide.save!
+      @items = s.last
+      # Generate the slide SVG
+      slide.create_svg(@header, @items)
+      slide.generate_images_later
 
-      # Find the scheduleslides in our slidegroup
-      schedule_slides = slidegroup.slides.where(type: ScheduleSlide.sti_name).to_a
+      current_slide += 1
+    end # slides.each
 
-      # Create a array containing a slide and the data to be shown on that slide
-      # FIXME: there must be a cleaner way...
-      slides = Array.new
-      slide_data.each_index do |i|
-        slides << [schedule_slides[i], slide_data[i]]
-      end
+    slidegroup.publish_slides
 
-      # Set the data to each corresponding slide
-      slides.each do |s|
-        if total_slides == 1
-          @header = header
-        else
-          @header = "#{header} #{current_slide}/#{total_slides}"
-        end
-        slide = s.first
-        slide.name = @header
-        slide.description = slide_description
-        slidegroup.slides << slide
-        slide.publish
-        slide.save!
-        @items = s.last
-        # Generate the slide SVG
-        slide.create_svg(@header, @items)
-        slide.generate_images_later
-
-        current_slide += 1
-      end # slides.each
-
-      slidegroup.publish_slides
-
-      # Generate the "up next" slide if needed
-      generate_next_up_slide if next_up && schedule_events.present?
-    end # Transaction
+    # Generate the "up next" slide if needed
+    generate_next_up_slide if next_up && schedule_events.present?
     return true
   end
 
