@@ -98,10 +98,10 @@ class Presentation < ActiveRecord::Base
 
   # Augmented select for creating the hash serialization
   def slides_for_hash
-    public_slides.select([ "slides.*",
-                           "groups.id as presentation_group_id",
-                           "master_groups.name as group_name",
-                           "master_groups.effect_id as effect_id"])
+    public_slides.select(["slides.*",
+                          "groups.id as presentation_group_id",
+                          "master_groups.name as group_name",
+                          "master_groups.effect_id as effect_id"])
   end
 
 private
