@@ -74,12 +74,11 @@ namespace :clean do
     files = Dir[Slide::FilePath.join("slide_*_data")].collect { |f| Slide::FilePath.join(f).to_s }
     files.each do |f|
       data = YAML.safe_load(File.read(f))
-      unless data.is_a? ActiveSupport::HashWithIndifferentAccess
-        puts "Old data in #{f} migrating..."
-        new_data = ActiveSupport::HashWithIndifferentAccess.new(data)
-        File.open(f, "w") do |file|
-          file.write new_data.to_yaml
-        end
+      next if data.is_a? ActiveSupport::HashWithIndifferentAccess
+      puts "Old data in #{f} migrating..."
+      new_data = ActiveSupport::HashWithIndifferentAccess.new(data)
+      File.open(f, "w") do |file|
+        file.write new_data.to_yaml
       end
     end
   end
