@@ -9,6 +9,9 @@ AllCops:
     - 'db/schema.rb'
     - 'bin/*'
 
+Style/ConstantName:
+  Enabled: false
+
 Style/PredicateName:
   Enabled: false
 
