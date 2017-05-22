@@ -2,84 +2,48 @@ AllCops:
   TargetRubyVersion: 2.3
   # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
   # to ignore them, so only the ones explicitly set in this file are enabled.
-  DisabledByDefault: true
   Exclude:
     - '**/templates/**/*'
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
+    - 'db/schema.rb'
 
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
 
-# Performance cops
-Performance/CaseWhenSplat:
-  Enabled: true
+# We need to load HashWithIndifferentAccess
+Security/YAMLLoad:
+  Enabled: false
+
+# 100_000_000 stuff is pretty bad...
+Style/NumericLiterals:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+# Do not assing the return values of conditionals
+Style/ConditionalAssignment:
+  SingleLineConditionsOnly: true
+  EnforcedStyle: assign_inside_condition
+  IncludeTernaryExpressions: false
+
+# Do not require class level comments
+Style/Documentation:
+  Enabled: false
+
+Style/IndentHash:
+  Enabled: false
+  EnforcedStyle: consistent
   
-Performance/Casecmp:
-  Enabled: true
-  
-Performance/CompareWithBlock:
-  Enabled: true
+Style/RedundantReturn:
+  Enabled: false
 
-Performance/Count:
-  Enabled: true
-  
-Performance/Detect:
-  Enabled: true
-  
-Performance/DoubleStartEndWith:
-  Enabled: true
-
-Performance/EndWith:
-  Enabled: true
-  
-Performance/FixedSize:
-  Enabled: true
-
-Performance/FlatMap:
-  Enabled: true
-
-Performance/HashEachMethods:
-  Enabled: true
-
-Performance/LstripRstrip:
-  Enabled: true
-  
-Performance/RangeInclude:
-  Enabled: true
-
-Performance/RedundantBlockCall:
-  Enabled: true
-
-Performance/RedundantMatch:
-  Enabled: true
-
-Performance/RedundantMerge:
-  Enabled: true
-
-Performance/RedundantSortBy:
-  Enabled: true
-
-Performance/RegexpMatch:
-  Enabled: true
-
-Performance/ReverseEach:
-  Enabled: true
-
-Performance/Sample:
-  Enabled: true
-
-Performance/Size:
-  Enabled: true
-
-Performance/StartWith:
-  Enabled: true
-
-Performance/StringReplacement:
-  Enabled: true
-
-Performance/TimesMap:
-  Enabled: true
-
-# End performance cops
+Style/EmptyLiteral:
+  Enabled: false
 
 Lint/DeprecatedClassMethods:
   Enabled: true
@@ -90,9 +54,31 @@ Metrics/LineLength:
   
 Metrics/PerceivedComplexity:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 200
+
+Metrics/ClassLength:
+  Max: 1000
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
   
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+# Do not use %I or %i literals
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/WordArray:
+  EnforcedStyle: brackets
   
 # Prefer &&/|| over and/or.
 Style/AndOr:
