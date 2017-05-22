@@ -84,14 +84,14 @@ private
   # FIXME: remove rexml in favor of nokogiri
   def process_svg
     svg = REXML::Document.new(@_template)
-    svg = set_viewbox(svg)
+    svg = viewbox(svg)
     generate_settings(svg)
     @_template = svg.to_s
   end
 
   # Set the viewBox attribute on the base svg
   # Inkscape doesn't set this and we need it for browser previews to work
-  def set_viewbox(svg)
+  def viewbox(svg)
     width = svg.root.attributes["width"].to_i
     height = svg.root.attributes["height"].to_i
     svg.root.attributes["viewBox"] = "0 0 #{width} #{height}"
