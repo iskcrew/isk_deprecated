@@ -7,7 +7,7 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-module  HasSlidedata
+module HasSlidedata
   # This module depends on the class setting DefaultSlidedata hash.
   # When new data is entered it's checked against the default hash and all
   # keys that are not also present in the default are dropped.
@@ -29,10 +29,10 @@ module  HasSlidedata
   # Read and memoize the slidedata
   def slidedata
     return @_slidedata if @_slidedata.present?
-    if !self.new_record? && File.exists?(self.data_filename.to_s)
-      @_slidedata = YAML.load(File.read(self.data_filename))
+    if !new_record? && File.exist?(data_filename.to_s)
+      @_slidedata = YAML.load(File.read(data_filename))
     end
-    return @_slidedata.blank? ? default_slidedata() : @_slidedata
+    return @_slidedata.blank? ? default_slidedata : @_slidedata
   end
 
   # Write new slidedata and sanitize the keys in it.
@@ -42,7 +42,7 @@ module  HasSlidedata
     d = slidedata.merge(d)
 
     if d.key? :url
-      if d[:url] != self.slidedata[:url]
+      if d[:url] != slidedata[:url]
         @_needs_fetch = true
         self.ready = false
       end
@@ -56,18 +56,16 @@ module  HasSlidedata
   end
 
   def generate_svg
-    self.template.generate_svg(self.slidedata)
+    template.generate_svg(slidedata)
   end
 
 private
 
   # Sanitalize the data hash, only keep keys that exist in the default hash
   def sanitalize_slidedata(d)
-    if d.nil?
-      d = default_slidedata
-    end
+    d = default_slidedata.dup if d.nil?
 
-    d.keep_if do |k, v|
+    d.keep_if do |k|
       default_slidedata.key? k
     end
     return d
@@ -78,8 +76,8 @@ private
   end
 
   def write_slidedata
-    return if self.new_record?
-    File.open(self.data_filename,  "w") do |f|
+    return if new_record?
+    File.open(data_filename, "w") do |f|
       f.write sanitalize_slidedata(@_slidedata).to_yaml
     end
   end

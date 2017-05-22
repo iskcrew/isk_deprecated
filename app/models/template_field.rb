@@ -10,5 +10,5 @@ class TemplateField < ActiveRecord::Base
   include RankedModel
   ranks :field_order, with_same: :slide_template_id
 
-  scope :editable, -> { where editable: true }
+  scope :editable, (-> { where editable: true })
 end

@@ -7,7 +7,7 @@
 class InkscapeSlide < SvgSlide
   # Constants
   # Slide type to report in html views
-  TypeString = "inkscape"
+  TypeString = "inkscape".freeze
 
   before_create do |slide|
     slide.is_svg = true
@@ -52,23 +52,22 @@ class InkscapeSlide < SvgSlide
   # TODO: verification cookie?
   # FIXME: Use a better id and sync with plugins!
   def update_metadata!
-    svg = Nokogiri::XML(self.svg_data)
+    svg = Nokogiri::XML(svg_data)
     svg = metadata_contents(svg)
 
-    File.open(self.svg_filename, "w") do |f|
+    File.open(svg_filename, "w") do |f|
       f.write svg.to_xml
     end
   end
 
 protected
 
+  # Update the metadata element
   def metadata_contents(svg)
-    svg.css("metadata").each do |meta|
-      meta.remove
-    end
+    svg.css("metadata").each(&:remove)
     metadata = Nokogiri::XML::Node.new "metadata", svg
     metadata["id"] = "metadata1"
-    meta = "#{self.id}!depricated.invalid.com"
+    meta = "#{id}!depricated.invalid.com"
     metadata.content = meta
     svg.root.add_child metadata
     return svg

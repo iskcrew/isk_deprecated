@@ -11,7 +11,7 @@ class HttpSlide < Slide
   require "net/http"
   require "net/https"
 
-  TypeString = "http"
+  TypeString = "http".freeze
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(url: "http://", user: nil, password: nil)
   include HasSlidedata
@@ -30,7 +30,7 @@ class HttpSlide < Slide
 
   def clone!
     new_slide = super
-    new_slide.slidedata = self.slidedata
+    new_slide.slidedata = slidedata
     return new_slide
   end
 
@@ -39,39 +39,35 @@ class HttpSlide < Slide
   end
 
   def fetch!
-    return false if self.slidedata.nil?
+    return false if slidedata.nil?
 
-    uri = URI.parse(self.slidedata[:url])
+    uri = URI.parse(slidedata[:url])
 
     http = Net::HTTP.new(uri.host, uri.port)
 
-    case uri.scheme
-    when "http"
-    when "https"
-
+    if uri.scheme == "https"
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    else
+    elsif uri.scheme != "http"
       raise ArgumentError "Unknown protocol"
     end
 
     request = Net::HTTP::Get.new(uri.request_uri)
 
-    unless self.slidedata[:user].blank?
-      request.basic_auth(self.slidedata[:user], self.slidedata[:password])
+    unless slidedata[:user].blank?
+      request.basic_auth(slidedata[:user], slidedata[:password])
     end
 
     resp = http.request(request)
 
     if resp.is_a? Net::HTTPOK
-      File.open(self.original_filename, "wb") do |f|
+      File.open(original_filename, "wb") do |f|
         f.write resp.body
       end
       self.is_svg = false
       self.ready = false
-      self.save!
-      self.generate_images_later
+      save!
+      generate_images_later
     else
       logger.error "Error fetching slide data, http request didn't return OK status"
       logger.error resp
@@ -101,9 +97,6 @@ private
     when "down"
       # Scale the image down if needed
       geo_str << '\>'
-    when "fit"
-      # Scale the image to fit maintaining aspect ratio
-      # Nothing to do
     when "up"
       # Only scale the image up if needed
       geo_str << '\<'
@@ -114,7 +107,7 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"\
+    command = "convert #{original_filename} -resize #{geo_str}"\
               " -background #{bg_color.shellescape} -gravity center"\
               " -extent #{size} #{tmp_file.path}"
     system command
@@ -124,15 +117,11 @@ private
 
   # Validates the url
   def validate_url
-    url = URI::parse slidedata[:url].strip
+    url = URI.parse slidedata[:url].strip
     unless ["http", "https"].include? url.scheme
       errors.add(:slidedata, "^URL scheme is invalid, must be http or https.")
     end
-
-    if url.host.blank?
-      errors.add(:slidedata, "^URL is invalid, missing host.")
-    end
-
+    errors.add(:slidedata, "^URL is invalid, missing host.") if url.host.blank?
   rescue URI::InvalidURIError
     errors.add(:slidedata, "^URL is invalid.")
   end

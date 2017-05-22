@@ -1,16 +1,98 @@
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
   # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
   # to ignore them, so only the ones explicitly set in this file are enabled.
-  DisabledByDefault: true
   Exclude:
     - '**/templates/**/*'
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
+    - 'db/schema.rb'
+    - 'bin/*'
 
-Rails:
+Style/ConstantName:
+  Enabled: false
+
+Style/PredicateName:
+  Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+# We need to load HashWithIndifferentAccess
+Security/YAMLLoad:
+  Enabled: false
+
+# 100_000_000 stuff is pretty bad...
+Style/NumericLiterals:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+# Do not assing the return values of conditionals
+Style/ConditionalAssignment:
+  SingleLineConditionsOnly: true
+  EnforcedStyle: assign_inside_condition
+  IncludeTernaryExpressions: false
+
+# Do not require class level comments
+Style/Documentation:
+  Enabled: false
+
+Style/IndentHash:
+  Enabled: false
+  EnforcedStyle: consistent
+  
+Style/RedundantReturn:
+  Enabled: false
+
+Style/EmptyLiteral:
+  Enabled: false
+
+Lint/DeprecatedClassMethods:
   Enabled: true
 
+Metrics/LineLength:
+  Max: 120
+  Enabled: false
+  
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 200
+
+Metrics/ClassLength:
+  Max: 1000
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+  
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Do not use %I or %i literals
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/WordArray:
+  EnforcedStyle: brackets
+  
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
@@ -149,6 +231,3 @@ Style/EmptyElse:
 Style/GuardClause:
   Enabled: true
   MinBodyLength: 2
-  
-Performance:
-  Enabled: true

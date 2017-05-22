@@ -10,7 +10,7 @@ class OverrideQueue < ActiveRecord::Base
   belongs_to :effect
 
   validates :duration, numericality: { only_integer: true }
-  #TODO: varmista että presis ja slide on olemassa
+  validates :slide, :display, presence: true
 
   include RankedModel
   ranks :position, with_same: :display_id
@@ -19,10 +19,10 @@ class OverrideQueue < ActiveRecord::Base
   include WebsocketMessages
 
   def to_hash
-    h = self.slide.to_hash
-    h[:override_queue_id] = self.id
-    h[:duration] = self.duration
-    h[:effect_id] = self.effect_id
+    h = slide.to_hash
+    h[:override_queue_id] = id
+    h[:duration] = duration
+    h[:effect_id] = effect_id
     h[:group_name] = "OVERRIDE"
     return h
   end

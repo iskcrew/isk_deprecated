@@ -27,38 +27,37 @@ module CacheSweeper
 private
 
   def expire_cache
-    if self.is_a? Slide
+    if is_a? Slide
       Cashier.expire "slides"
 
       # Expire presentation fragments
-      self.presentations.each do |p|
+      presentations.each do |p|
         Cashier.expire p.cache_tag
       end
 
-      Cashier.expire self.master_group.cache_tag
-      if self.changed.include? "master_group_id"
+      Cashier.expire master_group.cache_tag
+      if changed.include? "master_group_id"
         # We want to expire also the old group
-        if g = MasterGroup.where(id: self.master_group_id_was).first
-          Cashier.expire g.cache_tag
-        end
+        g = MasterGroup.where(id: master_group_id_was).first
+        Cashier.expire g.cache_tag if g
       end
-    elsif self.is_a? MasterGroup
+    elsif is_a? MasterGroup
       Cashier.expire "groups"
-      self.presentations.each do |p|
+      presentations.each do |p|
         Cashier.expire p.cache_tag
       end
-    elsif self.is_a? Presentation
+    elsif is_a? Presentation
 
-    elsif self.is_a? User
+    elsif is_a? User
 
-    elsif self.is_a? Group
-      Cashier.expire self.presentation.cache_tag
-    elsif self.is_a? Permission
-      Cashier.expire self.user.cache_tag
+    elsif is_a? Group
+      Cashier.expire presentation.cache_tag
+    elsif is_a? Permission
+      Cashier.expire user.cache_tag
     else
       raise ArgumentError, "Unexpected object class: " + self.class.name
     end
 
-    Cashier.expire self.cache_tag
+    Cashier.expire cache_tag
   end
 end

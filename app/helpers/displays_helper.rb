@@ -7,7 +7,7 @@
 module DisplaysHelper
   # Links to the details for all late displays
   def late_display_warning(d)
-    link_text = "#{d.name} (#{d.ip}) is more than #{Display::Timeout} minutes late!"
+    link_text = "#{d.name} (#{d.ip}) is more than #{Display::TIMEOUT} minutes late!"
     link_to link_text, display_path(d), class: "alert-link"
   end
 
@@ -51,10 +51,7 @@ module DisplaysHelper
 
     if d.last_contact_at
       ping_seconds = (Time.now - d.last_contact_at).to_i
-
-      if ping_seconds > 60
-        ping_seconds = ">60"
-      end
+      ping_seconds = ">60" if ping_seconds > 60
     else
       ping_seconds = "UNKNOWN"
     end
@@ -65,11 +62,7 @@ module DisplaysHelper
   # Render the img element for the current slide image
   # FIXME: handle unknown slide little better
   def display_current_slide(d)
-    if (d.status != "error") && (d.current_slide.present?)
-      html_options = {
-        title: "Click to show display details",
-        class: "slide_preview"
-      }
+    if (d.status != "error") && d.current_slide.present?
       image = slide_preview_image_tag d.current_slide
     else
       image = image_tag("display_error.png", class: "preview")

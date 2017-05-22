@@ -92,7 +92,7 @@ class PresentationsControllerTest < ActionController::TestCase
     p.reload
 
     assert_equal 2, p.groups.first!.id, "First group should be id 2"
-    assert_equal 1, p.groups.last!.id , "Last group should be id 1"
+    assert_equal 1, p.groups.last!.id, "Last group should be id 1"
   end
 
   test "delete presentation" do

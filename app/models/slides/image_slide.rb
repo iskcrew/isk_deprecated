@@ -5,19 +5,19 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class ImageSlide < Slide
-  TypeString = "image"
+  TypeString = "image".freeze
 
   ScalingOptions = [
     ["Fit", "fit"],
     ["Down only", "down"],
     ["Up only", "up"],
     ["Stretch", "stretch"]
-  ]
+  ].freeze
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
     scale: "fit",
     background: "#000000"
-  )
+  ).freeze
   include HasSlidedata
 
   after_save :save_image
@@ -38,7 +38,7 @@ private
   # A after save hook to move the possible new image into its place
   def save_image
     return unless @_image_file
-    FileUtils.move @_image_file.path, self.original_filename
+    FileUtils.move @_image_file.path, original_filename
     @_image_file = nil
   end
 
@@ -57,15 +57,15 @@ private
 
   # Validates that the background color is ok
   def check_bg_color
-    unless slidedata[:background].match(/\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/)
+    unless slidedata[:background] =~ /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
       errors.add :backgroud, "must be valid css hex color"
     end
   end
 
   # Generate the full size slide preview
   def generate_full_image
-    bg_color = self.slidedata[:background]
-    scale = self.slidedata[:scale]
+    bg_color = slidedata[:background]
+    scale = slidedata[:scale]
     size = picture_sizes[:full].join("x")
 
     # Build the ImageMagick geometry string
@@ -78,9 +78,6 @@ private
     when "down"
       # Scale the image down if needed
       geo_str << '\>'
-    when "fit"
-      # Scale the image to fit maintaining aspect ratio
-      # Nothing to do
     when "up"
       # Only scale the image up if needed
       geo_str << '\<'
@@ -91,7 +88,7 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"
+    command = "convert #{original_filename} -resize #{geo_str}"
     command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
     return compare_new_image(tmp_file) if system command
 

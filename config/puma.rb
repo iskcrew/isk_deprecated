@@ -10,7 +10,6 @@ threads 4, 16
 # Preload the application, needed for STI to work properly
 preload_app!
 
-
 if (ENV["RAILS_ENV"] || "development") != "development"
   # Run as daemon
   daemonize true

@@ -38,14 +38,12 @@ resp = RestClient.get("#{@base_url}displays", cookies: @cookies, accept: :json)
 @ws = nil
 
 @ws_base_url = "ws://#{@host}:#{@port}/"
-if @port.to_i == 443
-  @ws_base_url = "wss://#{@host}/"
-end
+@ws_base_url = "wss://#{@host}/" if @port.to_i == 443
 
 def init_general_socket
   @ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: @headers)
 
-  @ws.on :open do |event|
+  @ws.on :open do
     say "General connection opened"
     @connection_opened = Time.now
   end
@@ -63,14 +61,14 @@ def init_general_socket
     when "create"
       say "Create notification: #{msg.object} with id=#{msg.payload[:id]}".white
     else
-      say "Got unhandled message: #{msg.to_s}".red
+      say "Got unhandled message: #{msg}".red
     end
   end
 
-  @ws.on :close do |event|
+  @ws.on :close do
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, @connection_opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{Time.diff(Time.now, @connection_opened, '%h:%m:%s')[:diff]}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_general_socket
@@ -82,7 +80,7 @@ def init_display_socket(id)
 
   opened = Time.now
 
-  dws.on :open do |event|
+  dws.on :open do
     say "Display #{id} connection opened"
     opened = Time.now
   end
@@ -103,23 +101,23 @@ def init_display_socket(id)
     when "shutdown"
       say "Display #{id} is shutting down".yellow
     else
-      say "Got unhandled message: #{msg.to_s}".red
+      say "Got unhandled message: #{msg}".red
     end
   end
 
-  dws.on :close do |event|
+  dws.on :close do
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, opened, "%h:%m:%s")[:diff]}".red
+    say "Connection was up for #{Time.diff(Time.now, opened, '%h:%m:%s')[:diff]}".red
     say "Reconnecting in 10 seconds"
     sleep(10)
     init_display_socket(id)
   end
 end
 
-EM.run {
+EM.run do
   init_general_socket
   @displays.each do |d|
     init_display_socket(d["id"])
   end
-}
+end

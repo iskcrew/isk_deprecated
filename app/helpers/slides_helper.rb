@@ -19,7 +19,7 @@ module SlidesHelper
   # Render the slide duration as text
   def slide_duration(slide)
     return "Using presentation default" if slide.duration == -1
-    return "Infinite" if slide.duration == 0
+    return "Infinite" if slide.duration.zero?
     return "#{slide.duration} seconds"
   end
 
@@ -27,7 +27,7 @@ module SlidesHelper
   # FIXME: DRY with other images
   def slide_preview_image_tag(slide)
     html_options = {
-      class: "preview #{slide.public ? "slide-public" : "slide-hidden"}",
+      class: "preview #{slide.public ? 'slide-public' : 'slide-hidden'}",
       id: "slide_preview_#{slide.id}"
     }
 
@@ -100,7 +100,7 @@ module SlidesHelper
   end
 
   def simple_text_size_select(f, size)
-    f.select :text_size, options_for_select(simple_text_sizes, size),  {},
+    f.select :text_size, options_for_select(simple_text_sizes, size), {},
              id: "simple_text_size", data: { simple_field: true }
   end
 
@@ -110,7 +110,7 @@ module SlidesHelper
   end
 
   # A button to hide the slide or just inactive toggle, depending on user permissions
-  def slide_hide_button_or_status(s, remote = false)
+  def slide_hide_button_or_status(s)
     return slide_toggle_button("Public", s, :public) if s.can_edit? current_user
     return inactive_toggle("Public", s.public) unless s.can_hide?(current_user) && s.public == true
     return toggle_link_to "Public", s.public, hide_slide_path(s),
@@ -118,7 +118,8 @@ module SlidesHelper
                           remote: true,
                           data: {
                             confirm: "Are you sure you want to hide this"\
-                                     " slide? You cannot publish it later!" }
+                                     " slide? You cannot publish it later!"
+                          }
   end
 
   # Generic toggle button to toggle some boolean on the slide
@@ -185,14 +186,15 @@ module SlidesHelper
   def slide_next_in_group_link(slide)
     s = slide.master_group.slides.where("position > #{slide.position}").first
     return unless s
-    link_to ("Next slide #{icon('forward')}").html_safe,
+    link_to safe_join(["Next slide ", icon("forward")]),
             slide_path(s), class: "btn btn-primary btn-xs"
   end
 
   # Link to previous slide in the same group as this slide
   def slide_previous_in_group_link(slide)
-    if s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
-      link_to ("#{icon('backward')} Previous slide").html_safe, slide_path(s), class: "btn btn-primary btn-xs"
+    s = slide.master_group.slides.where("position < #{slide.position}").reorder(position: :desc).first
+    if s
+      link_to safe_join([icon("backward"), " Previous slide"]), slide_path(s), class: "btn btn-primary btn-xs"
     end
   end
 
@@ -204,7 +206,7 @@ module SlidesHelper
     return "Online SVG-editor slide" if s.is_a? SvgSlide
     return "Video presentation" if s.is_a? VideoSlide
     return "Automatically updating Http-slide" if s.is_a? HttpSlide
-    return "Plain bitmap slide" if !s.is_svg?
+    return "Plain bitmap slide" unless s.is_svg?
     return "Unknown"
   end
 
@@ -212,7 +214,7 @@ module SlidesHelper
   def slide_filter_links(filter)
     content_tag "div", class: "btn-group" do
       link_to("All slides", slides_path, class: (filter ? "btn btn-primary" : "btn btn-primary active")) +
-      link_to("Thrashed", slides_path(filter: "thrashed"), class: (filter == :thrashed ? "btn btn-primary active" : "btn btn-primary"))
+        link_to("Thrashed", slides_path(filter: "thrashed"), class: (filter == :thrashed ? "btn btn-primary active" : "btn btn-primary"))
     end
   end
 
@@ -238,8 +240,8 @@ private
   # this is needed for the select helpers
   def double_array(v)
     ret = Array.new
-    v.each do |v|
-      ret << [v, v]
+    v.each do |a|
+      ret << [a, a]
     end
     return ret
   end

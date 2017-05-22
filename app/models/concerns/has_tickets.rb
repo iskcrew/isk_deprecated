@@ -7,7 +7,7 @@
 #
 # A general module for all models that support opening tickets on them
 
-module  HasTickets
+module HasTickets
   extend ActiveSupport::Concern
 
   included do
@@ -18,9 +18,9 @@ module  HasTickets
   module ClassMethods
     # Return all records with error tickets
     def with_error_tickets
-      self.joins(:tickets)
-          .where(tickets: { kind: "error" })
-          .where.not(tickets: { status: Ticket::StatusClosed })
+      joins(:tickets)
+        .where(tickets: { kind: "error" })
+        .where.not(tickets: { status: Ticket::StatusClosed })
     end
   end
 
@@ -28,12 +28,12 @@ module  HasTickets
   def add_error_ticket(message)
     t = Ticket.new(kind: "error")
     t.about = self
-    t.name = "Error in #{self.class.name}: #{self.name}"
+    t.name = "Error in #{self.class.name}: #{name}"
     t.description = message
     t.save!
   end
 
   def error_tickets
-    self.tickets.where(kind: "error")
+    tickets.where(kind: "error")
   end
 end

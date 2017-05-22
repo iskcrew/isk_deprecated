@@ -10,9 +10,7 @@ class Slide < ActiveRecord::Base
 
   # Callbacks
   after_initialize do |s|
-    if s.master_group_id == nil
-      s.master_group_id = Event.current.ungrouped.id
-    end
+    s.master_group_id = Event.current.ungrouped.id if s.master_group_id.nil?
     true
   end
 
@@ -31,7 +29,7 @@ class Slide < ActiveRecord::Base
   belongs_to :master_group, counter_cache: true
   has_many :display_counts
   has_one :event, through: :master_group
-  has_many :presentations, -> { uniq }, through: :master_group
+  has_many :presentations, (-> { uniq }), through: :master_group
 
   # Attribute validations
   validates :name, presence: true, length: { maximum: 100 }
@@ -42,10 +40,10 @@ class Slide < ActiveRecord::Base
   validates :show_clock, :ready, :public, inclusion: { in: [true, false] }
 
   # Scopes for common queries
-  scope :published, -> { where(public: true) }
-  scope :hidden, -> { where(public: false) }
-  scope :current, -> { where(deleted: false).where(replacement_id: nil) }
-  scope :thrashed, -> { where("replacement_id is not null OR deleted = ?", true) }
+  scope :published, (-> { where(public: true) })
+  scope :hidden, (-> { where(public: false) })
+  scope :current, (-> { where(deleted: false).where(replacement_id: nil) })
+  scope :thrashed, (-> { where("replacement_id is not null OR deleted = ?", true) })
 
   # slide.master_group_name delegation
   delegate :name, to: :master_group, prefix: :master_group
@@ -67,11 +65,9 @@ class Slide < ActiveRecord::Base
   include CacheSweeper
 
   # Constants
-  # FIXME: Verify host isn't used anywhere anymore and remove it
-  Host = "http://example.com"
-  TypeString = "image"
-  FilePath = Rails.root.join("data", "slides")
-  UsePresentationDelay = -1 #Set duration to this to use presentation setting
+  TypeString = "image".freeze
+  FilePath = Rails.root.join("data", "slides").freeze
+  UsePresentationDelay = -1 # Set duration to this to use presentation setting
 
   # Error to raise when image operation fails
   class ImageError < StandardError
@@ -84,7 +80,7 @@ class Slide < ActiveRecord::Base
   def self.inherited(child)
     child.instance_eval do
       def model_name
-        self.base_class.model_name
+        base_class.model_name
       end
     end
 
@@ -106,14 +102,14 @@ class Slide < ActiveRecord::Base
 
   # Log that the slide has been shown on display_id just now.
   def shown_on(display_id, live)
-    self.display_counts.create(display_id: display_id, live: live)
+    display_counts.create(display_id: display_id, live: live)
   end
 
   # Create new ungrouped hidden clone of the slide
   def clone!
-    new_slide = self.dup
+    new_slide = dup
     new_slide.public = false
-    new_slide.name = self.name.last.match(/\d+/) ? self.name.next : new_slide.name << " (clone)"
+    new_slide.name = name.last =~ /\d+/ ? name.next : new_slide.name << " (clone)"
     if new_slide.name.split("(clone)").size > 2
       new_slide.name = new_slide.name.gsub("(clone)", "(badger)") + " (mushroom)"
     elsif new_slide.name.include?("(badger)") && !new_slide.name.include?("(mushroom) (mushroom)")
@@ -121,15 +117,15 @@ class Slide < ActiveRecord::Base
     elsif new_slide.name.include?("(mushroom) (mushroom)")
       new_slide.name = new_slide.name.gsub("(clone)", "")
     end
-    new_slide.position_position = self.group_position + 1
+    new_slide.position_position = group_position + 1
     new_slide.save!
-    FileUtils.copy(self.data_filename, new_slide.data_filename) if self.respond_to? :data_filename
-    FileUtils.copy(self.svg_filename, new_slide.svg_filename) if self.is_svg?
-    FileUtils.copy(self.original_filename, new_slide.original_filename) unless self.is_svg?
-    if self.ready
-      FileUtils.copy(self.preview_filename, new_slide.preview_filename)
-      FileUtils.copy(self.full_filename, new_slide.full_filename)
-      FileUtils.copy(self.thumb_filename, new_slide.thumb_filename)
+    FileUtils.copy(data_filename, new_slide.data_filename) if respond_to? :data_filename
+    FileUtils.copy(svg_filename, new_slide.svg_filename) if is_svg?
+    FileUtils.copy(original_filename, new_slide.original_filename) unless is_svg?
+    if ready
+      FileUtils.copy(preview_filename, new_slide.preview_filename)
+      FileUtils.copy(full_filename, new_slide.full_filename)
+      FileUtils.copy(thumb_filename, new_slide.thumb_filename)
     end
     return new_slide
   end
@@ -137,13 +133,13 @@ class Slide < ActiveRecord::Base
   # Find all displays that have this slide in either their presentation or in their override queues.
   def displays
     displays_via_presentation = Display.joins(presentation: { groups: { master_group: :slides } })
-                                       .where(slides: { id: self.id }).uniq
+                                       .where(slides: { id: id }).uniq
     return displays_via_presentation.to_a | override.to_a
   end
 
   # Find all displays that have this slide in their override queues
   def override
-    Display.joins(override_queues: :slide).where(slides: { id: self.id }).uniq
+    Display.joins(override_queues: :slide).where(slides: { id: id }).uniq
   end
 
   # Create a hash with the slide metadata
@@ -154,33 +150,33 @@ class Slide < ActiveRecord::Base
   # presentation_group_id - for the id of the Group belonging to the presentation being serialized
   def to_hash
     hash = Hash.new
-    hash[:id] = self.id
-    hash[:name] = self.name
-    hash[:ready] = self.ready
-    hash[:deleted] = self.deleted
-    hash[:created_at] = self.created_at.to_i
-    hash[:updated_at] = self.updated_at.to_i
-    hash[:duration] = self.duration
-    hash[:images_updated_at] = self.images_updated_at.to_i
-    hash[:show_clock] = self.show_clock
-    hash[:type] = self.is_a?(VideoSlide) ? "video" : "image"
-    hash[:master_group] = self.master_group_id
+    hash[:id] = id
+    hash[:name] = name
+    hash[:ready] = ready
+    hash[:deleted] = deleted
+    hash[:created_at] = created_at.to_i
+    hash[:updated_at] = updated_at.to_i
+    hash[:duration] = duration
+    hash[:images_updated_at] = images_updated_at.to_i
+    hash[:show_clock] = show_clock
+    hash[:type] = is_a?(VideoSlide) ? "video" : "image"
+    hash[:master_group] = master_group_id
     if has_attribute? :group_name
-      hash[:group_name] = self.group_name
+      hash[:group_name] = group_name
     else
-      hash[:group_name] = self.master_group.name
+      hash[:group_name] = master_group.name
     end
     if has_attribute? :effect_id
-      ef = self.effect_id
+      ef = effect_id
     else
-      ef = self.master_group.effect_id
+      ef = master_group.effect_id
     end
     hash[:effect_id] = ef
-    hash[:group] = self.presentation_group_id if has_attribute? :presentation_group_id
+    hash[:group] = presentation_group_id if has_attribute? :presentation_group_id
 
     return hash
   end
-  alias_method :to_h, :to_hash
+  alias to_h to_hash
 
   # Used in various views
   def type_str
@@ -189,31 +185,31 @@ class Slide < ActiveRecord::Base
 
   # Is this slide in a real group?
   def grouped?
-    !self.master_group.is_a?(UnGroup)
+    !master_group.is_a?(UnGroup)
   end
 
   # Has this slide been replaced by another slide?
   def replaced?
-    !self.replacement.nil?
+    !replacement.nil?
   end
 
   # Is this a svg based slide?
   def is_svg?
-    self.is_svg
+    is_svg
   end
 
   # Replace this slide with another slide
   def replace!(slide)
     self.replacement = slide
-    slide.position = self.position
-    slide.master_group = self.master_group
+    slide.position = position
+    slide.master_group = master_group
     slide.save!
-    self.destroy
+    destroy
   end
 
   # The position of this slide inside a group
   def group_position
-    Slide.where(master_group_id: self.master_group_id).where("position < ?", self.position).count
+    Slide.where(master_group_id: master_group_id).where("position < ?", position).count
   end
 
   # Generate the various different sized images from the slide master image
@@ -224,7 +220,7 @@ class Slide < ActiveRecord::Base
     end
 
     self.ready = true
-    self.save!
+    save!
   end
 
   def generate_images_later
@@ -233,66 +229,59 @@ class Slide < ActiveRecord::Base
 
   # Filenames of different sized slide images
   def thumb_filename
-    FilePath.join("#{self.filename}_thumb.png")
+    FilePath.join("#{filename}_thumb.png")
   end
 
   def preview_filename
-    FilePath.join("#{self.filename}_preview.png")
+    FilePath.join("#{filename}_preview.png")
   end
 
   def full_filename
-    FilePath.join("#{self.filename}_full.png")
+    FilePath.join("#{filename}_full.png")
   end
 
   def original_filename
-    FilePath.join("#{self.filename}_original")
+    FilePath.join("#{filename}_original")
   end
 
   # Override the default destroy method to soft-delete slides
   def destroy
     self.deleted = true
     self.master_group = Event.current.thrashed
-    self.save!
+    save!
   end
 
   # Mark the slide as not deleted.
   def undelete
     self.deleted = false
     self.master_group = Event.current.ungrouped
-    self.save!
+    save!
   end
 
   # Send websocket-messages when a slides images have been updated
   def updated_image_notifications
-    msg = IskMessage.new("slide", "updated_image", self.to_hash)
+    msg = IskMessage.new("slide", "updated_image", to_hash)
     msg.send
   end
 
   # Cache tag for all fragments depending on this slide
   def cache_tag
-    "slide_#{self.id.to_s}"
+    "slide_#{id}"
   end
 
   # Cache key for info fragment with full edit priviledges
   def rw_cache_key
-    "#{self.cache_tag}_edit"
+    "#{cache_tag}_edit"
   end
 
   # Cache key for info fragment with hide priviledge
   def hide_cache_key
-    "#{self.cache_tag}_hide"
+    "#{cache_tag}_hide"
   end
 
   # Cache key for info fragment with no edit priviledges
   def ro_cache_key
-    "#{self.cache_tag}_ro"
-  end
-
-private
-
-  # The picture dimensions
-  def picture_sizes
-    @_picture_sizes ||= self.event.picture_sizes
+    "#{cache_tag}_ro"
   end
 
   # Convenience method of getting the configured picture sizes of
@@ -301,16 +290,23 @@ private
     Event.current.picture_sizes
   end
 
+private
+
+  # The picture dimensions
+  def picture_sizes
+    @_picture_sizes ||= event.picture_sizes
+  end
+
   # Create the preview images from the full size slide image
   def generate_previews
-    system resize_command(self.preview_filename, picture_sizes[:preview])
-    system resize_command(self.thumb_filename, picture_sizes[:thumb])
+    system resize_command(preview_filename, picture_sizes[:preview])
+    system resize_command(thumb_filename, picture_sizes[:thumb])
   end
 
   # Shell command to resize the full sized slide image to requested size.
   # Size should be a array like [width, height]
   def resize_command(file, size)
-    "convert #{self.full_filename} -resize #{size.join('x')} #{file}"
+    "convert #{full_filename} -resize #{size.join('x')} #{file}"
   end
 
   # Generate the full size slideimage from svg with inkscape
@@ -321,7 +317,7 @@ private
     # Export size
     command << " -w #{size.first} -h #{size.last}"
     # Export to file
-    command << " -e #{tmp_file.path} #{self.svg_filename}"
+    command << " -e #{tmp_file.path} #{svg_filename}"
     # Supress std-out reporting
     command << " 2>&1"
 
@@ -332,31 +328,27 @@ private
   # If they differ then copy the tmp_file image as the new slide image.
   # TODO: Should we be extra careful and validate the image?
   def compare_new_image(tmp_file)
-    if File.exist?(self.full_filename) && FileUtils.compare_file(tmp_file.path, self.full_filename)
+    if File.exist?(full_filename) && FileUtils.compare_file(tmp_file.path, full_filename)
       # Generated image is the same as the previous one
       tmp_file.unlink
       return false
     else
-      FileUtils.mv tmp_file.path, self.full_filename
+      FileUtils.mv tmp_file.path, full_filename
       # Tmpfile has 700 mode, we need to give other read permissions (mainly the web server)
-      FileUtils.chmod 0644, self.full_filename
+      FileUtils.chmod 0o0644, full_filename
       return true
     end
   end
 
   # If slides group has been changed move it to the end of the new group
   def check_position
-    if changed.include? "master_group_id"
-      self.position_position = :last
-    end
+    self.position_position = :last if changed.include? "master_group_id"
   end
 
   # Update timestamps of all associated objects
   def update_timestamps
-    touch_by_group(self.master_group_id)
-    if changed.include? "master_group_id"
-      touch_by_group(self.master_group_id_was)
-    end
+    touch_by_group(master_group_id)
+    touch_by_group(master_group_id_was) if changed.include? "master_group_id"
   end
 
   # We need to proganate timestamps down the presentation chain for

@@ -16,7 +16,7 @@ class TubesockController < ApplicationController
         # Needs its own redis connection to pub
         # and sub at the same time
         Redis.new(Rails.configuration.x.redis).subscribe "isk_general" do |on|
-          on.message do |channel, message|
+          on.message do |_channel, message|
             tubesock.send_data message
           end
         end
@@ -27,7 +27,7 @@ class TubesockController < ApplicationController
           Rails.logger.debug "Got websocket message: #{m}"
           msg = IskMessage.from_json(m)
           # we only care about commands
-          return unless msg.object == "command"
+          break unless msg.object == "command"
           case msg.type
           when "simple_svg"
             msg = IskMessage.new("simple", "svg",

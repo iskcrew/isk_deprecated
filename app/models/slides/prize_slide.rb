@@ -5,5 +5,5 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class PrizeSlide < TemplateSlide
-  TypeString = "prize"
+  TypeString = "prize".freeze
 end

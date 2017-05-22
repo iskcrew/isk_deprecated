@@ -40,15 +40,13 @@ Isk::Application.configure do
   # See everything in the log (default is :info)
   config.log_level = :info
 
-  config.log_tags = [ :remote_ip ]
+  config.log_tags = [:remote_ip]
 
   # More compact logs
   config.lograge.enabled = true
 
   config.lograge.custom_options = lambda do |event|
-    if event.payload[:user]
-      { user: event.payload[:user].username }
-    end
+    { user: event.payload[:user].username } if event.payload[:user]
   end
 
   # Do not log slide image requests
@@ -62,7 +60,7 @@ Isk::Application.configure do
 
   # Use a different cache store in production
   config.cache_store = :dalli_store, "localhost",
-    { namespace: "ISK", expires_in: 15.minutes, compress: true }
+                       { namespace: "ISK", expires_in: 15.minutes, compress: true }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -81,7 +79,7 @@ Isk::Application.configure do
   config.active_support.deprecation = :notify
 
   # Cashier for better caching
-  #config.cashier.adapter = :cache_store
+  # config.cashier.adapter = :cache_store
   config.cashier.adapter = :redis_store
   config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis)
   # or Resque.redis or any existing redis connection
@@ -89,5 +87,4 @@ Isk::Application.configure do
   # Eager loads all registered config.eager_load_namespaces.
   # This includes your application, engines, Rails frameworks and any other registered namespace.
   config.eager_load = true
-
 end

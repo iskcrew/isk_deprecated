@@ -34,18 +34,18 @@ class ActiveSupport::TestCase
 
     images.each do |i|
       FileUtils.cp imagefile, i
-      FileUtils.chmod 0600, i
+      FileUtils.chmod 0o0600, i
     end
 
     if slide.respond_to? :svg_filename
       FileUtils.cp svgfile, slide.svg_filename.to_s
-      FileUtils.chmod 0600, slide.svg_filename.to_s
+      FileUtils.chmod 0o0600, slide.svg_filename.to_s
     end
 
     return unless slide.is_a? SimpleSlide
 
     FileUtils.cp simple_slidedatafile, slide.data_filename.to_s
-    FileUtils.chmod 0600, slide.data_filename.to_s
+    FileUtils.chmod 0o0600, slide.data_filename.to_s
   end
 
   # During testing we will end up generating slide datafiles in a temporary location.
@@ -54,8 +54,8 @@ class ActiveSupport::TestCase
   def clear_slide_files(s)
     [".svg", "_full.png", "_preview.png", "_thumb.png", "_data", "_original"].each do |t|
       f = Rails.root.join("tmp", "test", "slide_#{s.id.to_s + t}")
-      if File.exists? f
-        Rails.logger.info "Deleting temporary slide datafile: #{f.to_s}"
+      if File.exist? f
+        Rails.logger.info "Deleting temporary slide datafile: #{f}"
         File.delete f
       end
     end
@@ -79,11 +79,11 @@ class ActiveSupport::TestCase
     count = 0
     actions.each_value { |v| count += v.size }
 
-    assert count > 0, "No actions were found for controller #{c.to_s}, typo?"
+    assert count.positive?, "No actions were found for controller #{c}, typo?"
 
     missed = []
     actions.each_key do |verb|
-      tested = tested_actions[verb].collect { |x| x.first }
+      tested = tested_actions[verb].collect(&:first)
       actions[verb].each do |a|
         unless tested.include?(a.to_sym) || (allowed[verb] && allowed[verb].include?(a.to_sym))
           missed << "#{verb.upcase} :#{a}"
@@ -106,7 +106,7 @@ class ActiveSupport::TestCase
     Rails.application.routes.routes.each do |r|
       req = r.requirements
       if req[:controller] == c
-        verb = %W{ GET POST PUT PATCH DELETE }.grep(r.verb).first.downcase.to_sym
+        verb = ["GET", "POST", "PUT", "PATCH", "DELETE"].grep(r.verb).first.downcase.to_sym
         routes[verb] << req[:action]
       end
     end

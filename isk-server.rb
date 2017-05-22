@@ -19,10 +19,10 @@ Services = [
   "resque",
   "background_jobs",
   "rrd_monitoring"
-]
-RedisOptions = { host: "localhost", port: 6379 }
-MemcachedIP = "localhost:11211"
-MemcachedOptions = { namespace: "ISK", compress: true }
+].freeze
+RedisOptions = { host: "localhost", port: 6379 }.freeze
+MemcachedIP = "localhost:11211".freeze
+MemcachedOptions = { namespace: "ISK", compress: true }.freeze
 
 # Check that all the needed external binaries are present
 def check_deps
@@ -49,9 +49,9 @@ def start_service(process)
     # Resque doesn't check its pid file and refuse to start if already running
     # So we need to do that...
     pid_file = File.join(PidDirectory, "resque.pid")
-    if File.exists? pid_file
+    if File.exist? pid_file
       pid = File.read(pid_file).to_i
-      if `ps -o args -p #{pid}`.match "resque"
+      if `ps -o args -p #{pid}` =~ /resque/
         puts "FAILED".red
         puts "Resque worker already running with pid #{pid}"
         abort
@@ -95,25 +95,26 @@ def stop_service(process)
   end
 
   pid_file = File.join(PidDirectory, pid_file)
-  unless File.exists?(pid_file)
+  unless File.exist?(pid_file)
     puts "Not running".yellow
     return true
   end
   pid = File.read(pid_file).to_i
 
-  unless !!(`ps -p #{pid}`.match pid.to_s)
+  unless `ps -p #{pid}`.match pid.to_s
     puts "Not running".yellow
     return true
   end
 
   begin
     Process.kill("TERM", pid)
-    Timeout::timeout(20) do
-      begin
+    Timeout.timeout(20) do
+      loop do
         print "."
         $stdout.flush
         sleep 1
-      end while !!(`ps -p #{pid}`.match pid.to_s)
+        break unless `ps -p #{pid}`.match pid.to_s
+      end
     end
     puts "Success".green
   rescue Timeout::Error
@@ -130,18 +131,18 @@ else
 end
 case ARGV[0]
 when "start"
-  check_deps()
+  check_deps
   services.each { |s| start_service(s) }
   exit
 when "stop"
   services.each { |s| stop_service(s) }
   exit
 when "restart"
-  check_deps()
+  check_deps
   services.each { |s| stop_service(s) && start_service(s) }
   exit
 when "force-restart"
-  check_deps()
+  check_deps
   Services.each { |s| stop_service(s) }
   puts "Flushing redis databases..."
   redis = Redis.new(RedisOptions)

@@ -316,9 +316,9 @@ private
       action: msg.object,
       ip: request.remote_ip,
       message: msg,
-      display_name: @display_name,
       display_connection: @display_connection
     }
+    options[:display_name] = @display.name unless @display.nil?
     ActiveSupport::Notifications.instrument("iskdpy", options) do
       yield
     end

@@ -12,7 +12,7 @@ require "rubygems"
 
 # Set up gems listed in the Gemfile.
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
-require "bundler/setup" if File.exists?(ENV["BUNDLE_GEMFILE"])
+require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
 require "colorize"
 require "rrd"
 require "daemons"
@@ -26,7 +26,7 @@ options = {
   app_name: "rrd_monitoring",
   dir_mode: :normal,
   dir: @pid_path.to_s,
-  log_dir: @log_path.to_s,
+  log_dir: @log_path.to_s
 }
 
 Daemons.run_proc("rrd_monitoring", options) do
@@ -49,7 +49,7 @@ Daemons.run_proc("rrd_monitoring", options) do
 
   def create_rrd_for_process(rrd_file)
     rrd = RRD::Base.new(rrd_file)
-    unless File.exists? rrd_file
+    unless File.exist? rrd_file
       puts "Creating rrd database: #{rrd_file}"
       rrd.create start: Time.now - 10.seconds, step: 30.seconds do
         datasource "memory", type: :gauge, heartbeat: 10.minutes, min: 0, max: :unlimited
@@ -61,7 +61,7 @@ Daemons.run_proc("rrd_monitoring", options) do
   end
 
   # Collect pid files
-  while (true) do
+  loop do
     servers = Dir[@pid_path.join("server*")].collect { |f| extract_pid(f) }
     delayed_jobs =  Dir[@pid_path.join("delayed_job*")].collect { |f| extract_pid(f) }
     background_jobs = Dir[@pid_path.join("background_jobs*")].collect { |f| extract_pid(f) }

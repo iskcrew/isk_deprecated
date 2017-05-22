@@ -12,12 +12,12 @@ require "rubygems"
 
 # Set up gems listed in the Gemfile.
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
-require "bundler/setup" if File.exists?(ENV["BUNDLE_GEMFILE"])
+require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
 
 require "colorize"
 require "rrd"
 
-def get_color
+def color
   colors = [
     "#30FC30",
     "#3096FC",
@@ -70,7 +70,7 @@ RRD.graph! @rrd_path.join("memory.png").to_s, { title: "Memory usage" }.merge(gr
     v.each_with_index do |file, i|
       value = "mem_#{k}_#{i}"
       for_rrd_data value, memory: :average, from: file
-      draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
+      draw_line data: value, color: color, label: "#{k} \##{i}".ljust(25), width: 1
       print_value value, format: 'LAST:Current\:%8.2lf %s'
       print_value value, format: 'AVERAGE:Average\:%8.2lf %s'
       print_value value, format: 'MAX:Maximum\:%8.2lf %s\n'
@@ -84,7 +84,7 @@ RRD.graph! @rrd_path.join("cpu.png").to_s, { title: "CPU usage" }.merge(graph_op
     v.each_with_index do |file, i|
       value = "cpu_#{k}_#{i}"
       for_rrd_data value, cpu: :average, from: file
-      draw_line data: value, color: get_color, label: "#{k} \##{i}".ljust(25), width: 1
+      draw_line data: value, color: color, label: "#{k} \##{i}".ljust(25), width: 1
       print_value value, format: 'LAST:Current\: %2.2lf%%'
       print_value value, format: 'AVERAGE:Average\: %2.2lf%%'
       print_value value, format: 'MAX:Maximum\: %2.2lf%%\n'

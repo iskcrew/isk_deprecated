@@ -82,7 +82,8 @@ module TicketsHelper
     link_to icon("check-square-o", "Close"),
             ticket_path(ticket,
                         ticket: {
-                          status: Ticket::StatusClosed }),
+                          status: Ticket::StatusClosed
+                        }),
             method: :put,
             class: html_class
   end
@@ -105,7 +106,7 @@ module TicketsHelper
   end
 
   def ticket_tab_link(open)
-    link_name = "Tickets <span class=badge>#{icon "ticket", open}</span>"
+    link_name = "Tickets <span class=badge>#{icon 'ticket', open}</span>"
     return link_to link_name.html_safe, tickets_path, class: "ui-tabs-anchor"
   end
 
@@ -125,7 +126,7 @@ module TicketsHelper
 private
 
   def ticket_open_count
-    return "" unless Ticket.current.open.count > 0
+    return "" unless Ticket.current.open.count.positive?
     html = icon "ticket"
     html << Ticket.ticket.open.count.to_s
     return html

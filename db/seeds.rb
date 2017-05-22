@@ -32,7 +32,7 @@ roles = [
   ["display-client", "User can run clients on any display via websocket events."]
 ]
 
-models = [
+[
   Slide,
   MasterGroup,
   Presentation,

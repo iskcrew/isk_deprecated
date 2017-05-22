@@ -10,7 +10,6 @@ module ApplicationHelper
   def navigation_links
     controllers = ["Slides", "Groups", "Presentations", "Displays", "Schedules", "Tickets"]
     ret = String.new
-    base_html_options = { class: "ui-state-default ui-corner-top" }
     # Build navigation tabs for basic controllers
     tabs = controllers
     tabs.each do |c|
@@ -18,9 +17,8 @@ module ApplicationHelper
                        class: "",
                        id: "#{c.downcase}_tab"
                      }
-      if controller.class.name.include?(c)
-        html_options[:class] =	"active"
-      end
+
+      html_options[:class] =	"active" if controller.class.name.include?(c)
       ret << content_tag("li", link_to(c, controller: c.downcase), html_options)
     end
     return ret.html_safe
@@ -87,8 +85,7 @@ module ApplicationHelper
   # Memoize the current user
   def current_user
     return @_current_user ||= User.first if Rails.env.profile?
-    @_current_user ||= session[:user_id] &&
-    User.includes(:permissions).find_by_id(session[:user_id])
+    @_current_user ||= session[:user_id] && User.includes(:permissions).find_by_id(session[:user_id])
   end
 
   # Memioze the current event

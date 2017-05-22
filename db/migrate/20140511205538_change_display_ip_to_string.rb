@@ -3,6 +3,5 @@ class ChangeDisplayIpToString < ActiveRecord::Migration
     change_column :display_states, :ip, :string
   end
 
-  def down
-  end
+  def down; end
 end

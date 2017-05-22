@@ -5,7 +5,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class SimpleSlide < SvgSlide
-  TypeString = "simple"
+  TypeString = "simple".freeze
 
   # Slidedata functionality
   DefaultSlidedata = {
@@ -14,22 +14,22 @@ class SimpleSlide < SvgSlide
     color: "Red",
     text_size: 48,
     text_align: "Left"
-  }.with_indifferent_access
+  }.with_indifferent_access.freeze
 
   include HasSlidedata
 
-  BaseTemplate = Rails.root.join("data", "templates", "simple.svg")
-  HeadingSelector = "text#header"
-  BodySelector = "text#slide_content"
-  BackgroundSelector = "image#background_picture"
-  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"]
+  BaseTemplate = Rails.root.join("data", "templates", "simple.svg").freeze
+  HeadingSelector = "text#header".freeze
+  BodySelector = "text#slide_content".freeze
+  BackgroundSelector = "image#background_picture".freeze
+  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"].freeze
 
   validate :check_color
 
   # If our slidedata chances mark the slide as not ready when saving it.
   before_save do
-    if @_slidedata.present? || !File.exists?(self.svg_filename)
-      self.svg_data = SimpleSlide.create_svg(self.slidedata)
+    if @_slidedata.present? || !File.exist?(svg_filename)
+      self.svg_data = SimpleSlide.create_svg(slidedata)
       self.ready = false
     end
     true
@@ -65,15 +65,15 @@ class SimpleSlide < SvgSlide
 
     svg = REXML::Document.new(svg_slide.svg_data)
 
-    #IF slide has other images than the background we have a problem
-    unless svg.root.elements.to_a("//image").count == 1
+    # IF slide has other images than the background we have a problem
+    unless svg.root.elements.to_a("//image").size == 1
       raise ApplicationController::ConvertError
     end
 
     text_nodes = svg.root.elements.to_a("//text")
 
-    #The slide needs to contain some text
-    raise ApplicationController::ConvertError unless text_nodes.count > 0
+    # The slide needs to contain some text
+    raise ApplicationController::ConvertError unless text_nodes.count.positive?
 
     header = text_nodes[0].elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip
 
@@ -94,14 +94,14 @@ class SimpleSlide < SvgSlide
 
   def clone!
     new_slide = super
-    new_slide.slidedata = self.slidedata
+    new_slide.slidedata = slidedata
     return new_slide
   end
 
   # Take in the slide data and create a svg using them
   # This is used both to save the slide and to display a preview
   # in the simple editor page via websocket calls
-  #TODO: create inkscape compliant svg!
+  # TODO: create inkscape compliant svg!
   def self.create_svg(options)
     text_align = options[:text_align] || DefaultSlidedata[:text_align]
     text_size = options[:text_size] || DefaultSlidedata[:text_size]
@@ -116,17 +116,174 @@ class SimpleSlide < SvgSlide
     svg = prepare_template(settings, size, current_event.background_image)
 
     head = svg.at_css(HeadingSelector)
-    head = set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
+    set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
 
     # Find out the text x coordinate
     text_x = row_x(text_align, settings[:body][:margins])
     body = svg.at_css(BodySelector)
-    body = set_text(body, text, text_x, color, text_size, text_align)
+    set_text(body, text, text_x, color, text_size, text_align)
 
     return svg.to_xml
   end
 
 private
+
+  # Private singleton methods
+  class << self
+  private
+
+    # Prepare the base template based on event config
+    def prepare_template(settings, size, background_image)
+      svg = Nokogiri::XML(File.open(BaseTemplate))
+
+      # Add sodipodi namespace
+      svg.root.add_namespace "sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+
+      # Set dimensions
+      svg.root["width"] = size.first
+      svg.root["height"] = size.last
+
+      # Set viewbox
+      svg.root["viewBox"] = "0 0 #{size.first} #{size.last}"
+
+      # Set background
+      bg = svg.at_css(BackgroundSelector)
+      bg["xlink:href"] = background_image
+      bg["x"] = 0
+      bg["y"] = 0
+      bg["width"] = size.first
+      bg["height"] = size.last
+
+      # Position header
+      header = svg.at_css(HeadingSelector)
+      header["x"] = settings[:heading][:coordinates].first
+      header["y"] = settings[:heading][:coordinates].last
+
+      # Header font size
+      header["font-size"] = settings[:heading][:font_size]
+
+      # Position body
+      body = svg.at_css(BodySelector)
+      body["y"] = settings[:body][:y_coordinate]
+
+      # Clear child elements from header and body
+      clear_childs(header)
+      clear_childs(body)
+
+      # Set guides
+      named_view = svg.at_css("sodipodi|namedview")
+      named_view.css("sodipodi|guide").each(&:remove)
+
+      # Vertical guides
+      [
+        "#{settings[:body][:margins].first},0",
+        "#{settings[:body][:margins].last},0",
+        "#{settings[:heading][:coordinates].first},0"
+      ].each do |coord|
+        named_view.add_child(create_guide(svg, coord, "-200,0"))
+      end
+
+      # Horizontal guides
+      [
+        "0,#{size.last - settings[:body][:y_coordinate]}",
+        "0,#{size.last - settings[:heading][:coordinates].last}"
+      ].each do |coord|
+        named_view.add_child(create_guide(svg, coord, "0,-200"))
+      end
+
+      return svg
+    end
+
+    # Create a new sodipodi:guide element
+    def create_guide(svg, position, orientation)
+      guide = Nokogiri::XML::Node.new("sodipodi:guide", svg)
+      guide["position"] = position
+      guide["orientation"] = orientation
+      return guide
+    end
+
+    def set_text(element, text, text_x, color = nil, size = nil, align = nil)
+      # Set default attributes
+      element["x"] = text_x
+
+      if size
+        element["font-size"] = size
+      else
+        size = element["font-size"]
+      end
+
+      first_line = true
+
+      text.each_line do |l|
+        row = Nokogiri::XML::Node.new "tspan", element
+        row["x"] = text_x
+        row["sodipodi:role"] = "line"
+        row["xml:space"] = "preserve"
+
+        # Set the line spacing. First line has no spacing, others have 1em spacing.
+        if first_line
+          first_line = false
+        else
+          row["dy"] = "1em"
+        end
+        if l.strip.empty?
+          row["font-size"] = (size.to_i * 0.4).to_i
+          row["fill-opacity"] = 0
+          row["stroke-opacity"] = 0
+          row.content = "a"
+          element.add_child row
+          next
+        end
+        parts = l.split(/<([^>]*)>/)
+        parts.each_index do |i|
+          ts = Nokogiri::XML::Node.new "tspan", row
+          ts["fill"] = color if color && i.odd?
+          ts.content = parts[i].chomp
+          row.add_child ts
+        end
+        element.add_child row
+      end
+
+      return set_text_anchor(element, align)
+    end
+
+    def row_x(align, margins)
+      return margins.first unless align
+
+      case align.strip.downcase
+      when "right"
+        return margins.last
+      when "centered"
+        return (margins.first + margins.last) / 2
+      else
+        return margins.first
+      end
+    end
+
+    # Clear child elements
+    def clear_childs(e)
+      # Clear child elements (delete_element deletes only one element)
+      e.children.each(&:remove)
+      e.content = ""
+
+      return e
+    end
+
+    def set_text_anchor(element, align)
+      if align
+        case align.strip.downcase
+        when "right"
+          text_anchor = "end"
+        when "centered"
+          text_anchor = "middle"
+        else
+          text_anchor = "start"
+        end
+        element["text-anchor"] = text_anchor
+      end
+      return element
+    end
+  end
 
   # Validate that the highlight color is ok
   def check_color
@@ -135,163 +292,5 @@ private
     unless Event.current.config[:simple][:colors].include? slidedata[:color]
       errors.add :color, "is not whitelisted"
     end
-  end
-
-  # Prepare the base template based on event config
-  def self.prepare_template(settings, size, background_image)
-    svg = Nokogiri::XML(File.open(BaseTemplate))
-
-    # Add sodipodi namespace
-    svg.root.add_namespace "sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-
-    # Set dimensions
-    svg.root["width"] = size.first
-    svg.root["height"] = size.last
-
-    # Set viewbox
-    svg.root["viewBox"] = "0 0 #{size.first} #{size.last}"
-
-    # Set background
-    bg = svg.at_css(BackgroundSelector)
-    bg["xlink:href"] = background_image
-    bg["x"] = 0
-    bg["y"] = 0
-    bg["width"] = size.first
-    bg["height"] = size.last
-
-    # Position header
-    header = svg.at_css(HeadingSelector)
-    header["x"] = settings[:heading][:coordinates].first
-    header["y"] = settings[:heading][:coordinates].last
-
-    # Header font size
-    header["font-size"] = settings[:heading][:font_size]
-
-    # Position body
-    body = svg.at_css(BodySelector)
-    body["y"] = settings[:body][:y_coordinate]
-
-    # Clear child elements from header and body
-    clear_childs(header)
-    clear_childs(body)
-
-    # Set guides
-    named_view = svg.at_css("sodipodi|namedview")
-    named_view.css("sodipodi|guide").each do |e|
-      e.remove
-    end
-
-    # Vertical guides
-    [
-      "#{settings[:body][:margins].first},0",
-      "#{settings[:body][:margins].last},0",
-      "#{settings[:heading][:coordinates].first},0"
-    ].each do |coord|
-      named_view.add_child(create_guide(svg, coord, "-200,0"))
-    end
-
-    # Horizontal guides
-    [
-      "0,#{size.last - settings[:body][:y_coordinate]}",
-      "0,#{size.last - settings[:heading][:coordinates].last}"
-    ].each do |coord|
-      named_view.add_child(create_guide(svg, coord, "0,-200"))
-    end
-
-    return svg
-  end
-
-  # Create a new sodipodi:guide element
-  def self.create_guide(svg, position, orientation)
-    guide = Nokogiri::XML::Node.new("sodipodi:guide", svg)
-    guide["position"] = position
-    guide["orientation"] = orientation
-    return guide
-  end
-
-  def self.set_text(element, text, text_x, color = nil, size = nil, align = nil)
-    # Set default attributes
-    element["x"] = text_x
-
-    if size
-      element["font-size"] = size
-    else
-      size = element["font-size"]
-    end
-
-    first_line = true
-
-    text.each_line do |l|
-      row = Nokogiri::XML::Node.new "tspan", element
-      row["x"] = text_x
-      row["sodipodi:role"] = "line"
-      row["xml:space"] = "preserve"
-
-      # Set the line spacing. First line has no spacing, others have 1em spacing.
-      if first_line
-        first_line = false
-      else
-        row["dy"] = "1em"
-      end
-      if l.strip.empty?
-        row["font-size"] = (size.to_i * 0.4).to_i
-        row["fill-opacity"] = 0
-        row["stroke-opacity"] = 0
-        row.content = "a"
-        element.add_child row
-        next
-      end
-      parts = l.split(/<([^>]*)>/)
-      parts.each_index do |i|
-        ts = Nokogiri::XML::Node.new "tspan", row
-        if color && (i % 2 == 1)
-          ts["fill"] = color
-        end
-        ts.content = parts[i].chomp
-        row.add_child ts
-      end
-      element.add_child row
-    end
-
-    return set_text_anchor(element, align)
-  end
-
-  def self.row_x(align, margins)
-    return margins.first unless align
-
-    case align.strip.downcase
-    when "right"
-      return margins.last
-    when "centered"
-      return (margins.first + margins.last) / 2
-    else
-      return margins.first
-    end
-  end
-
-  # Clear child elements
-  def self.clear_childs(e)
-    # Clear child elements (delete_element deletes only one element)
-    e.children.each do |c|
-      c.remove
-    end
-    e.content = ""
-
-    return e
-  end
-
-  def self.set_text_anchor(element, align)
-    if align
-      case align.strip.downcase
-      when "right"
-        text_anchor = "end"
-      when "centered"
-        text_anchor = "middle"
-      else
-        text_anchor = "start"
-      end
-      element["text-anchor"] = text_anchor
-    end
-    return element
   end
 end
