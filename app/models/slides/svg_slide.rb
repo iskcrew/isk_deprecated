@@ -4,6 +4,8 @@
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
+require "english"
+
 class SvgSlide < Slide
   TypeString = "svg-edit".freeze
   @_svg_data = nil
@@ -16,7 +18,7 @@ class SvgSlide < Slide
   def generate_full_image
     tmp_file = Tempfile.new("isk-image")
     output = `#{inkscape_command_line(tmp_file)}`
-    return compare_new_image(tmp_file) if $?.to_i.zero?
+    return compare_new_image(tmp_file) if $CHILD_STATUS.to_i.zero?
     raise Slide::ImageError, "Error converting the slide svg into PNG\nInkscape output:\n#{output}"
   end
 end
