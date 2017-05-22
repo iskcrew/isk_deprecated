@@ -99,6 +99,6 @@ private
 
   def require_admin
     return unless Ticket.admin? current_user
-    fail ApplicationController::PermissionDenied
+    raise ApplicationController::PermissionDenied
   end
 end
