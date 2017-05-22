@@ -1,4 +1,0 @@
--   repo: https://github.com/jordant/rubocop-pre-commit-hook.git
-    sha: ae431551f703fff928bfabe2b440a9a8048e962b
-    hooks:
-    -   id: check-rubocop
