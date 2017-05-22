@@ -13,7 +13,6 @@ class DisplayLogging
   @_logger = nil
 
   # Initialize the logger for displays
-  # TODO: config parameters outside of this file
   def self.logger
     unless @_logger.present?
       @_logger = Logger.new(Rails.root.join("log", "displays.log"))
@@ -24,6 +23,11 @@ class DisplayLogging
     end
 
     return @_logger
+  end
+
+  # Use custom logger
+  def self.logger=(logger)
+    @_logger = logger
   end
 
   # Log a action in the display communication protocol
