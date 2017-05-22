@@ -7,7 +7,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 module RedisTestHelpers
-  ThreadTimeout = 0.2
+  THREAD_TIMEOUT = 0.2
 
   class RedisTestSubscriber
     attr_reader :channel, :messages
@@ -39,7 +39,7 @@ module RedisTestHelpers
   def with_redis(channel = "isk_general")
     start_subscriber(channel)
     yield
-    @subscriber.join ThreadTimeout
+    @subscriber.join THREAD_TIMEOUT
   end
 
   def redis_messages
