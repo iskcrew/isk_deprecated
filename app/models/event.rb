@@ -186,9 +186,7 @@ private
 
   # Callback that resets every other event to non-current when setting another as current one
   def set_current_event
-    if current && changed.include?("current")
-      Event.update_all current: false
-    end
+    Event.update_all(current: false) if current && changed.include?("current")
   end
 
   # Validation that prevents clearing the current event -bit
