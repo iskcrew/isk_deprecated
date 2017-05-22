@@ -63,25 +63,22 @@ class SimpleSlide < SvgSlide
     simple.ready = false
     simple.show_clock = svg_slide.show_clock
 
-    svg = REXML::Document.new(svg_slide.svg_data)
+    svg = Nokogiri.XML(svg_slide.svg_data)
 
     # IF slide has other images than the background we have a problem
-    unless svg.root.elements.to_a("//image").size == 1
-      raise ApplicationController::ConvertError
-    end
+    raise ApplicationController::ConvertError if svg.css("image").count != 1
 
-    text_nodes = svg.root.elements.to_a("//text")
+    text_nodes = svg.css("text")
 
     # The slide needs to contain some text
     raise ApplicationController::ConvertError unless text_nodes.count.positive?
 
-    header = text_nodes[0].elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip
-
-    text_nodes.delete_at(0)
+    header = text_nodes.first.text
+    text_nodes.shift
 
     text = String.new
     text_nodes.each do |n|
-      text << n.elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip << " "
+      text << n.text
     end
     text.strip!
 
