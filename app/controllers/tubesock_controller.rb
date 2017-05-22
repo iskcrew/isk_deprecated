@@ -27,7 +27,7 @@ class TubesockController < ApplicationController
           Rails.logger.debug "Got websocket message: #{m}"
           msg = IskMessage.from_json(m)
           # we only care about commands
-          return unless msg.object == "command"
+          break unless msg.object == "command"
           case msg.type
           when "simple_svg"
             msg = IskMessage.new("simple", "svg",
