@@ -6,8 +6,12 @@ AllCops:
     - '**/templates/**/*'
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
-    - 'db/schema.rb'
+    - 'db/**/*'
     - 'bin/*'
+  Include:
+      - '**/Rakefile'
+      - '**/config.ru'
+      - '**/*.rake'
 
 Style/ConstantName:
   Enabled: false
