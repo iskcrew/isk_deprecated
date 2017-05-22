@@ -92,13 +92,13 @@ gem "slim"
 gem "slim-rails"
 
 # For background stuff
-gem "resque"
-gem "daemons"
 gem "daemon"
+gem "daemons"
+gem "resque"
 
 # For monitorin scripts
-gem "highline"
 gem "faye-websocket"
+gem "highline"
 
 # Better caching
 gem "cashier"
@@ -119,8 +119,8 @@ end
 
 # Profiling support
 group :profile do
-  gem "ruby-prof"
   gem "request_profiler", git: "https://github.com/cheald/request_profiler/"
+  gem "ruby-prof"
 end
 
 # More compact logging
