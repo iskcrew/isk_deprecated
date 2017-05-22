@@ -19,11 +19,6 @@ class ApplicationController < ActionController::Base
     # no further implementation necessary
   end
 
-  # FIXME: Migrate this to Slide::ConvertError
-  class ConvertError < StandardError
-    # no further implementation necessary
-  end
-
   # Rescue from redirecting to back with no referer
   rescue_from ActionController::RedirectBackError, with: :return_to_root
 

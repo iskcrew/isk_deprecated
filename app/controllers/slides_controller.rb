@@ -322,7 +322,7 @@ class SlidesController < ApplicationController
         flash[:notice] = "Slide was converted simple slide."
         redirect_to slide_path(simple)
       end
-    rescue ConvertError
+    rescue Slide::ConvertError
       flash[:error] = "Conversion error, maybe slide has images?"
       redirect_to slide_path(slide)
     end

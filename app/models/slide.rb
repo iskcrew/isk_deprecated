@@ -67,9 +67,10 @@ class Slide < ActiveRecord::Base
   UsePresentationDelay = -1 # Set duration to this to use presentation setting
 
   # Error to raise when image operation fails
-  class ImageError < StandardError
-    # no further implementation necessary
-  end
+  class ImageError < StandardError; end
+
+  # Error to raise on slide conversion errors
+  class ConvertError < StandardError; end
 
   # We need to set the model names and partial paths on all slides inheriting from Slide
   # If we don't do this we would need to create different partials for each slide type, and handle

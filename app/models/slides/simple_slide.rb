@@ -44,7 +44,7 @@ class SimpleSlide < SvgSlide
 
     FileUtils.copy(s.svg_filename, simple.svg_filename)
 
-    raise ApplicationController::ConvertError unless simple.to_simple_slide!
+    raise Slide::ConvertError unless simple.to_simple_slide!
 
     simple = SimpleSlide.find(simple.id)
 
@@ -56,7 +56,7 @@ class SimpleSlide < SvgSlide
 
   # TODO: migrate to nokogiri
   def self.create_from_svg_slide(svg_slide)
-    raise ApplicationController::ConvertError unless svg_slide.is_a? SvgSlide
+    raise Slide::ConvertError unless svg_slide.is_a? SvgSlide
 
     simple = SimpleSlide.new
     simple.name = svg_slide.name + " (converted)"
@@ -66,12 +66,12 @@ class SimpleSlide < SvgSlide
     svg = Nokogiri.XML(svg_slide.svg_data)
 
     # IF slide has other images than the background we have a problem
-    raise ApplicationController::ConvertError if svg.css("image").count != 1
+    raise Slide::ConvertError if svg.css("image").count != 1
 
     text_nodes = svg.css("text")
 
     # The slide needs to contain some text
-    raise ApplicationController::ConvertError unless text_nodes.count.positive?
+    raise Slide::ConvertError unless text_nodes.count.positive?
 
     header = text_nodes.first.text
     text_nodes.shift

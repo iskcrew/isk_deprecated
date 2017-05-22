@@ -35,7 +35,7 @@ class InkscapeSlide < SvgSlide
 
   # Create a new InkscapeSlide from a SimpleSlide
   def self.create_from_simple(simple_slide)
-    raise ApplicationController::ConvertError unless simple_slide.is_a? SimpleSlide
+    raise Slide::ConvertError unless simple_slide.is_a? SimpleSlide
 
     ink = InkscapeSlide.new
     ink.name = "#{simple_slide.name} (converted)"
