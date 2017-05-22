@@ -99,8 +99,7 @@ class SlidesControllerTest < ActionController::TestCase
     s = Slide.find(slides(:simple).id)
     assert_equal "fooo", assigns(:slide).slidedata[:heading], "Slide heading didn't update"
 
-    # FIXME: why this fails?
-    # assert s.ready, "Slide should have had it's picture generated"
+    assert s.ready, "Slide should have had it's picture generated"
 
     assert File.exist?(s.svg_filename), "The slide svg file wasn't generated"
     assert File.exist?(s.full_filename), "The full slide image wasn't generated"
