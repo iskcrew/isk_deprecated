@@ -76,6 +76,4 @@ module ModelAuthorization
       user.has_role?(auth_roles[:admin])
     end
   end
-
-private
 end
