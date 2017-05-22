@@ -54,7 +54,7 @@ class Isk::Application < Rails::Application
   config.assets.version = "1.0"
 
   # Wrap form fields with errors in span.field_with_errors
-  config.action_view.field_error_proc = Proc.new { |html_tag| "<span class='field_with_errors'>#{html_tag}</span>".html_safe }
+  config.action_view.field_error_proc = proc { |html_tag| "<span class='field_with_errors'>#{html_tag}</span>".html_safe }
 
   # Add subdirectories of app/models to load paths, as we use them for STI classes
   config.autoload_paths += Dir[Rails.root.join("app", "models", "{**}")]
