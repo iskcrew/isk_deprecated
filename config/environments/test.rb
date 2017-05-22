@@ -47,7 +47,7 @@ Isk::Application.configure do
   # Test order
   config.active_support.test_order = :random
 
-  ActiveSupport::Deprecation.behavior = Proc.new { |message, callstack|
+  ActiveSupport::Deprecation.behavior = proc { |message, callstack|
     raise message + "\n" + callstack.join("\n  ")
   }
 
