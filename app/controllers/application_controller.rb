@@ -15,9 +15,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login
 
   # Error to raise when user doesn't have the necessarry permissions
-  class PermissionDenied < StandardError
-    # no further implementation necessary
-  end
+  class PermissionDenied < StandardError; end
 
   # Rescue from redirecting to back with no referer
   rescue_from ActionController::RedirectBackError, with: :return_to_root
