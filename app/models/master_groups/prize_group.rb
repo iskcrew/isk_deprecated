@@ -84,9 +84,9 @@ class PrizeGroup < MasterGroup
       slides << s
     end
 
-    self.slides.where(type: PrizeSlide.sti_name).each do |s|
-      s.template = template
-      s.save!
+    self.slides.where(type: PrizeSlide.sti_name).each do |slide|
+      slide.template = template
+      slide.save!
     end
 
     reload
@@ -122,10 +122,10 @@ class PrizeGroup < MasterGroup
     end
 
     # Mark slides as public and hide the clock
-    self.slides.where(type: PrizeSlide.sti_name).each do |s|
-      s.public = true
-      s.show_clock = false
-      s.save!
+    self.slides.where(type: PrizeSlide.sti_name).each do |slide|
+      slide.public = true
+      slide.show_clock = false
+      slide.save!
     end
   end
 
