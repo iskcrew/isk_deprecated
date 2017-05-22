@@ -38,9 +38,8 @@ private
       Cashier.expire master_group.cache_tag
       if changed.include? "master_group_id"
         # We want to expire also the old group
-        if g = MasterGroup.where(id: master_group_id_was).first
-          Cashier.expire g.cache_tag
-        end
+        g = MasterGroup.where(id: master_group_id_was).first
+        Cashier.expire g.cache_tag if g
       end
     elsif is_a? MasterGroup
       Cashier.expire "groups"
