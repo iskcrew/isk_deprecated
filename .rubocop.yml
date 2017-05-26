@@ -13,6 +13,9 @@ AllCops:
       - '**/config.ru'
       - '**/*.rake'
 
+Style/FileName:
+  Enabled: false
+
 Style/ConstantName:
   Enabled: false
 
@@ -39,7 +42,7 @@ Metrics/ParameterLists:
 Metrics/ModuleLength:
   Enabled: false
 
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 # Do not assing the return values of conditionals
@@ -52,10 +55,10 @@ Style/ConditionalAssignment:
 Style/Documentation:
   Enabled: false
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: false
   EnforcedStyle: consistent
-  
+
 Style/RedundantReturn:
   Enabled: false
 
@@ -68,7 +71,7 @@ Lint/DeprecatedClassMethods:
 Metrics/LineLength:
   Max: 120
   Enabled: false
-  
+
 Metrics/PerceivedComplexity:
   Enabled: false
 
@@ -86,7 +89,7 @@ Metrics/BlockLength:
 
 Metrics/CyclomaticComplexity:
   Enabled: false
-  
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 
@@ -96,89 +99,19 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
-  
+
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
 
-# Do not use braces for hash literals when they are the last argument of a
-# method call.
-Style/BracesAroundHashParameters:
-  Enabled: true
-
-# Align `when` with `case`.
-Style/CaseIndentation:
-  Enabled: true
-
-# Align comments with method definitions.
-Style/CommentIndentation:
-  Enabled: true
-
-# No extra empty lines.
-Style/EmptyLines:
-  Enabled: true
-
-# In a regular class definition, no empty lines around the body.
-Style/EmptyLinesAroundClassBody:
-  Enabled: true
-
-# In a regular method definition, no empty lines around the body.
-Style/EmptyLinesAroundMethodBody:
-  Enabled: true
-
-# In a regular module definition, no empty lines around the body.
-Style/EmptyLinesAroundModuleBody:
-  Enabled: true
-
-# Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
-Style/HashSyntax:
-  Enabled: true
-
 # Method definitions after `private` or `protected` isolated calls need one
 # extra level of indentation.
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: rails
 
 # Two spaces, no tabs (for indentation).
-Style/IndentationWidth:
-  Enabled: true
-
-Style/SpaceAfterColon:
-  Enabled: true
-
-Style/SpaceAfterComma:
-  Enabled: true
-
-Style/SpaceAroundEqualsInParameterDefault:
-  Enabled: true
-
-Style/SpaceAroundKeyword:
-  Enabled: true
-
-Style/SpaceAroundOperators:
-  Enabled: true
-
-Style/SpaceBeforeFirstArg:
-    Enabled: true
-
-# Defining a method with parameters needs parentheses.
-Style/MethodDefParentheses:
-  Enabled: true
-
-# Use `foo {}` not `foo{}`.
-Style/SpaceBeforeBlockBraces:
-  Enabled: true
-
-# Use `foo { bar }` not `foo {bar}`.
-Style/SpaceInsideBlockBraces:
-  Enabled: true
-
-# Use `{ a: 1 }` not `{a:1}`.
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: true
-
-Style/SpaceInsideParens:
+Layout/IndentationWidth:
   Enabled: true
 
 # Check quotes usage according to lint rule below.
@@ -186,52 +119,29 @@ Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
 
-# Detect hard tabs, no hard tabs.
-Style/Tab:
-  Enabled: true
-
-# Blank lines should not have any spaces.
-Style/TrailingBlankLines:
-  Enabled: true
-
-# No trailing whitespace.
-Style/TrailingWhitespace:
-  Enabled: true
-
-# Use quotes for string literals when they are enough.
-Style/UnneededPercentQ:
-  Enabled: true
-
 # Align `end` with the matching keyword or starting expression except for
 # assignments, where it should be aligned with the LHS.
 Lint/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: variable
 
-# Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
-Lint/RequireParentheses:
-  Enabled: true
-  
-Style/AlignHash:
+Layout/AlignHash:
   Enabled: true
   EnforcedHashRocketStyle: key
   EnforcedColonStyle: key
-  
-Style/AlignParameters:
+
+Layout/AlignParameters:
   Enabled: true
   EnforcedStyle: with_first_parameter
-  
-Style/CommentAnnotation:
-  Enabled: true
-  
-Style/DotPosition:
+
+Layout/DotPosition:
   Enabled: true
   EnforcedStyle: leading
-  
+
 Style/EmptyElse:
   Enabled: true
   EnforcedStyle: both
-  
+
 Style/GuardClause:
   Enabled: true
   MinBodyLength: 2
