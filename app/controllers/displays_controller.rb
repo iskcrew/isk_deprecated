@@ -217,7 +217,7 @@ class DisplaysController < ApplicationController
           when "start"
             # Display tells that it is starting up
             raise PermissionDenied unless require_display_control(@display)
-            # FIXME: proper connection tracking
+
             @display_connection = true
             @display.status = "running"
             @display.ip = request.remote_ip
@@ -259,7 +259,7 @@ class DisplaysController < ApplicationController
           when "shutdown"
             # Display is performing a controlled shutdown
             raise PermissionDenied unless require_display_control(@display)
-            # FIXME: proper connection tracking!
+
             @display_connection = false
             @display.status = "disconnected"
             @display.save!
