@@ -20,8 +20,8 @@ gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem "therubyracer",  platforms: :ruby
-gem "libv8", "3.16.14.7"
-gem "therubyracer", require: "v8"
+# gem "libv8", "3.16.14.7"
+# gem "therubyracer", require: "v8"
 
 # Use jquery as the JavaScript library
 gem "jquery-rails"
@@ -58,6 +58,9 @@ gem "bcrypt", "~> 3.1.10"
 gem "bootstrap-sass"
 # Bootstrap aware formbuilder
 gem "bootstrap_form"
+
+# English gem gives nicer names to special variables
+gem "english"
 
 # Nokogiri for XML processing
 gem "nokogiri"
