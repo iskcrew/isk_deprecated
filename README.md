@@ -15,6 +15,7 @@ Versions listed are known good ones, other versions are probably fine.
  * inkscape (for debian either 0.48.3.1-1.3 from Wheezy or 0.91-5~bpo8+1 from jessie-backports, 0.48.5-3 from Jessi DOES NOT WORK)
  * postgresql (9.1)
  * rrdtool (1.4.7) for statistic collection and graph generation
+ * nodejs for javascript runtime for asset creation
 
 ## Vagrant: Development environment the easy way
 
@@ -40,6 +41,7 @@ To get the dev environment running you need to do the following:
 5. rrdtool, librrd + dev headers (rrdtool, librrd4, librrd-dev)
 5. git
 6. curl
+7. nodejs
 
 The command "apt-get install redis-server memcached imagemagick postgresql postgresql-client libpq-dev inkscape rrdtool librrd4 librrd-dev git curl" should install all of the above in a debian based linux distribution.
 
@@ -53,7 +55,7 @@ To install rvm and the ruby version used by ISK:
 2. source the rvm script file as instructed post-install
 3. run "rvm requirements" and install packages as needed
 4. "rvm install 2.3.0" to install ruby 2.3.0
-5. "rvm use 2.3.0" and "rvm gemset create isk" to initialize the gemset for isk 
+5. "rvm use 2.3.0" and "rvm gemset create isk" to initialize the gemset for isk
 
 ### Clone isk git repository
 
@@ -162,11 +164,11 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.

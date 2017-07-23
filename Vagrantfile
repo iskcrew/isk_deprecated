@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
     # Add jessie-backports for inkscape
     echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
     apt-get update
-    apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl
+    apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl nodejs
     apt-get -t jessie-backports install -y inkscape
     # Create postgresql user and database
     su postgres -c "psql -c \\"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\\" "
