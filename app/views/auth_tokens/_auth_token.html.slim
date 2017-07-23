@@ -1,3 +1,4 @@
 div.token
 	p
 		= auth_token.token
+		= user_destroy_token_button(auth_token.user_id, auth_token.id)

@@ -191,5 +191,7 @@ Isk::Application.routes.draw do
 
     collection do
     end
+
+    resources :tokens, only: [:create, :destroy]
   end
 end
