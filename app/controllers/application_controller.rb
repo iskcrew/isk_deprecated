@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     return @_current_user ||= User.first if Rails.env.profile?
     return @_current_user if @_current_user.present?
     return @_current_user = User.includes(:permissions).find_by_id(session[:user_id]) if session[:user_id]
-    return nill unless params[:token]
+    return nil unless params[:token]
 
     @_current_user = AuthToken.authenticate(params[:token])
     session[:user_id] = @_current_user.id
