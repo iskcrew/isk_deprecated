@@ -32,7 +32,7 @@ module SlidesHelper
     }
 
     if slide.ready
-      url = preview_slide_path(slide, t: slide.images_updated_at.to_i)
+      url = slide_image_path(slide, size: :preview, t: slide.images_updated_at.to_i)
     else
       url = "wait.gif"
     end
@@ -48,7 +48,7 @@ module SlidesHelper
       id: "slide_thumb_#{slide.id}"
     }
     if slide.ready
-      url = thumb_slide_path(slide, t: slide.images_updated_at.to_i)
+      url = slide_image_path(slide, size: :thumb, t: slide.images_updated_at.to_i)
     else
       url = "wait.gif"
     end
@@ -57,7 +57,7 @@ module SlidesHelper
 
   # <img> tag for the slide full image
   def slide_full_image_tag(slide)
-    image_tag full_slide_path(slide, t: slide.images_updated_at.to_i),
+    image_tag slide_image_path(slide, t: slide.images_updated_at.to_i),
               class: "full_slide", id: "slide_full_" + slide.id.to_s
   end
 
@@ -89,7 +89,7 @@ module SlidesHelper
       title: "Click to show full size slide image",
       class: "slide-preview-to-full"
     }
-    url_options = full_slide_path(slide)
+    url_options = slide_image_path(slide)
     return link_to slide_preview_image_tag(slide), url_options, html_options
   end
 

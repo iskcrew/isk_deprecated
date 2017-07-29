@@ -146,6 +146,8 @@ Isk::Application.routes.draw do
       end
     end
 
+    resource :image, only: [:show]
+
     member do
       get "preview"
       get "full"
