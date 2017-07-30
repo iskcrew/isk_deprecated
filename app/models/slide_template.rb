@@ -148,7 +148,7 @@ private
       parts = l.split(/<([^>]*)>/)
       parts.each_index do |i|
         ts = row.add_element "tspan"
-        ts.attributes["fill"] = color if color && i.odd
+        ts.attributes["fill"] = color if color && i.odd?
         ts.text = parts[i]
       end
     end
