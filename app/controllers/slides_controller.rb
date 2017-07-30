@@ -299,7 +299,7 @@ class SlidesController < ApplicationController
     @slide.svg_data = params[:svg]
     @slide.save!
     @slide.generate_images_later
-    render nothing: true
+    render body: nil
   end
 
   # Convert a slide to InkscapeSlide
