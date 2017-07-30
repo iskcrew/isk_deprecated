@@ -5,11 +5,14 @@ class ImagesController < ApplicationController
   def show
     @slide = Slide.find(params[:slide_id])
     return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
+    filename = ""
     case params[:size]
     when "preview"
       filename = @slide.preview_filename
     when "thumb"
       filename = @slide.thumb_filename
+    when "transparent"
+      filename = @slide.respond_to?(:transparent_filename) ? @slide.transparent_filename : @slide.full_filename
     else
       filename = @slide.full_filename
     end
@@ -21,15 +24,15 @@ class ImagesController < ApplicationController
         if @slide.ready
           send_file filename, disposition: "inline"
         else
-          render nothing: true, status: 404 && return if params[:size] == "full"
+          render body: nil, status: 404 && return if params[:size] == "full" || params[:size] == "transparent"
           send_file(Rails.root.join("data", "no_image.jpg"),
                     disposition: "inline")
         end
       end
       format.js { render :show }
     end
-  rescue ActiveRecord::RecordNotFound
+  rescue ActiveRecord::RecordNotFound, ActionController::MissingFile
     # Slide not found, return 404
-    render nothing: true, status: 404
+    render body: nil, status: 404
   end
 end

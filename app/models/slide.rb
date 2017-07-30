@@ -308,21 +308,6 @@ private
     "convert #{full_filename} -resize #{size.join('x')} #{file}"
   end
 
-  # Generate the full size slideimage from svg with inkscape
-  def inkscape_command_line(tmp_file)
-    size = picture_sizes[:full]
-    # Chance to proper directory
-    command = "cd #{Slide::FilePath} && inkscape"
-    # Export size
-    command << " -w #{size.first} -h #{size.last}"
-    # Export to file
-    command << " -e #{tmp_file.path} #{svg_filename}"
-    # Supress std-out reporting
-    command << " 2>&1"
-
-    return command
-  end
-
   # Compare the passed file against the current slide image.
   # If they differ then copy the tmp_file image as the new slide image.
   # TODO: Should we be extra careful and validate the image?
