@@ -22,6 +22,14 @@ module ZipSlides
         zos.put_next_entry(filename)
         # Add the contents of the file, don't read the stuff linewise if its binary, instead use direct IO
         zos.print IO.read(slide.full_filename)
+
+        # If there is no transparent version we are done for this slide
+        next unless slide.respond_to?(:transparent_filename)
+
+        # Add the transparent image
+        filename = "#{self.class.name.downcase}_#{name}_slide_%03d_transparent.png" % i
+        zos.put_next_entry(filename)
+        zos.print IO.read(slide.transparent_filename)
       end
     end
 
