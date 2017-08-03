@@ -17,11 +17,11 @@ class ImagesController < ApplicationController
     end
     respond_to do |format|
       format.html do
+        return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
         # Set content headers to allow CORS
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Request-Method"] = "GET"
         if @slide.ready
-          return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
           send_file filename, disposition: "inline"
         else
           render body: nil, status: 404
