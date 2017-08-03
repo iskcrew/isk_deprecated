@@ -4,7 +4,6 @@ class ImagesController < ApplicationController
   # Send a given sized slide image
   def show
     @slide = Slide.find(params[:slide_id])
-    return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
     filename = ""
     case params[:size]
     when "preview"
@@ -22,6 +21,7 @@ class ImagesController < ApplicationController
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Request-Method"] = "GET"
         if @slide.ready
+          return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
           send_file filename, disposition: "inline"
         else
           unless params[:size] == "thumb" || params[:size] == "preview"
