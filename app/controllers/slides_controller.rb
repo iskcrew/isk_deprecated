@@ -331,18 +331,21 @@ class SlidesController < ApplicationController
   # Send the slide preview image, we set the cache headers
   # to avoid unecessary reloading
   def preview
-    redirect_to slide_image_path(params[:id], size: :preview)
+    slide = Slide.find(params[:id])
+    redirect_to slide_image_path(params[:id], size: :preview, t: slide.images_updated_at.to_i)
   end
 
   def thumb
-    redirect_to slide_image_path(params[:id], size: :thumb)
+    slide = Slide.find(params[:id])
+    redirect_to slide_image_path(params[:id], size: :thumb, t: slide.images_updated_at.to_i)
   end
 
   # Send the full sized slide image
   # We will always send the last rendered image if it exists
   # If not we will issue 404 status
   def full
-    redirect_to slide_image_path(params[:id])
+    slide = Slide.find(params[:id])
+    redirect_to slide_image_path(params[:id], t: slide.images_updated_at.to_i)
   end
 
 private
