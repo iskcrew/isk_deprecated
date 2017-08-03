@@ -24,12 +24,7 @@ class ImagesController < ApplicationController
           return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
           send_file filename, disposition: "inline"
         else
-          unless params[:size] == "thumb" || params[:size] == "preview"
-            render body: nil, status: 404
-            return
-          end
-          send_file(Rails.root.join("data", "no_image.jpg"),
-                    disposition: "inline")
+          render body: nil, status: 404
         end
       end
       format.js { render :show }
