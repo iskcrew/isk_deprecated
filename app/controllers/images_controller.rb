@@ -24,7 +24,7 @@ class ImagesController < ApplicationController
         if @slide.ready
           send_file filename, disposition: "inline"
         else
-          render body: nil, status: 404 && return if params[:size] == "full" || params[:size] == "transparent"
+          render body: nil, status: 404 && return unless params[:size] == "thumb" || params[:size] == "preview"
           send_file(Rails.root.join("data", "no_image.jpg"),
                     disposition: "inline")
         end
