@@ -29,6 +29,7 @@ password = ask("Password:  ") { |q| q.echo = "x" }
 
 @base_url, @cookies = isk_login(@host, @port, username, password)
 @headers = { "Cookie" => "#{@cookies.cookies.first.name}=#{@cookies.cookies.first.value};" }
+@headers.freeze
 # Get list of displays
 
 resp = RestClient.get("#{@base_url}displays", cookies: @cookies, accept: :json)
@@ -40,8 +41,8 @@ resp = RestClient.get("#{@base_url}displays", cookies: @cookies, accept: :json)
 @ws_base_url = "ws://#{@host}:#{@port}/"
 @ws_base_url = "wss://#{@host}/" if @port.to_i == 443
 
-def init_general_socket
-  @ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: @headers)
+def init_general_socket(headers)
+  @ws = Faye::WebSocket::Client.new("#{@ws_base_url}isk_general", nil, headers: headers)
 
   @ws.on :open do
     say "General connection opened"
@@ -69,14 +70,13 @@ def init_general_socket
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
     say "Connection was up for #{Time.diff(Time.now, @connection_opened, '%h:%m:%s')[:diff]}".red
-    say "Reconnecting in 10 seconds"
-    sleep(10)
-    init_general_socket
+    say "Reconnecting..."
+    init_general_socket(headers)
   end
 end
 
-def init_display_socket(id)
-  dws = Faye::WebSocket::Client.new("#{@ws_base_url}/displays/#{id}/websocket", nil, headers: @headers)
+def init_display_socket(id, headers)
+  dws = Faye::WebSocket::Client.new("#{@ws_base_url}/displays/#{id}/websocket", nil, headers: headers)
 
   opened = Time.now
 
@@ -109,15 +109,14 @@ def init_display_socket(id)
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
     say "Connection was up for #{Time.diff(Time.now, opened, '%h:%m:%s')[:diff]}".red
-    say "Reconnecting in 10 seconds"
-    sleep(10)
-    init_display_socket(id)
+    say "Reconnecting..."
+    init_display_socket(id, headers)
   end
 end
 
 EM.run do
-  init_general_socket
+  init_general_socket(@headers)
   @displays.each do |d|
-    init_display_socket(d["id"])
+    init_display_socket(d["id"], @headers)
   end
 end
