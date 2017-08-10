@@ -54,6 +54,9 @@ gem "bcrypt", "~> 3.1.10"
 
 #### END OF RAILS DEFAULT GEMFILE
 
+# WPE monitoring
+gem "net-ssh"
+
 # Twitter bootstrap for base css styling
 gem "bootstrap-sass"
 # Bootstrap aware formbuilder
