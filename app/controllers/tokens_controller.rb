@@ -13,8 +13,9 @@ class TokensController < ApplicationController
       # Got unique token
       token = user.auth_tokens.new(token: t)
       token.save!
-      redirect_to users_path && return
+      break
     end
+    redirect_to users_path
   end
 
   def destroy
