@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,7 +7,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class ImageSlide < Slide
-  TypeString = "image".freeze
+  TypeString = "image"
 
   ScalingOptions = [
     ["Fit", "fit"],
@@ -88,8 +90,8 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{original_filename} -resize #{geo_str}"
-    command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
+    command = "convert #{original_filename} -resize #{geo_str}" \
+              " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
     return compare_new_image(tmp_file) if system command
 
     # Image generation error

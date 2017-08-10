@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,7 +7,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class VideoSlide < Slide
-  TypeString = "video".freeze
+  TypeString = "video"
   FilePath = Rails.root.join("data", "video")
   VideoThumbnail = Rails.root.join("data", "video", "no_video.png")
 

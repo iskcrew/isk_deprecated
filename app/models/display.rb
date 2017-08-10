@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -168,8 +170,8 @@ class Display < ActiveRecord::Base
   # gives the time since last display reboot
   def uptime
     return nil unless last_hello && last_contact_at
-
-    return Time.diff(last_hello, last_contact_at, "%h:%m:%s")[:diff]
+    time_diff = last_contact_at - last_hello
+    return Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
   end
 
   # Return a hash containing all associated data, including the slides

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # We have several gems (cashier, resque) using redis
 # So set the redis for all of them here
 if Rails.env.test?

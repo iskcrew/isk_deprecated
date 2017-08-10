@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # http_slide.rb - STI slide type for dynamic content
@@ -11,7 +13,7 @@ class HttpSlide < Slide
   require "net/http"
   require "net/https"
 
-  TypeString = "http".freeze
+  TypeString = "http"
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(url: "http://", user: nil, password: nil)
   include HasSlidedata

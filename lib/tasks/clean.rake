@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :clean do
   desc "Clean all old data"
   task all: [:environment, "clean:deleted_slides", "clean:images", "assets:clean"] do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -60,7 +62,7 @@ class Slide < ActiveRecord::Base
   include ModelAuthorization
 
   # Constants
-  TypeString = "image".freeze
+  TypeString = "image"
   FilePath = Rails.root.join("data", "slides").freeze
   UsePresentationDelay = -1 # Set duration to this to use presentation setting
 

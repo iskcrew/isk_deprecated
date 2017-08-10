@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 #  display_logging.rb
 #  isk

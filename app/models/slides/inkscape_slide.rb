@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -7,7 +9,7 @@
 class InkscapeSlide < SvgSlide
   # Constants
   # Slide type to report in html views
-  TypeString = "inkscape".freeze
+  TypeString = "inkscape"
 
   before_create do |slide|
     slide.is_svg = true

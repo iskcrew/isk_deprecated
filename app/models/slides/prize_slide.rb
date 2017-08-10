@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,5 +7,5 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class PrizeSlide < TemplateSlide
-  TypeString = "prize".freeze
+  TypeString = "prize"
 end

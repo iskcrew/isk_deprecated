@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::		Vesa-Pekka Palmu
@@ -77,7 +79,8 @@ module DisplaysHelper
   # Render the last_contact_at timestamp and the diff to current time
   def display_last_contact(d)
     return "UNKNOWN" unless d.last_contact_at
-    delta = Time.diff(Time.now, d.last_contact_at, "%h:%m:%s")[:diff]
+    time_diff = Time.now - d.last_contact_at
+    delta = Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
     return "#{l d.last_contact_at, format: :short} (#{delta} ago)"
   end
 end

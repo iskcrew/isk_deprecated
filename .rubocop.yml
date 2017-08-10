@@ -94,7 +94,7 @@ Metrics/CyclomaticComplexity:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
 
 # Do not use %I or %i literals
 Style/SymbolArray:

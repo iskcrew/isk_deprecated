@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Script for starting and stopping all the various processes
@@ -21,7 +23,7 @@ Services = [
   "rrd_monitoring"
 ].freeze
 RedisOptions = { host: "localhost", port: 6379 }.freeze
-MemcachedIP = "localhost:11211".freeze
+MemcachedIP = "localhost:11211"
 MemcachedOptions = { namespace: "ISK", compress: true }.freeze
 
 # Check that all the needed external binaries are present

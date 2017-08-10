@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -6,7 +8,7 @@
 
 class ScheduleSlide < SvgSlide
   # Automatically generated schedule slide
-  TypeString = "schedule".freeze
+  TypeString = "schedule"
 
   # Find the schedule this slide belongs to
   def schedule

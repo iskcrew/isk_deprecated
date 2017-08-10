@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GenerateSlidesJob < ActiveJob::Base
   queue_as :default
 

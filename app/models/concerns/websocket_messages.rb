@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 #  websocket_messages.rb
 #  isk

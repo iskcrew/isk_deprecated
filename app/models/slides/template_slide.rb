@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,7 +7,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class TemplateSlide < InkscapeSlide
-  TypeString = "template".freeze
+  TypeString = "template"
 
   belongs_to :template, foreign_key: :foreign_object_id, class_name: "SlideTemplate"
   validates :template, presence: true

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -34,15 +36,11 @@ class User < ActiveRecord::Base
   end
 
   def roles_text
-    text = ""
-    roles.each do |r|
-      text << r.role << ", "
-    end
-    return text.chomp(", ")
+    roles.collect(&:role).join(", ")
   end
 
   def name
-    return self[:lastname] << ", " << self[:firstname]
+    return "#{lastname}, #{firstname}"
   end
 
   def password=(str)

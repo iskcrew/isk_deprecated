@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # ISK - A web controllable slideshow system
 #
@@ -69,7 +70,9 @@ def init_general_socket(headers)
   @ws.on :close do
     say "General connection closed!".red
     say "Connection was opened at: #{@connection_opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, @connection_opened, '%h:%m:%s')[:diff]}".red
+    time_diff = Time.now - @connection_opened
+    delta = Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
+    say "Connection was up for #{delta}".red
     say "Reconnecting..."
     init_general_socket(headers)
   end
@@ -108,7 +111,9 @@ def init_display_socket(id, headers)
   dws.on :close do
     say "Display #{id} connection closed!".red
     say "Connection was opened at: #{opened.strftime('%FT%T%z')}".red
-    say "Connection was up for #{Time.diff(Time.now, opened, '%h:%m:%s')[:diff]}".red
+    time_diff = Time.now - @connection_opened
+    delta = Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
+    say "Connection was up for #{delta}".red
     say "Reconnecting..."
     init_display_socket(id, headers)
   end

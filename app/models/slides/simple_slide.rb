@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,7 +7,7 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class SimpleSlide < SvgSlide
-  TypeString = "simple".freeze
+  TypeString = "simple"
 
   # Slidedata functionality
   DefaultSlidedata = {
@@ -19,9 +21,9 @@ class SimpleSlide < SvgSlide
   include HasSlidedata
 
   BaseTemplate = Rails.root.join("data", "templates", "simple.svg").freeze
-  HeadingSelector = "text#header".freeze
-  BodySelector = "text#slide_content".freeze
-  BackgroundSelector = "image#background_picture".freeze
+  HeadingSelector = "text#header"
+  BodySelector = "text#slide_content"
+  BackgroundSelector = "image#background_picture"
   Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"].freeze
 
   validate :check_color
