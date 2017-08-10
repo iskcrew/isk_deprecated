@@ -22,7 +22,7 @@ namespace :clean do
 
         files << s.svg_filename if s.respond_to? :svg_filename
         files << s.data_filename if s.respond_to? :data_filename
-
+        files << s.transparent_filename if s.respond_to? :transparent_filename
         files.each do |f|
           File.delete f if File.exist? f
         end
@@ -47,6 +47,7 @@ namespace :clean do
 
     # Iterate over all slides in db removing files associated to them.
     Slide.all.each do |slide|
+      files.delete slide.transparent_filename.to_s if slide.respond_to? :transparent_filename
       files.delete slide.full_filename.to_s
       files.delete slide.preview_filename.to_s
       files.delete slide.thumb_filename.to_s
