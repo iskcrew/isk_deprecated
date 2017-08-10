@@ -22,7 +22,7 @@ class SvgSlide < Slide
     tmp_svg.close
     tmp_file = Tempfile.new
     output = `#{inkscape_command_line(tmp_svg.path, tmp_file)}`
-    raise Slide::ImageError, "Error converting the slide svg into PNG\nInkscape output:\n#{output}" unless $CHILD_STATUS.to_i.zero?
+    raise Slide::ImageError, "Error converting the slide svg into PNG\nInkscape output:\n#{output}" unless $?.to_i.zero?
 
     FileUtils.mv tmp_file.path, transparent_filename
     # Tmpfile has 700 mode, we need to give other read permissions (mainly the web server)
@@ -33,7 +33,7 @@ class SvgSlide < Slide
     # Generate the normal unaltered full size image
     tmp_file = Tempfile.new("isk-image")
     output = `#{inkscape_command_line(svg_filename, tmp_file)}`
-    return compare_new_image(tmp_file) if $CHILD_STATUS.to_i.zero?
+    return compare_new_image(tmp_file) if $?.to_i.zero?
     raise Slide::ImageError, "Error converting the slide svg into PNG\nInkscape output:\n#{output}"
   end
 

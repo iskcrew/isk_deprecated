@@ -13,6 +13,9 @@ AllCops:
       - '**/config.ru'
       - '**/*.rake'
 
+Style/SpecialGlobalVars:
+  Enabled: false
+
 Style/FileName:
   Enabled: false
 
