@@ -33,8 +33,6 @@ class Presentation < ActiveRecord::Base
   include ZipSlides
   # Ticket system
   include HasTickets
-  # Cache sweeper
-  include CacheSweeper
 
   # Shorthand for returning the count of public slides
   # in the presentation
@@ -59,7 +57,7 @@ class Presentation < ActiveRecord::Base
   # The has currently has two representations of the
   # slides in the presentation due to legacy
   def to_hash
-    hash = Rails.cache.fetch hash_cache_name, tag: "presentation_#{id}" do
+    hash = Rails.cache.fetch(self) do
       hash = Hash.new
       hash[:name] = name
       hash[:id] = id

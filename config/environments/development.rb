@@ -21,7 +21,7 @@ Isk::Application.configure do
 
   # Memcached using dalli_store
   config.cache_store = :mem_cache_store, "localhost",
-                       { namespace: "ISK", expires_in: 5.minutes, compress: true }
+                       { namespace: "ISK", expires_in: 15.minutes, compress: true }
 
   # Don't log served assets
   config.assets.logger = false
@@ -47,9 +47,5 @@ Isk::Application.configure do
     rewrite %r{/backgrounds/(.*)}, "/backgrounds/$1"
   end
 
-  # Use cashier for better caching
-  # config.cashier.adapter = :cache_store
-  config.cashier.adapter = :redis_store
-  config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis) # or Resque.redis or any existing redis connection
   config.eager_load = false
 end

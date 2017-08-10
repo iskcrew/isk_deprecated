@@ -78,12 +78,6 @@ Isk::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # Cashier for better caching
-  # config.cashier.adapter = :cache_store
-  config.cashier.adapter = :redis_store
-  config.cashier.adapter.redis = Redis.new(Rails.configuration.x.redis)
-  # or Resque.redis or any existing redis connection
-
   # Eager loads all registered config.eager_load_namespaces.
   # This includes your application, engines, Rails frameworks and any other registered namespace.
   config.eager_load = true

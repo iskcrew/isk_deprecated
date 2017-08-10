@@ -19,9 +19,6 @@ class User < ActiveRecord::Base
   has_many :displays, -> { order "displays.name" },           through: :permissions, source: :target, source_type: "Display"
   has_many :auth_tokens
 
-  # Cache sweeper
-  include CacheSweeper
-
   def admin?
     User::AdminUsers.include?(username)
   end

@@ -62,9 +62,6 @@ gem "bootstrap-sass"
 # Bootstrap aware formbuilder
 gem "bootstrap_form"
 
-# English gem gives nicer names to special variables
-gem "english"
-
 # Nokogiri for XML processing
 gem "nokogiri"
 
@@ -106,9 +103,6 @@ gem "resque"
 gem "faye-websocket"
 gem "highline"
 
-# Better caching
-gem "cashier"
-
 # for zipping all slides in a group or presentation
 gem "rubyzip", require: "zip"
 
@@ -126,7 +120,7 @@ end
 # Profiling support
 group :profile do
   gem "request_profiler", git: "https://github.com/cheald/request_profiler/"
-  gem "ruby-prof"
+  gem "ruby-prof", "~> 0.15.9"
 end
 
 # More compact logging
@@ -156,4 +150,7 @@ group :test do
 
   # We do loads in after_commit callbacks so need to include them in tests
   gem "test_after_commit"
+
+  # Performance tests
+  gem "rails-perftest"
 end

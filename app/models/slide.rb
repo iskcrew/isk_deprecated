@@ -58,8 +58,6 @@ class Slide < ActiveRecord::Base
   include HasTickets
   # ACL system
   include ModelAuthorization
-  # Cache sweeper
-  include CacheSweeper
 
   # Constants
   TypeString = "image".freeze
