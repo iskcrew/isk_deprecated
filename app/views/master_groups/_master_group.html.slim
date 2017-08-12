@@ -1,4 +1,4 @@
-- cache([master_group.updated_at, master_group.can_edit?(current_user)]) do
+= cache([master_group, master_group.can_edit?(current_user)]) do
 	div.panel.panel-default.panel-iskgroup id=master_group.id
 		div.panel-heading id="anchor_group_#{master_group.id}"
 			= group_link_tag(master_group)

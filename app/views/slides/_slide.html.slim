@@ -10,7 +10,7 @@ div.slide.panel.panel-primary class=(slide.public ? 'slide-public' : 'slide-hidd
 			= slide_preview_to_show_tag(slide)
 	/ cache is here instead of top of the file because we want to be able to control
 	/ where the link on the slide preview leads
-	= cache([slide.updated_at, slide.can_edit?(current_user)]) do
+	= cache([slide, slide.can_edit?(current_user)]) do
 		div.slide_buttons
 			- if slide.deleted?
 				p
