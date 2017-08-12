@@ -128,6 +128,15 @@ class DisplaysController < ApplicationController
     redirect_to :back
   end
 
+  def clear_queue
+    @display = Display.find(params[:id])
+    require_override @display
+    @display.override_queues.destroy_all
+
+    flash[:notice] = "Override queue cleared."
+    redirect_to :back
+  end
+
   # Remote control for iskdpy via javascript and websockets
   def dpy_control
     @display = Display.find(params[:id])

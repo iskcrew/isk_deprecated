@@ -5,10 +5,11 @@ div.row
 		= render partial: 'form'
 
 div.row
-	div.col-md-6.col-lg-5	
+	div.col-md-6.col-lg-5
 		h2 Override queue
 		p You can drag the slides to sort the queue
-		
+		p = display_clear_queue_button(@display)
+
 		div.panel.panel-primary.sortable-container
 			div.panel-heading Slides in override queue
 			div.panel-body

@@ -212,6 +212,14 @@ class DisplaysControllerTest < ActionController::TestCase
     assert_one_sent_message "error", "forbidden"
   end
 
+  test "clear queue" do
+    d = displays(:with_overrides)
+    post :clear_queue, { id: d.id }, @adminsession
+    assert_response :redirect
+    d.reload
+    assert d.override_queues.empty?
+  end
+
   def assert_messages(count, types)
     assert_equal count, redis_messages.count, "Should have triggered #{count} messages"
     redis_messages.each do |m|

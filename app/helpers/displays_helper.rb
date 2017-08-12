@@ -13,6 +13,13 @@ module DisplaysHelper
     link_to link_text, display_path(d), class: "alert-link"
   end
 
+  def display_clear_queue_button(d)
+    link_to "Clear override queue", clear_queue_display_path(d),
+            class: "btn btn-danger", title: "Clear all slides from the override queue",
+            data: { confirm: "Clear all slides in the override queue?" },
+            method: :post
+  end
+
   # Link to displays#destroy if user has sufficient access
   def display_destroy_button(d)
     return unless d.admin?(current_user)
