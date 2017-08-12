@@ -80,6 +80,7 @@ module DisplaysHelper
   def display_last_contact(d)
     return "UNKNOWN" unless d.last_contact_at
     time_diff = Time.now - d.last_contact_at
+    return "> 24h" if time_diff > 24.hours
     delta = Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
     return "#{l d.last_contact_at, format: :short} (#{delta} ago)"
   end

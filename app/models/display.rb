@@ -171,6 +171,7 @@ class Display < ActiveRecord::Base
   def uptime
     return nil unless last_hello && last_contact_at
     time_diff = last_contact_at - last_hello
+    return "> 24h" if time_diff > 24.hours
     return Time.at(time_diff.to_i.abs).utc.strftime "%H:%M:%S"
   end
 
