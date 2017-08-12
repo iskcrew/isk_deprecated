@@ -34,7 +34,7 @@ module ApplicationHelper
   # Inactive toggle button with "led"
   def inactive_toggle(name, status)
     led = (status ? "green" : "off")
-    "<a class='button inactive led #{led}'>#{name}</a>".html_safe
+    "<a class='btn btn-primary disabled button inactive led #{led}'>#{name}</a>".html_safe
   end
 
   # Active toggle button with a "led"
