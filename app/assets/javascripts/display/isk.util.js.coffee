@@ -14,8 +14,14 @@ class ChangeNotifier
 # TODO remove jquery
 when_ready = (elem, f) ->
   console.debug 'when_ready', elem, f
-  $(elem).one 'load', f
-  .each -> $(@).load() if @complete
+  if elem.nodeName == 'IMG'
+    $(elem).one 'load', f
+    .each -> $(@).load() if @complete
+  else if elem.nodeName == 'VIDEO'
+    if elem.readyState >= 3
+      f.bind(elem)()
+    else
+      $(elem).one 'canplay', f
 
 #when_ready = (elem, cb) ->
 #  elem.addEventListener 'load', f = (e) ->

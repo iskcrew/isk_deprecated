@@ -304,6 +304,12 @@ class IskDisplayRenderer
     if @transition_active()
       @transition_progress(dt)
 
+    # Animate videos
+    if @cu?.from?.value?.image?.iskSlide?.type == 'video'
+      @webgl.update_texture @cu.from.value
+    if @cu?.to?.value?.image?.iskSlide?.type == 'video'
+      @webgl.update_texture @cu.to.value
+
     @webgl.render(@cu)
 
   init_observer: (target) ->

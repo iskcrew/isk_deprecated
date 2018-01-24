@@ -28,19 +28,39 @@ clock_mode = new isk.util.ChangeNotifier true, (clock) ->
     isk.clock?.hide()
 
 create_slide = (slide) ->
-  if slide?.group?
-    gs_id="slide_G#{slide.group}S#{slide.id}"
-    gs_class="presentation_slide"
+  elem=undefined
+  if slide?.type == 'image'
+    elem=create_img_slide(slide)
+  else if slide?.type == 'video'
+    elem=create_video_slide(slide)
   else
-    gs_id="slide_O#{slide.override_queue_id}S#{slide.id}"
-    gs_class="override_slide"
+    return elem
+
+
+  if slide?.group?
+    elem.id="slide_G#{slide.group}S#{slide.id}"
+    elem.classList.add("presentation_slide")
+  else
+    elem.id="slide_O#{slide.override_queue_id}S#{slide.id}"
+    elem.classList.add("override_slide")
+  elem
+
+create_img_slide = (slide) ->
   img=document.createElement('img')
-  img.id=gs_id
-  img.classList.add(gs_class)
-  img.src= "/slides/#{slide?.id}/image?t=#{slide?.images_updated_at}"
-  img.iskSlide = slide
+  img.src= "#{slide?.media_url}?t=#{slide?.images_updated_at}"
+  img.iskSlide=slide
   img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
   img
+
+create_video_slide = (slide) ->
+  video=document.createElement('video')
+  source=document.createElement('source')
+  video.appendChild(source)
+
+  source.src= "#{slide?.media_url}"
+  video.iskSlide=slide
+  video.iskSlide.uid="#{slide?.id}_#{slide?.updated_at}"
+  video
 
 handle_start = (data) ->
   console.debug "received start",  data
@@ -143,14 +163,21 @@ set_current = (elem) ->
   clearTimeout(timer)
   current?[0]?.classList?.remove('override_slide')
   send_slide_shown current?[0]
+  if elem.nodeName == 'VIDEO'
+    elem.currentTime=0
+    elem.pause()
 
   if elem? and elem?.iskSlide?.ready
     isk.util.when_ready elem, ->
-      if @?.width
+      if @?.width or @?.videoWidth
         [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
           e.classList.remove('current')
           e.classList.remove('updated')
+          if e.nodeName == 'VIDEO'
+            e.pause()
         _set_current @
+        if elem.nodeName == 'VIDEO'
+          elem.play()
       else
         send_error "Unknown error in slide image (#{@.id})"
         _set_slide_timeout 1
