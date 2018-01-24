@@ -30,7 +30,7 @@ gem "jquery-rails"
 gem "jquery-ui-rails"
 
 # Three.js Library
-gem "threejs-rails", git: "https://github.com/marvindanig/threejs-rails/"
+gem "threejs-rails", git: "https://github.com/marvindanig/threejs-rails/", ref: "b77626bea6089910721d59d75a5b7e7e949e8b72"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem "turbolinks"

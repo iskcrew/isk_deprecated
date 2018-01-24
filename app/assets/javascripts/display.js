@@ -16,7 +16,7 @@
 //= require jquery
 //
 // Three + plugins
-//= require three
+//= require three.min
 //= require THREEx.WindowResize
 //= require THREEx.FullScreen
 //
