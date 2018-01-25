@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170130074703) do
+ActiveRecord::Schema.define(version: 20180125151030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,10 +81,12 @@ ActiveRecord::Schema.define(version: 20170130074703) do
     t.boolean  "manual",                     default: false
     t.boolean  "do_overrides",               default: true
     t.boolean  "live",                       default: false
+    t.boolean  "wpe"
   end
 
   add_index "displays", ["name"], name: "index_displays_on_name", unique: true, using: :btree
   add_index "displays", ["presentation_id"], name: "index_displays_on_presentation_id", using: :btree
+  add_index "displays", ["wpe"], name: "index_displays_on_wpe", using: :btree
 
   create_table "effects", force: :cascade do |t|
     t.string   "name",        limit: 100

@@ -176,6 +176,9 @@ class DisplaysController < ApplicationController
   # Websocket connection for communication with displays
   def websocket
     @display = Display.find(params[:id])
+    # Detect WPE / Raspberry pi displays
+    @display.wpe = request.user_agent.include? "WPE"
+    @display.save!
 
     hijack do |tubesock|
       # Listen on its own thread
