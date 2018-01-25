@@ -1,12 +1,8 @@
 @isk or= {}
 
 default_shader=
-  fs: 'uniform sampler2D to; varying vec2 vUv; void main() {gl_FragColor = texture2D(to, vec2(vUv));}'
-  vs: 'varying vec2 vUv; void main() {vUv=uv; gl_Position = vec4(position, 1.0);}'
-
-shadername=
-  fs: 'fragmentShader'
-  vs: 'vertexShader'
+  vs: 'attribute vec3 a_pos; attribute vec2 a_tex_uv; varying vec2 v_uv; void main() {v_uv=a_tex_uv.xy; gl_Position = vec4(a_pos, 1.0);}'
+  fs: 'uniform sampler2D u_empty; varying vec2 v_uv; void main() {gl_FragColor = texture2D(u_empty, v_uv); \n}'
 
 effectname=
   c: 'benchmark'
@@ -86,20 +82,169 @@ class QueuePool
     @release(name, item) if item?
     item
 
+  insert: (name, item) ->
+    @release(name, item)
+
+class WebGLRenderer
+  constructor: ->
+    @domElement = document.createElement('canvas')
+    @gl_context = @domElement.getContext('webgl')
+    gl=@gl_context
+
+    @TEX_UNIT = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4, gl.TEXTURE5, gl.TEXTURE6, gl.TEXTURE7]
+
+    @buffers =
+      pos:
+        buf: gl.createBuffer()
+        array: [
+          -1.0, -1.0, 1.0,
+           1.0, -1.0, 1.0,
+           1.0,  1.0, 1.0,
+          -1.0,  1.0, 1.0 ]
+      tex_uv:
+        buf: gl.createBuffer()
+        array: [
+           0.0, 0.0,
+           1.0, 0.0,
+           1.0, 1.0,
+           0.0, 1.0 ]
+      index:
+        buf: gl.createBuffer()
+        array: [
+          0, 1, 2,
+          0, 2, 3 ]
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, @buffers.pos.buf )
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( @buffers.pos.array ), gl.STATIC_DRAW )
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, @buffers.tex_uv.buf )
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( @buffers.tex_uv.array ), gl.STATIC_DRAW )
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, @buffers.index.buf)
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( @buffers.index.array ), gl.STATIC_DRAW)
+
+    @default_program or= @create_shader_program(default_shader)
+    @current_program or= @default_program
+
+  _create_shader: (  source, type ) ->
+    gl = @gl_context
+
+    shader = gl.createShader( type )
+    gl.shaderSource( shader, source )
+    gl.compileShader( shader )
+    if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) )
+      console.error( ( (type == gl.VERTEX_SHADER) ? "VERTEX" : "FRAGMENT" ) + " SHADER:\n" +
+                       gl.getShaderInfoLog( shader ))
+      return null
+    return shader
+
+  create_shader_program: (shader) ->
+    gl = @gl_context
+
+    vs = @_create_shader( "precision lowp float; \n" + shader.vs, gl.VERTEX_SHADER )
+    fs = @_create_shader( "precision lowp float; \n" + shader.fs, gl.FRAGMENT_SHADER )
+
+    if (vs? and fs?)
+      program = gl.createProgram()
+      gl.attachShader( program, vs )
+      gl.attachShader( program, fs )
+      gl.linkProgram( program )
+
+    if (vs?)
+      gl.deleteShader(vs)
+    if (fs?)
+      gl.deleteShader(fs)
+
+    if ( !gl.getProgramParameter( program, gl.LINK_STATUS ))
+      console.error( "VALIDATE_STATUS: " + gl.getProgramParameter( program, gl.VALIDATE_STATUS ) + "\n" +
+                                        "ERROR: " + gl.getError() + "\n\n" +
+                                        "- Vertex Shader -\n" + shader.vs + "\n\n" +
+                                        "- Fragment Shader -\n" + shader.fs )
+      return null
+
+    return program
+
+  render: (uniforms) ->
+    gl = @gl_context
+
+    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT )
+    gl.useProgram( @current_program )
+    for name, item of uniforms
+      if item?.location?
+        if item.type == "1f"
+          gl.uniform1f( item.location, item.value )
+        else if item.type == "t"
+          gl.uniform1i( item.location, item.texture_unit)
+          gl.activeTexture(@TEX_UNIT[item.texture_unit])
+          gl.bindTexture(gl.TEXTURE_2D, item.value.texture)
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, @buffers.pos.buf )
+    gl.vertexAttribPointer( @buffers.pos.location, 3, gl.FLOAT, false, 0, 0 )
+    gl.enableVertexAttribArray( @buffers.pos.location )
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, @buffers.tex_uv.buf )
+    gl.vertexAttribPointer( @buffers.tex_uv.location, 2, gl.FLOAT, false, 0, 0 )
+    gl.enableVertexAttribArray( @buffers.tex_uv.location )
+
+    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, @buffers.index.buf )
+    gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0 )
+
+    gl.disableVertexAttribArray( @buffers.pos.location )
+    gl.disableVertexAttribArray( @buffers.tex_uv.location )
+
+  create_texture: (slide) ->
+    gl = @gl_context
+
+    texture = gl.createTexture()
+    gl.bindTexture(gl.TEXTURE_2D, texture)
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    tex= { texture: texture, image: slide }
+    @update_texture(tex)
+    return tex
+
+  update_texture: (tex) ->
+    gl = @gl_context
+
+    gl.bindTexture(gl.TEXTURE_2D, tex.texture)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tex.image)
+
+  set_size: (w, h) ->
+    gl = @gl_context
+    gl.viewport(0, 0, w, h)
+    @domElement.width=w
+    @domElement.height=h
+
+  set_program: (program, cu) ->
+    @current_program = program or @default_program
+
+  set_uniform_locations: (uniforms) ->
+    gl = @gl_context
+    for name, value of uniforms
+      value.location = gl.getUniformLocation(@current_program, "u_"+name)
+    @set_attribute_locations()
+
+  set_attribute_locations: ->
+    gl = @gl_context
+    for name, value of @buffers
+      value.location = gl.getAttribLocation(@current_program, "a_"+name)
+      console.debug( "Attribute location -1", name, value ) if value.location == -1
+
 
 class IskDisplayRenderer
   init_shaders: (uri)->
     my_getJSON uri+'/index.json', (@shaders) =>
       for name, value of @shaders
-        do (name, value) =>
-          value.material = new THREE.ShaderMaterial(uniforms: @cu)
+        do (name, value) ->
+          value.shader or= {}
           for type in ['fs', 'vs']
             do (type) ->
               my_get uri + '/' + value.name + '.' + type, (code) ->
-                value[type]=code
-                value.material[shadername[type]]=code
-                if value.fs? and value.vs?
-                  value.material.needsUpdate=true
+                value.shader[type]=code
+                if value.shader?.fs? and value.shader?.vs?
+                  value.program = isk.renderer.webgl.create_shader_program(value.shader)
 
   init_local_control_handlers: ->
     isk.local_broker?.register 'get shaders', @handle_get_shaders.bind(@)
@@ -128,41 +273,20 @@ class IskDisplayRenderer
     if h > window.innerHeight
       h = window.innerHeight
       w = h * 16 / 9
-    @renderer.setSize( w,h )
-    @camera.aspect = w / h
-    @camera.updateProjectionMatrix()
+    @webgl.set_size(w, h)
 
   init_renderer: ->
-    @renderer = new THREE.WebGLRenderer({antialias: false, precision: 'lowp'})
-    @renderer.setSize(window.innerWidth, window.innerHeight)
-    @renderer.autoClear = false
-
-    @scene = new THREE.Scene()
-    @camera = new THREE.PerspectiveCamera( 90.0, window.innerWidth/window.innerHeight, 1.0, 10000.0 )
-    @camera.position.z = 108.0 / 2
-
-    #geometry = new THREE.BoxGeometry( 20.0, 20.0, 20.0 )
-    geometry = new THREE.PlaneBufferGeometry(2,2,0,0)
-    #geometry = new THREE.PlaneGeometry( 192, 108,0,0 )
-    @tex_empty=new THREE.Texture(document.getElementById('empty'))
-    @tex_empty.minFilter=THREE.NearestFilter
-    @tex_empty.premultiplyAlpha=true
-    @tex_empty.needsUpdate=true
+    @tex_empty=@webgl.create_texture(document.getElementById('empty'))
     @cu=
-         from: { type: "t", value: @tex_empty}
-         to: { type: "t", value: @tex_empty}
-         empty: { type: "t", value: @tex_empty}
+         from: { type: "t", value: @tex_empty, texture_unit: 0}
+         to: { type: "t", value: @tex_empty, texture_unit: 1}
+         empty: { type: "t", value: @tex_empty, texture_unit: 2}
          time: { type: "1f", value: 0.0 }
          delta_time: { type: "1f", value: 0.0 }
          transition_time: { type: "1f", value: 0.0 }
 
-    @default_material or= new THREE.ShaderMaterial(uniforms: @cu)
-    for type, code of default_shader
-      @default_material[shadername[type]]=code
-    @default_material.needsUpdate=true
+    @webgl.set_uniform_locations(@cu)
 
-    @mesh = new THREE.Mesh( geometry, @default_material )
-    @scene.add( @mesh )
 
   animate: (t) =>
     @_animation = requestAnimationFrame @animate
@@ -178,7 +302,7 @@ class IskDisplayRenderer
     if @transition_active()
       @transition_progress(dt)
 
-    @renderer.render @scene, @camera
+    @webgl.render(@cu)
 
   init_observer: (target) ->
     @observer = new MutationObserver (mutations) ->
@@ -192,17 +316,19 @@ class IskDisplayRenderer
             isk.renderer.change_slide mutation.target
         return null
       return null
- 
+
     config = {subtree: true, attributes: true}
     @observer.observe(target, config)
 
   constructor: ->
+    @webgl=new WebGLRenderer()
+
     @init_local_control_handlers()
     @init_renderer()
     @init_shaders '/effects'
     @init_observer document.querySelector('#pres')
 
-    document.getElementById('canvas').appendChild(@renderer?.domElement)
+    document.getElementById('canvas').appendChild(@webgl.domElement)
 
     # Add window size event and run it once (to set initial values)
     window.addEventListener('resize', @handle_window_size, false)
@@ -211,12 +337,15 @@ class IskDisplayRenderer
   pause: ->
     cancelAnimationFrame @_animation
     @_animation = undefined
+
   run: ->
     if not @_animation?
       @_animation = requestAnimationFrame @animate
 
   transition_start: (type) ->
-    @mesh.material = @shaders?[type]?['material'] or @default_material
+    console.debug('transition_start: ' +type)
+    @webgl.set_program(@shaders?[type]?.program)
+    @webgl.set_uniform_locations(@cu)
     @cu.transition_time.value = 0.00000001
     @cu.time.value = 0
 
@@ -240,15 +369,11 @@ class IskDisplayRenderer
     tex=@texpool.loan(d.uid)
     if not tex
       console.debug "Creating new texture"
-      tex = new THREE.Texture()
-      @texpool.release(d.uid, tex)
-    if tex?.image?.iskSlide?.uid != d.uid
+      tex = @webgl.create_texture(slide)
+      @texpool.insert(d.uid, tex)
+    else if tex?.image?.iskSlide?.uid != d.uid
       tex.image=slide
-      tex.minFilter=THREE.NearestFilter
-      tex.magFilter=THREE.NearestFilter
-      tex.premultiplyAlpha=false
-      tex.generateMipmaps=false
-      tex.needsUpdate = true
+      @webgl.update_texture(tex)
 
     if @transition_active()
       @change_slide_end()
