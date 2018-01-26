@@ -7,14 +7,14 @@ inkscape plugin for creating more complex slides.
 ## Runtime dependencies for production
 Versions listed are known good ones, other versions are probably fine.
 
- * Unix environment (linux or os x, debian stable recommended, see https://www.dotdeb.org/ for up to date packages for redis/memcached/nginx etc)
- * Imagemagick (developed using 6.8.5-5, other versions probably fine)
+ * Unix environment (linux or os x, debian stretch recommended)
+ * Imagemagick
  * Nginx (version >1.3 or some other front-end webserver capable of proxying websocket connections)
- * memcached (1.4.5)
- * redis (2.6.10)
- * inkscape (for debian either 0.48.3.1-1.3 from Wheezy or 0.91-5~bpo8+1 from jessie-backports, 0.48.5-3 from Jessi DOES NOT WORK)
- * postgresql (9.1)
- * rrdtool (1.4.7) for statistic collection and graph generation
+ * memcached (>= 1.4.5)
+ * redis (>= 2.6.10)
+ * inkscape (0.48.5-3 from jessie DOES NOT WORK)
+ * postgresql (>=9.1)
+ * rrdtool (>=1.4.7) for statistic collection and graph generation
  * nodejs for javascript runtime for asset creation
 
 ## Vagrant: Development environment the easy way
@@ -54,8 +54,7 @@ To install rvm and the ruby version used by ISK:
 1. \curl -sSL https://get.rvm.io | bash -s stable
 2. source the rvm script file as instructed post-install
 3. run "rvm requirements" and install packages as needed
-4. "rvm install 2.3.0" to install ruby 2.3.0
-5. "rvm use 2.3.0" and "rvm gemset create isk" to initialize the gemset for isk
+4. "rvm install 2.4.1" to install ruby 2.4.1
 
 ### Clone isk git repository
 
@@ -63,7 +62,7 @@ Use "git clone https://github.com/depili/isk isk" to clone the repository. With 
 
 ### Install the rubygems needed for isk
 
-ISK manages its rubygem dependencies with bundler. This makes installing the correct versions of needed rubygems easy, just execute "bundle install" in the isk directory and they will get installed.
+ISK manages its rubygem dependencies with bundler. This makes installing the correct versions of needed rubygems easy, install bundler with "gem install bundler" and the bundled gems with "bundle install" in the isk directory.
 
 ### Create the database and initialize it
 
