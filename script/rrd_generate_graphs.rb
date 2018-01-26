@@ -28,7 +28,7 @@ graph_options = {
   font: [
     "LEGEND:8:DejaVuSansMono,DejaVu Sans Mono,DejaVu LGC Sans Mono,Bitstream Vera Sans Mono,monospace"
   ],
-  start: Time.now - 2.day,
+  start: Time.now - 2.days,
   end: Time.now
 }
 
@@ -74,9 +74,9 @@ RRD.graph! @rrd_path.join("rpi_mem.png").to_s, { title: "RPI free memory" }.merg
     value = "rpi_memfree_#{i}"
     for_rrd_data value, free: :average, from: file
     draw_line data: value, color: color, label: "WPE \##{i}".ljust(25), width: 1
-    print_value value, format: 'LAST:Current\: %2.2lf%%'
-    print_value value, format: 'AVERAGE:Average\: %2.2lf%%'
-    print_value value, format: 'MAX:Maximum\: %2.2lf%%\n'
+    print_value value, format: 'LAST:Current\:%8.2lf %s'
+    print_value value, format: 'AVERAGE:Average\:%8.2lf %s'
+    print_value value, format: 'MAX:Maximum\:%8.2lf %s\n'
   end
 end
 
@@ -89,9 +89,9 @@ RRD.graph! @rrd_path.join("rpi_temp.png").to_s, { title: "RPI temperature" }.mer
     for_rrd_data value, temp: :average, from: file
 
     draw_line data: value, color: color, label: "RPI #{i} temperature".ljust(25), width: 1
-    print_value value, format: 'LAST:Current\: %2.2lf%%'
-    print_value value, format: 'AVERAGE:Average\: %2.2lf%%'
-    print_value value, format: 'MAX:Maximum\: %2.2lf%%\n'
+    print_value value, format: 'LAST:Current\: %2.2lfC'
+    print_value value, format: 'AVERAGE:Average\: %2.2lfC'
+    print_value value, format: 'MAX:Maximum\: %2.2lfC\n'
   end
 end
 
