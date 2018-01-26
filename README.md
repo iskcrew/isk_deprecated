@@ -142,6 +142,10 @@ This extension is for sending the modifications made to a slide in inkscape back
 
 We have now integrated the previously separate iskdpy repository. This means that to run the slideshow in a browser using webgl you simply need to point your browser to http://iskhost.example/displays/1/dpy just replace the '1' in the url with the numerical id of the display you want to run.
 
+# Raspberry pi displays
+
+It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot Detailed instructions TBW.
+
 # Copyright
 
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
