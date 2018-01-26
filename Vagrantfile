@@ -87,10 +87,8 @@ Vagrant.configure("2") do |config|
     curl -sSL https://get.rvm.io | bash -s stable --ruby
     source ~/.rvm/scripts/rvm
     rvm requirements
-    rvm install 2.3.0
-    rvm use 2.3.0
-    rvm gemset create isk
-    rvm gemset use isk
+    rvm install 2.4.1
+    rvm use 2.4.1
     gem install bundler
 
     # Install rubygems for ISK
