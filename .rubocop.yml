@@ -16,13 +16,13 @@ AllCops:
 Style/SpecialGlobalVars:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
-Style/ConstantName:
+Naming/ConstantName:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 Style/FormatString:

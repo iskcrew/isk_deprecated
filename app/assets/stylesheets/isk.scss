@@ -1,7 +1,7 @@
 //
 // isk.scss
 // ISK main stylesheet
-// 
+//
 // This stylesheet contains the ISK specific styles needed on
 // top of bootstraps css.
 //
@@ -10,7 +10,7 @@
 //
 
 // Bootstrap scrollspy requires that the body has relative postitioning
-body { 
+body {
 	padding-top: 90px;
 	position: relative;
 }
@@ -23,32 +23,32 @@ nav#top-navbar {
   a.navbar-brand {
     padding-top: 18px;
   }
-	
+
 	// Highlight color for the number of open tickets
 	#tickets_tab {
 		.badge {
 			background-color: $brand-warning;
 		}
 	}
-	
+
 	// Tabs that want attention, like displays when there are errors detected
 	li.navbar-warning {
 		background-color: $state-warning-bg;
 	}
-	
+
 	li.navbar-warning a:hover {
 		background-color: darken($state-warning-bg, 10%);
 	}
-	
+
 	// The lower navigation bar for component specific actions (list, new, etc)
 	#navbar-actions {
 		margin-left: 60px;
-		
+
 		a {
 			padding: 5px 5px;
 		}
 	}
-	
+
 	// Notification if running on non-production environment
 	p.danger {
 		color: $brand-danger;
@@ -65,8 +65,8 @@ div#group_links {
 	margin: 75px 15px 0px 0px;
 	top: 0px;
 	right: 6px; // WTF is this requirement?
-	
-	li {		
+
+	li {
 		a {
 			color: $text_color;
 			padding: 2px 5px;
@@ -79,7 +79,7 @@ div#group_links {
 // Use a slightly bigger font on panel headings and fix link color on them
 div.panel-heading {
   font-size: 150%;
-  
+
   a {
     color: inherit;
   }
@@ -90,7 +90,7 @@ div.panel-heading {
 div.panel-display {
 	display: inline-block;
 	margin: 5px;
-	
+
 	div.panel-heading:before {
 			content: "";
 			display: inline-block;
@@ -102,23 +102,30 @@ div.panel-display {
 			height: 10px;
 			border-radius: 50%;
 	};
-	
+
+  img.wpe-icon {
+    height: 2em;
+    width: auto;
+    float: right;
+    margin-top: -5px;
+  }
+
 	&.display-live div.panel-heading:before {
 		background-color: $brand-success;
 	}
-	
+
 	div.panel-body {
 		padding: 0;
-		
+
 		img {
 			margin-bottom: 5px;
 		}
 	}
-	
+
 	div.panel-footer {
 		padding: 5px;
 		text-align: center;
-		
+
 		div.btn-group {
 			a {
 				padding: 5px;
@@ -145,7 +152,7 @@ form.form-inline {
   label {
     margin: 0px 5px;
   }
-  
+
   input {
     margin: 0px 5px;
   }

@@ -9,19 +9,17 @@
 
 # This script collects some ISK statistics in rrd databases
 
-require "rubygems"
-
-# Set up gems listed in the Gemfile.
-ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
-require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "config", "environment"))
 require "colorize"
 require "rrd"
 require "daemons"
 require_relative "../lib/cli_helpers.rb"
+require_relative "../lib/rrd_helpers.rb"
 
 @pid_path = Pathname.new File.expand_path("../../tmp/pids", __FILE__)
 @rrd_path = Pathname.new File.expand_path("../../data/rrd", __FILE__)
 @log_path = Pathname.new File.expand_path("../../log", __FILE__)
+@wpe_key = Pathname.new File.expand_path("../../config/wpe_key", __FILE__)
 
 options = {
   app_name: "rrd_monitoring",
@@ -35,56 +33,51 @@ Daemons.run_proc("rrd_monitoring", options) do
 
   say "RRD monitoring daemon started"
 
-  def get_process_stats(pid)
-    mem, cpu = `ps -o rss= -o %cpu= -p #{pid}`.split
-    return mem.to_i * 1024, cpu.to_f
-  end
-
-  def extract_pid(f)
-    pid = File.read(@pid_path.join(f).to_s).to_i
-
-    # Check if the pid is running
-    return pid if system "ps -p #{pid} 1>/dev/null"
-    return nil
-  end
-
-  def create_rrd_for_process(rrd_file)
-    rrd = RRD::Base.new(rrd_file)
-    unless File.exist? rrd_file
-      puts "Creating rrd database: #{rrd_file}"
-      rrd.create start: Time.now - 10.seconds, step: 30.seconds do
-        datasource "memory", type: :gauge, heartbeat: 10.minutes, min: 0, max: :unlimited
-        datasource "cpu", type: :gauge, heartbeat: 10.minutes, min: 0, max: :unlimited
-        archive :average, every: 1.minutes, during: 1.year
-      end
-    end
-    return rrd
-  end
-
   # Collect pid files
   loop do
     servers = Dir[@pid_path.join("server*")].collect { |f| extract_pid(f) }
-    delayed_jobs =  Dir[@pid_path.join("delayed_job*")].collect { |f| extract_pid(f) }
+    resque =  Dir[@pid_path.join("resque*")].collect { |f| extract_pid(f) }
     background_jobs = Dir[@pid_path.join("background_jobs*")].collect { |f| extract_pid(f) }
 
+    print "Collecting servers: "
     servers.each_with_index do |pid, i|
+      print "X"
       rrd_file = @rrd_path.join("server_#{i}.rrd").to_s
       rrd = create_rrd_for_process rrd_file
       rrd.update Time.now, *get_process_stats(pid)
     end
+    print "\n"
 
-    delayed_jobs.each_with_index do |pid, i|
-      rrd_file = @rrd_path.join("delayed_job_#{i}.rrd").to_s
+    print "Collecting background workers: "
+    resque.each_with_index do |pid, i|
+      print "X"
+      rrd_file = @rrd_path.join("resque_#{i}.rrd").to_s
       rrd = create_rrd_for_process rrd_file
       rrd.update Time.now, *get_process_stats(pid)
     end
+    print "\n"
 
+    print "Timed background jobs worker: "
     background_jobs.each_with_index do |pid, i|
+      print "X"
       rrd_file = @rrd_path.join("background_job_#{i}.rrd").to_s
       rrd = create_rrd_for_process rrd_file
       rrd.update Time.now, *get_process_stats(pid)
     end
+    print "\n"
 
+    print "WPE displays: "
+    # Monitor WPE displays
+    ActiveRecord::Base.connection.clear_query_cache
+    Display.where(wpe: true).each do |d|
+      print "X"
+      rrd_file = @rrd_path.join("wpe_#{d.id}.rrd").to_s
+      rrd = create_rrd_for_wpe rrd_file
+      collect_wpe_stats(d, @wpe_key, rrd)
+    end
+    print "\n"
+
+    puts "Sleeping..."
     sleep(30)
   end
 end
