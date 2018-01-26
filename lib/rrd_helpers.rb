@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+def color
+  colors = [
+    "#30FC30",
+    "#3096FC",
+    "#FFC930",
+    "#FF3030",
+    "#30CC30",
+    "#3030CC",
+    "#FFFF00",
+    "#CC3030",
+    "#00CC00",
+    "#0066CC",
+    "#FF9900",
+    "#CC0000",
+    "#009900",
+    "#000099",
+    "#CCCC00",
+    "#990000"
+  ]
+  if @last.nil? || @last > colors.size
+    @last = 0
+  else
+    @last += 1
+  end
+  return colors[@last]
+end
+
 def get_process_stats(pid)
   mem, cpu = `ps -o rss= -o %cpu= -p #{pid}`.split
   return mem.to_i * 1024, cpu.to_f
