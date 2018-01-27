@@ -48,7 +48,7 @@ create_slide = (slide) ->
   img=document.createElement('img')
   img.id=gs_id
   img.classList.add(gs_class)
-  img.src= "/slides/#{slide?.id}/full?t=#{slide?.images_updated_at}"
+  img.src= "/slides/#{slide?.id}/image?t=#{slide?.images_updated_at}"
   img.iskSlide = slide
   img.iskSlide.uid="#{slide?.id}_#{slide?.images_updated_at}"
   img
