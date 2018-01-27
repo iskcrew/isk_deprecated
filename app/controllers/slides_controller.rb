@@ -326,12 +326,12 @@ class SlidesController < ApplicationController
   # to avoid unecessary reloading
   def preview
     slide = Slide.find(params[:id])
-    redirect_to slide_image_path(params[:id], size: :preview, t: slide.images_updated_at.to_i)
+    redirect_to slide_image_path(params[:id], size: :preview)
   end
 
   def thumb
     slide = Slide.find(params[:id])
-    redirect_to slide_image_path(params[:id], size: :thumb, t: slide.images_updated_at.to_i)
+    redirect_to slide_image_path(params[:id], size: :thumb)
   end
 
   # Send the full sized slide image
@@ -339,7 +339,7 @@ class SlidesController < ApplicationController
   # If not we will issue 404 status
   def full
     slide = Slide.find(params[:id])
-    redirect_to slide_image_path(params[:id], t: slide.images_updated_at.to_i)
+    redirect_to slide_image_path(params[:id])
   end
 
 private
