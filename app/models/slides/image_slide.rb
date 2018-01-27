@@ -32,6 +32,7 @@ class ImageSlide < Slide
     file = Tempfile.new("isk-image", encoding: "binary")
     file.write(image.read)
     file.close
+    self.ready = false
     @_image_file = file
   end
 

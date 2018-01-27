@@ -4,6 +4,29 @@ ruby:
 	slidedata = (@slide.is_a?(HttpSlide) ? @slide.slidedata : HttpSlide::DefaultSlidedata)
 
 = f.fields_for :slidedata do |ff|
+	p Image scaling
+	dl
+		dt Fit
+		dd
+			| Image will be scaled to fit the slide dimensions maintaining aspect ratio.
+		dt Down only
+		dd
+			| Image will be scaled only if its height or width exceed the slide dimensions.
+			|  Aspect ratio will be maintained. Images smaller than the slide will be centered and
+			|  displayed 1:1.
+		dt Up only
+		dd
+			| The image will be scaled up if both its height and width are smaller than the slide.
+			|  Aspect ratio will be maintained.
+		dt Stretch
+		dd
+			| Image will be streched to the slide dimensions ignoring the aspect ratio.
+	= ff.select :scale, ImageSlide::ScalingOptions, selected: slidedata[:scale]
+	p
+		| Background color. When the (scaled) slide image is smaller than the slide it will be centered on
+		   the slide and rest of the slide will be filled with solid color background.
+	= ff.color_field :background, value: slidedata[:background]
+	p URL to fetch. ISK tries to retrieve a image from the given url periodically. The image is scaled per the above settings.
 	= ff.url_field :url, value: slidedata[:url], label: 'URL to fetch from (http or https)'
 	= ff.text_field :user, value: slidedata[:user], label: "HTTP basic auth username (if needed)"
 	= ff.text_field :password, value: slidedata[:password], label: 'HTTP basic auth password (stored clear text)'

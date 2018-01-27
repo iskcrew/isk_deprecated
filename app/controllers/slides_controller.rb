@@ -111,11 +111,7 @@ class SlidesController < ApplicationController
       end
     end # Transaction
 
-    if @slide.is_a? HttpSlide
-      @slide.fetch_later
-    else
-      @slide.generate_images_later
-    end
+    @slide.generate_images_later
 
     respond_to do |format|
       format.html { redirect_to slide_path(@slide) }
@@ -148,9 +144,7 @@ class SlidesController < ApplicationController
       if @slide.update_attributes(slide_params)
         # Generate images as needed
         # FIXME: This needs to be more universal..
-        @slide.generate_images_later if !@slide.is_a?(HttpSlide) && !@slide.ready
-        # Fetch the http slide image if needed
-        @slide.fetch_later if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
+        @slide.generate_images_later unless @slide.ready
 
         respond_to do |format|
           format.html do
