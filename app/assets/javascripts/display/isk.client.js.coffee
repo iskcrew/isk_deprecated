@@ -60,9 +60,9 @@ handle_start = (data) ->
 
 handle_display = (display) ->
   console.debug "received display",  display
-  
+
   isk.local_broker?.trigger 'presentation_changed', display
-  
+
   overs=document.createElement('div')
   overs.id='overrides'
   overs.appendChild create_slide s for s in display?.override_queue
@@ -137,7 +137,7 @@ send_slide_shown = (slide) ->
 send_error = (msg) ->
   console.debug 'sending error', msg
   isk.remote.trigger 'error', error: msg
-  
+
 # TODO remove jquery
 when_ready = (elem, f) ->
   console.debug 'when_ready', elem, f
@@ -176,8 +176,8 @@ set_current = (elem) ->
         _set_current @
       else
         send_error "Unknown error in slide image (#{@.id})"
-        _set_slide_timeout 1000
-  else _set_slide_timeout 1000
+        _set_slide_timeout 1
+  else _set_slide_timeout 1
   undefined
 
 set_current_updated = (elem) ->
@@ -191,7 +191,7 @@ set_current_updated = (elem) ->
         _set_current @, 'updated'
       else
         send_error "Unknown error in slide image (#{@.id})"
-        _set_slide_timeout 1000
+        _set_slide_timeout 1
   undefined
 
 prev_slide = ->
