@@ -123,6 +123,6 @@ def collect_wpe_stats(display, key, rrd)
 
     rrd.update! Time.now, data["MemFree:"].to_i * 1024, data["Active:"].to_i * 1024, data["Inactive:"].to_i * 1024, *wpe, temp
   end
-rescue IOError, Net::SSH::AuthenticationFailed, Net::SSH::ConnectionTimeout, Errno::EHOSTUNREACH, Errno::EHOSTDOWN
+rescue IOError, Net::SSH::AuthenticationFailed, Net::SSH::ConnectionTimeout, Errno::EHOSTUNREACH, Errno::EHOSTDOWN, Errno::ECONNREFUSED
   puts "Error collecting WPE stats for: #{display.name}"
 end
