@@ -144,7 +144,20 @@ We have now integrated the previously separate iskdpy repository. This means tha
 
 # Raspberry pi displays
 
-It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot Detailed instructions TBW.
+It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot
+
+Buildroot will yeild a minimal environment for the special browser that will run completely on ramdisk after the initial boot process and thus never writes to the sd card. This avoids potential card corruption on unexpected powerloss. The system also has a watchdog enabled to detect lockups and reboot, running out of memory also triggers a reboot.
+
+Configuring the environment relies on few files in the same fat partition on the sd card as the raspberry pi firmware and the kernel. The files are:
+ * `hostname` hostname for the raspberry pi, this is used by avahi to respond to mDNS requests, eg. iskrpi1.local
+ * `id_rsa.pub` Public key for ssh authentication. There is a ssh server running for remote access. This key can be used to log in as root. Password authentication has been disabled.
+ * `ntp.conf` Configuration for ntpd. By default ntpd will connect to pool.ntp.org servers
+ * `wpe.txt` This is the url where the browser will go on boot up. eg https://isk.local/displays/1/dpy?token=foobar
+ * `wpe.conf` Configuration for the browser, like the timezone
+
+The server detects raspberry pi displays on connect and tries to monitor their memory usage and temperature remotely. To do so we rely on ssh keys. Place the public key on the rasperry pi's and the private key in `config/wpe_key` file. Monitoring is done by the `script/rrd_monitor.rb` script.
+
+The relatively low amount of memory on the raspberry is also a limiting factor on the number of slides their presentations can contain. The limit is approximately 75 slides.
 
 # Copyright
 
