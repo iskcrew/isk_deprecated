@@ -76,7 +76,7 @@ RRD.graph! @rrd_path.join("rpi_mem.png").to_s, { title: "RPI free memory" }.merg
     draw_line data: value, color: color, label: "WPE \##{i}".ljust(25), width: 1
     print_value value, format: 'LAST:Current\:%8.2lf %s'
     print_value value, format: 'AVERAGE:Average\:%8.2lf %s'
-    print_value value, format: 'MAX:Maximum\:%8.2lf %s\n'
+    print_value value, format: 'MIN:Minimum\:%8.2lf %s\n'
   end
 end
 
