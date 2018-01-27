@@ -144,7 +144,7 @@ We have now integrated the previously separate iskdpy repository. This means tha
 
 # Raspberry pi displays
 
-It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot
+It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot-wpe
 
 Buildroot will yeild a minimal environment for the special browser that will run completely on ramdisk after the initial boot process and thus never writes to the sd card. This avoids potential card corruption on unexpected powerloss. The system also has a watchdog enabled to detect lockups and reboot, running out of memory also triggers a reboot.
 
