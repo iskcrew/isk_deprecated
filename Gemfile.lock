@@ -7,14 +7,6 @@ GIT
       ruby-prof
 
 GIT
-  remote: https://github.com/marvindanig/threejs-rails/
-  revision: b77626bea6089910721d59d75a5b7e7e949e8b72
-  ref: b77626bea6089910721d59d75a5b7e7e949e8b72
-  specs:
-    threejs-rails (1.1.3)
-      railties (>= 3.0.0)
-
-GIT
   remote: https://github.com/ngauthier/tubesock/
   revision: 3074cef201abd130a28ae3bcf43b140f92224d58
   ref: 3074cef
@@ -348,7 +340,6 @@ DEPENDENCIES
   slim-rails
   spring
   test_after_commit
-  threejs-rails!
   tubesock!
   turbolinks
   uglifier (>= 1.3.0)
