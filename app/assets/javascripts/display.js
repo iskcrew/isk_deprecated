@@ -30,4 +30,5 @@
 //= require ./display/isk.events.js.coffee
 //= require ./display/isk.localoverride.js.coffee
 //= require ./display/isk.videoplayer.js.coffee
+//= require ./display/isk.pingpong.js.coffee
 //= require ./display/isk.statemachine.js.coffee
