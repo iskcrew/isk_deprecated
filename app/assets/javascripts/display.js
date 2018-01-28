@@ -20,6 +20,7 @@
 //
 // Display javascripts, they care about the order
 //= require ./display/isk.debug.js.coffee
+//= require ./display/isk.util.js.coffee
 //= require ./display/isk.local_message_broker.js.coffee
 //= require ./display/isk.clock.js.coffee
 //= require ./display/isk.renderer.js.coffee

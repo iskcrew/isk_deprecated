@@ -277,6 +277,9 @@ class IskDisplayRenderer
 
   init_renderer: ->
     @tex_empty=@webgl.create_texture(document.getElementById('empty'))
+    isk.util.when_ready @tex_empty.image, =>
+      @webgl.update_texture @tex_empty
+
     @cu=
          from: { type: "t", value: @tex_empty, texture_unit: 0}
          to: { type: "t", value: @tex_empty, texture_unit: 1}
@@ -286,7 +289,6 @@ class IskDisplayRenderer
          transition_time: { type: "1f", value: 0.0 }
 
     @webgl.set_uniform_locations(@cu)
-
 
   animate: (t) =>
     @_animation = requestAnimationFrame @animate

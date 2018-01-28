@@ -13,18 +13,7 @@ current_over=root.getElementsByClassName('override_slide current')
 presentation=root.getElementsByClassName('presentation_slide')
 overrides=root.getElementsByClassName('override_slide')
 
-class ChangeNotifier
-  constructor: (initial, callback) ->
-    @state = initial
-    @cb = callback
-  set: (state) ->
-    if @state != state
-      @state = state
-      @cb state
-  get: () ->
-    @state
-
-manual_mode = new ChangeNotifier false, (manual) ->
+manual_mode = new isk.util.ChangeNotifier false, (manual) ->
   if manual
     clearTimeout(timer)
   else
@@ -32,7 +21,7 @@ manual_mode = new ChangeNotifier false, (manual) ->
     if dur?
       timer=setTimeout(timed_next_slide, dur*1000) if dur > 0
 
-clock_mode = new ChangeNotifier true, (clock) ->
+clock_mode = new isk.util.ChangeNotifier true, (clock) ->
   if clock
     isk.clock?.show()
   else
@@ -138,18 +127,6 @@ send_error = (msg) ->
   console.debug 'sending error', msg
   isk.remote.trigger 'error', error: msg
 
-# TODO remove jquery
-when_ready = (elem, f) ->
-  console.debug 'when_ready', elem, f
-  $(elem).one 'load', f
-  .each -> $(@).load() if @complete
-
-#when_ready = (elem, cb) ->
-#  elem.addEventListener 'load', f = (e) ->
-#    e.target.removeEventListener(e.type, arguments.callee)
-#    cb(e)
-#  f.apply(elem) if elem.complete
-
 _set_slide_timeout = (dur) ->
   if dur and not manual_mode.get()
     timer=setTimeout(timed_next_slide, dur*1000)
@@ -168,7 +145,7 @@ set_current = (elem) ->
   send_slide_shown current?[0]
 
   if elem? and elem?.iskSlide?.ready
-    when_ready elem, ->
+    isk.util.when_ready elem, ->
       if @?.width
         [].forEach.call @.parentElement.getElementsByClassName('current'), (e) ->
           e.classList.remove('current')
@@ -184,7 +161,7 @@ set_current_updated = (elem) ->
   console.debug 'UPDATED', elem
   if elem? and elem?.iskSlide?.ready
     clearTimeout(timer)
-    when_ready elem, ->
+    isk.util.when_ready elem, ->
       if @?.width
         [].forEach.call @.parentElement.getElementsByClassName('updated'), (e) ->
           e.classList.remove('updated')
