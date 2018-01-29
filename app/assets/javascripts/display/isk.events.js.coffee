@@ -12,7 +12,7 @@ requestFullscreen = (elem) ->
      elem.webkitRequestFullscreen ||
      elem.mozRequestFullScreen ||
      elem.msRequestFullscreen
-  f(elem)
+  f.bind(elem)()
 
 $(document).keypress (e) ->
   clearTimeout(escapetimeout)
