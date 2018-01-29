@@ -14,6 +14,7 @@ effects = [
   [1, "Normal", "Default transition effect"],
   [2, "Subtle", "Subtle transiton effect"],
   [3, "Alert",  "Attention seeking effect for alerts"]
+  [4, "Benchmark", "Shows time spent per frame as a red vertical line"]
 ]
 
 effects.each do |e|
