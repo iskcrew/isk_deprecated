@@ -216,6 +216,7 @@ private
       text.each_line do |l|
         row = Nokogiri::XML::Node.new "tspan", element
         row["sodipodi:role"] = "line"
+        row["xml:space"] = "preserve"
         row["font-size"] = size
         row["x"] = text_x
 
