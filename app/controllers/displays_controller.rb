@@ -21,7 +21,7 @@ class DisplaysController < ApplicationController
   # We support html or json for the whole list and
   # js for updating the late display warnings on pages.
   def index
-    @displays = Display.order(:name)
+    @displays = Display.order(:live, :name)
 
     respond_to do |format|
       format.js
@@ -176,9 +176,6 @@ class DisplaysController < ApplicationController
   # Websocket connection for communication with displays
   def websocket
     @display = Display.find(params[:id])
-    # Detect WPE / Raspberry pi displays
-    @display.wpe = request.user_agent.present? && request.user_agent.include?("WPE")
-    @display.save! if @display.changed?
 
     hijack do |tubesock|
       # Listen on its own thread
@@ -230,6 +227,8 @@ class DisplaysController < ApplicationController
             # Display tells that it is starting up
             raise PermissionDenied unless require_display_control(@display)
 
+            # Detect WPE / Raspberry pi displays
+            @display.wpe = request.user_agent.present? && request.user_agent.include?("WPE")
             @display_connection = true
             @display.status = "running"
             @display.ip = request.remote_ip
