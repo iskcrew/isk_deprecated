@@ -64,7 +64,7 @@ private
   def sql_backup(backup_file)
     cmd = nil
     with_config do |_app, host, db, user|
-      cmd = "pg_dump "
+      cmd = +"pg_dump "
       cmd << "--host #{host} " if host.present?
       cmd << "--username #{user} " if user.present?
       cmd << "--clean --no-owner #{db} > #{backup_file}"
