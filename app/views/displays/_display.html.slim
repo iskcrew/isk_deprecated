@@ -4,6 +4,8 @@ div.panel-display.panel class=display_class(display) id="display_#{display.id}"
 			= image_tag 'raspberry-pi.svg', class: 'wpe-icon'
 		- if display.status == 'running' && display.late?
 			span.fa.fa-warning title="This display isn't responding!"
+		- if display.presentation.blank?
+			span.fa.fa-question-circle title="No presentation"
 		=< link_to display.name, display_path(display)
 	div.panel-body
 		= display_current_slide(display)
