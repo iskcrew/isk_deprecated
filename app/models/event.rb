@@ -187,8 +187,16 @@ private
   end
 
   # Callback that resets every other event to non-current when setting another as current one
+  # We also clear presentations on displays on event change
   def set_current_event
-    Event.update_all(current: false) if current && changed.include?("current")
+    return unless current && changed.include?("current")
+    Event.update_all(current: false)
+    Display.all.each do |d|
+      d.presentation = nil
+      d.state.current_group = nil
+      d.state.current_slide = nil
+      d.save!
+    end
   end
 
   # Validation that prevents clearing the current event -bit
