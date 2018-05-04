@@ -20,6 +20,7 @@ class ImagesController < ApplicationController
     respond_to do |format|
       format.html do
         # Conditional get
+        render body: nil, status: 404 if @slide.images_updated_at.nil?
         return unless stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
 
         # Set content headers to allow CORS
