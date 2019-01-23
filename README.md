@@ -146,14 +146,23 @@ We have now integrated the previously separate iskdpy repository. This means tha
 
 This branch contains initial docker compatible setup. The minimal steps needed for having ISK running.
 
-* git clone https://github.com/iskcrew/isk
-* git checkout wip/docker
-* cp config/database.yml.example config/database.yml
-* docker-compose up --build
+    git clone https://github.com/iskcrew/isk
+    cd isk
+    git checkout wip/docker
 
-* docker-compose run website rake db:create
-* docker-compose run website rake db:schema:load
-* docker-compose run website rake db:seed
+    cp config/database.yml.example config/database.yml
+    cat > config/secrets.yml << EOF
+    development:
+      secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
+      secret_token: <%= ENV["SECRET_TOKEN"] %>
+    EOF
+
+    docker-compose up --build
+
+    # in another terminal
+    docker-compose run website rake db:create
+    docker-compose run website rake db:schema:load
+    docker-compose run website rake db:seed
 
 After all commands have been run, point your browser to http://localhost:8080/
 
