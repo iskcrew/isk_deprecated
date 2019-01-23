@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # ISK - A web controllable slideshow system
 #
@@ -18,7 +19,7 @@ require "rubygems"
 
 # Set up gems listed in the Gemfile.
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
-require "bundler/setup" if File.exists?(ENV["BUNDLE_GEMFILE"])
+require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
 require "highline/import"
 require "colorize"
 require "faye/websocket"
@@ -26,9 +27,7 @@ require "json"
 
 require_relative "../lib/cli_helpers.rb"
 
-unless ARGV.size >= 2
-  abort "Usage: <display_name> <host> [port]"
-end
+abort "Usage: <display_name> <host> [port]" unless ARGV.size >= 2
 
 display_name = ARGV[0]
 host = ARGV[1]
@@ -38,12 +37,12 @@ port ||= 80
 username = ask("Username:  ")
 password = ask("Password:  ") { |q| q.echo = "x" }
 
-http, headers = isk_login(host, port, username, password)
+_http, headers = isk_login(host, port, username, password)
 
 EM.run do
   ws = Faye::WebSocket::Client.new("ws://#{host}:#{port}/websocket", nil, headers: headers)
 
-  ws.on :open do |event|
+  ws.on :open do
     say "Connection opened"
   end
 
@@ -85,8 +84,6 @@ EM.run do
         abort "exiting"
       end
 
-    when "websocket_rails.subscribe"
-
     when "websocket_rails.ping"
       ws.send @pong.to_a.to_json
 
@@ -104,7 +101,6 @@ EM.run do
         say " -> Channel: #{msg_channel} message: #{msg_name} hash: #{msg_hash}"
       end
     end
-
   end
 
   ws.on :close do |event|

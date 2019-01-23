@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801173318) do
+ActiveRecord::Schema.define(version: 20180125151030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "auth_tokens", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.string   "token",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "auth_tokens", ["token"], name: "index_auth_tokens_on_token", using: :btree
+  add_index "auth_tokens", ["user_id"], name: "index_auth_tokens_on_user_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",               default: 0
@@ -71,10 +81,12 @@ ActiveRecord::Schema.define(version: 20160801173318) do
     t.boolean  "manual",                     default: false
     t.boolean  "do_overrides",               default: true
     t.boolean  "live",                       default: false
+    t.boolean  "wpe",                        default: false
   end
 
   add_index "displays", ["name"], name: "index_displays_on_name", unique: true, using: :btree
   add_index "displays", ["presentation_id"], name: "index_displays_on_presentation_id", using: :btree
+  add_index "displays", ["wpe"], name: "index_displays_on_wpe", using: :btree
 
   create_table "effects", force: :cascade do |t|
     t.string   "name",        limit: 100

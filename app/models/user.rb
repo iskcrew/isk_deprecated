@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -7,10 +9,9 @@
 class User < ActiveRecord::Base
   require "digest/sha1"
 
-  AdminUsers = ["admin"]
+  AdminUsers = ["admin"].freeze
 
-  validates_length_of :username, in: 1..50
-  validates_uniqueness_of :username
+  validates :username, length: { in: 1..50 }, uniqueness: true
 
   has_many :permissions, dependent: :delete_all
   has_many :roles, -> { order "roles.role" },                 through: :permissions, source: :target, source_type: "Role"
@@ -18,42 +19,32 @@ class User < ActiveRecord::Base
   has_many :master_groups, -> { order "master_groups.name" }, through: :permissions, source: :target, source_type: "MasterGroup"
   has_many :presentations, -> { order "presentations.name" }, through: :permissions, source: :target, source_type: "Presentation"
   has_many :displays, -> { order "displays.name" },           through: :permissions, source: :target, source_type: "Display"
-
-  # Cache sweeper
-  include CacheSweeper
+  has_many :auth_tokens
 
   def admin?
-    User::AdminUsers.include?(self.username)
+    User::AdminUsers.include?(username)
   end
 
   def has_role?(request)
-    return true if self.admin?
-    if request.is_a? Array
-      request.each do |r|
-        return true if self.roles.where(role: r).count > 0
-      end
-      return false
-    else
-      return self.roles.where(role: request).count > 0
+    return true if admin?
+    return roles.where(role: request).count.positive? unless request.is_a? Array
+
+    request.each do |r|
+      return true if roles.where(role: r).count.positive?
     end
+    return false
   end
 
   def roles_text
-    text = ""
-    self.roles.each do |r|
-      text << r.role << ", "
-    end
-    return text.chomp(", ")
+    roles.collect(&:role).join(", ")
   end
 
   def name
-    return self[:lastname] << ", " << self[:firstname]
+    return "#{lastname}, #{firstname}"
   end
 
   def password=(str)
-    unless self[:salt]
-      self[:salt] = generate_salt
-    end
+    self[:salt] = generate_salt unless self[:salt]
     self[:password] = Digest::SHA1.hexdigest(str << self[:salt])
     return true
   end
@@ -63,24 +54,17 @@ class User < ActiveRecord::Base
   end
 
   def authenticate(passwd)
-    if self[:password] == Digest::SHA1.hexdigest(passwd << self[:salt])
-      return true
-    else
-      return false
-    end
+    self[:password] == Digest::SHA1.hexdigest(passwd << self[:salt])
   end
 
   def self.authenticate(username, passwd)
-    user = User.where(username: username).first
-    if user && user.authenticate(passwd)
-      return user
-    else
-      return nil
-    end
+    user = User.find_by(username: username)
+    return user if user && user.authenticate(passwd)
+    return nil
   end
 
   def cache_tag
-    "user_" + self.id.to_s
+    "user_" + id.to_s
   end
 
 private

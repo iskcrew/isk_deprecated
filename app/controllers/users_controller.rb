@@ -33,9 +33,9 @@ class UsersController < ApplicationController
       if checked.to_i == 1
         # User should have this role
         user.roles << r unless user.roles.include?(r)
-      else
+      elsif user.roles.include?(r)
         # User shouldn't have this role
-        user.roles.delete(r) if user.roles.include?(r)
+        user.roles.delete(r)
       end
     end
     user.save!
@@ -107,12 +107,11 @@ class UsersController < ApplicationController
     # Disallow current user deleting itself
     if user.id == current_user.id
       flash[:error] = "You cannot delete your own user account!"
-      redirect_to users_path
     else
       user.destroy
       flash[:notice] = "User #{user.username} has been deleted."
-      redirect_to users_path
     end
+    redirect_to users_path
   end
 
 private

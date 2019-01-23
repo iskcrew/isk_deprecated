@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -33,9 +35,8 @@ module EventsHelper
 
   # Check if this event is current one and if it is then set the class to 'success'
   def event_current_class(event)
-    if event.current
-      "success"
-    end
+    return unless event.current
+    "success"
   end
 
   # Select box for choosing the slide resolution for the event.
@@ -49,7 +50,7 @@ module EventsHelper
 
     content_tag "div", class: "form-group" do
       content_tag("label", "Slide resolution", class: "control-label") +
-      select_tag(:resolution, options_for_select(options, selected), class: "form-control")
+        select_tag(:resolution, options_for_select(options, selected), class: "form-control")
     end
   end
 
@@ -60,6 +61,6 @@ module EventsHelper
       data: { confirm: "This operation will take a long time, are you sure?" },
       title: "Regenerate all slide images, this will take a long time."
     }
-    link_to "Regenerate images", generate_images_event_path(@event), options
+    link_to "Regenerate images", generate_images_event_path(event), options
   end
 end

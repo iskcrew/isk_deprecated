@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -24,6 +26,6 @@ class VideoSlide < Slide
   end
 
   def generate_images
-    #TODO
+    # TODO
   end
 end

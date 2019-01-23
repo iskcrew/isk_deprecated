@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
-gem "rails", "~> 4.2.7.1"
+gem "rails", "~> 4.2.8"
 
 # Database interfaces
 # gem "sqlite3"
@@ -20,25 +22,22 @@ gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.1.0"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem "therubyracer",  platforms: :ruby
-gem "libv8", "3.16.14.7"
-gem "therubyracer", require: "v8"
+# gem "libv8", "3.16.14.7"
+# gem "therubyracer", require: "v8"
 
 # Use jquery as the JavaScript library
 gem "jquery-rails"
 gem "jquery-ui-rails"
-
-# Three.js Library
-gem "threejs-rails", git: "git://github.com/marvindanig/threejs-rails.git"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem "turbolinks"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.3"
 # bundle exec rake doc:rails generates the API under doc/api.
-gem "sdoc", "~> 0.4.1",          group: :doc
+gem "sdoc", "~> 0.4.1", group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem "spring",        group: :development
+gem "spring", group: :development
 
 # Use ActiveModel has_secure_password
 gem "bcrypt", "~> 3.1.10"
@@ -53,6 +52,9 @@ gem "bcrypt", "~> 3.1.10"
 # gem "debugger", group: [:development, :test]
 
 #### END OF RAILS DEFAULT GEMFILE
+
+# WPE monitoring
+gem "net-ssh"
 
 # Twitter bootstrap for base css styling
 gem "bootstrap-sass"
@@ -72,7 +74,7 @@ gem "dalli"
 gem "ranked-model"
 
 # Tubesock websocket library
-gem "tubesock", github: "ngauthier/tubesock", ref: "3074cef"
+gem "tubesock", git: "https://github.com/ngauthier/tubesock/", ref: "3074cef"
 
 # tubesock needs a threaded server, like puma
 gem "puma"
@@ -83,25 +85,19 @@ gem "connection_pool"
 # f.error_messages
 gem "dynamic_form"
 
-# Calculate difference between two timestamps
-gem "time_diff", "~> 0.3"
-
 # Slim template engine
 gem "slim"
 # Generators for slim templates instead of erb
 gem "slim-rails"
 
 # For background stuff
-gem "resque"
-gem "daemons"
 gem "daemon"
+gem "daemons"
+gem "resque"
 
 # For monitorin scripts
-gem "highline"
 gem "faye-websocket"
-
-# Better caching
-gem "cashier"
+gem "highline"
 
 # for zipping all slides in a group or presentation
 gem "rubyzip", require: "zip"
@@ -119,8 +115,8 @@ end
 
 # Profiling support
 group :profile do
-  gem "ruby-prof"
-  gem "request_profiler", git: "git://github.com/cheald/request_profiler.git"
+  gem "request_profiler", git: "https://github.com/cheald/request_profiler/"
+  gem "ruby-prof", "~> 0.15.9"
 end
 
 # More compact logging
@@ -150,4 +146,7 @@ group :test do
 
   # We do loads in after_commit callbacks so need to include them in tests
   gem "test_after_commit"
+
+  # Performance tests
+  gem "rails-perftest"
 end

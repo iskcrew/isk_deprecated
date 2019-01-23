@@ -6,6 +6,14 @@ escape=3
 reset_escape = ->
   escape=3
 
+requestFullscreen = (elem) ->
+  elem or= document.body
+  f= elem.requestFullscreen ||
+     elem.webkitRequestFullscreen ||
+     elem.mozRequestFullScreen ||
+     elem.msRequestFullscreen
+  f.bind(elem)()
+
 $(document).keypress (e) ->
   clearTimeout(escapetimeout)
   escapetimeout=setTimeout(reset_escape, 300)
@@ -18,7 +26,7 @@ $(document).keypress (e) ->
   return true
 
 $('body').click (e) ->
-  THREEx?.FullScreen?.request?()
+  requestFullscreen()
   return false
 
 $('#renderer').click (e) ->

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :clean do
   desc "Clean all old data"
   task all: [:environment, "clean:deleted_slides", "clean:images", "assets:clean"] do
@@ -20,18 +22,11 @@ namespace :clean do
         files << s.preview_filename
         files << s.thumb_filename
 
-        if s.respond_to? :svg_filename
-          files << s.svg_filename
-        end
-
-        if s.respond_to? :data_filename
-          files << s.data_filename
-        end
-
+        files << s.svg_filename if s.respond_to? :svg_filename
+        files << s.data_filename if s.respond_to? :data_filename
+        files << s.transparent_filename if s.respond_to? :transparent_filename
         files.each do |f|
-          if File.exists? f
-            File.delete f
-          end
+          File.delete f if File.exist? f
         end
 
         s.delete
@@ -39,11 +34,10 @@ namespace :clean do
     else
       puts "Would delete slides: "
       deleted_slides.each do |s|
-        puts "id: #{s.id} '#{s.name}' in group: #{s.master_group.name} deleted: #{s.deleted ? "yes" : "no"}"
+        puts "id: #{s.id} '#{s.name}' in group: #{s.master_group.name} deleted: #{s.deleted ? 'yes' : 'no'}"
       end
       puts "Run with delete=1 to really do this."
     end
-
   end
 
   desc "Delete orphan slide images"
@@ -55,21 +49,13 @@ namespace :clean do
 
     # Iterate over all slides in db removing files associated to them.
     Slide.all.each do |slide|
+      files.delete slide.transparent_filename.to_s if slide.respond_to? :transparent_filename
       files.delete slide.full_filename.to_s
       files.delete slide.preview_filename.to_s
       files.delete slide.thumb_filename.to_s
-
-      if slide.is_a?(ImageSlide) || slide.is_a?(HttpSlide)
-        files.delete slide.original_filename.to_s
-      end
-
-      if slide.respond_to? :data_filename
-        files.delete slide.data_filename.to_s
-      end
-
-      if slide.respond_to? :svg_filename
-        files.delete slide.svg_filename.to_s
-      end
+      files.delete slide.original_filename.to_s if slide.is_a?(ImageSlide) || slide.is_a?(HttpSlide)
+      files.delete slide.data_filename.to_s if slide.respond_to? :data_filename
+      files.delete slide.svg_filename.to_s if slide.respond_to? :svg_filename
     end
 
     puts "Keeping: #{total - files.size} files"
@@ -90,13 +76,12 @@ namespace :clean do
     # Legacy format + new code leads to both 'key' and :key values ending up in the hash.
     files = Dir[Slide::FilePath.join("slide_*_data")].collect { |f| Slide::FilePath.join(f).to_s }
     files.each do |f|
-      data = YAML.load(File.read(f))
-      unless data.is_a? ActiveSupport::HashWithIndifferentAccess
-        puts "Old data in #{f} migrating..."
-        new_data = ActiveSupport::HashWithIndifferentAccess.new(data)
-        File.open(f, "w") do |file|
-          file.write new_data.to_yaml
-        end
+      data = YAML.safe_load(File.read(f))
+      next if data.is_a? ActiveSupport::HashWithIndifferentAccess
+      puts "Old data in #{f} migrating..."
+      new_data = ActiveSupport::HashWithIndifferentAccess.new(data)
+      File.open(f, "w") do |file|
+        file.write new_data.to_yaml
       end
     end
   end

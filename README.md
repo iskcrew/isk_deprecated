@@ -7,14 +7,15 @@ inkscape plugin for creating more complex slides.
 ## Runtime dependencies for production
 Versions listed are known good ones, other versions are probably fine.
 
- * Unix environment (linux or os x, debian stable recommended, see https://www.dotdeb.org/ for up to date packages for redis/memcached/nginx etc)
- * Imagemagick (developed using 6.8.5-5, other versions probably fine)
+ * Unix environment (linux or os x, debian stretch recommended)
+ * Imagemagick
  * Nginx (version >1.3 or some other front-end webserver capable of proxying websocket connections)
- * memcached (1.4.5)
- * redis (2.6.10)
- * inkscape (for debian either 0.48.3.1-1.3 from Wheezy or 0.91-5~bpo8+1 from jessie-backports, 0.48.5-3 from Jessi DOES NOT WORK)
- * postgresql (9.1)
- * rrdtool (1.4.7) for statistic collection and graph generation
+ * memcached (>= 1.4.5)
+ * redis (>= 2.6.10)
+ * inkscape (0.48.5-3 from jessie DOES NOT WORK)
+ * postgresql (>=9.1)
+ * rrdtool (>=1.4.7) for statistic collection and graph generation
+ * nodejs for javascript runtime for asset creation
 
 ## Vagrant: Development environment the easy way
 
@@ -40,6 +41,7 @@ To get the dev environment running you need to do the following:
 5. rrdtool, librrd + dev headers (rrdtool, librrd4, librrd-dev)
 5. git
 6. curl
+7. nodejs
 
 The command "apt-get install redis-server memcached imagemagick postgresql postgresql-client libpq-dev inkscape rrdtool librrd4 librrd-dev git curl" should install all of the above in a debian based linux distribution.
 
@@ -52,8 +54,7 @@ To install rvm and the ruby version used by ISK:
 1. \curl -sSL https://get.rvm.io | bash -s stable
 2. source the rvm script file as instructed post-install
 3. run "rvm requirements" and install packages as needed
-4. "rvm install 2.3.0" to install ruby 2.3.0
-5. "rvm use 2.3.0" and "rvm gemset create isk" to initialize the gemset for isk 
+4. "rvm install 2.4.1" to install ruby 2.4.1
 
 ### Clone isk git repository
 
@@ -61,7 +62,7 @@ Use "git clone https://github.com/depili/isk isk" to clone the repository. With 
 
 ### Install the rubygems needed for isk
 
-ISK manages its rubygem dependencies with bundler. This makes installing the correct versions of needed rubygems easy, just execute "bundle install" in the isk directory and they will get installed.
+ISK manages its rubygem dependencies with bundler. This makes installing the correct versions of needed rubygems easy, install bundler with "gem install bundler" and the bundled gems with "bundle install" in the isk directory.
 
 ### Create the database and initialize it
 
@@ -156,6 +157,23 @@ This branch contains initial docker compatible setup. The minimal steps needed f
 
 After all commands have been run, point your browser to http://localhost:8080/
 
+# Raspberry pi displays
+
+It is possible to use a special browser in a raspberry pi as a ISK display. The environment for this is located at https://github.com/iskcrew/buildroot-wpe
+
+Buildroot will yeild a minimal environment for the special browser that will run completely on ramdisk after the initial boot process and thus never writes to the sd card. This avoids potential card corruption on unexpected powerloss. The system also has a watchdog enabled to detect lockups and reboot, running out of memory also triggers a reboot.
+
+Configuring the environment relies on few files in the same fat partition on the sd card as the raspberry pi firmware and the kernel. The files are:
+ * `hostname` hostname for the raspberry pi, this is used by avahi to respond to mDNS requests, eg. iskrpi1.local
+ * `id_rsa.pub` Public key for ssh authentication. There is a ssh server running for remote access. This key can be used to log in as root. Password authentication has been disabled.
+ * `ntp.conf` Configuration for ntpd. By default ntpd will connect to pool.ntp.org servers
+ * `wpe.txt` This is the url where the browser will go on boot up. eg https://isk.local/displays/1/dpy?token=foobar
+ * `wpe.conf` Configuration for the browser, like the timezone
+
+The server detects raspberry pi displays on connect and tries to monitor their memory usage and temperature remotely. To do so we rely on ssh keys. Place the public key on the rasperry pi's and the private key in `config/wpe_key` file. Monitoring is done by the `script/rrd_monitor.rb` script.
+
+The relatively low amount of memory on the raspberry is also a limiting factor on the number of slides their presentations can contain. The limit is approximately 75 slides.
+
 # Copyright
 
 (c) Copyright 2013 Vesa-Pekka Palmu and Niko Vähäsarja.
@@ -177,11 +195,11 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.

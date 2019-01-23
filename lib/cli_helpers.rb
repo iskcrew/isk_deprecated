@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # A library for helper functions for CLI tasks
@@ -34,9 +36,7 @@ class WsMessage
   def to_a
     data = {}
     data["data"] = @_data
-    if @_connection_id
-      data["connection_id"] = @_connection_id
-    end
+    data["connection_id"] = @_connection_id if @_connection_id
     return [@_name, data]
   end
 end
@@ -55,10 +55,8 @@ def isk_login(host, port, username, password)
   puts base_url
   r = RestClient.post "#{base_url}/login", { username: username, password: password }, accept: :json
 
-  #Check the return code from the POST request
-  if r.code != 200
-    abort "Error loggin into ISK, aborting".red
-  end
+  # Check the return code from the POST request
+  abort "Error loggin into ISK, aborting".red if r.code != 200
 
   return base_url, r.cookie_jar
 end

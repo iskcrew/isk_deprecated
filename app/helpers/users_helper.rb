@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -25,5 +27,13 @@ module UsersHelper
 
   def user_details_button(user)
     link_to details_link_text, user_path(user), class: "btn btn-primary"
+  end
+
+  def user_add_token_button(user)
+    link_to icon("plus", "Token"), user_tokens_path(user), class: "btn btn-primary", method: :post
+  end
+
+  def user_destroy_token_button(user, token)
+    link_to delete_link_text, user_token_path(user, token), class: "btn btn-primary", method: :delete
   end
 end

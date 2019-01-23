@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -21,21 +23,19 @@ class Group < ActiveRecord::Base
 
   # Send websocket messages on create and update
   include WebsocketMessages
-  # Cache sweeper
-  include CacheSweeper
 
   def to_hash
     hash = Hash.new
-    hash[:name] = self.name
-    hash[:id] = self.id
-    hash[:master_id] = self.master_group.id
-    hash[:position] = self.position
-    hash[:total_slides] = self.master_group.slides.published.count
-    hash[:created_at] = self.master_group.created_at.to_i
-    hash[:updated_at] = self.master_group.updated_at.to_i
+    hash[:name] = name
+    hash[:id] = id
+    hash[:master_id] = master_group.id
+    hash[:position] = position
+    hash[:total_slides] = master_group.slides.published.count
+    hash[:created_at] = master_group.created_at.to_i
+    hash[:updated_at] = master_group.updated_at.to_i
     hash[:slides] = Array.new
-    self.public_slides.each do |s|
-      hash[:slides] << s.to_hash(self.presentation.delay)
+    public_slides.each do |s|
+      hash[:slides] << s.to_hash(presentation.delay)
     end
     return hash
   end
@@ -43,11 +43,11 @@ class Group < ActiveRecord::Base
   # The position of this group in a presentation
   # RankedModel uses sparse indexes in the postion column, so se need to do sql magic.
   def presentation_position
-    Group.where(presentation_id: self.presentation_id).where("position < ?", self.position).count
+    Group.where(presentation_id: presentation_id).where("position < ?", position).count
   end
 
   def public_slides
-    self.slides.where(public: true)
+    slides.where(public: true)
   end
 
   def cache_tag
@@ -57,9 +57,9 @@ class Group < ActiveRecord::Base
 private
 
   def update_timestamps
-    touch_by_presentation(self.presentation_id)
+    touch_by_presentation(presentation_id)
     if changed.include? "presentation_id"
-      touch_by_presentation(self.presentation_id_was)
+      touch_by_presentation(presentation_id_was)
     end
   end
 

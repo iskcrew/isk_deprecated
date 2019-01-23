@@ -5,6 +5,8 @@ li class=active_action?('index') = link_to icon('list', 'List displays'), displa
 	- if @display.can_edit? current_user
 		li class=active_action?('edit') = link_to edit_link_text, edit_display_path(@display)
 	li class=active_action?('show') = link_to details_link_text, display_path(@display)
-	li class=active_action?('dpy_control') = link_to 'Remote control', dpy_control_display_path(@display)
 	li = link_to 'Slide history', display_history_index_path(@display)
-	li = display_destroy_button(@display)
+	- if @display.can_edit? current_user
+		li class=active_action?('dpy_control') = link_to 'Remote control', dpy_control_display_path(@display)
+		li = display_clear_queue_button(@display)
+		li = display_destroy_button(@display)

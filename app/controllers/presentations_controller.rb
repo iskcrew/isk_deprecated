@@ -144,7 +144,7 @@ class PresentationsController < ApplicationController
     require_edit p
 
     g.destroy
-    flash[:notice] = "Removed group #{group.name} from the presentation"
+    flash[:notice] = "Removed group #{g.name} from the presentation"
     redirect_to :back
   end
 

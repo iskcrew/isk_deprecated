@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -12,12 +14,12 @@ class ImageSlide < Slide
     ["Down only", "down"],
     ["Up only", "up"],
     ["Stretch", "stretch"]
-  ]
+  ].freeze
 
   DefaultSlidedata = ActiveSupport::HashWithIndifferentAccess.new(
     scale: "fit",
     background: "#000000"
-  )
+  ).freeze
   include HasSlidedata
 
   after_save :save_image
@@ -30,6 +32,7 @@ class ImageSlide < Slide
     file = Tempfile.new("isk-image", encoding: "binary")
     file.write(image.read)
     file.close
+    self.ready = false
     @_image_file = file
   end
 
@@ -37,36 +40,35 @@ private
 
   # A after save hook to move the possible new image into its place
   def save_image
-    if @_image_file
-      FileUtils.move @_image_file.path, self.original_filename
-      @_image_file = nil
-    end
+    return unless @_image_file
+    FileUtils.move @_image_file.path, original_filename
+    @_image_file = nil
   end
 
   # Validate the uploaded image.
   def check_image
-    if @_image_file
-      # Verify image integrity
-      command = "identify #{@_image_file.path} &> /dev/null"
-      unless system command
-        @_image_file.unlink
-        @_image_file = nil
-        errors.add :image, "wasn't a valid image file."
-      end
-    end
+    return unless @_image_file
+    # Verify image integrity
+    command = "identify #{@_image_file.path} &> /dev/null"
+    return if system command
+
+    # Verify error
+    @_image_file.unlink
+    @_image_file = nil
+    errors.add :image, "wasn't a valid image file."
   end
 
   # Validates that the background color is ok
   def check_bg_color
-    unless slidedata[:background].match /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
+    unless slidedata[:background] =~ /\A#(?:[0-9a-f]{3})(?:[0-9a-f]{3})?\z/
       errors.add :backgroud, "must be valid css hex color"
     end
   end
 
   # Generate the full size slide preview
   def generate_full_image
-    bg_color = self.slidedata[:background]
-    scale = self.slidedata[:scale]
+    bg_color = slidedata[:background]
+    scale = slidedata[:scale]
     size = picture_sizes[:full].join("x")
 
     # Build the ImageMagick geometry string
@@ -79,9 +81,6 @@ private
     when "down"
       # Scale the image down if needed
       geo_str << '\>'
-    when "fit"
-      # Scale the image to fit maintaining aspect ratio
-      # Nothing to do
     when "up"
       # Only scale the image up if needed
       geo_str << '\<'
@@ -92,13 +91,12 @@ private
 
     # Generate the full sized image to a tempfile
     tmp_file = Tempfile.new("isk-image")
-    command = "convert #{self.original_filename} -resize #{geo_str}"
-    command << " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
-    if system command
-      return compare_new_image(tmp_file)
-    else
-      tmp_file.unlink
-      raise Slide::ImageError, "Error generating full size slide image!"
-    end
+    command = "convert #{original_filename} -resize #{geo_str}" \
+              " -background #{bg_color.shellescape} -gravity center -extent #{size} png:#{tmp_file.path}"
+    return compare_new_image(tmp_file) if system command
+
+    # Image generation error
+    tmp_file.unlink
+    raise Slide::ImageError, "Error generating full size slide image!"
   end
 end

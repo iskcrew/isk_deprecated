@@ -13,7 +13,8 @@
 effects = [
   [1, "Normal", "Default transition effect"],
   [2, "Subtle", "Subtle transiton effect"],
-  [3, "Alert",  "Attention seeking effect for alerts"]
+  [3, "Alert",  "Attention seeking effect for alerts"],
+  [4, "Benchmark", "Shows time spent per frame as a red vertical line"]
 ]
 
 effects.each do |e|
@@ -32,7 +33,7 @@ roles = [
   ["display-client", "User can run clients on any display via websocket events."]
 ]
 
-models = [
+[
   Slide,
   MasterGroup,
   Presentation,

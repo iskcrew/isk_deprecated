@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Class for handling the websocket messages in ISK
@@ -35,12 +37,12 @@ class IskMessage
   end
 
   def send(channel = "isk_general", redis_settings = {})
-    if $redis_pool
-      $redis_pool.with do |conn|
-        conn.publish channel, self.encode
+    if Rails.configuration.x.redis_pool
+      Rails.configuration.x.redis_pool.with do |conn|
+        conn.publish channel, encode
       end
     else
-      Redis.new(redis_settings).publish channel, self.encode
+      Redis.new(redis_settings).publish channel, encode
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class SchedulesControllerTest < ActionController::TestCase
@@ -31,13 +33,13 @@ class SchedulesControllerTest < ActionController::TestCase
       }
     }
 
-    #We don't want to generate slides into the normal place
+    # We don't want to generate slides into the normal place
     Slide.send(:remove_const, :FilePath)
     Slide.const_set(:FilePath, Rails.root.join("tmp", "test"))
   end
 
   def teardown
-    #Clean up all created slides
+    # Clean up all created slides
     Slide.all.each do |s|
       clear_slide_files(s)
     end
@@ -79,7 +81,6 @@ class SchedulesControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to schedule_path(assigns(:schedule))
-
   end
 
   test "update schedule" do

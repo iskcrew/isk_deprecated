@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::		Vesa-Pekka Palmu
@@ -10,7 +12,6 @@ module ApplicationHelper
   def navigation_links
     controllers = ["Slides", "Groups", "Presentations", "Displays", "Schedules", "Tickets"]
     ret = String.new
-    base_html_options = { class: "ui-state-default ui-corner-top" }
     # Build navigation tabs for basic controllers
     tabs = controllers
     tabs.each do |c|
@@ -18,9 +19,8 @@ module ApplicationHelper
                        class: "",
                        id: "#{c.downcase}_tab"
                      }
-      if controller.class.name.include?(c)
-        html_options[:class] =	"active"
-      end
+
+      html_options[:class] =	"active" if controller.class.name.include?(c)
       ret << content_tag("li", link_to(c, controller: c.downcase), html_options)
     end
     return ret.html_safe
@@ -33,13 +33,8 @@ module ApplicationHelper
 
   # Inactive toggle button with "led"
   def inactive_toggle(name, status)
-    if status
-      html = "<a class='button inactive led green'>"
-    else
-      html = "<a class='button inactive led off'>"
-    end
-    html << name << "</a>"
-    return html.html_safe
+    led = (status ? "green" : "off")
+    "<a class='btn btn-primary disabled button inactive led #{led}'>#{name}</a>".html_safe
   end
 
   # Active toggle button with a "led"
@@ -87,8 +82,7 @@ module ApplicationHelper
   # Memoize the current user
   def current_user
     return @_current_user ||= User.first if Rails.env.profile?
-    @_current_user ||= session[:user_id] &&
-    User.includes(:permissions).find_by_id(session[:user_id])
+    @_current_user ||= session[:user_id] && User.includes(:permissions).find_by_id(session[:user_id])
   end
 
   # Memioze the current event

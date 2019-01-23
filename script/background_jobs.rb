@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # ISK - A web controllable slideshow system
 #
@@ -18,7 +19,7 @@ options = {
   app_name: "background_jobs",
   dir_mode: :normal,
   dir: @pid_path.to_s,
-  log_dir: @log_path.to_s,
+  log_dir: @log_path.to_s
 }
 
 Daemons.run_proc("background_jobs", options) do
@@ -42,27 +43,27 @@ Daemons.run_proc("background_jobs", options) do
     say "Fetching http-slides.."
     begin
       realtime = Benchmark.realtime do
-        @slides = Event.current.slides.where(type: "HttpSlide").all.each do |slide|
-          slide.fetch!
+        @slides = Event.current.slides.where(type: "HttpSlide").all.each do |s|
+          begin
+            s.generate_images
+          rescue StandardError => e
+            say "Error fetching http-slide: #{s.name}"
+            puts e.message
+            puts e.backtrace.inspect
+          end
         end
       end
       say " -> Fetched #{@slides.size} slides in %.2f seconds (%.2f sec. per slide)" % [realtime, realtime / @slides.size]
-    rescue Exception => e
-      say "Error fetching http-slides"
-      puts e.message
-      puts e.backtrace.inspect
     end
     @slides = nil
 
     say "Generating schedule slides.."
     begin
       realtime = Benchmark.realtime do
-        @schedules = Event.current.schedules.all.each do |schedule|
-          schedule.generate_slides
-        end
+        @schedules = Event.current.schedules.all.each(&:generate_slides)
       end
-      say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime,  realtime / @schedules.size])
-    rescue Exception => e
+      say(" -> Generated #{@schedules.size} schedules in %.2f seconds (%.2f sec. per schedule)" % [realtime, realtime / @schedules.size])
+    rescue StandardError => e
       say "Error generating schedule slides"
       puts e.message
       puts e.backtrace.inspect

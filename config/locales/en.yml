@@ -6,7 +6,7 @@ en:
   time:
     formats:
       short: "%a %H:%M:%S %d.%m.%y"
-      iso: "%Y-%m-%dT%H:%M:%S"            
+      iso: "%Y-%m-%dT%H:%M:%S"
   activerecord:
     attributes:
       display:
@@ -19,7 +19,7 @@ en:
         resolution: 'Slide resolution'
         simple_heading_font_size: 'Heading font size'
         simple_heading_x: 'Heading anchor x coordinate'
-        simple_heading_y: 'Heading acnhor y coordinate'
+        simple_heading_y: 'Heading anchor y coordinate'
         simple_body_margin_left: 'Left margin for body'
         simple_body_margin_right: 'Right margin for body'
         simple_body_y: 'Body anchor y coordinate'
@@ -58,4 +58,4 @@ en:
       ticket:
         name: "Name for the ticket:"
         description: "Describe what should be done:"
-        
+

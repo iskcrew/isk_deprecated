@@ -1,14 +1,18 @@
 div.panel-display.panel class=display_class(display) id="display_#{display.id}"
 	div.panel-heading
+		- if display.wpe
+			= image_tag 'raspberry-pi.svg', class: 'wpe-icon'
 		- if display.status == 'running' && display.late?
 			span.fa.fa-warning title="This display isn't responding!"
+		- if display.presentation.blank?
+			span.fa.fa-question-circle title="No presentation"
 		=< link_to display.name, display_path(display)
 	div.panel-body
 		= display_current_slide(display)
 		div.display_metadata
 			ul
 				- if display.current_slide.present?
-					li 
+					li
 						| Current slide:
 						=< link_to display.current_slide.name, slide_path(display.current_slide)
 				- else
@@ -19,9 +23,9 @@ div.panel-display.panel class=display_class(display) id="display_#{display.id}"
 						=< link_to display.current_group.name, group_path(display.current_group.master_group)
 				- else
 					li Current group: Unknown
-				li 
+				li
 					- if display.presentation
-						| Presentation: 
+						| Presentation:
 						=< link_to display.presentation.name, presentation_path(display.presentation.id)
 					- else
 						| Presentation: Not defined
@@ -33,10 +37,17 @@ div.panel-display.panel class=display_class(display) id="display_#{display.id}"
 
 	div.panel-footer
 		div.btn-group.btn-group-sm
-			= toggle_link_to 'Overrides', display.do_overrides, display_path(display, 
-				display: {do_overrides: !display.do_overrides}), {method: :put, remote: true}
-			= toggle_link_to 'Manual control', display.manual, display_path(display, 
-				display: {manual: !display.manual}), {method: :put, remote: true}
-			= link_to details_link_text, display_path(display), class: 'btn btn-primary'
-			= link_to edit_link_text, edit_display_path(display), class: 'btn btn-primary'
-			= link_to 'Remote control', dpy_control_display_path(display),	class: 'btn btn-primary'
+			= cache([display, display.can_edit?(current_user)]) do
+				- if display.can_edit? current_user
+					= toggle_link_to 'Overrides', display.do_overrides, display_path(display,
+						display: {do_overrides: !display.do_overrides}), {method: :put, remote: true}
+					= toggle_link_to 'Manual control', display.manual, display_path(display,
+						display: {manual: !display.manual}), {method: :put, remote: true}
+					= link_to details_link_text, display_path(display), class: 'btn btn-primary'
+					= link_to edit_link_text, edit_display_path(display), class: 'btn btn-primary'
+					= link_to 'Remote control', dpy_control_display_path(display),	class: 'btn btn-primary'
+				- else
+					= inactive_toggle 'Overrides', display.do_overrides
+					= inactive_toggle 'Manual control', display.manual
+					= link_to details_link_text, display_path(display), class: 'btn btn-primary'
+

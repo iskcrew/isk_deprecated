@@ -15,16 +15,12 @@
 // Jquery
 //= require jquery
 //
-// Three + plugins
-//= require three
-//= require THREEx.WindowResize
-//= require THREEx.FullScreen
-//
 // State-machine
 //= require state-machine
 //
 // Display javascripts, they care about the order
 //= require ./display/isk.debug.js.coffee
+//= require ./display/isk.util.js.coffee
 //= require ./display/isk.local_message_broker.js.coffee
 //= require ./display/isk.clock.js.coffee
 //= require ./display/isk.renderer.js.coffee
@@ -34,4 +30,5 @@
 //= require ./display/isk.events.js.coffee
 //= require ./display/isk.localoverride.js.coffee
 //= require ./display/isk.videoplayer.js.coffee
+//= require ./display/isk.pingpong.js.coffee
 //= require ./display/isk.statemachine.js.coffee

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -47,12 +49,12 @@ Isk::Application.configure do
   # Test order
   config.active_support.test_order = :random
 
-  ActiveSupport::Deprecation.behavior = Proc.new { |message, callstack|
+  ActiveSupport::Deprecation.behavior = proc { |message, callstack|
     raise message + "\n" + callstack.join("\n  ")
   }
 
   # Use inline queue adapter during tests for now.
-  # FIXME: test the sync behaviour in model tests and then just veryfy queueing in controller tests
+  # FIXME: test the sync behaviour in model tests and then just verify queueing in controller tests
   # Will save time.
   Rails.application.config.active_job.queue_adapter = :inline
 end

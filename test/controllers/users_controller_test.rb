@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class UsersControllerTest < ActionController::TestCase
@@ -60,7 +62,7 @@ class UsersControllerTest < ActionController::TestCase
 
     post :grant, data, @adminsession
     assert_redirected_to users_path
-    assert u.roles.count == 0
+    assert u.roles.count.zero?
   end
 
   test "Grant all roles" do

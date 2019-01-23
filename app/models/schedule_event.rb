@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -15,11 +17,11 @@ class ScheduleEvent < ActiveRecord::Base
   validates :schedule, presence: true
 
   before_validation do |event|
-    if event.name.length > self.schedule.settings[:events][:line_length]
+    if event.name.length > schedule.settings[:events][:line_length]
       new_name = String.new
       line = String.new
       event.name.split.each do |word|
-        if line.length + word.length > self.schedule.settings[:events][:line_length]
+        if line.length + word.length > schedule.settings[:events][:line_length]
           new_name << line << "\n"
           line = String.new
         end
@@ -27,7 +29,7 @@ class ScheduleEvent < ActiveRecord::Base
       end
       new_name << line
       self.name = new_name
-      self.linecount = self.name.split("\n").size
+      self.linecount = name.split("\n").size
     end
 
     true

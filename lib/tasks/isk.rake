@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :isk do
   desc "Runs all installation tasks; sets up the database, secrets and creates nginx config file"
   task setup: ["db:setup", "isk:secrets", "isk:nginx", "assets:precompile"] do
@@ -10,7 +12,7 @@ namespace :isk do
     isk_data = Rails.root.join("data")
     nginx_conf = Rails.root.join("isk_server.conf")
     puts "Writing nginx configuration fragment to isk_server.conf"
-    abort "File exists!" if File.exists? nginx_conf
+    abort "File exists!" if File.exist? nginx_conf
     erb = ERB.new(File.read(template))
     result = erb.result binding
     File.open(nginx_conf, "w") do |f|
@@ -21,17 +23,16 @@ namespace :isk do
 
   desc "Backup the database"
   task sql_backup: :environment do
-    backup_file = Tempfile.new "isk-database-backup"
     sql_backup(sql_backup_location)
-    puts "SQL backup created: #{sql_backup_location.to_s}"
+    puts "SQL backup created: #{sql_backup_location}"
   end
 
   desc "Create zip with all slide data and the database dump"
   task full_backup: :sql_backup do
-    backup_file = Rails.root.join("isk_backup-#{Time.now.strftime("%F-%H%M")}.tar.gz").to_s
+    backup_file = Rails.root.join("isk_backup-#{Time.now.strftime('%F-%H%M')}.tar.gz").to_s
     # We need relative location for the sql file
     sql_file = sql_backup_location.to_s.partition(Rails.root.to_s).last[1..-1]
-    cmd = "tar -czf #{backup_file} -C #{Rails.root.to_s} data #{sql_file}"
+    cmd = "tar -czf #{backup_file} -C #{Rails.root} data #{sql_file}"
     puts "Creating the archive..."
     system cmd
     puts "Created full backup: #{backup_file}"
@@ -40,9 +41,7 @@ namespace :isk do
   desc "Generate session encryption keys"
   task secrets: :environment do
     file = Rails.root.join("config", "secrets.yml")
-    if File.exists? file
-      abort "#{file.to_s} exists, aborting"
-    end
+    abort "#{file} exists, aborting" if File.exist? file
     puts "Generating #{file}"
     secrets = {
       "development" => {
@@ -64,8 +63,8 @@ private
 
   def sql_backup(backup_file)
     cmd = nil
-    with_config do |app, host, db, user|
-      cmd = "pg_dump "
+    with_config do |_app, host, db, user|
+      cmd = +"pg_dump "
       cmd << "--host #{host} " if host.present?
       cmd << "--username #{user} " if user.present?
       cmd << "--clean --no-owner #{db} > #{backup_file}"
@@ -75,7 +74,7 @@ private
   end
 
   def sql_backup_location
-    @location ||= Rails.root.join("db", "isk_database_backup-#{Time.now.strftime("%F-%H%M")}.sql")
+    @location ||= Rails.root.join("db", "isk_database_backup-#{Time.now.strftime('%F-%H%M')}.sql")
   end
 
   def with_config

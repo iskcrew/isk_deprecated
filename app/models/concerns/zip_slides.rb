@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 #  zip_slides.rb
 #  isk
@@ -15,13 +17,21 @@ module ZipSlides
     # Give the path of the temp file to the zip outputstream, it won't try to open it as an archive.
     Zip::OutputStream.open(t.path) do |zos|
       i = 0
-      self.slides.each do |slide|
+      slides.each do |slide|
         i += 1
-        filename = "#{self.class.name.downcase}_#{self.name}_slide_%03d.png" % i
+        filename = "#{self.class.name.downcase}_#{name}_slide_%03d.png" % i
         # Create a new entry with some arbitrary name
         zos.put_next_entry(filename)
         # Add the contents of the file, don't read the stuff linewise if its binary, instead use direct IO
         zos.print IO.read(slide.full_filename)
+
+        # If there is no transparent version we are done for this slide
+        next unless slide.respond_to?(:transparent_filename)
+
+        # Add the transparent image
+        filename = "#{self.class.name.downcase}_#{name}_slide_%03d_transparent.png" % i
+        zos.put_next_entry(filename)
+        zos.print IO.read(slide.transparent_filename)
       end
     end
 

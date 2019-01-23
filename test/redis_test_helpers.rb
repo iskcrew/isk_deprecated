@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Helpers for catching redis.publish trafic in tests
@@ -6,8 +8,8 @@
 # Copyright:: Copyright (c) Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
-module  RedisTestHelpers
-  ThreadTimeout = 0.2
+module RedisTestHelpers
+  THREAD_TIMEOUT = 0.2
 
   class RedisTestSubscriber
     attr_reader :channel, :messages
@@ -18,7 +20,7 @@ module  RedisTestHelpers
 
     def process
       Redis.new(Rails.configuration.x.redis).subscribe(@channel) do |on|
-        on.message do |channel, message|
+        on.message do |_channel, message|
           @messages.unshift message
           Thread.current[:messages] = messages
         end
@@ -27,9 +29,9 @@ module  RedisTestHelpers
   end
 
   def start_subscriber(channel = "isk_general")
-    @subscriber = Thread.new {
+    @subscriber = Thread.new do
       RedisTestSubscriber.new(channel).process
-    }
+    end
   end
 
   def stop_subscriber
@@ -39,7 +41,7 @@ module  RedisTestHelpers
   def with_redis(channel = "isk_general")
     start_subscriber(channel)
     yield
-    @subscriber.join ThreadTimeout
+    @subscriber.join THREAD_TIMEOUT
   end
 
   def redis_messages

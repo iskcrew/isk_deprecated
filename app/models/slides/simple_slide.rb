@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -14,22 +16,22 @@ class SimpleSlide < SvgSlide
     color: "Red",
     text_size: 48,
     text_align: "Left"
-  }.with_indifferent_access
+  }.with_indifferent_access.freeze
 
   include HasSlidedata
 
-  BaseTemplate = Rails.root.join("data", "templates", "simple.svg")
+  BaseTemplate = Rails.root.join("data", "templates", "simple.svg").freeze
   HeadingSelector = "text#header"
   BodySelector = "text#slide_content"
   BackgroundSelector = "image#background_picture"
-  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"]
+  Colors = ["Gold", "Red", "Orange", "Yellow", "PaleGreen", "Aqua", "LightPink"].freeze
 
   validate :check_color
 
   # If our slidedata chances mark the slide as not ready when saving it.
   before_save do
-    if @_slidedata.present? || !File.exists?(self.svg_filename)
-      self.svg_data = SimpleSlide.create_svg(self.slidedata)
+    if @_slidedata.present? || !File.exist?(svg_filename)
+      self.svg_data = SimpleSlide.create_svg(slidedata)
       self.ready = false
     end
     true
@@ -44,7 +46,7 @@ class SimpleSlide < SvgSlide
 
     FileUtils.copy(s.svg_filename, simple.svg_filename)
 
-    raise ApplicationController::ConvertError unless simple.to_simple_slide!
+    raise Slide::ConvertError unless simple.to_simple_slide!
 
     simple = SimpleSlide.find(simple.id)
 
@@ -56,32 +58,29 @@ class SimpleSlide < SvgSlide
 
   # TODO: migrate to nokogiri
   def self.create_from_svg_slide(svg_slide)
-    raise ApplicationController::ConvertError unless svg_slide.is_a? SvgSlide
+    raise Slide::ConvertError unless svg_slide.is_a? SvgSlide
 
     simple = SimpleSlide.new
     simple.name = svg_slide.name + " (converted)"
     simple.ready = false
     simple.show_clock = svg_slide.show_clock
 
-    svg = REXML::Document.new(svg_slide.svg_data)
+    svg = Nokogiri.XML(svg_slide.svg_data)
 
-    #IF slide has other images than the background we have a problem
-    unless svg.root.elements.to_a("//image").count == 1
-      raise ApplicationController::ConvertError
-    end
+    # IF slide has other images than the background we have a problem
+    raise Slide::ConvertError if svg.css("image").count != 1
 
-    text_nodes = svg.root.elements.to_a("//text")
+    text_nodes = svg.css("text")
 
-    #The slide needs to contain some text
-    raise ApplicationController::ConvertError unless text_nodes.count > 0
+    # The slide needs to contain some text
+    raise Slide::ConvertError unless text_nodes.count.positive?
 
-    header = text_nodes[0].elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip
-
-    text_nodes.delete_at(0)
+    header = text_nodes.first.text
+    text_nodes.shift
 
     text = String.new
     text_nodes.each do |n|
-      text << n.elements.collect("tspan") { |e| e.texts.join(" ") }.join(" ").strip << " "
+      text << n.text
     end
     text.strip!
 
@@ -94,14 +93,14 @@ class SimpleSlide < SvgSlide
 
   def clone!
     new_slide = super
-    new_slide.slidedata = self.slidedata
+    new_slide.slidedata = slidedata
     return new_slide
   end
 
   # Take in the slide data and create a svg using them
   # This is used both to save the slide and to display a preview
   # in the simple editor page via websocket calls
-  #TODO: create inkscape compliant svg!
+  # TODO: create inkscape compliant svg!
   def self.create_svg(options)
     text_align = options[:text_align] || DefaultSlidedata[:text_align]
     text_size = options[:text_size] || DefaultSlidedata[:text_size]
@@ -116,148 +115,141 @@ class SimpleSlide < SvgSlide
     svg = prepare_template(settings, size, current_event.background_image)
 
     head = svg.at_css(HeadingSelector)
-    head = set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
+    set_text(head, heading, settings[:heading][:coordinates].first, color, settings[:heading][:font_size])
 
     # Find out the text x coordinate
     text_x = row_x(text_align, settings[:body][:margins])
     body = svg.at_css(BodySelector)
-    body = set_text(body, text, text_x, color, text_size, text_align)
+    set_text(body, text, text_x, color, text_size, text_align)
 
     return svg.to_xml
   end
 
 private
 
-  # Validate that the highlight color is ok
-  def check_color
-    # Do not run this validation if slidedata hasn't been changed or loaded, as doing so will mark the slide as not ready
-    return true if @_slidedata.nil?
-    unless Event.current.config[:simple][:colors].include? slidedata[:color]
-      errors.add :color, "is not whitelisted"
-    end
-  end
+  # Private singleton methods
+  class << self
+  private
 
-  # Prepare the base template based on event config
-  def self.prepare_template(settings, size, background_image)
-    svg = Nokogiri::XML(File.open(BaseTemplate))
+    # Prepare the base template based on event config
+    def prepare_template(settings, size, background_image)
+      svg = Nokogiri::XML(File.open(BaseTemplate))
 
-    # Add sodipodi namespace
-    svg.root.add_namespace "sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+      # Add sodipodi namespace
+      svg.root.add_namespace "sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 
-    # Set dimensions
-    svg.root["width"] = size.first
-    svg.root["height"] = size.last
+      # Set dimensions
+      svg.root["width"] = size.first
+      svg.root["height"] = size.last
 
-    # Set viewbox
-    svg.root["viewBox"] = "0 0 #{size.first} #{size.last}"
+      # Set viewbox
+      svg.root["viewBox"] = "0 0 #{size.first} #{size.last}"
 
-    # Set background
-    bg = svg.at_css(BackgroundSelector)
-    bg["xlink:href"] = background_image
-    bg["x"] = 0
-    bg["y"] = 0
-    bg["width"] = size.first
-    bg["height"] = size.last
+      # Set background
+      bg = svg.at_css(BackgroundSelector)
+      bg["xlink:href"] = background_image
+      bg["x"] = 0
+      bg["y"] = 0
+      bg["width"] = size.first
+      bg["height"] = size.last
 
-    # Position header
-    header = svg.at_css(HeadingSelector)
-    header["x"] = settings[:heading][:coordinates].first
-    header["y"] = settings[:heading][:coordinates].last
+      # Position header
+      header = svg.at_css(HeadingSelector)
+      header["x"] = settings[:heading][:coordinates].first
+      header["y"] = settings[:heading][:coordinates].last
 
-    # Header font size
-    header["font-size"] = settings[:heading][:font_size]
+      # Header font size
+      header["font-size"] = settings[:heading][:font_size]
 
-    # Position body
-    body = svg.at_css(BodySelector)
-    body["y"] = settings[:body][:y_coordinate]
+      # Position body
+      body = svg.at_css(BodySelector)
+      body["y"] = settings[:body][:y_coordinate]
 
-    # Clear child elements from header and body
-    clear_childs(header)
-    clear_childs(body)
+      # Clear child elements from header and body
+      clear_childs(header)
+      clear_childs(body)
 
-    # Set guides
-    named_view = svg.at_css("sodipodi|namedview")
-    named_view.css("sodipodi|guide").each do |e|
-      e.remove
-    end
+      # Set guides
+      named_view = svg.at_css("sodipodi|namedview")
+      named_view.css("sodipodi|guide").each(&:remove)
 
-    # Vertical guides
-    [
-      "#{settings[:body][:margins].first},0",
-      "#{settings[:body][:margins].last},0",
-      "#{settings[:heading][:coordinates].first},0"
-    ].each do |coord|
-      named_view.add_child(create_guide(svg, coord, "-200,0"))
-    end
+      # Vertical guides
+      [
+        "#{settings[:body][:margins].first},0",
+        "#{settings[:body][:margins].last},0",
+        "#{settings[:heading][:coordinates].first},0"
+      ].each do |coord|
+        named_view.add_child(create_guide(svg, coord, "-200,0"))
+      end
 
-    # Horizontal guides
-    [
-      "0,#{size.last - settings[:body][:y_coordinate]}",
-      "0,#{size.last - settings[:heading][:coordinates].last}"
-    ].each do |coord|
-      named_view.add_child(create_guide(svg, coord, "0,-200"))
+      # Horizontal guides
+      [
+        "0,#{size.last - settings[:body][:y_coordinate]}",
+        "0,#{size.last - settings[:heading][:coordinates].last}"
+      ].each do |coord|
+        named_view.add_child(create_guide(svg, coord, "0,-200"))
+      end
+
+      return svg
     end
 
-    return svg
-  end
-
-  # Create a new sodipodi:guide element
-  def self.create_guide(svg, position, orientation)
-    guide = Nokogiri::XML::Node.new("sodipodi:guide", svg)
-    guide["position"] = position
-    guide["orientation"] = orientation
-    return guide
-  end
-
-  def self.set_text(element, text, text_x, color = nil, size = nil, align = nil)
-    # Set default attributes
-    element["x"] = text_x
-
-    if size
-      element["font-size"] = size
-    else
-      size = element["font-size"]
+    # Create a new sodipodi:guide element
+    def create_guide(svg, position, orientation)
+      guide = Nokogiri::XML::Node.new("sodipodi:guide", svg)
+      guide["position"] = position
+      guide["orientation"] = orientation
+      return guide
     end
 
-    first_line = true
-
-    text.each_line do |l|
-      row = Nokogiri::XML::Node.new "tspan", element
-      row["x"] = text_x
-      row["sodipodi:role"] = "line"
-      row["xml:space"] = "preserve"
-
-      # Set the line spacing. First line has no spacing, others have 1em spacing.
-      if first_line
-        first_line = false
+    def set_text(element, text, text_x, color = nil, size = nil, align = nil)
+      # Set default attributes
+      element["x"] = text_x
+      element["sodipodi:linespacing"] = "100%"
+      if size
+        element["font-size"] = size
       else
-        row["dy"] = "1em"
+        size = element["font-size"]
       end
-      if l.strip.empty?
-        row["font-size"] = (size.to_i * 0.4).to_i
-        row["fill-opacity"] = 0
-        row["stroke-opacity"] = 0
-        row.content = "a"
-        element.add_child row
-        next
-      end
-      parts = l.split(/<([^>]*)>/)
-      parts.each_index do |i|
-        ts = Nokogiri::XML::Node.new "tspan", row
-        if color && (i % 2 == 1)
-          ts["fill"] = color
+
+      first_line = true
+
+      text.each_line do |l|
+        row = Nokogiri::XML::Node.new "tspan", element
+        row["sodipodi:role"] = "line"
+        row["xml:space"] = "preserve"
+        row["font-size"] = size
+        row["x"] = text_x
+
+        # Set the line spacing. First line has no spacing, others have 1em spacing.
+        if first_line
+          first_line = false
+        else
+          row["dy"] = "1em"
         end
-        ts.content = parts[i].chomp
-        row.add_child ts
+        if l.strip.empty?
+          row["font-size"] = (size.to_i * 0.4).to_i
+          row["fill-opacity"] = 0
+          row["stroke-opacity"] = 0
+          row.content = "a"
+          element.add_child row
+          next
+        end
+        parts = l.split(/<([^>]*)>/)
+        parts.each_index do |i|
+          ts = Nokogiri::XML::Node.new "tspan", row
+          ts["fill"] = color if color && i.odd?
+          ts.content = parts[i].chomp
+          row.add_child ts
+        end
+        element.add_child row
       end
-      element.add_child row
+
+      return set_text_anchor(element, align)
     end
 
-    return set_text_anchor(element, align)
-  end
+    def row_x(align, margins)
+      return margins.first unless align
 
-  def self.row_x(align, margins)
-    if align
       case align.strip.downcase
       when "right"
         return margins.last
@@ -266,34 +258,39 @@ private
       else
         return margins.first
       end
-    else
-      return margins.first
     end
-  end
 
-  # Clear child elements
-  def self.clear_childs(e)
-    # Clear child elements (delete_element deletes only one element)
-    e.children.each do |c|
-      c.remove
+    # Clear child elements
+    def clear_childs(e)
+      # Clear child elements (delete_element deletes only one element)
+      e.children.each(&:remove)
+      e.content = ""
+
+      return e
     end
-    e.content = ""
 
-    return e
-  end
-
-  def self.set_text_anchor(element, align)
-    if align
-      case align.strip.downcase
-      when "right"
-        text_anchor = "end"
-      when "centered"
-        text_anchor = "middle"
-      else
-        text_anchor = "start"
+    def set_text_anchor(element, align)
+      if align
+        case align.strip.downcase
+        when "right"
+          text_anchor = "end"
+        when "centered"
+          text_anchor = "middle"
+        else
+          text_anchor = "start"
+        end
+        element["text-anchor"] = text_anchor
       end
-      element["text-anchor"] = text_anchor
+      return element
     end
-    return element
+  end
+
+  # Validate that the highlight color is ok
+  def check_color
+    # Do not run this validation if slidedata hasn't been changed or loaded, as doing so will mark the slide as not ready
+    return true if @_slidedata.nil?
+    unless Event.current.config[:simple][:colors].include? slidedata[:color]
+      errors.add :color, "is not whitelisted"
+    end
   end
 end

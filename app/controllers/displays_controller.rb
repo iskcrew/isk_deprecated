@@ -21,7 +21,7 @@ class DisplaysController < ApplicationController
   # We support html or json for the whole list and
   # js for updating the late display warnings on pages.
   def index
-    @displays = Display.order(:name)
+    @displays = Display.order(:live, :name)
 
     respond_to do |format|
       format.js
@@ -128,6 +128,15 @@ class DisplaysController < ApplicationController
     redirect_to :back
   end
 
+  def clear_queue
+    @display = Display.find(params[:id])
+    require_override @display
+    @display.override_queues.destroy_all
+
+    flash[:notice] = "Override queue cleared."
+    redirect_to :back
+  end
+
   # Remote control for iskdpy via javascript and websockets
   def dpy_control
     @display = Display.find(params[:id])
@@ -217,7 +226,9 @@ class DisplaysController < ApplicationController
           when "start"
             # Display tells that it is starting up
             raise PermissionDenied unless require_display_control(@display)
-            # FIXME: proper connection tracking
+
+            # Detect WPE / Raspberry pi displays
+            @display.wpe = request.user_agent.present? && request.user_agent.include?("WPE")
             @display_connection = true
             @display.status = "running"
             @display.ip = request.remote_ip
@@ -259,7 +270,7 @@ class DisplaysController < ApplicationController
           when "shutdown"
             # Display is performing a controlled shutdown
             raise PermissionDenied unless require_display_control(@display)
-            # FIXME: proper connection tracking!
+
             @display_connection = false
             @display.status = "disconnected"
             @display.save!
@@ -316,9 +327,9 @@ private
       action: msg.object,
       ip: request.remote_ip,
       message: msg,
-      display_name: @display_name,
       display_connection: @display_connection
     }
+    options[:display_name] = @display.name unless @display.nil?
     ActiveSupport::Notifications.instrument("iskdpy", options) do
       yield
     end

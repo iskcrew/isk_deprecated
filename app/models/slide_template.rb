@@ -1,12 +1,18 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
 # Copyright:: Copyright (c) 2012-2013 Vesa-Pekka Palmu
 # License::   Licensed under GPL v3, see LICENSE.md
 
+# FIXME: REXML -> nokogiri
+
+require "rexml/document"
+
 class SlideTemplate < ActiveRecord::Base
   belongs_to :event
-  has_many :fields, -> { order(field_order: :asc) }, class_name: "TemplateField"
+  has_many :fields, (-> { order(field_order: :asc) }), class_name: "TemplateField"
   has_many :slides, foreign_key: :foreign_object_id
 
   validates :name, :event, presence: true
@@ -18,12 +24,12 @@ class SlideTemplate < ActiveRecord::Base
 
   FilePath = Rails.root.join("data", "templates")
 
-  scope :current, -> { where deleted: false }
+  scope :current, (-> { where deleted: false })
 
   # Load the svg in
   def template
-    return @_template if (@_template || self.new_record?)
-    @_template = File.read(self.filename) if File.exists?(self.filename)
+    return @_template if @_template || new_record?
+    @_template = File.read(filename) if File.exist?(filename)
 
     return @_template
   end
@@ -43,9 +49,9 @@ class SlideTemplate < ActiveRecord::Base
 
   # TODO: input validation
   def generate_svg(data)
-    svg = REXML::Document.new(self.template)
+    svg = REXML::Document.new(template)
 
-    self.fields.editable.each do |f|
+    fields.editable.each do |f|
       svg.root.elements.each("//text[@id='#{f.element_id}']") do |e|
         set_text(e, data[f.element_id.to_sym], f.color)
       end
@@ -56,22 +62,20 @@ class SlideTemplate < ActiveRecord::Base
 
   # Filename to store the svg template file in
   def filename
-    FilePath.join "slide_template_#{self.id}.svg"
+    FilePath.join "slide_template_#{id}.svg"
   end
 
   # We use soft-delete for templates, because hard-deleting the template will break all slides using it.
   def destroy
     self.deleted = true
-    self.save!
+    save!
   end
 
 private
 
   # Associate a new SlideTemplate to Event when it's created
   def assign_to_event
-    if self.event.nil?
-      self.event = Event.current
-    end
+    self.event = Event.current if event.nil?
     return true
   end
 
@@ -86,26 +90,24 @@ private
   # FIXME: remove rexml in favor of nokogiri
   def process_svg
     svg = REXML::Document.new(@_template)
-    svg = set_viewbox(svg)
+    svg = viewbox(svg)
     generate_settings(svg)
     @_template = svg.to_s
   end
 
   # Set the viewBox attribute on the base svg
   # Inkscape doesn't set this and we need it for browser previews to work
-  def set_viewbox(svg)
+  def viewbox(svg)
     width = svg.root.attributes["width"].to_i
     height = svg.root.attributes["height"].to_i
     svg.root.attributes["viewBox"] = "0 0 #{width} #{height}"
     return svg
   end
 
-  # Extract all text fields from the svg template and
-  # generate a settings hash based on that
+  # Extract all text fields from the svg template
   def generate_settings(svg)
-    s = HashWithIndifferentAccess.new
     svg.root.elements.each("//text") do |e|
-      f = self.fields.new
+      f = fields.new
       f.element_id = e.attributes["id"]
       f.default_value = REXML::XPath.match(e, ".//text()").join.strip
       f.save!
@@ -116,10 +118,9 @@ private
   # we use binary mode here to prevent ascii conversions..
   # FIXME: set viewBox on import, so web preview scales properly!
   def write_template
-    unless self.new_record?
-      File.open(self.filename, "wb") do |f|
-        f.write @_template
-      end
+    return if new_record?
+    File.open(filename, "wb") do |f|
+      f.write @_template
     end
   end
 
@@ -139,7 +140,7 @@ private
       row.attributes["sodipodi:role"] = "line"
       row.attributes["xml:space"] = "preserve"
 
-      #First line requires little different attributes
+      # First line requires little different attributes
       if first_line
         first_line = false
       else
@@ -149,9 +150,7 @@ private
       parts = l.split(/<([^>]*)>/)
       parts.each_index do |i|
         ts = row.add_element "tspan"
-        if color && (i % 2 == 1)
-          ts.attributes["fill"] = color
-        end
+        ts.attributes["fill"] = color if color && i.odd?
         ts.text = parts[i]
       end
     end

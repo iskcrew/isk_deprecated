@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class SlidesControllerTest < ActionController::TestCase
@@ -53,8 +55,8 @@ class SlidesControllerTest < ActionController::TestCase
   end
 
   def teardown
-    #Remove any possible files associated with test data from
-    #the test directory
+    # Remove any possible files associated with test data from
+    # the test directory
 
     Slide.all.each do |s|
       clear_slide_files(s)
@@ -65,7 +67,6 @@ class SlidesControllerTest < ActionController::TestCase
     get :index, nil, @adminsession
 
     assert_response :success
-
   end
 
   test "get slide details" do
@@ -93,18 +94,17 @@ class SlidesControllerTest < ActionController::TestCase
   test "update simple slide" do
     put :update,
         { id: slides(:simple),
-          slide: { slidedata: { heading: "fooo" } }
-        }, @adminsession
+          slide: { slidedata: { heading: "fooo" } } },
+        @adminsession
 
     assert_redirected_to slide_path(assigns(:slide))
     s = Slide.find(slides(:simple).id)
     assert_equal "fooo", assigns(:slide).slidedata[:heading], "Slide heading didn't update"
 
-    # FIXME: why this fails?
-    # assert s.ready, "Slide should have had it's picture generated"
+    assert s.ready, "Slide should have had it's picture generated"
 
-    assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
-    assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+    assert File.exist?(s.svg_filename), "The slide svg file wasn't generated"
+    assert File.exist?(s.full_filename), "The full slide image wasn't generated"
     assert s.svg_data.include?(">fooo<"), "SVG didn't contain the new header"
 
     put :update, { id: slides(:simple), slide: { public: false } }, @adminsession
@@ -119,8 +119,8 @@ class SlidesControllerTest < ActionController::TestCase
 
     assert_redirected_to slide_path(assigns(:slide))
     s = assigns(:slide)
-    assert File.exists?(s.svg_filename), "The slide svg file wasn't generated"
-    assert File.exists?(s.full_filename), "The full slide image wasn't generated"
+    assert File.exist?(s.svg_filename), "The slide svg file wasn't generated"
+    assert File.exist?(s.full_filename), "The full slide image wasn't generated"
 
     # Clear the files
     clear_slide_files(s)
@@ -199,5 +199,15 @@ class SlidesControllerTest < ActionController::TestCase
     }
 
     assert_acl_coverage(:slides, @forbidden_actions, allowed)
+  end
+
+  test "slide list without permissions" do
+    get :index, nil, user_id: users(:no_roles)
+    assert_response :success
+  end
+
+  test "slide info without permissions" do
+    get :show, { id: slides(:simple) }, user_id: users(:no_roles)
+    assert_response :success
   end
 end

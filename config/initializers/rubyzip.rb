@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configure the rubyzip gem used for generating zips of slides.
 
 Zip.setup do |c|

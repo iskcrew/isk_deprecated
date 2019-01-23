@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -7,5 +9,5 @@
 class DisplayCount < ActiveRecord::Base
   belongs_to :display
   belongs_to :slide
-  scope :by_time, -> { order(modified_at: :desc) }
+  scope :by_time, (-> { order(modified_at: :desc) })
 end

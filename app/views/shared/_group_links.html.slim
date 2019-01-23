@@ -1,8 +1,8 @@
 - if @groups && @groups.size > 1
-	= cache('group_links', tag: ["groups", "slides"]) do
+	= cache @groups do
 		div#group_links.spy-target
 			h4 Goto group:
-			
+
 			ul.nav.nav-pills.nav-stacked#group-nav
 				- @groups.chunk {|g| g.name.upcase.ord}.each do |ch, groups|
 					- if groups.size > 2
@@ -12,7 +12,7 @@
 								=< ch.chr
 								span.number_of_groups
 									= "(#{groups.size})"
-								
+
 							ul.dropdown-menu.dropdown-menu-right
 								- groups.each do |group|
 									li: a.group_link href=("\#anchor_group_#{group.id}") #{group.name}

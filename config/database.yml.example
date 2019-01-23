@@ -9,15 +9,30 @@ defaults: &defaults
 production:
   <<: *defaults
   database: isk
+  # host: localhost
+  # username: isk
+  # password: changeme
+  
 
 development:
   <<: *defaults
   database: isk_development
+  # host: localhost
+  # username: isk
+  # password: changeme
+  
 
 profile:
   <<: *defaults
   database: isk_development
+  # host: localhost
+  # username: isk
+  # password: changeme
+  
 
 test:
   <<: *defaults
   database: isk_test
+  # host: localhost
+  # username: isk
+  # password: changeme

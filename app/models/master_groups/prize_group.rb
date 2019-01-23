@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # master_group.rb STI inherited group with a generator
@@ -18,7 +20,7 @@ class PrizeGroup < MasterGroup
       { name: "", by: "", pts: "" },
       { name: "", by: "", pts: "" }
     ]
-  )
+  ).freeze
   @_data = nil
 
   after_save do
@@ -27,8 +29,8 @@ class PrizeGroup < MasterGroup
   end
 
   def data
-    return @_data if (@_data.present? && @_data.is_a?(Hash))
-    if !self.new_record? && File.exists?(data_filename)
+    return @_data if @_data.present? && @_data.is_a?(Hash)
+    if !new_record? && File.exist?(data_filename)
       @_data = YAML.load(File.read(data_filename))
     end
 
@@ -43,9 +45,7 @@ class PrizeGroup < MasterGroup
   end
 
   def data=(d)
-    if d.nil?
-      d = DefaultData
-    end
+    d = DefaultData if d.nil?
 
     Rails.logger.debug d.class
     Rails.logger.debug d
@@ -53,7 +53,7 @@ class PrizeGroup < MasterGroup
     d[:title] = DefaultData[:title] unless d.key?(:title)
     d[:awards] = DefaultData[:awards] unless d.key?(:awards)
 
-    d.keep_if do |k, v|
+    d.keep_if do |k|
       DefaultData.key? k
     end
 
@@ -65,16 +65,14 @@ class PrizeGroup < MasterGroup
     # Determinate how many places were awarded
     awards = []
     data[:awards].each do |a|
-      if a[:name].present?
-        awards << a
-      end
+      awards << a if a[:name].present?
     end
     template = SlideTemplate.find(data[:template_id])
     # Find the PrizeSlides for this group
     slides = self.slides.where(type: PrizeSlide.sti_name).to_a
     # Destroy excess slides, we need awards + 1 slides because first slide
     # is only for the competition name.
-    while (slides.size > (awards.size + 1)) do
+    while slides.size > (awards.size + 1)
       s = slides.pop
       s.destroy
     end
@@ -88,12 +86,12 @@ class PrizeGroup < MasterGroup
       slides << s
     end
 
-    self.slides.where(type: PrizeSlide.sti_name).each do |s|
-      s.template = template
-      s.save!
+    self.slides.where(type: PrizeSlide.sti_name).each do |slide|
+      slide.template = template
+      slide.save!
     end
 
-    self.reload
+    reload
     slides = self.slides.where(type: PrizeSlide.sti_name).to_a
 
     s = slides.shift
@@ -126,10 +124,10 @@ class PrizeGroup < MasterGroup
     end
 
     # Mark slides as public and hide the clock
-    self.slides.where(type: PrizeSlide.sti_name).each do |s|
-      s.public = true
-      s.show_clock = false
-      s.save!
+    self.slides.where(type: PrizeSlide.sti_name).each do |slide|
+      slide.public = true
+      slide.show_clock = false
+      slide.save!
     end
   end
 
@@ -138,7 +136,7 @@ private
   def empty_template_data
     d = {
       header: "Results",
-      subheader: data[:title],
+      subheader: data[:title]
     }
 
     (1..5).each do |i|
@@ -152,18 +150,14 @@ private
   end
 
   def data_filename
-    if self.id
-      return Rails.root.join("data", "prizes", "prize_group_#{id}")
-    else
-      return nil
-    end
+    return nill unless id
+    return Rails.root.join("data", "prizes", "prize_group_#{id}")
   end
 
   def write_data
-    unless self.new_record?
-      File.open(data_filename,  "w") do |f|
-        f.write self.data.to_yaml
-      end
+    return if new_record?
+    File.open(data_filename, "w") do |f|
+      f.write data.to_yaml
     end
   end
 end

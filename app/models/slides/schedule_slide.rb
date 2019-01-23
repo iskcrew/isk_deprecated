@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -5,13 +7,13 @@
 # License::   Licensed under GPL v3, see LICENSE.md
 
 class ScheduleSlide < SvgSlide
-  #Automatically generated schedule slide
+  # Automatically generated schedule slide
   TypeString = "schedule"
 
   # Find the schedule this slide belongs to
   def schedule
-    Schedule.joins(:slidegroup).where(master_groups: { id: self.master_group_id }).first ||
-    Schedule.joins(:next_up_group).where(master_groups: { id: self.master_group_id }).first
+    Schedule.joins(:slidegroup).where(master_groups: { id: master_group_id }).first ||
+      Schedule.joins(:next_up_group).where(master_groups: { id: master_group_id }).first
   end
 
   # Create the slide svg from passed schedule events
@@ -20,9 +22,7 @@ class ScheduleSlide < SvgSlide
     svg = Nokogiri::XML(SimpleSlide.create_svg(heading: header))
 
     body = svg.at_css(SimpleSlide::BodySelector)
-    body.children.each do |c|
-      c.remove
-    end
+    body.children.each(&:remove)
 
     body["sodipodi:linespacing"] = settings[:linespacing]
 
@@ -58,6 +58,6 @@ class ScheduleSlide < SvgSlide
 private
 
   def settings
-    @_settings ||= self.schedule.settings[:slides]
+    @_settings ||= schedule.settings[:slides]
   end
 end

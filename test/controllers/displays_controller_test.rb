@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "redis_test_helpers"
 require "test_tubesock"
@@ -210,12 +212,20 @@ class DisplaysControllerTest < ActionController::TestCase
     assert_one_sent_message "error", "forbidden"
   end
 
+  test "clear queue" do
+    d = displays(:with_overrides)
+    post :clear_queue, { id: d.id }, @adminsession
+    assert_response :redirect
+    d.reload
+    assert d.override_queues.empty?
+  end
+
   def assert_messages(count, types)
     assert_equal count, redis_messages.count, "Should have triggered #{count} messages"
     redis_messages.each do |m|
       assert msg = IskMessage.from_json(m), "Should be valid message, data: #{m}"
       assert_equal "display", msg.object, "Should be about a display"
-      assert_includes types, msg.type, "Should have a type in: #{types.join ", "}"
+      assert_includes types, msg.type, "Should have a type in: #{types.join ', '}"
     end
   end
 end

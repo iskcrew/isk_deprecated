@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class EventsControllerTest < ActionController::TestCase
@@ -48,7 +50,6 @@ class EventsControllerTest < ActionController::TestCase
 
     post :update, data, @adminsession
     assert_template :edit
-
   end
 
   test "get new event form" do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -71,7 +73,7 @@ Vagrant.configure("2") do |config|
     # Add jessie-backports for inkscape
     echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
     apt-get update
-    apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl
+    apt-get install -y gnupg2 redis-server memcached imagemagick postgresql postgresql-client libpq-dev rrdtool librrd4 librrd-dev git curl nodejs
     apt-get -t jessie-backports install -y inkscape
     # Create postgresql user and database
     su postgres -c "psql -c \\"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\\" "
@@ -85,10 +87,8 @@ Vagrant.configure("2") do |config|
     curl -sSL https://get.rvm.io | bash -s stable --ruby
     source ~/.rvm/scripts/rvm
     rvm requirements
-    rvm install 2.3.0
-    rvm use 2.3.0
-    rvm gemset create isk
-    rvm gemset use isk
+    rvm install 2.4.1
+    rvm use 2.4.1
     gem install bundler
 
     # Install rubygems for ISK

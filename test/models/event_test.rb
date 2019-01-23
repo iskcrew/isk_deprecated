@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class EventTest < ActiveSupport::TestCase
@@ -26,7 +28,6 @@ class EventTest < ActiveSupport::TestCase
     assert_equal e, Event.current, "New event isn't current one"
     assert_equal e.ungrouped.event_id, e.id, "Ungrouped group doesn't have correct event_id"
     assert_equal e.thrashed.event_id, e.id, "Thrashed group doesn't have correct event_id"
-
   end
 
   test "set new current event" do

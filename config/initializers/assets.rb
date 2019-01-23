@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Add the display js blob to precompile list
 Rails.application.config.assets.precompile += [
   "display.js",

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ISK - A web controllable slideshow system
 #
 # Author::    Vesa-Pekka Palmu
@@ -20,7 +22,7 @@ class DisplayState < ActiveRecord::Base
   include WebsocketMessages
 
   before_validation do
-    self.ip = "UNKNOWN" if self.ip.blank?
+    self.ip = "UNKNOWN" if ip.blank?
   end
 
   after_commit :send_error_notifications
@@ -33,20 +35,19 @@ private
 
   # Send error notifications if we are in error state
   def send_error_notifications
-    if self.status == "error"
-      if self.display.error_tickets.open.present?
-        msg = self.display.error_tickets.open.last!.description.lines.last
-      else
-        msg = "Error has occured!"
-      end
-      data = {
-        id: self.display_id,
-        message: msg
-      }
-      Rails.logger.error "Error has occured on display #{self.display_id} with message: '#{msg}'"
-      msg = IskMessage.new("display", "error", data)
-      msg.send
-      msg.send(self.display.websocket_channel)
+    return unless status == "error"
+    if display.error_tickets.open.present?
+      msg = display.error_tickets.open.last!.description.lines.last
+    else
+      msg = "Error has occured!"
     end
+    data = {
+      id: display_id,
+      message: msg
+    }
+    Rails.logger.error "Error has occured on display #{display_id} with message: '#{msg}'"
+    msg = IskMessage.new("display", "error", data)
+    msg.send
+    msg.send(display.websocket_channel)
   end
 end

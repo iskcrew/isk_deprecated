@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class GroupsControllerTest < ActionController::TestCase
@@ -49,7 +51,7 @@ class GroupsControllerTest < ActionController::TestCase
       ]
 
     }
-    #We don't want to generate slides into the normal place
+    # We don't want to generate slides into the normal place
     Slide.send(:remove_const, :FilePath)
     Slide.const_set(:FilePath, Rails.root.join("tmp", "test"))
   end
@@ -124,18 +126,18 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test "hide all slides in group" do
-    assert master_groups(:ten_slides).slides.where(public: true).count != 0
+    assert_not master_groups(:ten_slides).slides.where(public: true).count.zero?
     post :hide_all, { id: master_groups(:ten_slides).id }, @adminsession
     assert_redirected_to group_path(assigns(:group))
-    assert assigns(:group).slides.where(public: true).count == 0
+    assert assigns(:group).slides.where(public: true).count.zero?
   end
 
   test "publish all slides in grou" do
-    assert master_groups(:hidden_slide).slides.where(public: false).count != 0
+    assert_not master_groups(:hidden_slide).slides.where(public: false).count.zero?
     post :publish_all, { id: master_groups(:hidden_slide).id }, @adminsession
 
     assert_redirected_to group_path(assigns(:group))
-    assert assigns(:group).slides.where(public: false).count == 0
+    assert assigns(:group).slides.where(public: false).count.zero?
   end
 
   test "acl without user" do

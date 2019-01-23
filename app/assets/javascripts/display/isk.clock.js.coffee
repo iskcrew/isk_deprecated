@@ -11,8 +11,8 @@ t_size = "60px"
 
 longday =
   Mon: "Monday"
-  Tue: "Tueday"
-  Wed: "Wedday"
+  Tue: "Tuesday"
+  Wed: "Wednesday"
   Thu: "Thursday"
   Fri: "Friday"
   Sat: "Saturday"

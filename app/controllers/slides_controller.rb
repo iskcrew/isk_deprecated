@@ -111,11 +111,7 @@ class SlidesController < ApplicationController
       end
     end # Transaction
 
-    if @slide.is_a? HttpSlide
-      @slide.fetch_later
-    else
-      @slide.generate_images_later
-    end
+    @slide.generate_images_later
 
     respond_to do |format|
       format.html { redirect_to slide_path(@slide) }
@@ -127,7 +123,6 @@ class SlidesController < ApplicationController
                status: :created
       end
     end
-
   rescue Slide::ImageError
     # image invalid
     flash[:error] = "Error creating slide, invalid image file."
@@ -149,9 +144,7 @@ class SlidesController < ApplicationController
       if @slide.update_attributes(slide_params)
         # Generate images as needed
         # FIXME: This needs to be more universal..
-        @slide.generate_images_later if !@slide.is_a?(HttpSlide) && !@slide.ready
-        # Fetch the http slide image if needed
-        @slide.fetch_later if @slide.is_a?(HttpSlide) && @slide.needs_fetch?
+        @slide.generate_images_later unless @slide.ready
 
         respond_to do |format|
           format.html do
@@ -248,7 +241,7 @@ class SlidesController < ApplicationController
     display = Display.find(params[:add_to_override][:display_id])
 
     unless display.can_override? current_user
-      fail ApplicationController::PermissionDenied
+      raise ApplicationController::PermissionDenied
     end
 
     effect = Effect.find params[:add_to_override][:effect_id]
@@ -271,7 +264,7 @@ class SlidesController < ApplicationController
   def hide
     @slide = Slide.find(params[:id])
     unless @slide.can_hide? current_user
-      fail ApplicationController::PermissionDenied
+      raise ApplicationController::PermissionDenied
     end
     @slide.public = false
     @slide.save!
@@ -300,7 +293,7 @@ class SlidesController < ApplicationController
     @slide.svg_data = params[:svg]
     @slide.save!
     @slide.generate_images_later
-    render nothing: true
+    render body: nil
   end
 
   # Convert a slide to InkscapeSlide
@@ -323,7 +316,7 @@ class SlidesController < ApplicationController
         flash[:notice] = "Slide was converted simple slide."
         redirect_to slide_path(simple)
       end
-    rescue ConvertError
+    rescue Slide::ConvertError
       flash[:error] = "Conversion error, maybe slide has images?"
       redirect_to slide_path(slide)
     end
@@ -332,13 +325,13 @@ class SlidesController < ApplicationController
   # Send the slide preview image, we set the cache headers
   # to avoid unecessary reloading
   def preview
-    @slide = Slide.find(params[:id])
-    send_slide_image(:preview)
+    slide = Slide.find(params[:id])
+    redirect_to slide_image_path(params[:id], size: :preview)
   end
 
   def thumb
-    @slide = Slide.find(params[:id])
-    send_slide_image(:thumb)
+    slide = Slide.find(params[:id])
+    redirect_to slide_image_path(params[:id], size: :thumb)
   end
 
   # Send the full sized slide image
@@ -346,68 +339,27 @@ class SlidesController < ApplicationController
   # If not we will issue 404 status
   def full
     slide = Slide.find(params[:id])
-    if stale?(last_modified: slide.images_updated_at.utc, etag: slide)
-      if File.exists? slide.full_filename
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Request-Method"] = "GET"
-        send_file slide.full_filename, disposition: "inline"
-      else
-        render nothing: true, status: 404
-      end
-    end
-  rescue ActiveRecord::RecordNotFound
-    render nothing: true, status: 404
+    redirect_to slide_image_path(params[:id])
   end
 
 private
 
-  # Send a given sized slide image
-  def send_slide_image(size)
-    case size
-    when :full
-      filename = @slide.full_filename
-    when :thumb
-      filename = @slide.thumb_filename
-    else
-      filename = @slide.preview_filename
-    end
-
-    if stale?(last_modified: @slide.images_updated_at.utc, etag: @slide)
-      respond_to do |format|
-        format.html do
-          # Set content headers to allow CORS
-          response.headers["Access-Control-Allow-Origin"] = "*"
-          response.headers["Access-Control-Request-Method"] = "GET"
-          if @slide.ready
-            send_file filename, disposition: "inline"
-          else
-            send_file(Rails.root.join("data", "no_image.jpg"),
-                      disposition: "inline")
-          end
-        end
-        format.js { render :show }
-      end
-    end
-  end
-
   # Whitelist the accepted slide parameters for update and create
   def slide_params
     params.required(:slide).permit(
-    :name, :description, :show_clock, :public, :duration, :foreign_object_id,
-    :master_group_id, :image,
-    slidedata: params[:slide][:slidedata].try(:keys)
+      :name, :description, :show_clock, :public, :duration, :foreign_object_id,
+      :master_group_id, :image,
+      slidedata: params[:slide][:slidedata].try(:keys)
     )
   end
 
   def require_create
-    unless Slide.can_create? current_user
-      fail ApplicationController::PermissionDenied
-    end
+    return if Slide.can_create? current_user
+    raise ApplicationController::PermissionDenied
   end
 
   def require_admin
-    unless Slide.admin? current_user
-      fail ApplicationController::PermissionDenied
-    end
+    return if Slide.admin? current_user
+    raise ApplicationController::PermissionDenied
   end
 end
