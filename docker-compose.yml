@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 
 services:
   postgres:
@@ -29,6 +29,7 @@ services:
     env_file:
       - 'docker-config.env'
     command: 'bundle exec rails s -b 0.0.0.0'
+    init: true
 
   worker:
     depends_on:
@@ -39,6 +40,7 @@ services:
     env_file:
       - 'docker-config.env'
     command: './script/background_jobs.rb run'
+    init: true
 
   resque:
     depends_on:
@@ -51,6 +53,7 @@ services:
     environment:
       - QUEUE=*
     command: 'bundler exec rake resque:work --trace'
+    init: true
 
   proxy:
     image: 'nginx:alpine'
@@ -61,7 +64,7 @@ services:
     volumes:
       - '.:/isk'
       - './docker-nginx.conf:/etc/nginx/conf.d/default.conf:ro'
-    
+
 
 
 volumes:
