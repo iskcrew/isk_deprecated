@@ -1,8 +1,0 @@
-= bootstrap_form_for @display do |f|
-	= f.error_messages
-	= f.text_field :name
-	= f.check_box :monitor
-	= f.check_box :manual
-	= f.check_box :live
-	= f.collection_select(:presentation_id, current_event.presentations.order(:name), :id, :name, {include_blank: true})
-	= f.primary

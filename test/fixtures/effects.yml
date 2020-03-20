@@ -1,9 +1,0 @@
-default:
-    id: 1
-    name: Default
-    description: Default effect
-
-fancy:
-    id: 2
-    name: Fancy effect
-    description: Second effect!

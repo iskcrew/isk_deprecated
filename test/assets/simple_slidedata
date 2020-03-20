@@ -1,6 +1,0 @@
---- !ruby/hash:ActiveSupport::HashWithIndifferentAccess
-heading: Slide heading
-text: Slide contents with <highlight>
-color: PaleGreen
-text_size: '80'
-text_align: Left

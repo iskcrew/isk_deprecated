@@ -1,5 +1,0 @@
-Roolit:
-
-'sali-av' == täysi pääsy tekemään mitä tahansa kalvoille jne
-'slide-create' == voi luoda uusia yksinkertaisia kalvoja ryhmien ulkopuolelle, voi editoida niitä
-

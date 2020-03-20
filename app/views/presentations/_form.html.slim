@@ -1,5 +1,0 @@
-= bootstrap_form_for @presentation do |f|
-	= f.text_field :name
-	= f.text_field :delay
-	= f.select :effect_id, Effect.all.collect {|p| [ p.name, p.id ] }
-	= f.primary

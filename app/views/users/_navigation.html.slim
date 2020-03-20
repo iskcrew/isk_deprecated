@@ -1,6 +1,0 @@
-li class=active_action?('index') = link_to icon('list', 'List users'), users_path
-li class=active_action?('new') = link_to icon('plus', 'New user'), new_user_path
-- if @user.present? && !@user.new_record?
-	li class=active_action?('show') = link_to details_link_text, user_path(@user)
-	li class=active_action?('edit') = link_to edit_link_text, edit_user_path(@user)
-	li class=active_action?('roles') = link_to icon('plus', 'Assign roles'), roles_user_path(@user)

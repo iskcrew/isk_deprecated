@@ -1,9 +1,0 @@
-- if group.slides.present?
-	div.compact-slidelist.panel.panel-default id="anchor_group_#{group.id}"
-		div.panel-heading
-			-if group.is_a? UnGroup
-				a name="anchor_group_#{group.id}" Ungrouped slides
-			-else
-				= group_link_tag(group)
-		div.panel-body.slides-list
-			= render group.slides

@@ -1,5 +1,0 @@
-li class=active_action?('index') = link_to icon('list', 'List templates'), templates_path
-li class=active_action?('new') = link_to icon('plus', 'New template'), new_template_path
-- if @template.present? && !@template.new_record?
-	li class=active_action?('show') = link_to details_link_text, template_path(@template)
-	li class=active_action?('edit') = link_to edit_link_text, edit_template_path(@template)

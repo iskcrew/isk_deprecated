@@ -1,9 +1,0 @@
-li class=active_action?('index') = link_to icon('list', 'List presentations'), presentations_path
-- if Presentation.can_create?(current_user)
-	li class=active_action?('new') = link_to icon('plus', 'New presentation'), new_presentation_path
-- if @presentation.present? && !@presentation.new_record?
-	li class=active_action?('show') = link_to details_link_text, presentation_path(@presentation)
-	li class=active_action?('preview') = link_to 'Preview', preview_presentation_path(@presentation)
-	- if @presentation.can_edit? current_user
-		li class=active_action?('edit') = link_to edit_link_text, edit_presentation_path(@presentation)
-		li = presentation_destroy_button(@presentation)

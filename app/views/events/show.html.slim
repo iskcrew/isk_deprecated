@@ -1,9 +1,0 @@
-h1 Information for event: #{@event.name}
-
-- if @event.current
-	div.alert.alert-success This is the current ISK event.
-
-	ul
-		li Resolution for slides: #{@event.picture_sizes[:full].join('x')}
-		li Group for ungrouped slides: #{link_to @event.ungrouped.name, group_path(@event.ungrouped)}
-		li Group for thrashed slides: #{link_to @event.thrashed.name, group_path(@event.thrashed)}

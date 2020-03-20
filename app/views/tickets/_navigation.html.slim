@@ -1,9 +1,0 @@
-li class=active_action?('index') = link_to icon('list', 'List tickets'), tickets_path
-li class=active_action?('show') = link_to icon('plus', "New ticket"), new_ticket_path
-- if @ticket.present? && !@ticket.new_record?
-	- if @ticket.can_edit? current_user
-		li class=active_action?('edit') = ticket_edit_link @ticket
-	- if @ticket.can_close? current_user
-		li = ticket_close_link @ticket
-	- if @ticket.admin? current_user
-		li = ticket_destroy_link @ticket
